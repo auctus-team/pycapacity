@@ -12,10 +12,6 @@ import pycapacity.pycapacity as capacity
 
 - [`pycapacity`](./docs/pycapacity.md#module-pycapacity)
 
-## Classes
-
-- No classes
-
 ## Functions
 
 - [`pycapacity.force_polytope`](./docs/pycapacity.md#function-force_polytope): Force polytope representing the capacities of the two robots in a certain configuration
@@ -28,7 +24,6 @@ import pycapacity.pycapacity as capacity
 - [`pycapacity.manipulability_force`](./docs/pycapacity.md#function-manipulability_force): force manipulability calculation
 - [`pycapacity.manipulability_velocity`](./docs/pycapacity.md#function-manipulability_velocity): velocity manipulability calculation
 - [`pycapacity.order_index`](./docs/pycapacity.md#function-order_index): Order clockwise 2D points
-
 
 ---
 
