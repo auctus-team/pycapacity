@@ -1,7 +1,7 @@
 
 ## Python capacity module
 
-In this directory you can find the generic robot capacity calculation module called `robot_capacity_solver` which you can easily integrate in your python project, for example
+In this directory you can find the generic robot capacity calculation module called `pycapacity` which you can easily integrate in your python project, for example
 ```python
 import pycapacity.pycapacity as capacity
 ```
