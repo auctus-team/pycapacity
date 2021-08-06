@@ -3,9 +3,9 @@
 
 ![](https://gitlab.inria.fr/askuric/polytope_vertex_search/-/raw/master/images/rviz_screenshot_2020.png)
 
-In this directory you can find the generic robot capacity calculation module called `pycapacityRT` which you can easily integrate in your python project, for example
+In this directory you can find the generic robot capacity calculation module called `pycapacity` which you can easily integrate in your python project, for example
 ```python
-import pycapacityRT.pycapacity as capacity
+import pycapacity.pycapacity as capacity
 ```
 
 This module integrates several velocity and force capacity calculation functions based on manipulability ellipsoids and polytopes. All the polytope functions have been implemented according to the paper:
