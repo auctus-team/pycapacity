@@ -24,13 +24,13 @@ velocity manipulability calculation
 
 **Args:**
  
- - <b>`param1`</b>:  Jacobian_position position jacobian 
- - <b>`param2`</b>:  dq_max maximal joint velocities 
+ - <b>`Jacobian_position`</b>:  position jacobian 
+ - <b>`dq_max`</b>:   maximal joint velocities 
 
 **Returns:**
  
- - <b>`list`</b>:   list of singular values S 
- - <b>`array`</b>:  the matrix U 
+ - <b>`S`</b> (list):   list of singular values S 
+ - <b>`U`</b> (matrix):  the matrix U 
 
 
 ---
@@ -45,20 +45,22 @@ manipulability_force(Jacobian_position, t_max)
 
 force manipulability calculation 
 
+
+
 **Args:**
  
- - <b>`param1`</b>:  Jacobian_position position jacobian 
- - <b>`param2`</b>:  t_max maximal joint torques 
+ - <b>`Jacobian_position`</b>:  position jacobian 
+ - <b>`dq_max`</b>:   maximal joint velocities 
 
 **Returns:**
  
  - <b>`list`</b>:   list of singular values 1/S 
- - <b>`array`</b>:  the matrix U 
+ - <b>`U`</b> (matrix):  the matrix U 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L53"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L54"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection`
 
@@ -83,23 +85,25 @@ Force polytope representing the intersection of the capacities of the two robots
 
 **Args:**
  
- - <b>`param1`</b>:  Jacobian1 position jacobian robot 1 
- - <b>`param2`</b>:  Jacobian2 position jacobian robot 2 
- - <b>`param3`</b>:  t_max1 maximal joint torques robot 1 
- - <b>`param4`</b>:  t_max2 maximal joint torques robot 2 
- - <b>`param5`</b>:  gravity1 applied joint torques (for example gravity vector  or J^T*f ) robot 1 
- - <b>`param6`</b>:  gravity2 maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
+ - <b>`Jacobian1`</b>:   position jacobian robot 1 
+ - <b>`Jacobian2`</b>:  Jacobian2 position jacobian robot 2 
+ - <b>`t_min1`</b>:   minimal joint torques robot 1 
+ - <b>`t_min2`</b>:   minimal joint torques robot 2 
+ - <b>`t_max1`</b>:   maximal joint torques robot 1 
+ - <b>`t_max2`</b>:   maximal joint torques robot 2 
+ - <b>`gravity1`</b>:   applied joint torques (for example gravity vector  or J^T*f ) robot 1 
+ - <b>`gravity2`</b>:   maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
 
 
 
 **Returns:**
  
- - <b>`list`</b>:  f_vertex vertices of the polytope 
+ - <b>`f_vertex`</b> (list):   vertices of the polytope 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L81"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_sum_withfaces`
 
@@ -122,19 +126,21 @@ Force polytope representing the minkowski sum of the capacities of the two robot
 
 **Args:**
  
- - <b>`param1`</b>:  Jacobian1 position jacobian robot 1 
- - <b>`param2`</b>:  Jacobian2 position jacobian robot 2 
- - <b>`param3`</b>:  t_max1 maximal joint torques robot 1 
- - <b>`param4`</b>:  t_max2 maximal joint torques robot 2 
- - <b>`param5`</b>:  gravity1 applied joint torques (for example gravity vector  or J^T*f ) robot 1 
- - <b>`param6`</b>:  gravity2 maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
+ - <b>`Jacobian1`</b>:   position jacobian robot 1 
+ - <b>`Jacobian2`</b>:  Jacobian2 position jacobian robot 2 
+ - <b>`t_min1`</b>:   minimal joint torques robot 1 
+ - <b>`t_min2`</b>:   minimal joint torques robot 2 
+ - <b>`t_max1`</b>:   maximal joint torques robot 1 
+ - <b>`t_max2`</b>:   maximal joint torques robot 2 
+ - <b>`gravity1`</b>:   applied joint torques (for example gravity vector  or J^T*f ) robot 1 
+ - <b>`gravity2`</b>:   maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
 
 
 
 **Returns:**
  
- - <b>`list`</b>:  f_vertex vertices of the polytope 
- - <b>`list`</b>:  polytope_faces faces of the polytope 
+ - <b>`f_vertex`</b> (list):   vertices of the polytope 
+ - <b>`faces`</b> (list):  polytope_faces faces of the polytope 
 
 
 ---
@@ -153,20 +159,21 @@ Force polytope representing the capacities of the two robots in a certain config
 
 **Args:**
  
- - <b>`param1`</b>:  Jacobian1 position jacobian  
- - <b>`param3`</b>:  t_max1 maximal joint torques  
- - <b>`param5`</b>:  gravity1 applied joint torques (for example gravity vector  or J^T*f )   
+ - <b>`Jacobian`</b>:   position jacobian  
+ - <b>`t_max`</b>:   maximal joint torques  
+ - <b>`t_min`</b>:   minimal joint torques  
+ - <b>`gravity`</b>:   applied joint torques (for example gravity vector  or J^T*f )   
 
 
 
 **Returns:**
  
- - <b>`list`</b>:  f_vertex vertices of the polytope 
+ - <b>`f_vertex`</b> (list):   vertices of the polytope 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L205"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L206"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_withfaces`
 
@@ -180,21 +187,22 @@ Force polytope representing the capacities of the two robots in a certain config
 
 **Args:**
  
- - <b>`param1`</b>:  Jacobian1 position jacobian  
- - <b>`param3`</b>:  t_max1 maximal joint torques  
- - <b>`param5`</b>:  gravity1 applied joint torques (for example gravity vector  or J^T*f )   
+ - <b>`Jacobian`</b>:   position jacobian  
+ - <b>`t_max`</b>:   maximal joint torques  
+ - <b>`t_min`</b>:   minimal joint torques  
+ - <b>`gravity`</b>:   applied joint torques (for example gravity vector  or J^T*f )   
 
 
 
 **Returns:**
  
- - <b>`list`</b>:  f_vertex vertices of the polytope 
- - <b>`list`</b>:  polytope_faces faces of the polytope 
+ - <b>`f_vertex`</b> (list):   vertices of the polytope 
+ - <b>`faces`</b> (list):   faces of the polytope 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L243"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L245"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection_withfaces`
 
@@ -217,24 +225,26 @@ Force polytope representing the intersection of the capacities of the two robots
 
 **Args:**
  
- - <b>`param1`</b>:  Jacobian1 position jacobian robot 1 
- - <b>`param2`</b>:  Jacobian2 position jacobian robot 2 
- - <b>`param3`</b>:  t_max1 maximal joint torques robot 1 
- - <b>`param4`</b>:  t_max2 maximal joint torques robot 2 
- - <b>`param5`</b>:  gravity1 applied joint torques (for example gravity vector  or J^T*f ) robot 1 
- - <b>`param6`</b>:  gravity2 maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
+ - <b>`Jacobian1`</b>:   position jacobian robot 1 
+ - <b>`Jacobian2`</b>:  Jacobian2 position jacobian robot 2 
+ - <b>`t_min1`</b>:   minimal joint torques robot 1 
+ - <b>`t_min2`</b>:   minimal joint torques robot 2 
+ - <b>`t_max1`</b>:   maximal joint torques robot 1 
+ - <b>`t_max2`</b>:   maximal joint torques robot 2 
+ - <b>`gravity1`</b>:   applied joint torques (for example gravity vector  or J^T*f ) robot 1 
+ - <b>`gravity2`</b>:   maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
 
 
 
 **Returns:**
  
- - <b>`list`</b>:  f_vertex vertices of the polytope 
- - <b>`list`</b>:  polytope_faces faces of the polytope 
+ - <b>`f_vertex`</b> (list):   vertices of the polytope 
+ - <b>`faces`</b> (list):  polytope_faces faces of the polytope 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L282"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L286"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `make_2d`
 
@@ -246,16 +256,16 @@ Take a list of 3D(cooplanar) points and make it 2D
 
 **Args:**
  
- - <b>`param1`</b>:  points matrix of 3D points 
+ - <b>`points3D`</b>:   matrix of 3D points 
 
 **Returns:**
  
- - <b>`array`</b>:   list array of 2D points 
+ - <b>`points2D`</b> (array):   list array of 2D points 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L307"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L311"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `order_index`
 
@@ -267,16 +277,16 @@ Order clockwise 2D points
 
 **Args:**
  
- - <b>`param1`</b>:  points matrix of 2D points 
+ - <b>`points`</b>:   matrix of 2D points 
 
 **Returns:**
  
- - <b>`array`</b>:  ordered indexes 
+ - <b>`indexes`</b> (array):  ordered indexes 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L323"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L327"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `make_unique`
 
@@ -290,11 +300,11 @@ Remove repetitions of columns
 
 **Args:**
  
- - <b>`param1`</b>:  points matrix of n-dim points 
+ - <b>`points`</b>:   matrix of n-dim points 
 
 **Returns:**
  
- - <b>`array`</b>:  matrix with only unique pints 
+ - <b>`unique`</b>:  matrix with only unique pints 
 
 
 
