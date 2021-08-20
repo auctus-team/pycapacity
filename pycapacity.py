@@ -5,7 +5,7 @@ import numpy.matlib
 import itertools
 
 # minkowski sum
-from scipy.spatial import ConvexHull
+from scipy.spatial import ConvexHull, HalfspaceIntersection
 
 
 # velocity manipulability calculation
@@ -75,7 +75,12 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     t_max = np.vstack((t1_max,t1_max))
     if gravity1 is None:
         gravity = None
-    else:array
+    else:
+        gravity = np.vstack((gravity1, gravity2))
+
+    return force_polytope(Jac, t_max,t_min, gravity)
+
+
 def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, gravity1 = None, gravity2 = None):
     """
     Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
@@ -281,6 +286,114 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
             else: 
                 polytopes.append(fi)
     return [force_vertex, polytopes]
+
+
+def velocity_polytope(Jacobian, dq_max, dq_min, gravity= None):
+    """
+    Velocity polytope calculating function
+
+    Args:
+        Jacobian:  position jacobian 
+        dq_max:  maximal joint velocities 
+        dq_min:  minimal joint velocities 
+
+    Returns:
+        velocity_vertex(list):  vertices of the polytope
+    """ 
+    velocity_vertex, H, d, vel_faces = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
+    return velocity_vertex
+
+def velocity_polytope_withfaces(Jacobian, dq_max, dq_min, gravity= None):
+    """
+    Velocity polytope calculating function, with faces
+
+    Args:
+        Jacobian:  position jacobian 
+        dq_max:  maximal joint velocities 
+        dq_min:  minimal joint velocities 
+
+    Returns:
+        velocity_vertex(list):  vertices of the polytope
+        faces(list):  faces of the polytope
+    """ 
+    velocity_vertex, H, d, vel_faces = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
+    faces = []
+    for face in vel_faces:
+        faces.append(velocity_vertex[:,face])
+    return velocity_vertex, faces
+
+def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
+    """
+    Hyper plane shifting method implementation used to solve problems of a form:
+    y = Ax
+    s.t. x_min <= x <= x_max
+
+    Hyperplane shifting method: 
+    *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht*
+
+
+    This algorithm can be used to calcualte acceleration polytope, velocity polytoe and even 
+    polytope of the joint achievable joint torques based on the muscle forces
+
+    Args:
+        A: projection matrix
+        x_min: minimal values
+        x_max: maximal values 
+        
+    Returns:
+        H: half space representation matrix H - Hx < d
+        d: half space representaiton vector d - Hx < d
+        vertices: vertex representation of the polytope
+    """
+    H = []
+    d = []
+
+    x_min = np.array(x_min)
+    x_max = np.array(x_max)
+    # Combination of n x n-1 columns of A
+    #C = nchoosek(1:size(A,2),size(A,1)-1)
+    C = np.array(list(itertools.combinations(range(A.shape[1]),A.shape[0]-1)))
+    for comb in range(C.shape[0]):
+        W = A[:,C[comb,:]]
+        U,S,V = np.linalg.svd(W.T)
+        if ( A.shape[0] - len(S) ) == 1 :
+            c = V[:,-1].T
+
+            # Check for redundant constraint
+            if len(H) :
+                #diff = min(vecnorm(H - c,2,2))
+                diff = np.min( np.sqrt( np.sum( np.power((H-c), 2), 1)))
+                if diff < tol and diff > -tol :
+                    c_exists = True
+                else:
+                    c_exists = False
+            else: 
+                c_exists = False
+
+            # Compute offsets    
+            if ~c_exists :   
+                I = c.dot(A)          
+                I_positive = np.where(I > 0)[0]
+                I_negative = np.where(I < 0)[0]    
+                d_positive = np.sum(I[I_positive] * np.max([x_min[I_positive],x_max[I_positive]],0)) + np.sum(I[I_negative] * np.min([x_min[I_negative],x_max[I_negative]],0))
+                d_negative = -np.sum(I[I_negative] * np.max([x_min[I_negative],x_max[I_negative]],0)) - np.sum(I[I_positive] * np.min([x_min[I_positive],x_max[I_positive]],0))
+
+                # Append constraints
+                if not len(H):
+                    H = np.vstack((c,-c))
+                    d = np.vstack((d_positive,d_negative))
+                else:
+                    H = np.vstack((H, c, -c))
+                    d = np.vstack((d, [[d_positive], [d_negative]]))
+
+    if len(H):
+        # calculate the certices
+        hd_mat = np.hstack((np.array(H),-np.array(d)))
+        hd = HalfspaceIntersection(hd_mat,np.zeros(A.shape[0]))
+        hull = ConvexHull(hd.intersections)
+        return hd.intersections.T, H, d, hull.simplices
+    else:
+        return [], H, d, []
 
 
 def make_2d(points):

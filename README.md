@@ -13,14 +13,20 @@ This module integrates several velocity and force capacity calculation functions
 [**On-line force capability evaluation based on efficient polytope vertex search**](https://arxiv.org/abs/2011.05226)<br> 
 by Antun Skuric, Vincent Padois and David Daney<br> Published on ICRA2021
 
+
 ## Module functions
+- [`manipulability_force`](./docs/pycapacity.md#function-manipulability_force): force manipulability calculation
+- [`manipulability_velocity`](./docs/pycapacity.md#function-manipulability_velocity): velocity manipulability calculation
 - [`force_polytope`](./docs/pycapacity.md#function-force_polytope): Force polytope representing the capacities of the two robots in a certain configuration
+- [`force_polytope_withfaces`](./docs/pycapacity.md#function-force_polytope_withfaces): Force polytope representing the capacities of the two robots in a certain configuration.
+- [`velocity_polytope`](./docs/pycapacity.md#function-velocity_polytope): Velocity polytope calculating function
+- [`velocity_polytope_withfaces`](./docs/pycapacity.md#function-velocity_polytope_withfaces): Velocity polytope calculating function, with faces
 - [`force_polytope_intersection`](./docs/pycapacity.md#function-force_polytope_intersection): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
 - [`force_polytope_intersection_withfaces`](./docs/pycapacity.md#function-force_polytope_intersection_withfaces): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
 - [`force_polytope_sum_withfaces`](./docs/pycapacity.md#function-force_polytope_sum_withfaces): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
-- [`force_polytope_withfaces`](./docs/pycapacity.md#function-force_polytope_withfaces): Force polytope representing the capacities of the two robots in a certain configuration.
-- [`manipulability_force`](./docs/pycapacity.md#function-manipulability_force): force manipulability calculation
-- [`manipulability_velocity`](./docs/pycapacity.md#function-manipulability_velocity): velocity manipulability calculation
+
+Algorithms:
+- [`hyper_plane_shift_method`](./docs/pycapacity.md#function-hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
 ---
 
 ## Code examples

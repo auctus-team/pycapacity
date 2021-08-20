@@ -103,7 +103,7 @@ Force polytope representing the intersection of the capacities of the two robots
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_sum_withfaces`
 
@@ -145,7 +145,7 @@ Force polytope representing the minkowski sum of the capacities of the two robot
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope`
 
@@ -173,7 +173,7 @@ Force polytope representing the capacities of the two robots in a certain config
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L206"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L211"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_withfaces`
 
@@ -202,7 +202,7 @@ Force polytope representing the capacities of the two robots in a certain config
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L245"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L250"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection_withfaces`
 
@@ -244,7 +244,97 @@ Force polytope representing the intersection of the capacities of the two robots
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L286"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L291"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `velocity_polytope`
+
+```python
+velocity_polytope(Jacobian, dq_max, dq_min, gravity=None)
+```
+
+Velocity polytope calculating function 
+
+
+
+**Args:**
+ 
+ - <b>`Jacobian`</b>:   position jacobian  
+ - <b>`dq_max`</b>:   maximal joint velocities  
+ - <b>`dq_min`</b>:   minimal joint velocities  
+
+
+
+**Returns:**
+ 
+ - <b>`velocity_vertex`</b> (list):   vertices of the polytope 
+
+
+---
+
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L306"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `velocity_polytope_withfaces`
+
+```python
+velocity_polytope_withfaces(Jacobian, dq_max, dq_min, gravity=None)
+```
+
+Velocity polytope calculating function, with faces 
+
+
+
+**Args:**
+ 
+ - <b>`Jacobian`</b>:   position jacobian  
+ - <b>`dq_max`</b>:   maximal joint velocities  
+ - <b>`dq_min`</b>:   minimal joint velocities  
+
+
+
+**Returns:**
+ 
+ - <b>`velocity_vertex`</b> (list):   vertices of the polytope 
+ - <b>`faces`</b> (list):   faces of the polytope 
+
+
+---
+
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L325"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `hyper_plane_shift_method`
+
+```python
+hyper_plane_shift_method(A, x_min, x_max, tol=1e-15)
+```
+
+Hyper plane shifting method implementation used to solve problems of a form: y = Ax s.t. x_min <= x <= x_max 
+
+Hyperplane shifting method:  *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht* 
+
+
+
+This algorithm can be used to calcualte acceleration polytope, velocity polytoe and even  polytope of the joint achievable joint torques based on the muscle forces 
+
+
+
+**Args:**
+ 
+ - <b>`A`</b>:  projection matrix 
+ - <b>`x_min`</b>:  minimal values 
+ - <b>`x_max`</b>:  maximal values  
+
+
+
+**Returns:**
+ 
+ - <b>`H`</b>:  half space representation matrix H - Hx < d 
+ - <b>`d`</b>:  half space representaiton vector d - Hx < d 
+ - <b>`vertices`</b>:  vertex representation of the polytope 
+
+
+---
+
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L399"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `make_2d`
 
@@ -265,7 +355,7 @@ Take a list of 3D(cooplanar) points and make it 2D
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L311"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L424"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `order_index`
 
@@ -286,7 +376,7 @@ Order clockwise 2D points
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L327"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L440"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `make_unique`
 
