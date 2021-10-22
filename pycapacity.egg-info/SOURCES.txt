@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+pycapacity.egg-info/PKG-INFO
+pycapacity.egg-info/SOURCES.txt
+pycapacity.egg-info/dependency_links.txt
+pycapacity.egg-info/requires.txt
+pycapacity.egg-info/top_level.txt

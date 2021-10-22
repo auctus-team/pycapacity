@@ -5,14 +5,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='pycapacity',
-    version='1.0.0',
+    version='1.0.1',
     author='Antun Skuric',
     author_email='antun.skuric@inria.fr',
     description='A Real-time capable robot capacity calculation module',
-    long_description=long_description,
+    long_description=long_description, #'A Real-time capable robot capacity calculation module', 
     long_description_content_type="text/markdown",
     url='https://gitlab.inria.fr/askuric/pycapacity',
     license='MIT',
-    packages=['pycapacity'],
-    install_requires=['numpy','scipy','itertools'],
+    packages=setuptools.find_packages(),
+    install_requires=['numpy','scipy']
 )
