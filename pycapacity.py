@@ -1,3 +1,4 @@
+#! /usr/bin/python3se
 import numpy as np
 import numpy.matlib
 import itertools

@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 import setuptools
 
 with open("README.md", "r", encoding="utf-8") as fh:
@@ -5,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='pycapacity',
-    version='1.0.3',
+    version='1.0.4',
     author='Antun Skuric',
     author_email='antun.skuric@inria.fr',
     description='A Real-time capable robot capacity calculation module',
