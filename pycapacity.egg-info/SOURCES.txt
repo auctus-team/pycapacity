@@ -1,6 +1,8 @@
 LICENSE
 README.md
 setup.py
+pycapacity/__init__.py
+pycapacity/pycapacity.py
 pycapacity.egg-info/PKG-INFO
 pycapacity.egg-info/SOURCES.txt
 pycapacity.egg-info/dependency_links.txt
