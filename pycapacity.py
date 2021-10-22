@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-from math import sin, cos 
 import numpy as np
-import numpy.matlib 
+import numpy.matlib
 import itertools
 
 # minkowski sum
@@ -9,19 +7,19 @@ from scipy.spatial import ConvexHull, HalfspaceIntersection
 
 
 # velocity manipulability calculation
-def manipulability_velocity(Jacobian_position, dq_max):
+def velocity_ellipsoid(J, dq_max):
     """
-    velocity manipulability calculation
+    velocity manipulability ellipsoid calculation
 
     Args:
-        Jacobian_position: position jacobian
+        J: position jacobian
         dq_max:  maximal joint velocities
     Returns: 
-        S(list):  list of singular values S
-        U(matrix): the matrix U
+        S(list):  list of axis lengths
+        U(matrix): list of axis vectors
     """ 
     # jacobian calculation
-    Jac = Jacobian_position
+    Jac = J
     # limits scaling
     W = np.diagflat(dq_max)
     # calculate the singular value decomposition
@@ -29,20 +27,42 @@ def manipulability_velocity(Jacobian_position, dq_max):
     # return the singular values and the unit vector angle
     return [S, U]
 
-# force manipulability calculation
-def manipulability_force(Jacobian_position, t_max):
+# acceleration manipulability calculation
+def acceleration_ellipsoid(J, M, t_max):
     """
-    force manipulability calculation
+    acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
 
     Args:
-        Jacobian_position: position jacobian
-        dq_max:  maximal joint velocities
+        J: matrix jacobian
+        M: matrix inertia 
+        t_max:  maximal joint torques
     Returns: 
-        list:  list of singular values 1/S
-        U(matrix): the matrix U
+        S(list):  list of axis lengths
+        U(matrix): list of axis vectors
     """ 
     # jacobian calculation
-    Jac = Jacobian_position
+    Jac = J.dot(np.linalg.pinv(M))
+    # limits scaling
+    W = np.linalg.pinv(np.diagflat(t_max))
+    # calculate the singular value decomposition
+    U, S, V = np.linalg.svd(Jac.dot(W))
+    # return the singular values and the unit vector angle
+    return [S, U]
+
+# force ellipsoid calculation
+def force_ellipsoid(J, t_max):
+    """
+    force manipulability ellipsoid calculation
+
+    Args:
+        J: matrix jacobian
+        t_max:  maximal joint torques
+    Returns: 
+        S(list):  list of axis lengths
+        U(matrix): list of axis vectors
+    """ 
+    # jacobian calculation
+    Jac = J
     # limits scaling
     W = np.linalg.pinv(np.diagflat(t_max))
     # calculate the singular value decomposition
@@ -51,7 +71,7 @@ def manipulability_force(Jacobian_position, t_max):
     return [np.divide(1,S), U]
 
 # maximal end effector force
-def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, gravity1, gravity2):
+def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias, t2_bias):
     """
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
 
@@ -63,8 +83,8 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
         t_min2:  minimal joint torques robot 2
         t_max1:  maximal joint torques robot 1
         t_max2:  maximal joint torques robot 2
-        gravity1:  applied joint torques (for example gravity vector  or J^T*f ) robot 1
-        gravity2:  maximal joint torques (for example gravity vector  or J^T*f ) robot 2
+        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
+        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
 
     Returns:
         f_vertex(list):  vertices of the polytope
@@ -73,15 +93,14 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     Jac =  np.hstack((Jacobian1,Jacobian2))
     t_min = np.vstack((t1_min,t2_min))
     t_max = np.vstack((t1_max,t1_max))
-    if gravity1 is None:
-        gravity = None
+    if t1_bias is None:
+        t_bias = None
     else:
-        gravity = np.vstack((gravity1, gravity2))
+        t_bias = np.vstack((t1_bias, t2_bias))
 
-    return force_polytope(Jac, t_max,t_min, gravity)
+    return force_polytope(Jac, t_max,t_min, t_bias)
 
-
-def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, gravity1 = None, gravity2 = None):
+def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias = None, t2_bias = None):
     """
     Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
@@ -93,16 +112,16 @@ def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t
         t_min2:  minimal joint torques robot 2
         t_max1:  maximal joint torques robot 1
         t_max2:  maximal joint torques robot 2
-        gravity1:  applied joint torques (for example gravity vector  or J^T*f ) robot 1
-        gravity2:  maximal joint torques (for example gravity vector  or J^T*f ) robot 2
+        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
+        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
 
     Returns:
         f_vertex(list):  vertices of the polytope
         faces(list): polytope_faces faces of the polytope
     """ 
     # calculate two polytopes
-    f_vertex1, t_vertex1, gravity1 = force_polytope(Jacobian1, t1_max, t1_min, gravity1)
-    f_vertex2, t_vertex2, gravity2 = force_polytope(Jacobian2, t2_max, t2_min, gravity2)
+    f_vertex1, t_vertex1, t1_bias = force_polytope(Jacobian1, t1_max, t1_min, t1_bias)
+    f_vertex2, t_vertex2, t2_bias = force_polytope(Jacobian2, t2_max, t2_min, t2_bias)
     # then do a minkowski sum
     m, n = Jacobian1.shape
     f_sum = np.zeros((f_vertex1.shape[1]*f_vertex2.shape[1],m))
@@ -120,7 +139,7 @@ def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t
     return f_vertex, polytope_faces
 
 # maximal end effector force
-def force_polytope(Jacobian, t_max, t_min, gravity = None):
+def force_polytope(Jacobian, t_max, t_min, t_bias = None):
     """
     Force polytope representing the capacities of the two robots in a certain configuration
 
@@ -128,7 +147,7 @@ def force_polytope(Jacobian, t_max, t_min, gravity = None):
         Jacobian:  position jacobian 
         t_max:  maximal joint torques 
         t_min:  minimal joint torques 
-        gravity:  applied joint torques (for example gravity vector  or J^T*f )  
+        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 
 
     Returns:
         f_vertex(list):  vertices of the polytope
@@ -137,9 +156,9 @@ def force_polytope(Jacobian, t_max, t_min, gravity = None):
     Jac = Jacobian
     m, n = Jac.shape
 
-    # if gravity not specified
-    if gravity is None:
-        gravity = np.zeros((n,1))
+    # if t_bias not specified
+    if t_bias is None:
+        t_bias = np.zeros((n,1))
 
     # calculate svd
     U, S, V = np.linalg.svd(Jac)
@@ -152,8 +171,8 @@ def force_polytope(Jacobian, t_max, t_min, gravity = None):
 
     # matrix of axis vectors - for polytope search
     T_vec = np.diagflat(t_max-t_min)
-    T_min = np.matlib.repmat(t_min - gravity,1,2**m)
-    t_max_g = t_max - gravity
+    T_min = np.matlib.repmat(t_min - t_bias,1,2**m)
+    t_max_g = t_max - t_bias
 
     fixed_vectors_combinations = np.array(list(itertools.combinations(range(n),m)))
     permutations = np.array(list(itertools.product([0, 1], repeat=m))).T
@@ -206,9 +225,9 @@ def force_polytope(Jacobian, t_max, t_min, gravity = None):
     t_vertex = make_unique(t_vertex)
     # calculate the forces based on the vertex torques
     f_vertex = J_n_invT.dot( t_vertex )
-    return f_vertex, t_vertex, gravity
+    return f_vertex, t_vertex, t_bias
     
-def force_polytope_withfaces(Jacobian, t_max, t_min, gravity = None):
+def force_polytope_withfaces(Jacobian, t_max, t_min, t_bias = None):
     """
     Force polytope representing the capacities of the two robots in a certain configuration.
     With vertices ordered into the faces
@@ -217,15 +236,16 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, gravity = None):
         Jacobian:  position jacobian 
         t_max:  maximal joint torques 
         t_min:  minimal joint torques 
-        gravity:  applied joint torques (for example gravity vector  or J^T*f )  
+        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces
 
     Returns:
         f_vertex(list):  vertices of the polytope
         faces(list):  faces of the polytope
     """ 
-    force_vertex, t_vertex, gravity = force_polytope(Jacobian, t_max, t_min, gravity)
+    force_vertex, t_vertex, t_bias = force_polytope(Jacobian, t_max, t_min, t_bias)
     m, n = Jacobian.shape
     
+    # find the polytope faces
     polytope_faces = []
     if force_vertex.shape[0] == 1:
         polytope_faces.append(force_vertex)
@@ -233,13 +253,13 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, gravity = None):
         polytope_faces.append(force_vertex[:, order_index(force_vertex)])
     else:        
         for i in range(n):
-            fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_min[i] - gravity[i]),1e-5)])
+            fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_min[i] - t_bias[i]),1e-5)])
             if fi != []:
                 if fi.shape[1] > 3:
                     polytope_faces.append(fi[:,order_index(make_2d(fi))])
                 else: 
                     polytope_faces.append(fi)
-            fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_max[i] - gravity[i]),1e-5)])
+            fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_max[i] - t_bias[i]),1e-5)])
             if fi != []:
                 if fi.shape[1] > 3:
                     polytope_faces.append(fi[:,order_index(make_2d(fi))])
@@ -247,7 +267,7 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, gravity = None):
                     polytope_faces.append(fi)
     return [force_vertex, polytope_faces]
 
-def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, gravity1=None, gravity2=None):
+def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias=None, t2_bias=None):
     """
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
@@ -259,27 +279,27 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
         t_min2:  minimal joint torques robot 2
         t_max1:  maximal joint torques robot 1
         t_max2:  maximal joint torques robot 2
-        gravity1:  applied joint torques (for example gravity vector  or J^T*f ) robot 1
-        gravity2:  maximal joint torques (for example gravity vector  or J^T*f ) robot 2
+        t1_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
+        t2_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
 
     Returns:
         f_vertex(list):  vertices of the polytope
         faces(list): polytope_faces faces of the polytope
     """
-    force_vertex, t_vertex, gravity = force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, gravity1, gravity2)
+    force_vertex, t_vertex, t_bias = force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias, t2_bias)
     m, n = Jacobian1.shape
     t_max_int = np.vstack((t1_max,t2_max))
     t_min_int = np.vstack((t1_min,t2_min))
 
     polytopes = []
     for i in range(2*n):
-        fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_min_int[i] - gravity[i]),1e-5)])
+        fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_min_int[i] - t_bias[i]),1e-5)])
         if fi != []:
             if fi.shape[1] > 3:
                 polytopes.append(fi[:,order_index(make_2d(fi))])
             else: 
                 polytopes.append(fi)
-        fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_max_int[i] - gravity[i]),1e-5)])
+        fi = np.array(force_vertex[:,np.isclose(t_vertex[i,:], (t_max_int[i] - t_bias[i]),1e-5)])
         if fi != []:
             if fi.shape[1] > 3:
                 polytopes.append(fi[:,order_index(make_2d(fi))])
@@ -288,7 +308,7 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
     return [force_vertex, polytopes]
 
 
-def velocity_polytope(Jacobian, dq_max, dq_min, gravity= None):
+def velocity_polytope(Jacobian, dq_max, dq_min):
     """
     Velocity polytope calculating function
 
@@ -303,7 +323,7 @@ def velocity_polytope(Jacobian, dq_max, dq_min, gravity= None):
     velocity_vertex, H, d, vel_faces = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
     return velocity_vertex
 
-def velocity_polytope_withfaces(Jacobian, dq_max, dq_min, gravity= None):
+def velocity_polytope_withfaces(Jacobian, dq_max, dq_min):
     """
     Velocity polytope calculating function, with faces
 
@@ -321,6 +341,51 @@ def velocity_polytope_withfaces(Jacobian, dq_max, dq_min, gravity= None):
     for face in vel_faces:
         faces.append(velocity_vertex[:,face])
     return velocity_vertex, faces
+
+def acceleration_polytope(J, M, t_max, t_min, t_bias= None):
+    """
+    Acceleration polytope calculating function
+
+    Args:
+        J:  position jacobian 
+        M:  inertia matrix 
+        t_max:  maximal joint torque 
+        t_min:  minimal joint torque 
+        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces
+    Returns:
+        acceleration_vertex(list):  vertices of the polytope
+    """ 
+    B = J.dot(np.linalg.pinv(M))
+    if t_bias is None:
+        vertex, H, d, faces = hyper_plane_shift_method(B,t_min,t_max)
+    else:
+       vertex, H, d, faces = hyper_plane_shift_method(B,t_min-t_bias, t_max-t_bias)
+    return vertex
+
+def acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias= None):
+    """
+    Acceleration polytope calculating function
+
+    Args:
+        J:  position jacobian 
+        M:  inertia matrix 
+        t_max:  maximal joint torque 
+        t_min:  minimal joint torque 
+        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces
+    Returns:
+        acceleration_vertex(list):  vertices of the polytope
+    """ 
+    B = J.dot(np.linalg.pinv(M))
+    if t_bias is None:
+        vertex, H, d, faces_index = hyper_plane_shift_method(B,t_min,t_max)
+    else:
+       vertex, H, d, faces_index = hyper_plane_shift_method(B,t_min-t_bias,t_max-t_bias)
+
+    faces = []
+    for face in faces_index:
+        faces.append(vertex[:,face])
+    return vertex, faces
+
 
 def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     """
@@ -395,7 +460,6 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     else:
         return [], H, d, []
 
-
 def make_2d(points):
     """
     Take a list of 3D(cooplanar) points and make it 2D
@@ -449,6 +513,6 @@ def make_unique(points):
     unique_points = np.unique(np.around(points,7), axis=1)
     return unique_points
          
-# definition of the four_link_solver module
+# definition of the testing functions module
 if __name__ == '__main__':
-    print('imported capacity solver')
+    print('pycapacity testing')

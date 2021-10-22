@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `pycapacity`
 
@@ -10,57 +10,83 @@
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L9"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-## <kbd>function</kbd> `manipulability_velocity`
+## <kbd>function</kbd> `velocity_ellipsoid`
 
 ```python
-manipulability_velocity(Jacobian_position, dq_max)
+velocity_ellipsoid(J, dq_max)
 ```
 
-velocity manipulability calculation 
+velocity manipulability ellipsoid calculation 
 
 
 
 **Args:**
  
- - <b>`Jacobian_position`</b>:  position jacobian 
+ - <b>`J`</b>:  position jacobian 
  - <b>`dq_max`</b>:   maximal joint velocities 
 
 **Returns:**
  
- - <b>`S`</b> (list):   list of singular values S 
- - <b>`U`</b> (matrix):  the matrix U 
+ - <b>`S`</b> (list):   list of axis lengths 
+ - <b>`U`</b> (matrix):  list of axis vectors 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L33"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-## <kbd>function</kbd> `manipulability_force`
+## <kbd>function</kbd> `acceleration_ellipsoid`
 
 ```python
-manipulability_force(Jacobian_position, t_max)
+acceleration_ellipsoid(J, M, t_max)
 ```
 
-force manipulability calculation 
+acceleration ellipsoid calculation (dynamic manipulability ellipsoid) 
 
 
 
 **Args:**
  
- - <b>`Jacobian_position`</b>:  position jacobian 
- - <b>`dq_max`</b>:   maximal joint velocities 
+ - <b>`J`</b>:  matrix jacobian 
+ - <b>`M`</b>:  matrix inertia  
+ - <b>`t_max`</b>:   maximal joint torques 
 
 **Returns:**
  
- - <b>`list`</b>:   list of singular values 1/S 
- - <b>`U`</b> (matrix):  the matrix U 
+ - <b>`S`</b> (list):   list of axis lengths 
+ - <b>`U`</b> (matrix):  list of axis vectors 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L54"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `force_ellipsoid`
+
+```python
+force_ellipsoid(J, t_max)
+```
+
+force manipulability ellipsoid calculation 
+
+
+
+**Args:**
+ 
+ - <b>`J`</b>:  matrix jacobian 
+ - <b>`t_max`</b>:   maximal joint torques 
+
+**Returns:**
+ 
+ - <b>`S`</b> (list):   list of axis lengths 
+ - <b>`U`</b> (matrix):  list of axis vectors 
+
+
+---
+
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L73"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection`
 
@@ -72,8 +98,8 @@ force_polytope_intersection(
     t1_min,
     t2_max,
     t2_min,
-    gravity1,
-    gravity2
+    t1_bias,
+    t2_bias
 )
 ```
 
@@ -91,8 +117,8 @@ Force polytope representing the intersection of the capacities of the two robots
  - <b>`t_min2`</b>:   minimal joint torques robot 2 
  - <b>`t_max1`</b>:   maximal joint torques robot 1 
  - <b>`t_max2`</b>:   maximal joint torques robot 2 
- - <b>`gravity1`</b>:   applied joint torques (for example gravity vector  or J^T*f ) robot 1 
- - <b>`gravity2`</b>:   maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
+ - <b>`t1_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1 
+ - <b>`t2_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2 
 
 
 
@@ -103,7 +129,7 @@ Force polytope representing the intersection of the capacities of the two robots
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L102"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_sum_withfaces`
 
@@ -115,8 +141,8 @@ force_polytope_sum_withfaces(
     t1_min,
     t2_max,
     t2_min,
-    gravity1=None,
-    gravity2=None
+    t1_bias=None,
+    t2_bias=None
 )
 ```
 
@@ -132,8 +158,8 @@ Force polytope representing the minkowski sum of the capacities of the two robot
  - <b>`t_min2`</b>:   minimal joint torques robot 2 
  - <b>`t_max1`</b>:   maximal joint torques robot 1 
  - <b>`t_max2`</b>:   maximal joint torques robot 2 
- - <b>`gravity1`</b>:   applied joint torques (for example gravity vector  or J^T*f ) robot 1 
- - <b>`gravity2`</b>:   maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
+ - <b>`t1_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1 
+ - <b>`t2_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2 
 
 
 
@@ -145,12 +171,12 @@ Force polytope representing the minkowski sum of the capacities of the two robot
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L123"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L141"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope`
 
 ```python
-force_polytope(Jacobian, t_max, t_min, gravity=None)
+force_polytope(Jacobian, t_max, t_min, t_bias=None)
 ```
 
 Force polytope representing the capacities of the two robots in a certain configuration 
@@ -162,7 +188,7 @@ Force polytope representing the capacities of the two robots in a certain config
  - <b>`Jacobian`</b>:   position jacobian  
  - <b>`t_max`</b>:   maximal joint torques  
  - <b>`t_min`</b>:   minimal joint torques  
- - <b>`gravity`</b>:   applied joint torques (for example gravity vector  or J^T*f )   
+ - <b>`t_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot  
 
 
 
@@ -173,12 +199,12 @@ Force polytope representing the capacities of the two robots in a certain config
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L211"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L229"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_withfaces`
 
 ```python
-force_polytope_withfaces(Jacobian, t_max, t_min, gravity=None)
+force_polytope_withfaces(Jacobian, t_max, t_min, t_bias=None)
 ```
 
 Force polytope representing the capacities of the two robots in a certain configuration. With vertices ordered into the faces 
@@ -190,7 +216,7 @@ Force polytope representing the capacities of the two robots in a certain config
  - <b>`Jacobian`</b>:   position jacobian  
  - <b>`t_max`</b>:   maximal joint torques  
  - <b>`t_min`</b>:   minimal joint torques  
- - <b>`gravity`</b>:   applied joint torques (for example gravity vector  or J^T*f )   
+ - <b>`t_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces 
 
 
 
@@ -202,7 +228,7 @@ Force polytope representing the capacities of the two robots in a certain config
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L250"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L269"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection_withfaces`
 
@@ -214,8 +240,8 @@ force_polytope_intersection_withfaces(
     t1_min,
     t2_max,
     t2_min,
-    gravity1=None,
-    gravity2=None
+    t1_bias=None,
+    t2_bias=None
 )
 ```
 
@@ -231,8 +257,8 @@ Force polytope representing the intersection of the capacities of the two robots
  - <b>`t_min2`</b>:   minimal joint torques robot 2 
  - <b>`t_max1`</b>:   maximal joint torques robot 1 
  - <b>`t_max2`</b>:   maximal joint torques robot 2 
- - <b>`gravity1`</b>:   applied joint torques (for example gravity vector  or J^T*f ) robot 1 
- - <b>`gravity2`</b>:   maximal joint torques (for example gravity vector  or J^T*f ) robot 2 
+ - <b>`t1_bias`</b>:   bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1 
+ - <b>`t2_bias`</b>:   bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2 
 
 
 
@@ -244,12 +270,12 @@ Force polytope representing the intersection of the capacities of the two robots
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L291"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L310"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_polytope`
 
 ```python
-velocity_polytope(Jacobian, dq_max, dq_min, gravity=None)
+velocity_polytope(Jacobian, dq_max, dq_min)
 ```
 
 Velocity polytope calculating function 
@@ -271,12 +297,12 @@ Velocity polytope calculating function
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L306"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L325"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_polytope_withfaces`
 
 ```python
-velocity_polytope_withfaces(Jacobian, dq_max, dq_min, gravity=None)
+velocity_polytope_withfaces(Jacobian, dq_max, dq_min)
 ```
 
 Velocity polytope calculating function, with faces 
@@ -299,7 +325,61 @@ Velocity polytope calculating function, with faces
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L325"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L344"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `acceleration_polytope`
+
+```python
+acceleration_polytope(J, M, t_max, t_min, t_bias=None)
+```
+
+Acceleration polytope calculating function 
+
+
+
+**Args:**
+ 
+ - <b>`J`</b>:   position jacobian  
+ - <b>`M`</b>:   inertia matrix  
+ - <b>`t_max`</b>:   maximal joint torque  
+ - <b>`t_min`</b>:   minimal joint torque  
+ - <b>`t_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces 
+
+**Returns:**
+ 
+ - <b>`acceleration_vertex`</b> (list):   vertices of the polytope 
+
+
+---
+
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L364"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `acceleration_polytope_withfaces`
+
+```python
+acceleration_polytope_withfaces(Jacobian, dq_max, dq_min, t_bias=None)
+```
+
+Acceleration polytope calculating function 
+
+
+
+**Args:**
+ 
+ - <b>`J`</b>:   position jacobian  
+ - <b>`M`</b>:   inertia matrix  
+ - <b>`t_max`</b>:   maximal joint torque  
+ - <b>`t_min`</b>:   minimal joint torque  
+ - <b>`t_bias`</b>:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces 
+
+**Returns:**
+ 
+ - <b>`acceleration_vertex`</b> (list):   vertices of the polytope 
+
+
+---
+
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L389"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `hyper_plane_shift_method`
 
@@ -334,7 +414,7 @@ This algorithm can be used to calcualte acceleration polytope, velocity polytoe 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L399"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L462"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `make_2d`
 
@@ -355,7 +435,7 @@ Take a list of 3D(cooplanar) points and make it 2D
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L424"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L487"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `order_index`
 
@@ -376,7 +456,7 @@ Order clockwise 2D points
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/pycapacity/pycapacity.py#L440"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L503"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `make_unique`
 
