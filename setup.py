@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 import setuptools
 
-with open("README.md", "r", encoding="utf-8") as fh:
+with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
@@ -14,6 +14,8 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url='https://gitlab.inria.fr/askuric/pycapacity',
     license='MIT',
-    packages=setuptools.find_packages(),
+    #package_dir = {'': 'src'},
+    #packages=setuptools.find_packages(include=['src.*']),
+    py_modules=['pycapacity'],
     install_requires=['numpy','scipy']
 )
