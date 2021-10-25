@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='pycapacity',
-    version='1.0.4',
+    version='1.0.5',
     author='Antun Skuric',
     author_email='antun.skuric@inria.fr',
     description='A Real-time capable robot capacity calculation module',
