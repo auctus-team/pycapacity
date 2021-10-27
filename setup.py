@@ -14,8 +14,8 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity',
     license='MIT',
-    package_dir = {'pycapacity': 'pycapacity'}, 
-    packages = setuptools.find_packages(),
-    py_modules=['pycapacity.robot','pycapacity.human'],
+    #package_dir = {'pycapacity': 'pycapacity'}, 
+    packages = ['pycapacity'],
+    #py_modules=['pycapacity.robot','pycapacity.human'],
     install_requires=['numpy','scipy','cvxopt']
 )
