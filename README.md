@@ -2,7 +2,7 @@
 # Python real-time capable task-space capacity calculation module
 
 <img src="./images/comparison.gif" height="300px">
-<img src="./images/bimanual1.png" height="250px">
+<img src="./images/bimanual1.png" height="200px">
 
 The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
 - Robotic serial manipulators - `pycapacity.robot`
