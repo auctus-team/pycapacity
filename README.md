@@ -1,14 +1,15 @@
 
 # Python real-time capable task-space capacity calculation module
 
-![](./images/comparison.gif)
+<img src="./images/comparison.gif" height="300px">
+<img src="./images/force.png" height="300px">
 
 The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
 - Robotic serial manipulators - `pycapacity.robot`
 - Human musculoskeletal models - `pycapacity.human`
 
 ## Robotic manipulator capacity metrics
-<img src='./images/robot.png' height='400px'>
+<img src='./images/robot.png' height='300px'>
 
 For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
 - Velocity (manipulability) ellipsoid <br> `E_vel = {dx | dx = J.dq, ||dq||<1 }`
