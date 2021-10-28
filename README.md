@@ -1,11 +1,16 @@
 
-# Python real-time capable robot task-space capacity calculation module
+# Python real-time capable task-space capacity calculation module
 
-![](https://gitlab.inria.fr/askuric/polytope_vertex_search/-/raw/master/images/rviz_screenshot_2020.png)
+![](./images/comparison.gif)
 
-This module provides a framework for the generic robot capacity calculation called in a form of a python module `pycapacity`.
+The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
+- Robotic serial manipulators - `pycapacity.robot`
+- Human musculoskeletal models - `pycapacity.human`
 
-This module integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
+## Robotic manipulator capacity metrics
+<img src='./images/robot.png' height='400px'>
+
+For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
 - Velocity (manipulability) ellipsoid <br> `E_vel = {dx | dx = J.dq, ||dq||<1 }`
 - Acceleration (dynamic manipulability) ellipsoid <br> `E_acc = {ddx | ddx = J.M^(-1).t, ||t||<1 }`
 - Force ellipsoid <br> `E_for = {f | J^T.f = t, ||t||<1 }`
@@ -16,11 +21,31 @@ And polytopes:
 - Force polytope <br> `P_for = {f | J^T.f = t, t_min < t < t_max}`
 - Force polytopes *Minkowski sum and intersection*
 
+Where `J` is the robot jacobian matrix, `f` is the vector of cartesian forces,`dx` and `ddx` are vectors fo cartesian velocities and accretions, `dq` is the vector of the joint velocities and `t` is the vector of joint torques.
+
 The force polytope functions have been implemented according to the paper:<br>
 [**On-line force capability evaluation based on efficient polytope vertex search**](https://arxiv.org/abs/2011.05226)<br> 
-by Antun Skuric, Vincent Padois and David Daney<br> Published on ICRA2021
+by A.Skuric, V.Padois and D.Daney<br> Published on ICRA2021
 
 And the velocity and acceleration polytopes are resolved using the *Hyper-plane shifting method*:<br>
+[**Characterization of Parallel Manipulator Available Wrench Set Facets**](http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf)<br>
+by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)
+
+## Human musculoskeletal models capacity metrics
+<img src='./images/bimanual1.png' height='300px'>
+
+For the human musculoskeletal models this package implements the polytope metrics:
+- Velocity polytope <br> `P_vel = {dx | dx = J.dq, dl = L.dq  dl_min < dl < dl_max}`
+- Acceleration polytope <br> `P_acc = {ddx | ddx = J.M^(-1).N.F, F_min < F < F_max}`
+- Force polytope <br> `P_for = {f | J^T.f = N.F, F_min < F < F_max}`
+
+Where `J` is the model's jacobian matrix, `L` si the muscle length jacobian matrix, `N= -L^T` is the moment arm matrix, `f` is the vector of cartesian forces,`dx` and `ddx` are vectors fo cartesian velocities and accretions, `dq` is the vector of the joint velocities, `t` is the vector of joint torques, `dl` is the vector of the muscle stretching velocities and `F` is the vector of muscular forces. 
+
+The force and velocity polytope functions have been implemented according to the paper:<br>
+[**On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method**](https://hal.inria.fr/hal-03369576)<br> 
+by A.Skuric, V.Padois, N.Rezzoug and D.Daney<br> Submitted to RAL & ICRA2022 
+
+And the acceleration polytopes are resolved using the *Hyper-plane shifting method*:<br>
 [**Characterization of Parallel Manipulator Available Wrench Set Facets**](http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf)<br>
 by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)
 
@@ -32,19 +57,21 @@ pip install pycapacity
 ```
 And include it to your python project
 ```python
-import pycapacity
+import pycapacity.robot 
+# and/or
+import pycapacity.human 
 ```
 
 Other way to install the code is by installing it directly from the git repo:
 ```
-pip install git+https://gitlab.inria.fr/askuric/pycapacity
+pip install git+https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/merge_requests
 ```
 
 # Installation to enable modifying the source
 Clone or download the repository to your pc:
 ```
 cd your/project/path
-git clone https://gitlab.inria.fr/askuric/pycapacity.git
+git clone https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/merge_requests
 ```
 Put the folder in your project directory:
 ```
@@ -58,7 +85,7 @@ my_project:
 ```
 And then import it in your python code for example:
 ```python
-import pycapacity.pycapacity as capacity
+import pycapacity.pycapacity.robot  as capacity
 ```
 > Note: if you do not install the module using pip you will need to import it using double name `pycapacity.pycapacity`.
 
