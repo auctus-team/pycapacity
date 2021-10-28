@@ -2,7 +2,7 @@
 # Python real-time capable task-space capacity calculation module
 
 <img src="./images/comparison.gif" height="300px">
-<img src="./images/force.png" height="300px">
+<img src="./images/bimanual1.png" height="250px">
 
 The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
 - Robotic serial manipulators - `pycapacity.robot`
@@ -33,7 +33,7 @@ And the velocity and acceleration polytopes are resolved using the *Hyper-plane 
 by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)
 
 ## Human musculoskeletal models capacity metrics
-<img src='./images/bimanual1.png' height='300px'>
+<img src='./images/force.png' height='300px'>
 
 For the human musculoskeletal models this package implements the polytope metrics:
 - Velocity polytope <br> `P_vel = {dx | dx = J.dq, dl = L.dq  dl_min < dl < dl_max}`
