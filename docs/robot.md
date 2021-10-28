@@ -1,8 +1,8 @@
 <!-- markdownlint-disable -->
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-# <kbd>module</kbd> `pycapacity`
+# <kbd>module</kbd> `robot`
 
 
 
@@ -10,7 +10,7 @@
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L9"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_ellipsoid`
 
@@ -35,7 +35,7 @@ velocity manipulability ellipsoid calculation
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L34"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `acceleration_ellipsoid`
 
@@ -44,6 +44,11 @@ acceleration_ellipsoid(J, M, t_max)
 ```
 
 acceleration ellipsoid calculation (dynamic manipulability ellipsoid) 
+
+
+
+**Returns:**
+ 
 
 
 
@@ -61,7 +66,7 @@ acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L58"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_ellipsoid`
 
@@ -86,7 +91,7 @@ force manipulability ellipsoid calculation
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L73"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection`
 
@@ -125,11 +130,13 @@ Force polytope representing the intersection of the capacities of the two robots
 **Returns:**
  
  - <b>`f_vertex`</b> (list):   vertices of the polytope 
+ - <b>`t_vertex `</b>:  joint torques corresponging to the force vertices 
+ - <b>`t_bias `</b>:  combined bias vector 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L102"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L110"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_sum_withfaces`
 
@@ -171,7 +178,7 @@ Force polytope representing the minkowski sum of the capacities of the two robot
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L141"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L149"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope`
 
@@ -194,12 +201,14 @@ Force polytope representing the capacities of the two robots in a certain config
 
 **Returns:**
  
- - <b>`f_vertex`</b> (list):   vertices of the polytope 
+ - <b>`f_vertex `</b>:   vertices of the polytope 
+ - <b>`t_vertex `</b>:  joint torques corresponging to the force vertices 
+ - <b>`t_bias `</b>:  bias vector used for the calculation 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L229"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L168"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_withfaces`
 
@@ -228,7 +237,7 @@ Force polytope representing the capacities of the two robots in a certain config
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L269"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L208"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection_withfaces`
 
@@ -270,7 +279,7 @@ Force polytope representing the intersection of the capacities of the two robots
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L310"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L249"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_polytope`
 
@@ -297,7 +306,7 @@ Velocity polytope calculating function
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L325"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_polytope_withfaces`
 
@@ -325,7 +334,7 @@ Velocity polytope calculating function, with faces
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L344"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L283"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `acceleration_polytope`
 
@@ -352,12 +361,12 @@ Acceleration polytope calculating function
 
 ---
 
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L364"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L303"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `acceleration_polytope_withfaces`
 
 ```python
-acceleration_polytope_withfaces(Jacobian, dq_max, dq_min, t_bias=None)
+acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias=None)
 ```
 
 Acceleration polytope calculating function 
@@ -375,106 +384,7 @@ Acceleration polytope calculating function
 **Returns:**
  
  - <b>`acceleration_vertex`</b> (list):   vertices of the polytope 
-
-
----
-
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L389"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-## <kbd>function</kbd> `hyper_plane_shift_method`
-
-```python
-hyper_plane_shift_method(A, x_min, x_max, tol=1e-15)
-```
-
-Hyper plane shifting method implementation used to solve problems of a form: y = Ax s.t. x_min <= x <= x_max 
-
-Hyperplane shifting method:  *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht* 
-
-
-
-This algorithm can be used to calcualte acceleration polytope, velocity polytoe and even  polytope of the joint achievable joint torques based on the muscle forces 
-
-
-
-**Args:**
- 
- - <b>`A`</b>:  projection matrix 
- - <b>`x_min`</b>:  minimal values 
- - <b>`x_max`</b>:  maximal values  
-
-
-
-**Returns:**
- 
- - <b>`H`</b>:  half space representation matrix H - Hx < d 
- - <b>`d`</b>:  half space representaiton vector d - Hx < d 
- - <b>`vertices`</b>:  vertex representation of the polytope 
-
-
----
-
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L462"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-## <kbd>function</kbd> `make_2d`
-
-```python
-make_2d(points)
-```
-
-Take a list of 3D(cooplanar) points and make it 2D 
-
-**Args:**
- 
- - <b>`points3D`</b>:   matrix of 3D points 
-
-**Returns:**
- 
- - <b>`points2D`</b> (array):   list array of 2D points 
-
-
----
-
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L487"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-## <kbd>function</kbd> `order_index`
-
-```python
-order_index(points)
-```
-
-Order clockwise 2D points 
-
-**Args:**
- 
- - <b>`points`</b>:   matrix of 2D points 
-
-**Returns:**
- 
- - <b>`indexes`</b> (array):  ordered indexes 
-
-
----
-
-<a href="https://gitlab.inria.fr/askuric/pycapacity/-/blob/master/pycapacity.py#L503"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-## <kbd>function</kbd> `make_unique`
-
-```python
-make_unique(points)
-```
-
-Remove repetitions of columns 
-
-
-
-**Args:**
- 
- - <b>`points`</b>:   matrix of n-dim points 
-
-**Returns:**
- 
- - <b>`unique`</b>:  matrix with only unique pints 
+ - <b>`acceleration_faces`</b> (list):   faces of the polytope 
 
 
 
