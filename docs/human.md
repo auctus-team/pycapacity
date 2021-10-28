@@ -122,7 +122,7 @@ velocity_polytope(J, N, dl_min, dl_max, tol)
 
 A function calculating the polytopes of achievable velocity based  on the jacobian matrix J and moment arm matrix N 
 
-J.q = dl L.q = v st dl_min <= dl <= dl_max 
+L.q = dl J.q = v st dl_min <= dl <= dl_max 
 
 
 
