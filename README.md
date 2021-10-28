@@ -192,7 +192,8 @@ print(vertices) # display the vertices
 ```python
 """
 A simple example program 3d force polytope 
-evaluation of a randomised 6dof robot 
+evaluation of a randomised 30 muscle 7dof 
+human musculoskeletal model 
 """
 from pycapacity.human import force_polytope as polytope
 import numpy as np
