@@ -233,7 +233,7 @@ N = np.array(np.random.rand(n,L))*2-1 # random moment arm matrix
 F_max = 100*np.ones(L)  # muscle forces limits max and min
 F_min = np.zeros(L)
 
-vertices, H,d, face_indexes = human.force_polytope(J,N, F_min, F_max, 0.1) # calculate the polytope vertices and faces
+vertices, H,d, face_indexes = capacity.force_polytope(J,N, F_min, F_max, 0.1) # calculate the polytope vertices and faces
 faces = capacity.face_index_to_vertex(vertices, face_indexes)
 
 print(vertices) # display the vertices
