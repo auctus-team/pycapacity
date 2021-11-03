@@ -10,6 +10,8 @@ The `pycapacity` package provides a framework for the generic task-space capacit
 
 This package also provides a module `pycapacity.algorithms` with a set of polytope evaluation algorithms for standard polytope formulations, that can be used as a standalone library.
 
+Additionally, `pycapacity.visual` module provides a set of visualisaiton tools using the `matplotlib` for visualising 2d and 3d polytopes.
+
 ## Robotic manipulator capacity metrics
 <img src='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/robot.png' height='300px'>
 
@@ -112,7 +114,9 @@ import pycapacity.robot
 # and/or
 import pycapacity.human 
 #and/or
-import pycapacity.algorithms  as algos
+import pycapacity.algorithms 
+#and/or
+import pycapacity.visual 
 ```
 
 Other way to install the code is by installing it directly from the git repo:
@@ -127,8 +131,9 @@ See full docs at the [link](https://gitlab.inria.fr/auctus-team/people/antunskur
 ### Modules
 
 - [`human`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/human.md#module-human)
-- [`algorithms`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#module-algorithms)
 - [`robot`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#module-robot)
+- [`algorithms`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#module-algorithms)
+- [`visual`](./visual.md#module-visual)
 
 ### Functions
 
@@ -143,7 +148,7 @@ Robot metrics
 - [`robot.force_polytope_sum_withfaces`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#function-force_polytope_sum_withfaces): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
 - [`robot.force_polytope_withfaces`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#function-force_polytope_withfaces): Force polytope representing the capacities of the two robots in a certain configuration.
 - [`robot.velocity_ellipsoid`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#function-velocity_ellipsoid): velocity manipulability ellipsoid calculation
-- [`robot.velocity_polytope`](https://gitlab.inria.fr/e capable task-space capacity calculation moduleauctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#function-velocity_polytope): Velocity polytope calculating function
+- [`robot.velocity_polytope`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#function-velocity_polytope): Velocity polytope calculating function
 - [`robot.velocity_polytope_withfaces`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#function-velocity_polytope_withfaces): Velocity polytope calculating function, with faces
 
 Human metrics
@@ -159,10 +164,18 @@ Algorithms
 - [`algorithms.iterative_convex_hull_method`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
 - [`algorithms.vertex_enumeration_auctus`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-vertex_enumeration_auctus): Efficient vertex enumeration algorithm for a problem of a form:
 
+
+Visualisation tools
+- [`visual.plot_polytope_faces`](./visual.md#function-plot_polytope_faces): Polytope faces plotting function in 2d and 3d
+- [`visual.plot_polytope_vertex`](./visual.md#function-plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
 ---
 
 ## Code examples
 
+
+See [`demo_notebook.ipynb`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/demo_notebook.ipynb) for more examples of how ot use the module.
+
+### Radnomised serial robot example
 ```python
 """
 A simple example program for 3d force polytope 
@@ -199,12 +212,14 @@ plt.show()
 ```
 
 
+### Radnomised muslucoskeletal model example
 ```python
 """
 A simple example program for 3d force polytope 
 evaluation of a randomised 30 muscle 7dof 
 human musculoskeletal model 
 """
+
 import pycapacity.human as capacity # robot capacity module
 import numpy as np
 
@@ -237,5 +252,3 @@ plt.legend()
 plt.show()
 
 ```
-
-See [`demo_notebook.ipynb`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/demo_notebook.ipynb) for one example use case of the module.
