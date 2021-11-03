@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='pycapacity',
-    version='1.1.1',
+    version='1.1.2',
     author='Antun Skuric',
     author_email='antun.skuric@inria.fr',
     description='A real-time task space capacity calculation module for robotic manipulators and human musculoskeletal models',
@@ -17,7 +17,7 @@ setuptools.setup(
     #package_dir = {'pycapacity': 'pycapacity'}, 
     packages = ['pycapacity'],
     #py_modules=['pycapacity.robot','pycapacity.human'],
-    install_requires=['numpy','scipy','cvxopt'],
+    install_requires=['numpy','scipy','cvxopt','matplotlib'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

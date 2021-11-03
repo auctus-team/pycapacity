@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from math import sin, cos 
 import numpy as np
 import numpy.matlib 
@@ -44,7 +43,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
         faces(list):   list of vertex indexes forming polytope faces  
     """
     # svd of jacobian
-    m, n = A.T.shape
+    n, m = A.shape
     L = len(y_min)
 
     u, s, v = np.linalg.svd(A.T)
@@ -74,7 +73,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
             u, sn, vn = np.linalg.svd(B)
 
     # if optional projection defined
-    if P != None:
+    if P is not None:
         M = P.dot(M)
         u = P.dot(u)
 
@@ -156,13 +155,10 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
             hull.add_points(x_p_new.T)
             y_vert = stack(y_vert, y_vert_new,'h')
             x_p  = stack(x_p, x_p_new,'h')
-            
+
         n_faces = len(hull.simplices)
-
-    z_vert = B.dot(y_vert)
-    x_vert  = M.dot(y_vert)
-
-    return x_vert, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices
+    
+    return hull.points.T, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices
 
 def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     """
@@ -331,36 +327,12 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
         # add b vertex - corresponding to the x vertex
         b_vertex = np.hstack((b_vertex, S+T.dot(X)))
     
-    b_vertex = make_unique(b_vertex)
+    # only unique vertices
+    b_vertex = np.unique(np.around(b_vertex,7), axis=1)
     # calculate the forces based on the vertex torques
     x_vertex = A_inv.dot( b_vertex )
     return x_vertex, b_vertex, b_bias
    
-def make_2d(points):
-    """
-    Take a list of 3D(cooplanar) points and make it 2D
-    Args:
-        points3D:  matrix of 3D points
-    Returns:
-        points2D(array):  list array of 2D points
-    """
-    U = points[:,1]-points[:,0]   # define 1st ortogonal vector
-    for i in range(2, points.shape[1]): # find 2nd ortogonal vector (avoid collinear)
-        V = points[:,i]-points[:,0]
-        if abs(abs(U.dot(V)) - np.linalg.norm(U)*np.linalg.norm(V)) > 10**-7:
-            break
-    
-    U = U / np.linalg.norm(U)
-    V = V / np.linalg.norm(V)
-
-    W = np.cross(U,V) # this will be near zero if A,B,C are on single line
-    U = np.cross(V,W)
-    
-    x = U.dot(points)
-    y = V.dot(points)
-
-    return np.array([x, y])
-
 def order_index(points):
     """
     Order clockwise 2D points
@@ -377,18 +349,16 @@ def order_index(points):
     sort_index = np.argsort(angles)
     return sort_index
 
-def make_unique(points):
+def face_index_to_vertex(vertices, indexes):
     """
-    Remove repetitions of columns
+    Helping function for transforming the list of faces with indexes to the vertices
+    """
+    dim = min(np.array(vertices).shape)
+    if dim == 2:
+        return vertices[:,order_index(vertices)]
+    else:
+        return [vertices[:,face] for face in indexes]
 
-    Args:
-        points:  matrix of n-dim points
-    Returns:
-        unique: matrix with only unique pints
-    """
-    unique_points = np.unique(np.around(points,7), axis=1)
-    return unique_points
-         
 def stack(A, B, dir='v'):
     if not len(A):
         return B

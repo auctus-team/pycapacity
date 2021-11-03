@@ -1,9 +1,10 @@
 import numpy as np
 from cvxopt import matrix
 import cvxopt.glpk
+
 # import the algos
-from pycapacity.polyalgos import iterative_convex_hull_method, hyper_plane_shift_method
-from pycapacity.polyalgos import stack
+from pycapacity.algorithms import iterative_convex_hull_method, hyper_plane_shift_method
+from pycapacity.algorithms import stack, face_index_to_vertex
 
 
 def joint_torques_polytope(N, F_min, F_max, tol=1e-15):
@@ -75,7 +76,7 @@ def force_polytope(J, N, F_min, F_max, tol):
     """
     return iterative_convex_hull_method(J.T, N, F_min, F_max, tol)
 
-def velocity_polytope(J, N, dl_min, dl_max, tol):
+def velocity_polytope(J, N, dl_min , dl_max, tol):
     """
     A function calculating the polytopes of achievable velocity based 
     on the jacobian matrix J and moment arm matrix N
@@ -97,7 +98,7 @@ def velocity_polytope(J, N, dl_min, dl_max, tol):
         q_vert(list):  list of joint angular velocity vertices
         faces(list):   list of vertex indexes forming velocity polytope faces  
     """
-    return iterative_convex_hull_method(A=-N.T, B=np.eye(dl.shape[0]), P = J, y_mi=dl_min, y_max=dl_max, tol=tol)
+    return iterative_convex_hull_method(A=-N.T, B=np.eye(dl_min.shape[0]), P = J, y_min=dl_min, y_max=dl_max, tol=tol)
 
 def torque_to_muscle_force(N, F_min, F_max, tau, options="lp"):
     """

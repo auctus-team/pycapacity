@@ -173,12 +173,12 @@ Force polytope representing the minkowski sum of the capacities of the two robot
 **Returns:**
  
  - <b>`f_vertex`</b> (list):   vertices of the polytope 
- - <b>`faces`</b> (list):  polytope_faces faces of the polytope 
+ - <b>`faces`</b> (list):  list of vertex indexes belonging to faces 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L149"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L144"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope`
 
@@ -208,7 +208,7 @@ Force polytope representing the capacities of the two robots in a certain config
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L168"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L163"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_withfaces`
 
@@ -232,12 +232,12 @@ Force polytope representing the capacities of the two robots in a certain config
 **Returns:**
  
  - <b>`f_vertex`</b> (list):   vertices of the polytope 
- - <b>`faces`</b> (list):   faces of the polytope 
+ - <b>`faces`</b> (list):  list of vertex indexes belonging to faces 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L208"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L191"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `force_polytope_intersection_withfaces`
 
@@ -274,12 +274,12 @@ Force polytope representing the intersection of the capacities of the two robots
 **Returns:**
  
  - <b>`f_vertex`</b> (list):   vertices of the polytope 
- - <b>`faces`</b> (list):  polytope_faces faces of the polytope 
+ - <b>`faces`</b> (list):  list of vertex indexes belonging to faces 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L249"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L225"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_polytope`
 
@@ -306,7 +306,7 @@ Velocity polytope calculating function
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L240"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_polytope_withfaces`
 
@@ -329,12 +329,12 @@ Velocity polytope calculating function, with faces
 **Returns:**
  
  - <b>`velocity_vertex`</b> (list):   vertices of the polytope 
- - <b>`faces`</b> (list):   faces of the polytope 
+ - <b>`faces`</b> (list):  list of vertex indexes belonging to faces 
 
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L283"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L256"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `acceleration_polytope`
 
@@ -361,7 +361,7 @@ Acceleration polytope calculating function
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L303"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/robot.py#L277"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `acceleration_polytope_withfaces`
 
@@ -384,7 +384,7 @@ Acceleration polytope calculating function
 **Returns:**
  
  - <b>`acceleration_vertex`</b> (list):   vertices of the polytope 
- - <b>`acceleration_faces`</b> (list):   faces of the polytope 
+ - <b>`faces`</b> (list):  list of vertex indexes belonging to faces 
 
 
 

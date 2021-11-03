@@ -8,7 +8,7 @@ The `pycapacity` package provides a framework for the generic task-space capacit
 - Robotic serial manipulators - `pycapacity.robot`
 - Human musculoskeletal models - `pycapacity.human`
 
-This package also provides a module `pycapacity.polyalgos` with a set of polytope evaluation algorithms for standard polytope formulations, that can be used as a standalone library.
+This package also provides a module `pycapacity.algorithms` with a set of polytope evaluation algorithms for standard polytope formulations, that can be used as a standalone library.
 
 ## Robotic manipulator capacity metrics
 <img src='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/robot.png' height='300px'>
@@ -59,7 +59,7 @@ There are three methods implemented in this paper to resolve all the polytope ca
 - Iterative convex hull method
 - Vertex enumeration auctus
 
-All of the methods are implemented in the module `pycapacity.polyalgos` and can be used as standalone functions.  See in [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md). 
+All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md). 
 
 ### Hyper-plane shifting method
 [**Characterization of Parallel Manipulator Available Wrench Set Facets**](http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf)<br>
@@ -71,7 +71,7 @@ P = {x | x = By, y_min <= y <= y_max }
 ```
 To find the vertices of the polytope after finding the half-space representation `Hx <= d` an convex-hull algorithm is used. 
 
-The method is a part of the `pycapacity.polyalgos` module `hyper_plane_shift_method`, See in [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-hyper_plane_shift_method). 
+The method is a part of the `pycapacity.algorithms` module `hyper_plane_shift_method`, See in [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-hyper_plane_shift_method). 
 
 ### Iterative convex-hull method
 [**On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method**](https://hal.inria.fr/hal-03369576)<br> 
@@ -86,7 +86,7 @@ And it can be additionally extended to the case where there is an additional pro
 P = {x | x= Pz, Az = By, y_min <= y <= y_max }
 ``` 
 
-The method is a part of the `pycapacity.polyalgos` module `iterative_convex_hull_method`. See the [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-iterative_convex_hull_method)
+The method is a part of the `pycapacity.algorithms` module `iterative_convex_hull_method`. See the [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-iterative_convex_hull_method)
 
 ### Vertex enumeration auctus
 [**On-line force capability evaluation based on efficient polytope vertex search**](https://arxiv.org/abs/2011.05226)<br> 
@@ -98,7 +98,7 @@ P = {x | Ax = y, y_min <= y <= y_max }
 ``` 
 To find the half-space representation (faces) of the polytope after finding the vertex representation  an convex-hull algorithm is used. 
 
-The method is a part of the `pycapacity.polyalgos` module `vertex_enumeration_auctus`. See the [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-vertex_enumeration_auctus)
+The method is a part of the `pycapacity.algorithms` module `vertex_enumeration_auctus`. See the [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-vertex_enumeration_auctus)
 
 ## Installation
 
@@ -112,7 +112,7 @@ import pycapacity.robot
 # and/or
 import pycapacity.human 
 #and/or
-import pycapacity.polyalgos  as algos
+import pycapacity.algorithms  as algos
 ```
 
 Other way to install the code is by installing it directly from the git repo:
@@ -127,7 +127,7 @@ See full docs at the [link](https://gitlab.inria.fr/auctus-team/people/antunskur
 ### Modules
 
 - [`human`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/human.md#module-human)
-- [`polyalgos`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#module-polyalgos)
+- [`algorithms`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#module-algorithms)
 - [`robot`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/robot.md#module-robot)
 
 ### Functions
@@ -155,13 +155,9 @@ Human metrics
 
 
 Algorithms
-- [`polyalgos.hyper_plane_shift_method`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
-- [`polyalgos.iterative_convex_hull_method`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
-- [`polyalgos.make_2d`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-make_2d): Take a list of 3D(cooplanar) points and make it 2D
-- [`polyalgos.make_unique`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-make_unique): Remove repetitions of columns
-- [`polyalgos.order_index`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-order_index): Order clockwise 2D points
-- [`polyalgos.stack`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-stack)
-- [`polyalgos.vertex_enumeration_auctus`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/polyalgos.md#function-vertex_enumeration_auctus): Efficient vertex enumeration algorithm for a problem of a form:
+- [`algorithms.hyper_plane_shift_method`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
+- [`algorithms.iterative_convex_hull_method`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
+- [`algorithms.vertex_enumeration_auctus`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-vertex_enumeration_auctus): Efficient vertex enumeration algorithm for a problem of a form:
 
 ---
 
@@ -172,7 +168,7 @@ Algorithms
 A simple example program for 3d force polytope 
 evaluation of a randomised 6dof robot 
 """
-from pycapacity.robot import force_polytope_withfaces as polytope
+import pycapacity.robot as capacity # robot capacity module
 import numpy as np
 
 m = 3 # 3d forces
@@ -183,34 +179,63 @@ J = np.array(np.random.rand(m,n)) # random jacobian matrix
 t_max = np.ones(n)  # joint torque limits max and min
 t_min = -np.ones(n)
 
-vertices, faces = polytope(J,t_min, t_max) # calculate the polytope vertices and faces
+vertices, face_indexes = capacity.force_polytope_withfaces(J,t_min, t_max) # calculate the polytope vertices and faces
+faces = capacity.face_index_to_vertex(vertices, face_indexes)
 
 print(vertices) # display the vertices
+
+# plotting the polytope
+import matplotlib.pyplot as plt
+from pycapacity.visual import plot_polytope_faces, plot_polytope_vertex # pycapacity visualisation tools
+fig = plt.figure(4)
+
+# draw faces and vertices
+ax = plot_polytope_vertex(plt=plt, vertex=vertices, label='force',color='blue')
+plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
+
+plt.tight_layout()
+plt.legend()
+plt.show()
 ```
 
 
 ```python
 """
-A simple example program 3d force polytope 
+A simple example program for 3d force polytope 
 evaluation of a randomised 30 muscle 7dof 
 human musculoskeletal model 
 """
-from pycapacity.human import force_polytope as polytope
+import pycapacity.human as capacity # robot capacity module
 import numpy as np
 
-L = 30 # muscles
+L = 30 # number of muscles
 m = 3 # 3d forces
-n = 6 # robot dof
+n = 6 # number of joints - dof
 
 J = np.array(np.random.rand(m,n))*2-1 # random jacobian matrix
 N = np.array(np.random.rand(n,L))*2-1 # random moment arm matrix
 
-F_max = 1000*np.ones(L)  # muscle forces limits max and min
+F_max = 100*np.ones(L)  # muscle forces limits max and min
 F_min = np.zeros(L)
 
-vertices, H,d, faces = polytope(J,N, F_min, F_max, 0.2) # calculate the polytope vertices and faces
+vertices, H,d, face_indexes = human.force_polytope(J,N, F_min, F_max, 0.1) # calculate the polytope vertices and faces
+faces = capacity.face_index_to_vertex(vertices, face_indexes)
 
 print(vertices) # display the vertices
+
+# plotting the polytope
+import matplotlib.pyplot as plt
+from pycapacity.visual import plot_polytope_faces, plot_polytope_vertex # pycapacity visualisation tools
+fig = plt.figure(4)
+
+# draw faces and vertices
+ax = plot_polytope_vertex(plt=plt, vertex=vertices, label='force',color='blue')
+plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
+
+plt.tight_layout()
+plt.legend()
+plt.show()
+
 ```
 
 See [`demo_notebook.ipynb`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/demo_notebook.ipynb) for one example use case of the module.
