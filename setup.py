@@ -17,7 +17,7 @@ setuptools.setup(
     #package_dir = {'pycapacity': 'pycapacity'}, 
     packages = ['pycapacity'],
     #py_modules=['pycapacity.robot','pycapacity.human'],
-    install_requires=['numpy','scipy','cvxopt','matplotlib'],
+    install_requires=['numpy','scipy','cvxopt>=1.2.6','matplotlib'],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
