@@ -175,7 +175,7 @@ Visualisation tools
 
 See [`demo_notebook.ipynb`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/demo_notebook.ipynb) for more examples of how ot use the module.
 
-### Radnomised serial robot example
+### Randomised serial robot example
 ```python
 """
 A simple example program for 3d force polytope 
@@ -212,7 +212,7 @@ plt.show()
 ```
 
 
-### Radnomised muslucoskeletal model example
+### Randomised muslucoskeletal model example
 ```python
 """
 A simple example program for 3d force polytope 
