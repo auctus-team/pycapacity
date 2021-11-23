@@ -183,7 +183,7 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, t_bias = None):
     if force_vertex.shape[0] == 1:
         polytope_faces = [0, 1]
     else:        
-        hull = ConvexHull(force_vertex.T)
+        hull = ConvexHull(force_vertex.T, qhull_options='QJ')
         polytope_faces = hull.simplices
         
     return force_vertex, polytope_faces
@@ -216,7 +216,7 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
     if force_vertex.shape[0] == 1:
         polytope_faces = [0, 1]
     else:        
-        hull = ConvexHull(force_vertex.T)
+        hull = ConvexHull(force_vertex.T, qhull_options='QJ')
         polytope_faces = hull.simplices
 
     return force_vertex, polytope_faces
