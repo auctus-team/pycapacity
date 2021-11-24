@@ -186,22 +186,23 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     H = []
     d = []
 
-    x_min = np.array(x_min)
-    x_max = np.array(x_max)
+    x_min = np.array(x_min).reshape((-1,1))
+    x_max = np.array(x_max).reshape((-1,1))
+    A = np.array(A)
     # Combination of n x n-1 columns of A
     #C = nchoosek(1:size(A,2),size(A,1)-1)
     C = np.array(list(itertools.combinations(range(A.shape[1]),A.shape[0]-1)))
-    for comb in range(C.shape[0]):
-        W = A[:,C[comb,:]]
+    for comb in C:
+        W = A[:,comb]
         U,S,V = np.linalg.svd(W.T)
-        if ( A.shape[0] - len(S) ) == 1 :
-            c = V[:,-1].T
-
+        if ( A.shape[0] - np.linalg.matrix_rank(W) ) == 1 :
+            c = V[-1,:]
+            
             # Check for redundant constraint
             if len(H) :
                 #diff = min(vecnorm(H - c,2,2))
-                diff = np.min( np.sqrt( np.sum( np.power((H-c), 2), 1)))
-                if diff < tol and diff > -tol :
+                diff = np.min(np.linalg.norm(H-c,axis=1))
+                if diff < tol:
                     c_exists = True
                 else:
                     c_exists = False
@@ -209,22 +210,21 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
                 c_exists = False
 
             # Compute offsets    
-            if ~c_exists :   
-                I = c.dot(A)          
+            if not c_exists :   
+                I = c.dot(A)
                 I_positive = np.where(I > 0)[0]
                 I_negative = np.where(I < 0)[0]    
-                d_positive = np.sum(I[I_positive] * np.max([x_min[I_positive],x_max[I_positive]],0)) + np.sum(I[I_negative] * np.min([x_min[I_negative],x_max[I_negative]],0))
-                d_negative = -np.sum(I[I_negative] * np.max([x_min[I_negative],x_max[I_negative]],0)) - np.sum(I[I_positive] * np.min([x_min[I_positive],x_max[I_positive]],0))
-
+                d_positive = I[I_positive].dot(np.max([x_min[I_positive],x_max[I_positive]],0)) + I[I_negative].dot(np.min([x_min[I_negative],x_max[I_negative]],0))
+                d_negative = -I[I_negative].dot(np.max([x_min[I_negative],x_max[I_negative]],0)) - I[I_positive].dot(np.min([x_min[I_positive],x_max[I_positive]],0))
                 # Append constraints
                 H = stack(H, c)
                 H = stack(H, -c)
-                d = stack(d, [[d_positive], [d_negative]])
+                d = stack(d, [d_positive, d_negative])
 
     if len(H):
         # calculate the certices
         hd_mat = np.hstack((np.array(H),-np.array(d)))
-        hd = HalfspaceIntersection(hd_mat,np.zeros(A.shape[0]))
+        hd = HalfspaceIntersection(hd_mat,np.zeros(A.shape[0]),'QJ')
         hull = ConvexHull(hd.intersections)
         return hd.intersections.T, H, d, hull.simplices
     else:
