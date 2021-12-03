@@ -7,7 +7,7 @@ from cvxopt import matrix
 import cvxopt.glpk
 
 
-def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
+def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None):
     """
     A function calculating the polytopes of achievable x for equations form:
     
@@ -17,12 +17,16 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
     
     or
     
-    A.x = B.y
+    A.x = B.y 
     s.t. y_min <= y <= y_max
 
     (optionally - additional projection matrix)
-    A.z = B.y
+    A.z = B.y 
     P.z = x
+    s.t. y_min <= y <= y_max
+
+    (optionally - additional bias)
+    A.z = B.y + bias
     s.t. y_min <= y <= y_max
 
     On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
@@ -35,6 +39,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
         y_max: maximal values
         tol: tolerance for the polytope calculation
         P: an additional projection matrix 
+        bias: bias in the intermediate space 
         
     Returns:
         x_vert(list):  list of cartesian force vertices
@@ -51,19 +56,27 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
     V1 = np.array(v.transpose()[:,:r])
     V2 = np.array(v.transpose()[:,r:])
 
+    # if bias not defiend set it to zero
+    if bias is None:
+        bias = np.zeros((n,1))  
+    else:
+        bias = np.array(bias).reshape((n,1))  
+
     # optimisation setup
     if n > m:
         # for redundant case
         M = np.linalg.pinv(A).dot(B)
+        x_bias = -np.linalg.pinv(A).dot(bias)
         # - intersection with the image of the J^T 
         Aeq = matrix(V2.T.dot(B)) 
-        beq = matrix(np.zeros((n-m,1)))
+        beq = matrix(V2.T.dot(bias))
         # for 1d jacobian case
         if m == 1:
             u = np.array([[1]])
     else:
         # for non redundant case 
         M = np.linalg.pinv(A).dot(B)
+        x_bias = -np.linalg.pinv(A).dot(bias)
         # - no need to intersect with the image of J^T
         Aeq = None
         beq = None
@@ -75,7 +88,8 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
     # if optional projection defined
     if P is not None:
         M = P.dot(M)
-        u = P.dot(u)
+        x_bias = P.dot(x_bias)
+        u = P.dot(u)     
 
     G = matrix(np.vstack((-np.identity(L),np.identity(L))))
     h = matrix(np.hstack((list(-np.array(y_min)),y_max)))
@@ -93,7 +107,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
         y_vert = stack(y_vert, res[1],'h')
         res = cvxopt.glpk.lp(c=c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
         y_vert = stack(y_vert, res[1],'h')
-    x_p  = M.dot(y_vert)
+    x_p  = M.dot(y_vert)# + x_bias
 
     try:
         hull = ConvexHull(x_p.T, incremental=True)
@@ -101,8 +115,8 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
         try:
             hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
         except:
-            z_vert = B.dot(y_vert)
-            x_vert  = M.dot(y_vert)
+            z_vert = B.dot(y_vert) + bias
+            x_vert  = M.dot(y_vert) + x_bias
             return x_vert, y_vert, z_vert, []
 
     n_faces, n_faces_old,  = len(hull.simplices), 0
@@ -138,27 +152,28 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None):
             else:
                 res = cvxopt.glpk.lp(c=c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
                 
-            res = res[1]
+            res = np.array(res[1])
             # a simple counter of linprog execuitions
             cnt = cnt+1
 
             # vertex distance from the face
-            distance = np.abs( face_normal.dot( M.dot(list(res)) - x_p[:,face[0]] ) )
+            distance = np.abs( face_normal.dot( M.dot(res) + x_bias) -face_normal.dot( x_p[:,face[0]] ))
             if distance > tol:
                 # new vertex found
-                y_vert_new = stack(y_vert_new, np.array(res), 'h')
+                y_vert_new = stack(y_vert_new, res, 'h')
             else:
                 face_final[face_key] = 1
 
         if len(y_vert_new):
-            x_p_new = M.dot(y_vert_new)
+            x_p_new = M.dot(y_vert_new) + x_bias
+            #print(x_p_new.shape,x_bias.shape,(x_p_new+x_bias).shape)
             hull.add_points(x_p_new.T)
             y_vert = stack(y_vert, y_vert_new,'h')
             x_p  = stack(x_p, x_p_new,'h')
 
         n_faces = len(hull.simplices)
     
-    return hull.points.T, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices
+    return x_p, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices
 
 def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     """

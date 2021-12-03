@@ -15,7 +15,7 @@
 ## <kbd>function</kbd> `iterative_convex_hull_method`
 
 ```python
-iterative_convex_hull_method(A, B, y_min, y_max, tol, P=None)
+iterative_convex_hull_method(A, B, y_min, y_max, tol, P=None, bias=None)
 ```
 
 A function calculating the polytopes of achievable x for equations form: 
@@ -24,9 +24,11 @@ z = B.y A.x = z s.t. y_min <= y <= y_max
 
 or 
 
-A.x = B.y s.t. y_min <= y <= y_max 
+A.x = B.y  s.t. y_min <= y <= y_max 
 
-(optionally - additional projection matrix) A.z = B.y P.z = x s.t. y_min <= y <= y_max 
+(optionally - additional projection matrix) A.z = B.y  P.z = x s.t. y_min <= y <= y_max 
+
+(optionally - additional bias) A.z = B.y + bias s.t. y_min <= y <= y_max 
 
 On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method A.Skuric,V.Padois,N.Rezzoug,D.Daney  
 
@@ -40,6 +42,7 @@ On-line feasible wrench polytope evaluation based on human musculoskeletal model
  - <b>`y_max`</b>:  maximal values 
  - <b>`tol`</b>:  tolerance for the polytope calculation 
  - <b>`P`</b>:  an additional projection matrix  
+ - <b>`bias`</b>:  bias in the intermediate space  
 
 
 
@@ -53,7 +56,7 @@ On-line feasible wrench polytope evaluation based on human musculoskeletal model
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L163"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L178"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `hyper_plane_shift_method`
 
@@ -88,7 +91,7 @@ This algorithm can be used to calcualte acceleration polytope, velocity polytoe 
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L234"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L249"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `vertex_enumeration_auctus`
 
@@ -120,7 +123,7 @@ On-line force capability evaluation based on efficient polytope vertex search by
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L336"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L351"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `order_index`
 
@@ -141,7 +144,7 @@ Order clockwise 2D points
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L352"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L367"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `face_index_to_vertex`
 
@@ -154,7 +157,7 @@ Helping function for transforming the list of faces with indexes to the vertices
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L362"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/algorithms.py#L377"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `stack`
 
