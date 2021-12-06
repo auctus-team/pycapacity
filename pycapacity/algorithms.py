@@ -117,7 +117,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None)
         except:
             z_vert = B.dot(y_vert) + bias
             x_vert  = M.dot(y_vert) + x_bias
-            return x_vert, y_vert, z_vert, []
+            return x_vert, [], [], []
 
     n_faces, n_faces_old,  = len(hull.simplices), 0
     face_final, cnt = {}, 2*m

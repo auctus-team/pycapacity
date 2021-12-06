@@ -83,12 +83,12 @@ a = ddx = J.M^(-1).N.F st F_min <= F <= F_max
 ## <kbd>function</kbd> `force_polytope`
 
 ```python
-force_polytope(J, N, F_min, F_max, tol)
+force_polytope(J, N, F_min, F_max, tol, torque_bias=None)
 ```
 
 A function calculating the polytopes of achievable foreces based  on the jacobian matrix J and moment arm matrix N 
 
-J^T.f = N.F st F_min <= F <= F_max 
+J^T.f = N.F (+ t_bias  optional)  st F_min <= F <= F_max 
 
 
 
@@ -99,20 +99,21 @@ J^T.f = N.F st F_min <= F <= F_max
  - <b>`F_min`</b>:  minimal muscular forces (passive forces or 0) 
  - <b>`F_max`</b>:  maximal isometric forces  
  - <b>`tolerance`</b>:  tolerance for the polytope calculation 
+ - <b>`torque_bias`</b>:  torque bias optional (gravity or movement or applied forces ....)  
 
 
 
 **Returns:**
  
  - <b>`f_vert`</b> (list):   list of cartesian force vertices 
- - <b>`F_vert`</b> (list):   list of muscle force vertiecs 
- - <b>`t_vert`</b> (list):   list of joint torque vertices 
+ - <b>`H`</b> (array):   half-space rep matrix H - H.a < d 
+ - <b>`d`</b> (array):   half-space rep vectors d 
  - <b>`faces`</b> (list):    list of vertex indexes forming polytope faces   
 
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/human.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/human.py#L80"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `velocity_polytope`
 
@@ -139,14 +140,14 @@ L.q = dl J.q = v st dl_min <= dl <= dl_max
 **Returns:**
  
  - <b>`v_vert`</b> (list):   list of cartesian velocity vertices 
- - <b>`dl_vert`</b> (list):  list of muscle contraction velocity vertiecs 
- - <b>`q_vert`</b> (list):   list of joint angular velocity vertices 
+ - <b>`H`</b> (array):   half-space rep matrix H - H.a < d 
+ - <b>`d`</b> (array):   half-space rep vectors d 
  - <b>`faces`</b> (list):    list of vertex indexes forming velocity polytope faces   
 
 
 ---
 
-<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/human.py#L103"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/pycapacity/human.py#L104"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `torque_to_muscle_force`
 

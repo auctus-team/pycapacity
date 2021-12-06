@@ -53,12 +53,12 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-15):
     """
     return hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
 
-def force_polytope(J, N, F_min, F_max, tol):
+def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
     """
     A function calculating the polytopes of achievable foreces based 
     on the jacobian matrix J and moment arm matrix N
 
-    J^T.f = N.F
+    J^T.f = N.F (+ t_bias  optional) 
     st F_min <= F <= F_max
 
     Args:
@@ -67,14 +67,15 @@ def force_polytope(J, N, F_min, F_max, tol):
         F_min: minimal muscular forces (passive forces or 0)
         F_max: maximal isometric forces 
         tolerance: tolerance for the polytope calculation
+        torque_bias: torque bias optional (gravity or movement or applied forces ....) 
         
     Returns:
         f_vert(list):  list of cartesian force vertices
-        F_vert(list):  list of muscle force vertiecs
-        t_vert(list):  list of joint torque vertices
+        H(array):  half-space rep matrix H - H.a < d
+        d(array):  half-space rep vectors d
         faces(list):   list of vertex indexes forming polytope faces  
     """
-    return iterative_convex_hull_method(J.T, N, F_min, F_max, tol)
+    return iterative_convex_hull_method(J.T, N, F_min, F_max, tol, bias=torque_bias)
 
 def velocity_polytope(J, N, dl_min , dl_max, tol):
     """
@@ -94,8 +95,8 @@ def velocity_polytope(J, N, dl_min , dl_max, tol):
         
     Returns:
         v_vert(list):  list of cartesian velocity vertices
-        dl_vert(list): list of muscle contraction velocity vertiecs
-        q_vert(list):  list of joint angular velocity vertices
+        H(array):  half-space rep matrix H - H.a < d
+        d(array):  half-space rep vectors d
         faces(list):   list of vertex indexes forming velocity polytope faces  
     """
     return iterative_convex_hull_method(A=-N.T, B=np.eye(dl_min.shape[0]), P = J, y_min=dl_min, y_max=dl_max, tol=tol)
