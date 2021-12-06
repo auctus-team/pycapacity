@@ -1,20 +1,7 @@
-image: python:3.7-alpine
 
-test:
-  stage: test
-  script:
-    - cd docs
-    - pip install -r requirements.txt
-    - make html
-    
 pages:
   stage: deploy
-  script:
-    - cd docs
-    - pip install -r requirements.txt
-    - make html
   artifacts:
     paths:
     - public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
