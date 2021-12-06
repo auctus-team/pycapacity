@@ -1,11 +1,9 @@
-# the 'pages' job will deploy and build your site to the 'public' path
 pages:
   stage: deploy
+  script:
+    - ls
   artifacts:
     paths:
       - public
-    expire_in: 1 week
   only:
-    - master # this job will affect only the 'master' branch
-
-
+    - master
