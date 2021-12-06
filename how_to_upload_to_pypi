@@ -4,3 +4,8 @@ python -m twine upload dist/*
 
 # docs
 lazydocs pycapacity --overview-file="README.md" --src-base-url="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/"
+
+# sphinx
+cd docs
+sphinx-apidoc -f -o source ../pycapacity --separate
+make html

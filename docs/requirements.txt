@@ -1,0 +1,5 @@
+# requirements.txt
+
+Sphinx
+sphinx-rtd-theme # to use a nice modern theme
+recommonmark # to include the Readme.md
