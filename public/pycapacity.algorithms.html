@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.algorithms module &mdash; pycapacity v1.2.4 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pycapacity.visual module" href="pycapacity.visual.html" />
+    <link rel="prev" title="pycapacity.human module" href="pycapacity.human.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pycapacity
+          </a>
+              <div class="version">
+                1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">About</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="pycapacity.robot.html">Robot capacity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pycapacity.human.html">Human capacity</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Algortihms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pycapacity.visual.html">Visualisation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>pycapacity.algorithms module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pycapacity.algorithms.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-pycapacity.algorithms">
+<span id="pycapacity-algorithms-module"></span><h1>pycapacity.algorithms module<a class="headerlink" href="#module-pycapacity.algorithms" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pycapacity.algorithms.face_index_to_vertex">
+<code class="descclassname">pycapacity.algorithms.</code><code class="descname">face_index_to_vertex</code><span class="sig-paren">(</span><em>vertices</em>, <em>indexes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#face_index_to_vertex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycapacity.algorithms.face_index_to_vertex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helping function for transforming the list of faces with indexes to the vertices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pycapacity.algorithms.hyper_plane_shift_method">
+<code class="descclassname">pycapacity.algorithms.</code><code class="descname">hyper_plane_shift_method</code><span class="sig-paren">(</span><em>A</em>, <em>x_min</em>, <em>x_max</em>, <em>tol=1e-15</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#hyper_plane_shift_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycapacity.algorithms.hyper_plane_shift_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hyper plane shifting method implementation used to solve problems of a form:
+y = Ax
+s.t. x_min &lt;= x &lt;= x_max</p>
+<p>Hyperplane shifting method:
+<em>Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht</em></p>
+<p>This algorithm can be used to calcualte acceleration polytope, velocity polytoe and even
+polytope of the joint achievable joint torques based on the muscle forces</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>A</strong> – projection matrix</li>
+<li><strong>x_min</strong> – minimal values</li>
+<li><strong>x_max</strong> – maximal values</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">half space representation matrix H - Hx &lt; d
+d: half space representaiton vector d - Hx &lt; d
+vertices: vertex representation of the polytope</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">H</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pycapacity.algorithms.iterative_convex_hull_method">
+<code class="descclassname">pycapacity.algorithms.</code><code class="descname">iterative_convex_hull_method</code><span class="sig-paren">(</span><em>A</em>, <em>B</em>, <em>y_min</em>, <em>y_max</em>, <em>tol</em>, <em>P=None</em>, <em>bias=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#iterative_convex_hull_method"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycapacity.algorithms.iterative_convex_hull_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function calculating the polytopes of achievable x for equations form:</p>
+<p>z = B.y
+A.x = z
+s.t. y_min &lt;= y &lt;= y_max</p>
+<p>or</p>
+<p>A.x = B.y
+s.t. y_min &lt;= y &lt;= y_max</p>
+<p>(optionally - additional projection matrix)
+A.z = B.y
+P.z = x
+s.t. y_min &lt;= y &lt;= y_max</p>
+<p>(optionally - additional bias)
+A.z = B.y + bias
+s.t. y_min &lt;= y &lt;= y_max</p>
+<p>On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
+A.Skuric,V.Padois,N.Rezzoug,D.Daney</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>A</strong> – matrix</li>
+<li><strong>B</strong> – matrix</li>
+<li><strong>y_min</strong> – minimal values</li>
+<li><strong>y_max</strong> – maximal values</li>
+<li><strong>tol</strong> – tolerance for the polytope calculation</li>
+<li><strong>P</strong> – an additional projection matrix</li>
+<li><strong>bias</strong> – bias in the intermediate space</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list of cartesian force vertices
+H(list):  matrix of half-space representation Hx&lt;d
+d(list):  vector of half-space representation Hx&lt;d
+faces(list):   list of vertex indexes forming polytope faces</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">x_vert(list)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pycapacity.algorithms.order_index">
+<code class="descclassname">pycapacity.algorithms.</code><code class="descname">order_index</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#order_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycapacity.algorithms.order_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Order clockwise 2D points
+:param points: matrix of 2D points</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">ordered indexes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">indexes(array)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pycapacity.algorithms.stack">
+<code class="descclassname">pycapacity.algorithms.</code><code class="descname">stack</code><span class="sig-paren">(</span><em>A</em>, <em>B</em>, <em>dir='v'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#stack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycapacity.algorithms.stack" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="pycapacity.algorithms.vertex_enumeration_auctus">
+<code class="descclassname">pycapacity.algorithms.</code><code class="descname">vertex_enumeration_auctus</code><span class="sig-paren">(</span><em>A</em>, <em>b_max</em>, <em>b_min</em>, <em>b_bias=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#vertex_enumeration_auctus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pycapacity.algorithms.vertex_enumeration_auctus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Efficient vertex enumeration algorithm for a problem of a form:
+Ax = b
+s.t. b_min &lt;= b &lt;= b_max</p>
+<p>Optional (if b_bias added):
+Ax = b
+s.t. b_min &lt;= b - b_bias &lt;= b_max</p>
+<p>On-line force capability evaluation based on efficient polytope vertex search
+by A. Skuric, V. Padois, D. Daney</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>A</strong> – system matrix A</li>
+<li><strong>b_max</strong> – maximal b</li>
+<li><strong>b_min</strong> – minimal b</li>
+<li><strong>b_bias</strong> – b bias vector ( offset from 0 )</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">vertices of the polytope</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">f_vertex(list)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pycapacity.human.html" class="btn btn-neutral float-left" title="pycapacity.human module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pycapacity.visual.html" class="btn btn-neutral float-right" title="pycapacity.visual module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

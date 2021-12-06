@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.robot &mdash; pycapacity v1.2.4 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> pycapacity
+          </a>
+              <div class="version">
+                1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">About</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.robot.html">Robot capacity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.human.html">Human capacity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.algorithms.html">Algortihms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.visual.html">Visualisation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pycapacity.robot</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycapacity.robot</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.matlib</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="c1"># minkowski sum</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">ConvexHull</span><span class="p">,</span> <span class="n">HalfspaceIntersection</span>
+
+<span class="c1"># import the algos</span>
+<span class="kn">from</span> <span class="nn">pycapacity.algorithms</span> <span class="kn">import</span> <span class="n">hyper_plane_shift_method</span><span class="p">,</span> <span class="n">vertex_enumeration_auctus</span>
+<span class="kn">from</span> <span class="nn">pycapacity.algorithms</span> <span class="kn">import</span> <span class="n">order_index</span><span class="p">,</span> <span class="n">face_index_to_vertex</span>
+
+<span class="c1"># velocity manipulability calculation</span>
+<div class="viewcode-block" id="velocity_ellipsoid"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.velocity_ellipsoid">[docs]</a><span class="k">def</span> <span class="nf">velocity_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    velocity manipulability ellipsoid calculation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: position jacobian</span>
+<span class="sd">        dq_max:  maximal joint velocities</span>
+<span class="sd">    Returns: </span>
+<span class="sd">        S(list):  list of axis lengths</span>
+<span class="sd">        U(matrix): list of axis vectors</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span> <span class="n">J</span>
+    <span class="c1"># limits scaling</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">dq_max</span><span class="p">)</span>
+    <span class="c1"># calculate the singular value decomposition</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Jac</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="c1"># return the singular values and the unit vector angle</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">U</span><span class="p">]</span></div>
+
+<span class="c1"># acceleration manipulability calculation</span>
+<div class="viewcode-block" id="acceleration_ellipsoid"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.acceleration_ellipsoid">[docs]</a><span class="k">def</span> <span class="nf">acceleration_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">t_max</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    acceleration ellipsoid calculation (dynamic manipulability ellipsoid)</span>
+<span class="sd">   </span>
+<span class="sd">    Returns:</span>
+<span class="sd">     </span>
+<span class="sd">    Args:</span>
+<span class="sd">        J: matrix jacobian</span>
+<span class="sd">        M: matrix inertia </span>
+<span class="sd">        t_max:  maximal joint torques</span>
+<span class="sd">    Returns: </span>
+<span class="sd">        S(list):  list of axis lengths</span>
+<span class="sd">        U(matrix): list of axis vectors</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+    <span class="c1"># limits scaling</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">t_max</span><span class="p">))</span>
+    <span class="c1"># calculate the singular value decomposition</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Jac</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="c1"># return the singular values and the unit vector angle</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">S</span><span class="p">,</span> <span class="n">U</span><span class="p">]</span></div>
+
+<span class="c1"># force ellipsoid calculation</span>
+<div class="viewcode-block" id="force_ellipsoid"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_ellipsoid">[docs]</a><span class="k">def</span> <span class="nf">force_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">t_max</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    force manipulability ellipsoid calculation</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: matrix jacobian</span>
+<span class="sd">        t_max:  maximal joint torques</span>
+<span class="sd">    Returns: </span>
+<span class="sd">        S(list):  list of axis lengths</span>
+<span class="sd">        U(matrix): list of axis vectors</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span> <span class="n">J</span>
+    <span class="c1"># limits scaling</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">t_max</span><span class="p">))</span>
+    <span class="c1"># calculate the singular value decomposition</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Jac</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="c1"># return the singular values and the unit vector angle</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">S</span><span class="p">),</span> <span class="n">U</span><span class="p">]</span></div>
+
+<span class="c1"># maximal end effector force</span>
+<div class="viewcode-block" id="force_polytope_intersection"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope_intersection">[docs]</a><span class="k">def</span> <span class="nf">force_polytope_intersection</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t1_bias</span><span class="p">,</span> <span class="n">t2_bias</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the intersection of the capacities of the two robots in certain configurations.</span>
+
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian1:  position jacobian robot 1</span>
+<span class="sd">        Jacobian2: Jacobian2 position jacobian robot 2</span>
+<span class="sd">        t_min1:  minimal joint torques robot 1</span>
+<span class="sd">        t_min2:  minimal joint torques robot 2</span>
+<span class="sd">        t_max1:  maximal joint torques robot 1</span>
+<span class="sd">        t_max2:  maximal joint torques robot 2</span>
+<span class="sd">        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1</span>
+<span class="sd">        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        f_vertex(list):  vertices of the polytope</span>
+<span class="sd">        t_vertex : joint torques corresponging to the force vertices</span>
+<span class="sd">        t_bias : combined bias vector</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Jacobian1</span><span class="p">,</span><span class="n">Jacobian2</span><span class="p">))</span>
+    <span class="n">t_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">t1_min</span><span class="p">,</span><span class="n">t2_min</span><span class="p">))</span>
+    <span class="n">t_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">t1_max</span><span class="p">,</span><span class="n">t1_max</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">t1_bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t_bias</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">t_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">t1_bias</span><span class="p">,</span> <span class="n">t2_bias</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">Jac</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span><span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="force_polytope_sum_withfaces"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope_sum_withfaces">[docs]</a><span class="k">def</span> <span class="nf">force_polytope_sum_withfaces</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t1_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t2_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.</span>
+<span class="sd">    With ordered vertices into the faces.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian1:  position jacobian robot 1</span>
+<span class="sd">        Jacobian2: Jacobian2 position jacobian robot 2</span>
+<span class="sd">        t_min1:  minimal joint torques robot 1</span>
+<span class="sd">        t_min2:  minimal joint torques robot 2</span>
+<span class="sd">        t_max1:  maximal joint torques robot 1</span>
+<span class="sd">        t_max2:  maximal joint torques robot 2</span>
+<span class="sd">        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1</span>
+<span class="sd">        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        f_vertex(list):  vertices of the polytope</span>
+<span class="sd">        faces(list): list of vertex indexes belonging to faces</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># calculate two polytopes</span>
+    <span class="n">f_vertex1</span><span class="p">,</span> <span class="n">t_vertex1</span><span class="p">,</span> <span class="n">t1_bias</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t1_bias</span><span class="p">)</span>
+    <span class="n">f_vertex2</span><span class="p">,</span> <span class="n">t_vertex2</span><span class="p">,</span> <span class="n">t2_bias</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t2_bias</span><span class="p">)</span>
+    <span class="c1"># then do a minkowski sum</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">Jacobian1</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">f_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">f_vertex1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">f_vertex2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">m</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">f_vertex1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">f_vertex2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">f_sum</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">f_vertex2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f_vertex1</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">f_vertex2</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">flat</span>
+
+    <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">f_sum</span><span class="p">,</span> <span class="n">qhull_options</span><span class="o">=</span><span class="s1">&#39;QJ&#39;</span><span class="p">)</span>
+    <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">hull</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">],</span> <span class="n">qhull_options</span><span class="o">=</span><span class="s1">&#39;QJ&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">hull</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">hull</span><span class="o">.</span><span class="n">simplices</span></div>
+
+<span class="c1"># maximal end effector force</span>
+<div class="viewcode-block" id="force_polytope"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope">[docs]</a><span class="k">def</span> <span class="nf">force_polytope</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the capacities of the two robots in a certain configuration</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian:  position jacobian </span>
+<span class="sd">        t_max:  maximal joint torques </span>
+<span class="sd">        t_min:  minimal joint torques </span>
+<span class="sd">        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        f_vertex :  vertices of the polytope</span>
+<span class="sd">        t_vertex : joint torques corresponging to the force vertices</span>
+<span class="sd">        t_bias : bias vector used for the calculation</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+
+    <span class="c1"># jacobian calculation</span>
+    <span class="k">return</span> <span class="n">vertex_enumeration_auctus</span><span class="p">(</span><span class="n">Jacobian</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="force_polytope_withfaces"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope_withfaces">[docs]</a><span class="k">def</span> <span class="nf">force_polytope_withfaces</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the capacities of the two robots in a certain configuration.</span>
+<span class="sd">    With vertices ordered into the faces</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian:  position jacobian </span>
+<span class="sd">        t_max:  maximal joint torques </span>
+<span class="sd">        t_min:  minimal joint torques </span>
+<span class="sd">        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        f_vertex(list):  vertices of the polytope</span>
+<span class="sd">        faces(list): list of vertex indexes belonging to faces</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">force_vertex</span><span class="p">,</span> <span class="n">t_vertex</span><span class="p">,</span> <span class="n">t_bias</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="p">)</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">Jacobian</span><span class="o">.</span><span class="n">shape</span>
+    
+    <span class="c1"># find the polytope faces</span>
+    <span class="n">polytope_faces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">force_vertex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">polytope_faces</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>        
+        <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">force_vertex</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">qhull_options</span><span class="o">=</span><span class="s1">&#39;QJ&#39;</span><span class="p">)</span>
+        <span class="n">polytope_faces</span> <span class="o">=</span> <span class="n">hull</span><span class="o">.</span><span class="n">simplices</span>
+        
+    <span class="k">return</span> <span class="n">force_vertex</span><span class="p">,</span> <span class="n">polytope_faces</span></div>
+
+<div class="viewcode-block" id="force_polytope_intersection_withfaces"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope_intersection_withfaces">[docs]</a><span class="k">def</span> <span class="nf">force_polytope_intersection_withfaces</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t1_bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2_bias</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the intersection of the capacities of the two robots in certain configurations.</span>
+<span class="sd">    With ordered vertices into the faces.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian1:  position jacobian robot 1</span>
+<span class="sd">        Jacobian2: Jacobian2 position jacobian robot 2</span>
+<span class="sd">        t_min1:  minimal joint torques robot 1</span>
+<span class="sd">        t_min2:  minimal joint torques robot 2</span>
+<span class="sd">        t_max1:  maximal joint torques robot 1</span>
+<span class="sd">        t_max2:  maximal joint torques robot 2</span>
+<span class="sd">        t1_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1</span>
+<span class="sd">        t2_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        f_vertex(list):  vertices of the polytope</span>
+<span class="sd">        faces(list): list of vertex indexes belonging to faces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">force_vertex</span><span class="p">,</span> <span class="n">t_vertex</span><span class="p">,</span> <span class="n">t_bias</span> <span class="o">=</span> <span class="n">force_polytope_intersection</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t1_bias</span><span class="p">,</span> <span class="n">t2_bias</span><span class="p">)</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">Jacobian1</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">t_max_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">t1_max</span><span class="p">,</span><span class="n">t2_max</span><span class="p">))</span>
+    <span class="n">t_min_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">t1_min</span><span class="p">,</span><span class="n">t2_min</span><span class="p">))</span>
+
+    <span class="n">polytope_faces</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">force_vertex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">polytope_faces</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>        
+        <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">force_vertex</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">qhull_options</span><span class="o">=</span><span class="s1">&#39;QJ&#39;</span><span class="p">)</span>
+        <span class="n">polytope_faces</span> <span class="o">=</span> <span class="n">hull</span><span class="o">.</span><span class="n">simplices</span>
+
+    <span class="k">return</span> <span class="n">force_vertex</span><span class="p">,</span> <span class="n">polytope_faces</span></div>
+
+
+<div class="viewcode-block" id="velocity_polytope"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.velocity_polytope">[docs]</a><span class="k">def</span> <span class="nf">velocity_polytope</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Velocity polytope calculating function</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian:  position jacobian </span>
+<span class="sd">        dq_max:  maximal joint velocities </span>
+<span class="sd">        dq_min:  minimal joint velocities </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        velocity_vertex(list):  vertices of the polytope</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">vel_faces</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span><span class="n">dq_min</span><span class="p">,</span><span class="n">dq_max</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">velocity_vertex</span></div>
+
+<div class="viewcode-block" id="velocity_polytope_withfaces"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.velocity_polytope_withfaces">[docs]</a><span class="k">def</span> <span class="nf">velocity_polytope_withfaces</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Velocity polytope calculating function, with faces</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian:  position jacobian </span>
+<span class="sd">        dq_max:  maximal joint velocities </span>
+<span class="sd">        dq_min:  minimal joint velocities </span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        velocity_vertex(list):  vertices of the polytope</span>
+<span class="sd">        faces(list): list of vertex indexes belonging to faces</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">vel_faces</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span><span class="n">dq_min</span><span class="p">,</span><span class="n">dq_max</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">vel_faces</span></div>
+
+<div class="viewcode-block" id="acceleration_polytope"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.acceleration_polytope">[docs]</a><span class="k">def</span> <span class="nf">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Acceleration polytope calculating function</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J:  position jacobian </span>
+<span class="sd">        M:  inertia matrix </span>
+<span class="sd">        t_max:  maximal joint torque </span>
+<span class="sd">        t_min:  minimal joint torque </span>
+<span class="sd">        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        acceleration_vertex(list):  vertices of the polytope</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">B</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">t_bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vertex</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">t_min</span><span class="p">,</span><span class="n">t_max</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+       <span class="n">vertex</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">t_min</span><span class="o">-</span><span class="n">t_bias</span><span class="p">,</span> <span class="n">t_max</span><span class="o">-</span><span class="n">t_bias</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">vertex</span></div>
+
+<div class="viewcode-block" id="acceleration_polytope_withfaces"><a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.acceleration_polytope_withfaces">[docs]</a><span class="k">def</span> <span class="nf">acceleration_polytope_withfaces</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Acceleration polytope calculating function</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J:  position jacobian </span>
+<span class="sd">        M:  inertia matrix </span>
+<span class="sd">        t_max:  maximal joint torque </span>
+<span class="sd">        t_min:  minimal joint torque </span>
+<span class="sd">        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        acceleration_vertex(list):  vertices of the polytope</span>
+<span class="sd">        faces(list): list of vertex indexes belonging to faces</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">B</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">t_bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vertex</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">faces_index</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">t_min</span><span class="p">,</span><span class="n">t_max</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">vertex</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">faces_index</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">t_min</span><span class="o">-</span><span class="n">t_bias</span><span class="p">,</span><span class="n">t_max</span><span class="o">-</span><span class="n">t_bias</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">vertex</span><span class="p">,</span> <span class="n">faces_index</span></div>
+
+<span class="c1"># definition of the testing functions module</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+   
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># nb joints</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># cartesian forces</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">t_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">t_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">t_max</span>
+    <span class="n">dq_max</span> <span class="o">=</span> <span class="n">t_max</span>
+
+    <span class="n">force_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span><span class="p">)</span>
+    <span class="n">force_polytope_withfaces</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span><span class="p">)</span>
+    <span class="n">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span><span class="p">)</span>
+    <span class="n">acceleration_polytope_withfaces</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span><span class="p">)</span>
+    <span class="n">velocity_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">)</span>
+    <span class="n">velocity_polytope_withfaces</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

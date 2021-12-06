@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.algorithms &mdash; pycapacity v1.2.4 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> pycapacity
+          </a>
+              <div class="version">
+                1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">About</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.robot.html">Robot capacity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.human.html">Human capacity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.algorithms.html">Algortihms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.visual.html">Visualisation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pycapacity.algorithms</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycapacity.algorithms</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span> 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.matlib</span> 
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">ConvexHull</span><span class="p">,</span> <span class="n">HalfspaceIntersection</span>
+<span class="kn">from</span> <span class="nn">cvxopt</span> <span class="kn">import</span> <span class="n">matrix</span>
+<span class="kn">import</span> <span class="nn">cvxopt.glpk</span>
+
+
+<div class="viewcode-block" id="iterative_convex_hull_method"><a class="viewcode-back" href="../../pycapacity.algorithms.html#pycapacity.algorithms.iterative_convex_hull_method">[docs]</a><span class="k">def</span> <span class="nf">iterative_convex_hull_method</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function calculating the polytopes of achievable x for equations form:</span>
+<span class="sd">    </span>
+<span class="sd">    z = B.y</span>
+<span class="sd">    A.x = z</span>
+<span class="sd">    s.t. y_min &lt;= y &lt;= y_max</span>
+<span class="sd">    </span>
+<span class="sd">    or</span>
+<span class="sd">    </span>
+<span class="sd">    A.x = B.y </span>
+<span class="sd">    s.t. y_min &lt;= y &lt;= y_max</span>
+
+<span class="sd">    (optionally - additional projection matrix)</span>
+<span class="sd">    A.z = B.y </span>
+<span class="sd">    P.z = x</span>
+<span class="sd">    s.t. y_min &lt;= y &lt;= y_max</span>
+
+<span class="sd">    (optionally - additional bias)</span>
+<span class="sd">    A.z = B.y + bias</span>
+<span class="sd">    s.t. y_min &lt;= y &lt;= y_max</span>
+
+<span class="sd">    On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method</span>
+<span class="sd">    A.Skuric,V.Padois,N.Rezzoug,D.Daney </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        A: matrix</span>
+<span class="sd">        B: matrix</span>
+<span class="sd">        y_min: minimal values</span>
+<span class="sd">        y_max: maximal values</span>
+<span class="sd">        tol: tolerance for the polytope calculation</span>
+<span class="sd">        P: an additional projection matrix </span>
+<span class="sd">        bias: bias in the intermediate space </span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        x_vert(list):  list of cartesian force vertices</span>
+<span class="sd">        H(list):  matrix of half-space representation Hx&lt;d</span>
+<span class="sd">        d(list):  vector of half-space representation Hx&lt;d</span>
+<span class="sd">        faces(list):   list of vertex indexes forming polytope faces  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># svd of jacobian</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_min</span><span class="p">)</span>
+
+    <span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">V1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">transpose</span><span class="p">()[:,:</span><span class="n">r</span><span class="p">])</span>
+    <span class="n">V2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">transpose</span><span class="p">()[:,</span><span class="n">r</span><span class="p">:])</span>
+
+    <span class="c1"># if bias not defiend set it to zero</span>
+    <span class="k">if</span> <span class="n">bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>  
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">bias</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>  
+
+    <span class="c1"># optimisation setup</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">:</span>
+        <span class="c1"># for redundant case</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+        <span class="n">x_bias</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">bias</span><span class="p">)</span>
+        <span class="c1"># - intersection with the image of the J^T </span>
+        <span class="n">Aeq</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">V2</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">))</span> 
+        <span class="n">beq</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">V2</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">bias</span><span class="p">))</span>
+        <span class="c1"># for 1d jacobian case</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># for non redundant case </span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+        <span class="n">x_bias</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">bias</span><span class="p">)</span>
+        <span class="c1"># - no need to intersect with the image of J^T</span>
+        <span class="n">Aeq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">beq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># for the case when A is an identity matrix</span>
+        <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">n</span><span class="p">))):</span>
+            <span class="c1"># use u vector of the B instead of A</span>
+            <span class="n">u</span><span class="p">,</span> <span class="n">sn</span><span class="p">,</span> <span class="n">vn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+
+    <span class="c1"># if optional projection defined</span>
+    <span class="k">if</span> <span class="n">P</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+        <span class="n">x_bias</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x_bias</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>     
+
+    <span class="n">G</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">L</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">L</span><span class="p">))))</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="nb">list</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_min</span><span class="p">)),</span><span class="n">y_max</span><span class="p">)))</span>
+    <span class="c1">#solvers.options[&#39;show_progress&#39;] = False</span>
+    <span class="n">solvers_opt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="c1">#&quot;glpk&quot;</span>
+    <span class="c1">#solvers.options[&#39;glpk&#39;] = dict(msg_lev=&#39;GLP_MSG_OFF&#39;)</span>
+    <span class="c1"># solvers_opt.options[&#39;solver&#39;] = &#39;mosek&#39; # &#39;glpk&#39;</span>
+
+    <span class="n">solvers_opt</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tm_lim&#39;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span> <span class="s1">&#39;msg_lev&#39;</span><span class="p">:</span> <span class="s1">&#39;GLP_MSG_OFF&#39;</span><span class="p">,</span> <span class="s1">&#39;it_lim&#39;</span><span class="p">:</span><span class="mi">10000</span><span class="p">}</span>
+
+    <span class="n">y_vert</span><span class="p">,</span> <span class="n">x_p</span> <span class="o">=</span> <span class="p">[],[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">((</span><span class="n">u</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">glpk</span><span class="o">.</span><span class="n">lp</span><span class="p">(</span><span class="n">c</span><span class="o">=-</span><span class="n">c</span><span class="p">,</span>  <span class="n">A</span><span class="o">=</span><span class="n">Aeq</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">beq</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">solvers_opt</span><span class="p">)</span>
+        <span class="n">y_vert</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">y_vert</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">glpk</span><span class="o">.</span><span class="n">lp</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span>  <span class="n">A</span><span class="o">=</span><span class="n">Aeq</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">beq</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">solvers_opt</span><span class="p">)</span>
+        <span class="n">y_vert</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">y_vert</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+    <span class="n">x_p</span>  <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_vert</span><span class="p">)</span><span class="c1"># + x_bias</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">x_p</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">incremental</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">x_p</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">incremental</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">qhull_options</span><span class="o">=</span><span class="s2">&quot;QJ&quot;</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">z_vert</span> <span class="o">=</span> <span class="n">B</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_vert</span><span class="p">)</span> <span class="o">+</span> <span class="n">bias</span>
+            <span class="n">x_vert</span>  <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_vert</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_bias</span>
+            <span class="k">return</span> <span class="n">x_vert</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+
+    <span class="n">n_faces</span><span class="p">,</span> <span class="n">n_faces_old</span><span class="p">,</span>  <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hull</span><span class="o">.</span><span class="n">simplices</span><span class="p">),</span> <span class="mi">0</span>
+    <span class="n">face_final</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">=</span> <span class="p">{},</span> <span class="mi">2</span><span class="o">*</span><span class="n">m</span>
+
+    <span class="k">while</span> <span class="n">n_faces</span> <span class="o">&gt;</span> <span class="n">n_faces_old</span><span class="p">:</span>
+        <span class="n">n_faces_old</span> <span class="o">=</span> <span class="n">n_faces</span>
+        
+        <span class="n">x_center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x_p</span><span class="p">)</span>
+        
+        <span class="n">y_vert_new</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">face</span><span class="p">,</span> <span class="n">equation</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">hull</span><span class="o">.</span><span class="n">simplices</span><span class="p">,</span><span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">):</span>
+            
+            <span class="c1"># create a string index of the face </span>
+            <span class="c1"># this value is used as a hash map index</span>
+            <span class="c1"># to store dyamically the faces that have been found as final</span>
+            <span class="n">face_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">face</span><span class="p">))</span>
+            <span class="c1"># check if this face (face index) has been found as final</span>
+            <span class="k">if</span> <span class="n">face_key</span> <span class="ow">in</span> <span class="n">face_final</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">continue</span><span class="p">;</span> 
+
+            <span class="c1"># calculate the normal vector to the face</span>
+            <span class="n">face_normal</span> <span class="o">=</span> <span class="n">equation</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c1"># calculate the projection of the centroid on the normal of the face</span>
+            <span class="c1"># to figure out the direction of the LP</span>
+            <span class="nb">dir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">face_normal</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x_p</span><span class="p">[:,</span><span class="n">face</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="n">x_center</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="c1"># use linear programming to find a vertex in the face_normal direciton</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">((</span><span class="n">face_normal</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">dir</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">glpk</span><span class="o">.</span><span class="n">lp</span><span class="p">(</span><span class="n">c</span><span class="o">=-</span><span class="n">c</span><span class="p">,</span>  <span class="n">A</span><span class="o">=</span><span class="n">Aeq</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">beq</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">solvers_opt</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">glpk</span><span class="o">.</span><span class="n">lp</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span>  <span class="n">A</span><span class="o">=</span><span class="n">Aeq</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="n">beq</span><span class="p">,</span> <span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">solvers_opt</span><span class="p">)</span>
+                
+            <span class="n">res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># a simple counter of linprog execuitions</span>
+            <span class="n">cnt</span> <span class="o">=</span> <span class="n">cnt</span><span class="o">+</span><span class="mi">1</span>
+
+            <span class="c1"># vertex distance from the face</span>
+            <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span> <span class="n">face_normal</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span> <span class="n">M</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_bias</span><span class="p">)</span> <span class="o">-</span><span class="n">face_normal</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span> <span class="n">x_p</span><span class="p">[:,</span><span class="n">face</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="p">))</span>
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="n">tol</span><span class="p">:</span>
+                <span class="c1"># new vertex found</span>
+                <span class="n">y_vert_new</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">y_vert_new</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">face_final</span><span class="p">[</span><span class="n">face_key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_vert_new</span><span class="p">):</span>
+            <span class="n">x_p_new</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_vert_new</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_bias</span>
+            <span class="c1">#print(x_p_new.shape,x_bias.shape,(x_p_new+x_bias).shape)</span>
+            <span class="n">hull</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">x_p_new</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">y_vert</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">y_vert</span><span class="p">,</span> <span class="n">y_vert_new</span><span class="p">,</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+            <span class="n">x_p</span>  <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">x_p</span><span class="p">,</span> <span class="n">x_p_new</span><span class="p">,</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+
+        <span class="n">n_faces</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">hull</span><span class="o">.</span><span class="n">simplices</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">x_p</span><span class="p">,</span> <span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">hull</span><span class="o">.</span><span class="n">simplices</span></div>
+
+<div class="viewcode-block" id="hyper_plane_shift_method"><a class="viewcode-back" href="../../pycapacity.algorithms.html#pycapacity.algorithms.hyper_plane_shift_method">[docs]</a><span class="k">def</span> <span class="nf">hyper_plane_shift_method</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="n">tol</span> <span class="o">=</span> <span class="mf">1e-15</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Hyper plane shifting method implementation used to solve problems of a form:</span>
+<span class="sd">    y = Ax</span>
+<span class="sd">    s.t. x_min &lt;= x &lt;= x_max</span>
+
+<span class="sd">    Hyperplane shifting method: </span>
+<span class="sd">    *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht*</span>
+
+
+<span class="sd">    This algorithm can be used to calcualte acceleration polytope, velocity polytoe and even </span>
+<span class="sd">    polytope of the joint achievable joint torques based on the muscle forces</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        A: projection matrix</span>
+<span class="sd">        x_min: minimal values</span>
+<span class="sd">        x_max: maximal values </span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        H: half space representation matrix H - Hx &lt; d</span>
+<span class="sd">        d: half space representaiton vector d - Hx &lt; d</span>
+<span class="sd">        vertices: vertex representation of the polytope</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">x_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_min</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">x_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x_max</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+    <span class="c1"># Combination of n x n-1 columns of A</span>
+    <span class="c1">#C = nchoosek(1:size(A,2),size(A,1)-1)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="k">for</span> <span class="n">comb</span> <span class="ow">in</span> <span class="n">C</span><span class="p">:</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">A</span><span class="p">[:,</span><span class="n">comb</span><span class="p">]</span>
+        <span class="n">U</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">W</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">W</span><span class="p">)</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:]</span>
+            
+            <span class="c1"># Check for redundant constraint</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="p">)</span> <span class="p">:</span>
+                <span class="c1">#diff = min(vecnorm(H - c,2,2))</span>
+                <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">H</span><span class="o">-</span><span class="n">c</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">diff</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+                    <span class="n">c_exists</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">c_exists</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span> 
+                <span class="n">c_exists</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="c1"># Compute offsets    </span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">c_exists</span> <span class="p">:</span>   
+                <span class="n">I</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+                <span class="n">I_positive</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">I</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">I_negative</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">I</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>    
+                <span class="n">d_positive</span> <span class="o">=</span> <span class="n">I</span><span class="p">[</span><span class="n">I_positive</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">x_min</span><span class="p">[</span><span class="n">I_positive</span><span class="p">],</span><span class="n">x_max</span><span class="p">[</span><span class="n">I_positive</span><span class="p">]],</span><span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">I</span><span class="p">[</span><span class="n">I_negative</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">x_min</span><span class="p">[</span><span class="n">I_negative</span><span class="p">],</span><span class="n">x_max</span><span class="p">[</span><span class="n">I_negative</span><span class="p">]],</span><span class="mi">0</span><span class="p">))</span>
+                <span class="n">d_negative</span> <span class="o">=</span> <span class="o">-</span><span class="n">I</span><span class="p">[</span><span class="n">I_negative</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">x_min</span><span class="p">[</span><span class="n">I_negative</span><span class="p">],</span><span class="n">x_max</span><span class="p">[</span><span class="n">I_negative</span><span class="p">]],</span><span class="mi">0</span><span class="p">))</span> <span class="o">-</span> <span class="n">I</span><span class="p">[</span><span class="n">I_positive</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">x_min</span><span class="p">[</span><span class="n">I_positive</span><span class="p">],</span><span class="n">x_max</span><span class="p">[</span><span class="n">I_positive</span><span class="p">]],</span><span class="mi">0</span><span class="p">))</span>
+                <span class="c1"># Append constraints</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="o">-</span><span class="n">c</span><span class="p">)</span>
+                <span class="n">d</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="p">[</span><span class="n">d_positive</span><span class="p">,</span> <span class="n">d_negative</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">H</span><span class="p">):</span>
+        <span class="c1"># calculate the certices</span>
+        <span class="n">hd_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">H</span><span class="p">),</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">)))</span>
+        <span class="n">hd</span> <span class="o">=</span> <span class="n">HalfspaceIntersection</span><span class="p">(</span><span class="n">hd_mat</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="s1">&#39;QJ&#39;</span><span class="p">)</span>
+        <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">hd</span><span class="o">.</span><span class="n">intersections</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hd</span><span class="o">.</span><span class="n">intersections</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">hull</span><span class="o">.</span><span class="n">simplices</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[],</span> <span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="p">[]</span></div>
+
+<span class="c1"># maximal end effector force</span>
+<div class="viewcode-block" id="vertex_enumeration_auctus"><a class="viewcode-back" href="../../pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_auctus">[docs]</a><span class="k">def</span> <span class="nf">vertex_enumeration_auctus</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">b_max</span><span class="p">,</span> <span class="n">b_min</span><span class="p">,</span> <span class="n">b_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Efficient vertex enumeration algorithm for a problem of a form:</span>
+<span class="sd">    Ax = b</span>
+<span class="sd">    s.t. b_min &lt;= b &lt;= b_max </span>
+
+<span class="sd">    Optional (if b_bias added): </span>
+<span class="sd">    Ax = b</span>
+<span class="sd">    s.t. b_min &lt;= b - b_bias &lt;= b_max</span>
+
+<span class="sd">    On-line force capability evaluation based on efficient polytope vertex search</span>
+<span class="sd">    by A. Skuric, V. Padois, D. Daney</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        A:      system matrix A</span>
+<span class="sd">        b_max:  maximal b </span>
+<span class="sd">        b_min:  minimal b  </span>
+<span class="sd">        b_bias: b bias vector ( offset from 0 )</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        f_vertex(list):  vertices of the polytope</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># Size calculation</span>
+    <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">b_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b_min</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">b_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b_max</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># if b_bias not specified</span>
+    <span class="k">if</span> <span class="n">b_bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">b_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># calculate svd</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_rank</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">V1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">transpose</span><span class="p">()[:,:</span><span class="n">m</span><span class="p">])</span>
+    <span class="n">V2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">transpose</span><span class="p">()[:,</span><span class="n">m</span><span class="p">:])</span>
+
+    <span class="c1"># A matrix pseudo inverse</span>
+    <span class="n">A_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+
+    <span class="c1"># matrix of axis vectors - for polytope search</span>
+    <span class="n">T_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">b_max</span><span class="o">-</span><span class="n">b_min</span><span class="p">)</span>
+    <span class="n">T_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matlib</span><span class="o">.</span><span class="n">repmat</span><span class="p">(</span><span class="n">b_min</span> <span class="o">-</span> <span class="n">b_bias</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">b_max_bias</span> <span class="o">=</span> <span class="n">b_max</span> <span class="o">-</span> <span class="n">b_bias</span>
+
+    <span class="c1"># all the face origin vector combiantions</span>
+    <span class="n">fixed_vectors_combinations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">m</span><span class="p">)))</span>
+    <span class="n">permutations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="n">m</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="n">x_vertex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">b_vertex</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># A loop to go through all pairs of adjacent vertices</span>
+    <span class="k">for</span> <span class="n">fixed_vectors</span> <span class="ow">in</span> <span class="n">fixed_vectors_combinations</span><span class="p">:</span>
+        <span class="c1"># find all n-m face vector indexes</span>
+        <span class="n">face_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">fixed_vectors</span><span class="p">)</span> 
+
+        <span class="n">S</span> <span class="o">=</span> <span class="n">T_min</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span> <span class="n">S</span><span class="p">[</span><span class="n">fixed_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">permutations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b_max_bias</span><span class="p">[</span><span class="n">fixed_vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">S_v2</span> <span class="o">=</span> <span class="n">V2</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+        <span class="c1"># vectors to be used</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">T_vec</span><span class="p">[:,</span><span class="n">face_vectors</span><span class="p">]</span>
+        <span class="c1"># project the face vectors to the null space of the matrix A (using the V2)</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">V2</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="o">-</span><span class="n">T</span><span class="p">)</span>
+
+        <span class="c1"># figure out if some solutions can be discarded</span>
+        <span class="n">Z_min</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">Z_min</span><span class="p">[</span><span class="n">Z_min</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">Z_max</span> <span class="o">=</span> <span class="n">Z</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">Z_max</span><span class="p">[</span><span class="n">Z_max</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">S_min</span> <span class="o">=</span> <span class="n">Z_min</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="n">S_max</span> <span class="o">=</span> <span class="n">Z_max</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="n">m</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span>
+        <span class="n">to_reject</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">S_v2</span> <span class="o">-</span> <span class="n">S_min</span> <span class="o">&lt;</span> <span class="o">-</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">7</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">S_v2</span> <span class="o">-</span> <span class="n">S_max</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">7</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">to_reject</span><span class="p">):</span> <span class="c1"># all should be discarded</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># remove the unfeasible solutions</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">S</span><span class="p">[:,</span><span class="o">~</span><span class="n">to_reject</span><span class="p">]</span>
+        <span class="c1"># project the fixed vectors to the null space of the matrix A (using the V2)</span>
+        <span class="n">S_v2</span> <span class="o">=</span> <span class="n">V2</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+        
+        <span class="c1"># invert the matrix Z</span>
+        <span class="n">Z_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">Z</span><span class="p">)</span>
+                                
+        <span class="c1"># calculate the solution of the x for each face</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">Z_inv</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S_v2</span><span class="p">)</span>
+        <span class="c1"># check if inverse correct - all error 0</span>
+        <span class="n">b_err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span> <span class="nb">abs</span><span class="p">(</span><span class="n">S_v2</span> <span class="o">-</span> <span class="n">Z</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">7</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> 
+        <span class="c1"># remove the solutions that are not in polytope </span>
+        <span class="n">to_remove</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">X</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">10</span><span class="o">**-</span><span class="mi">7</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">7</span> <span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">b_err</span>
+        <span class="n">X</span><span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="o">~</span><span class="n">to_remove</span><span class="p">]</span>
+        <span class="n">S</span><span class="o">=</span> <span class="n">S</span><span class="p">[:,</span> <span class="o">~</span><span class="n">to_remove</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">b_vertex</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">b_vertex</span> <span class="o">=</span>  <span class="n">S</span><span class="o">+</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        <span class="c1"># add b vertex - corresponding to the x vertex</span>
+        <span class="n">b_vertex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">b_vertex</span><span class="p">,</span> <span class="n">S</span><span class="o">+</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">)))</span>
+    
+    <span class="c1"># only unique vertices</span>
+    <span class="n">b_vertex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">b_vertex</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># calculate the forces based on the vertex torques</span>
+    <span class="n">x_vertex</span> <span class="o">=</span> <span class="n">A_inv</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span> <span class="n">b_vertex</span> <span class="p">)</span>
+    <span class="k">return</span> <span class="n">x_vertex</span><span class="p">,</span> <span class="n">b_vertex</span><span class="p">,</span> <span class="n">b_bias</span></div>
+   
+<div class="viewcode-block" id="order_index"><a class="viewcode-back" href="../../pycapacity.algorithms.html#pycapacity.algorithms.order_index">[docs]</a><span class="k">def</span> <span class="nf">order_index</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Order clockwise 2D points</span>
+<span class="sd">    Args:</span>
+<span class="sd">        points:  matrix of 2D points</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        indexes(array): ordered indexes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">py</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    <span class="n">p_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span> <span class="p">(</span><span class="n">py</span><span class="o">-</span><span class="n">p_mean</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="n">px</span><span class="o">-</span><span class="n">p_mean</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">sort_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sort_index</span></div>
+
+<div class="viewcode-block" id="face_index_to_vertex"><a class="viewcode-back" href="../../pycapacity.algorithms.html#pycapacity.algorithms.face_index_to_vertex">[docs]</a><span class="k">def</span> <span class="nf">face_index_to_vertex</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="n">indexes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helping function for transforming the list of faces with indexes to the vertices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vertices</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">vertices</span><span class="p">[:,</span><span class="n">order_index</span><span class="p">(</span><span class="n">vertices</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">vertices</span><span class="p">[:,</span><span class="n">face</span><span class="p">]</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="stack"><a class="viewcode-back" href="../../pycapacity.algorithms.html#pycapacity.algorithms.stack">[docs]</a><span class="k">def</span> <span class="nf">stack</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s1">&#39;v&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">A</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">B</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">B</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">A</span>
+    <span class="k">elif</span> <span class="nb">dir</span> <span class="o">==</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">))</span></div>
+         
+<span class="c1"># definition of the four_link_solver module</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">5</span> 
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">3</span> 
+    <span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">y_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">y_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+
+    <span class="c1"># Ax = By</span>
+    <span class="c1"># s.t. y in [y_min, y_max]</span>
+    <span class="n">iterative_convex_hull_method</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="c1"># x = By</span>
+    <span class="c1"># s.t. y in [y_min, y_max]</span>
+    <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+    <span class="c1"># Ax = y</span>
+    <span class="c1"># s.t. y in [y_min, y_max]</span>
+    <span class="n">y_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">y_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">vertex_enumeration_auctus</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

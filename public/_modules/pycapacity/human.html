@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="writer-html4" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.human &mdash; pycapacity v1.2.4 documentation</title><link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> pycapacity
+          </a>
+              <div class="version">
+                1.2
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">About</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.robot.html">Robot capacity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.human.html">Human capacity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.algorithms.html">Algortihms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.visual.html">Visualisation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pycapacity.human</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycapacity.human</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">cvxopt</span> <span class="kn">import</span> <span class="n">matrix</span>
+<span class="kn">import</span> <span class="nn">cvxopt.glpk</span>
+
+<span class="c1"># import the algos</span>
+<span class="kn">from</span> <span class="nn">pycapacity.algorithms</span> <span class="kn">import</span> <span class="n">iterative_convex_hull_method</span><span class="p">,</span> <span class="n">hyper_plane_shift_method</span>
+<span class="kn">from</span> <span class="nn">pycapacity.algorithms</span> <span class="kn">import</span> <span class="n">stack</span><span class="p">,</span> <span class="n">face_index_to_vertex</span>
+
+
+<div class="viewcode-block" id="joint_torques_polytope"><a class="viewcode-back" href="../../pycapacity.human.html#pycapacity.human.joint_torques_polytope">[docs]</a><span class="k">def</span> <span class="nf">joint_torques_polytope</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function calculating the polytopes of achievable joint torques</span>
+<span class="sd">    based on the moment arm matrix N :</span>
+<span class="sd">    </span>
+<span class="sd">    t = N.F</span>
+<span class="sd">    st F_min &lt;= F &lt;= F_max</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N: moment arm matrix</span>
+<span class="sd">        F_min: minimal muscular forces (passive forces or 0)</span>
+<span class="sd">        F_max: maximal isometric forces </span>
+<span class="sd">        tolerance: tolerance for the polytope calculation</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        t_vert(array):  list of torque vertices</span>
+<span class="sd">        H(array):  half-space rep matrix H - H.t &lt; d</span>
+<span class="sd">        d(array):  half-space rep vector d</span>
+<span class="sd">        faces: indexes of verteices forming the polytope faces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="acceleration_polytope"><a class="viewcode-back" href="../../pycapacity.human.html#pycapacity.human.acceleration_polytope">[docs]</a><span class="k">def</span> <span class="nf">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function calculating the polytopes of achievable accelerations</span>
+<span class="sd">    based on the jacobian matrix J, moment arm matrix N and mass matrix M</span>
+
+<span class="sd">    a = ddx = J.M^(-1).N.F</span>
+<span class="sd">    st F_min &lt;= F &lt;= F_max</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: jacobian matrix</span>
+<span class="sd">        N: moment arm matrix</span>
+<span class="sd">        M: mass matrix</span>
+<span class="sd">        F_min: minimal muscular forces (passive forces or 0)</span>
+<span class="sd">        F_max: maximal isometric forces </span>
+<span class="sd">        tolerance: tolerance for the polytope calculation</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        a_vert(array):  list of acceleraiton vertices</span>
+<span class="sd">        H(array):  half-space rep matrix H - H.a &lt; d</span>
+<span class="sd">        d(array):  half-space rep vectors d</span>
+<span class="sd">        faces: indexes of verteices forming the polytope faces</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">)),</span><span class="n">F_min</span><span class="p">,</span><span class="n">F_max</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="force_polytope"><a class="viewcode-back" href="../../pycapacity.human.html#pycapacity.human.force_polytope">[docs]</a><span class="k">def</span> <span class="nf">force_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">torque_bias</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function calculating the polytopes of achievable foreces based </span>
+<span class="sd">    on the jacobian matrix J and moment arm matrix N</span>
+
+<span class="sd">    J^T.f = N.F (+ t_bias  optional) </span>
+<span class="sd">    st F_min &lt;= F &lt;= F_max</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: jacobian matrix</span>
+<span class="sd">        N: moment arm matrix</span>
+<span class="sd">        F_min: minimal muscular forces (passive forces or 0)</span>
+<span class="sd">        F_max: maximal isometric forces </span>
+<span class="sd">        tolerance: tolerance for the polytope calculation</span>
+<span class="sd">        torque_bias: torque bias optional (gravity or movement or applied forces ....) </span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        f_vert(list):  list of cartesian force vertices</span>
+<span class="sd">        H(array):  half-space rep matrix H - H.a &lt; d</span>
+<span class="sd">        d(array):  half-space rep vectors d</span>
+<span class="sd">        faces(list):   list of vertex indexes forming polytope faces  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">iterative_convex_hull_method</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span> <span class="n">tol</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">torque_bias</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="velocity_polytope"><a class="viewcode-back" href="../../pycapacity.human.html#pycapacity.human.velocity_polytope">[docs]</a><span class="k">def</span> <span class="nf">velocity_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">dl_min</span> <span class="p">,</span> <span class="n">dl_max</span><span class="p">,</span> <span class="n">tol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function calculating the polytopes of achievable velocity based </span>
+<span class="sd">    on the jacobian matrix J and moment arm matrix N</span>
+
+<span class="sd">    L.q = dl</span>
+<span class="sd">    J.q = v</span>
+<span class="sd">    st dl_min &lt;= dl &lt;= dl_max</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: jacobian matrix</span>
+<span class="sd">        N: moment arm matrix L = -N^T</span>
+<span class="sd">        dl_min: minimal achievable muscle contraction veclocity</span>
+<span class="sd">        dl_max: maximal achievable muscle contraction veclocity</span>
+<span class="sd">        tolerance: tolerance for the polytope calculation</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        v_vert(list):  list of cartesian velocity vertices</span>
+<span class="sd">        H(array):  half-space rep matrix H - H.a &lt; d</span>
+<span class="sd">        d(array):  half-space rep vectors d</span>
+<span class="sd">        faces(list):   list of vertex indexes forming velocity polytope faces  </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">iterative_convex_hull_method</span><span class="p">(</span><span class="n">A</span><span class="o">=-</span><span class="n">N</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">B</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dl_min</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">P</span> <span class="o">=</span> <span class="n">J</span><span class="p">,</span> <span class="n">y_min</span><span class="o">=</span><span class="n">dl_min</span><span class="p">,</span> <span class="n">y_max</span><span class="o">=</span><span class="n">dl_max</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="torque_to_muscle_force"><a class="viewcode-back" href="../../pycapacity.human.html#pycapacity.human.torque_to_muscle_force">[docs]</a><span class="k">def</span> <span class="nf">torque_to_muscle_force</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="s2">&quot;lp&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function calculating muscle forces needed to create the joint torques tau</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        N: moment arm matrix</span>
+<span class="sd">        F_min: minimal muscular forces (passive forces or 0)</span>
+<span class="sd">        F_max: maximal isometric forces </span>
+<span class="sd">        tau: joint torque</span>
+<span class="sd">        options: solver type to use: &#39;lp&#39; - linear programming (defualt), &#39;qp&#39; - quadratic programming</span>
+<span class="sd">        </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        F(list): list of muscle forces</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">F_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_min</span><span class="p">)</span>
+    <span class="n">F_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_max</span><span class="p">)</span>
+    <span class="n">F_range</span> <span class="o">=</span> <span class="n">F_max</span> <span class="o">-</span> <span class="n">F_min</span>
+
+    <span class="n">L</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">F_min</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;lp&quot;</span> <span class="ow">in</span> <span class="n">options</span> <span class="p">:</span>
+        <span class="n">solvers_opt</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;tm_lim&#39;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span> <span class="s1">&#39;msg_lev&#39;</span><span class="p">:</span> <span class="s1">&#39;GLP_MSG_OFF&#39;</span><span class="p">,</span> <span class="s1">&#39;it_lim&#39;</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">/</span><span class="n">F_range</span><span class="p">)</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">L</span><span class="p">),</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">L</span><span class="p">))))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">F_max</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_min</span><span class="p">)))))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">glpk</span><span class="o">.</span><span class="n">lp</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span><span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span><span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">,</span><span class="n">options</span><span class="o">=</span><span class="n">solvers_opt</span><span class="p">)</span>
+        <span class="c1"># print(tau)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">F_min</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s1">&#39;show_progress&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">/</span><span class="n">F_range</span><span class="o">/</span><span class="n">F_range</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">L</span><span class="p">))</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tau</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span>  <span class="n">matrix</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">L</span><span class="p">),</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">L</span><span class="p">))))</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">F_max</span><span class="p">,</span><span class="nb">list</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_min</span><span class="p">)))))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">solvers</span><span class="o">.</span><span class="n">qp</span><span class="p">(</span><span class="n">P</span><span class="o">=</span><span class="n">P</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span><span class="n">G</span><span class="o">=</span><span class="n">G</span><span class="p">,</span><span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span><span class="n">A</span><span class="o">=</span><span class="n">A</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="n">b</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">F_min</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+  
+    <span class="n">L</span> <span class="o">=</span> <span class="mi">20</span> <span class="c1"># nb muslces</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># nb joints</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># cartesian forces</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">F_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+    <span class="n">F_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+
+    <span class="n">force_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">N</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">)</span>
+    <span class="c1"># direct acceleration polytope calculation</span>
+    <span class="n">iterative_convex_hull_method</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">M</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">N</span><span class="p">)),</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">F_min</span><span class="p">,</span> <span class="n">F_max</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
