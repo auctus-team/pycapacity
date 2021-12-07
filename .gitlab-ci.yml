@@ -1,8 +1,9 @@
-image: python:3.6-alpine
+image: python:3.6-slim
 
 pages:
   stage: deploy
   script:
+  - pip install .
   - cd docs
   - pip install -r requirements.txt
   - sphinx-build -M html "source" "build" 
