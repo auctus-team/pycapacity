@@ -10,11 +10,11 @@ def plot_polytope_faces(faces,ax=None, plt=None, face_color=None, edge_color=Non
         If provided matplotlib `plt` it will find the `ax` automatically. No need to provide the `ax`. If `ax` already defined no need to provide the `plt`.
 
     Examples:
-        >> import pycapacity.visual
-        >> import matplotlib.pyplot as plt
-        >> ax = pycapacity.visual.plot_polytope_faces([[6,5,4,3],[1,2,2,1]],plt=plt,face_color='blue')
-        >> pycapacity.visual.plot_polytope_faces([[10,8,7,6],[1,2,2,1]],ax=ax,face_color='red')
-        >> plt.show()
+        >>> import pycapacity.visual
+        >>> import matplotlib.pyplot as plt
+        >>> ax = pycapacity.visual.plot_polytope_faces([[6,5,4,3],[1,2,2,1]],plt=plt,face_color='blue')
+        >>> pycapacity.visual.plot_polytope_faces([[10,8,7,6],[1,2,2,1]],ax=ax,face_color='red')
+        >>> plt.show()
 
     Args:
         faces:  list of faces (vertices)
@@ -67,10 +67,16 @@ def plot_polytope_vertex(vertex, ax=None, plt=None, label=None, color='black'):
     """
     Polytope vertices plotting function in 2d and 3d
 
-    Notes
-    -----
-    If provided matplotlib plt it will find the ax automatically. No need to provide the ax. If ax already defined no need to provide the plt.
+    Note:
+        If provided matplotlib `plt` it will find the `ax` automatically. No need to provide the `ax`. If `ax` already defined no need to provide the `plt`.
 
+    Examples:
+        >>> import pycapacity.visual
+        >>> import matplotlib.pyplot as plt
+        >>> ax = pycapacity.visual.plot_polytope_vertex(np.array([[6,5,4,3],[1,2,2,1]]),plt=plt,color='blue')
+        >>> pycapacity.visual.plot_polytope_vertex(np.array([[10,8,7,6],[1,2,2,1]]),ax=ax, color='red')
+        >>> plt.show()
+        
     Args:
         vertex :  position jacobian 
         ax :  matplotlib ax to plot on 
