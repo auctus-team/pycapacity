@@ -1,5 +1,5 @@
 # requirements.txt
 
-Sphinx
-sphinx-rtd-theme # to use a nice modern theme
-recommonmark # to include the Readme.md
+Sphinx==1.8.6
+sphinx-rtd-theme==1.0.0# to use a nice modern theme
+recommonmark==0.7.1 # to include the Readme.md
