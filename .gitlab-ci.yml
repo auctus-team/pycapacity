@@ -3,7 +3,6 @@ pages:
   tags:
     - ci-auctus
     - u180464b
-
   script:
     - ls
   artifacts:
