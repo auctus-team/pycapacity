@@ -4,7 +4,12 @@ import numpy as np
 
 def plot_polytope_faces(faces,ax=None, plt=None, face_color=None, edge_color=None, alpha=None,label=None):
     """
-    Polytope faces plotting function in 2d and 3d
+    Polytope faces plotting function in 2d and 3d. 
+    
+    Notes
+    -----
+    If provided matplotlib plt it will find the ax automatically. No need to provide the ax. If ax already defined no need to provide the plt.
+
 
     Args:
         faces:  list of faces (vertices)
@@ -53,19 +58,23 @@ def plot_polytope_faces(faces,ax=None, plt=None, face_color=None, edge_color=Non
         print("cannot visualise data with dimension: "+str(dim))
     return ax
 
-def plot_polytope_vertex(vertex,ax=None, plt=None, label=None, color='black'):
+def plot_polytope_vertex(vertex, ax=None, plt=None, label=None, color='black'):
     """
     Polytope vertices plotting function in 2d and 3d
 
+    Notes
+    -----
+    If provided matplotlib plt it will find the ax automatically. No need to provide the ax. If ax already defined no need to provide the plt.
+
     Args:
-        vertex:  position jacobian 
-        ax:  matplotlib ax to plot on 
-        plt: matplotlib plot to plot on - it will find the ax automatically
-        color:  vertex color 
-        label:  legend label
+        vertex :  position jacobian 
+        ax :  matplotlib ax to plot on 
+        plt : matplotlib plot to plot on - it will find the ax automatically
+        color :  vertex color 
+        label :  legend label
 
     Returns:
-        ax:  matplotlib ax used for plotting
+        ax :  matplotlib ax used for plotting
     """ 
     dim = np.array(vertex).shape[0]
     if dim == 2:
