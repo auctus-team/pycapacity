@@ -1,12 +1,11 @@
+image: alpine:latest
+
 pages:
   stage: deploy
-  tags:
-    - ci-auctus
-    - u180464b
   script:
-    - ls
+  - echo 'Nothing to do...'
   artifacts:
     paths:
-      - public
+    - public
   only:
-    - master
+  - master
