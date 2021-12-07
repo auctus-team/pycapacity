@@ -3,7 +3,7 @@ image: python:3.6-alpine
 pages:
   stage: deploy
   script:
-  - pip install -U numpy
+  - apt install gcc
   - pip install .
   - cd docs
   - pip install -r requirements.txt
