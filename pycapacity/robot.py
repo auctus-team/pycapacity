@@ -12,14 +12,21 @@ from pycapacity.algorithms import order_index, face_index_to_vertex
 # velocity manipulability calculation
 def velocity_ellipsoid(J, dq_max):
     """
-    velocity manipulability ellipsoid calculation
+    Velocity manipulability ellipsoid calculation
+
+    .. math:: J\dot{q} = \dot{x}
+    .. math:: ||\dot{q}|| \leq \dot{q}_{max}
 
     Args:
         J: position jacobian
         dq_max:  maximal joint velocities
-    Returns: 
-        S(list):  list of axis lengths
-        U(matrix): list of axis vectors
+
+    Returns
+    ---------
+        S(list):  
+            list of axis lengths
+        U(matrix): 
+            list of axis vectors
     """ 
     # jacobian calculation
     Jac = J
@@ -33,17 +40,22 @@ def velocity_ellipsoid(J, dq_max):
 # acceleration manipulability calculation
 def acceleration_ellipsoid(J, M, t_max):
     """
-    acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
+    Acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
-    Returns:
+    .. math:: \ddot{x}   = JM^{-1} t
+    .. math:: ||{t}|| \leq {t}_{max}
      
     Args:
         J: matrix jacobian
         M: matrix inertia 
         t_max:  maximal joint torques
-    Returns: 
-        S(list):  list of axis lengths
-        U(matrix): list of axis vectors
+        
+    Returns
+    ---------
+        S(list):  
+            list of axis lengths
+        U(matrix): 
+            list of axis vectors
     """ 
     # jacobian calculation
     Jac = J.dot(np.linalg.pinv(M))
@@ -57,14 +69,21 @@ def acceleration_ellipsoid(J, M, t_max):
 # force ellipsoid calculation
 def force_ellipsoid(J, t_max):
     """
-    force manipulability ellipsoid calculation
+    Force manipulability ellipsoid calculation
+
+    .. math:: t  = J^Tf
+    .. math:: ||{t}|| \leq {t}_{max}
 
     Args:
         J: matrix jacobian
         t_max:  maximal joint torques
-    Returns: 
-        S(list):  list of axis lengths
-        U(matrix): list of axis vectors
+
+    Returns
+    ---------
+        S(list):  
+            list of axis lengths
+        U(matrix): 
+            list of axis vectors
     """ 
     # jacobian calculation
     Jac = J
@@ -80,6 +99,12 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     """
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
 
+    .. math:: t_1  = J_1^Tf_1,\quad t_2  = J_2^Tf_2, \quad f_1=f_2
+    .. math:: {t}_{1,min} \leq t_1 \leq {t}_{1,max}
+    .. math:: {t}_{2,min} \leq t_1 \leq {t}_{2,max}
+
+
+    Based on the ``vertex_enumeration_auctus`` algorihtm.
 
     Args:
         Jacobian1:  position jacobian robot 1
@@ -91,10 +116,14 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
         t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
         t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
 
-    Returns:
-        f_vertex(list):  vertices of the polytope
-        t_vertex : joint torques corresponging to the force vertices
-        t_bias : combined bias vector
+    Returns
+    ---------
+        f_vertex(list):  
+            vertices of the polytope
+        t_vertex : 
+            joint torques corresponging to the force vertices
+        t_bias : 
+            combined bias vector
     """
     # jacobian calculation
     Jac =  np.hstack((Jacobian1,Jacobian2))
@@ -112,6 +141,12 @@ def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t
     Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
 
+    .. math:: t_1  = J_1^Tf_1,\quad t_2  = J_2^Tf_2, \quad f = f_1 + f_2
+    .. math:: {t}_{1,min} \leq t_1 \leq {t}_{1,max}
+    .. math:: {t}_{2,min} \leq t_1 \leq {t}_{2,max}
+
+    Based on the ``vertex_enumeration_auctus`` algorihtm.
+
     Args:
         Jacobian1:  position jacobian robot 1
         Jacobian2: Jacobian2 position jacobian robot 2
@@ -122,9 +157,12 @@ def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t
         t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
         t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
 
-    Returns:
-        f_vertex(list):  vertices of the polytope
-        faces(list): list of vertex indexes belonging to faces
+    Returns
+    ---------
+        f_vertex(list):  
+            vertices of the polytope
+        faces(list): 
+            list of vertex indexes belonging to faces
     """ 
     # calculate two polytopes
     f_vertex1, t_vertex1, t1_bias = force_polytope(Jacobian1, t1_max, t1_min, t1_bias)
@@ -145,16 +183,25 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None):
     """
     Force polytope representing the capacities of the two robots in a certain configuration
 
+    .. math:: t = J^Tf
+    .. math:: {t}_{min} \leq t \leq {t}_{max}
+
+    Based on the ``vertex_enumeration_auctus`` algorihtm.
+
     Args:
         Jacobian:  position jacobian 
         t_max:  maximal joint torques 
         t_min:  minimal joint torques 
         t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 
 
-    Returns:
-        f_vertex :  vertices of the polytope
-        t_vertex : joint torques corresponging to the force vertices
-        t_bias : bias vector used for the calculation
+    Returns
+    ---------
+        f_vertex : 
+            vertices of the polytope
+        t_vertex : 
+            joint torques corresponging to the force vertices
+        t_bias : 
+            bias vector used for the calculation
     """ 
 
     # jacobian calculation
@@ -165,15 +212,24 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, t_bias = None):
     Force polytope representing the capacities of the two robots in a certain configuration.
     With vertices ordered into the faces
 
+
+    .. math:: t = J^Tf
+    .. math:: {t}_{min} \leq t \leq {t}_{max}
+
+    Based on the ``vertex_enumeration_auctus`` algorihtm.
+
     Args:
         Jacobian:  position jacobian 
         t_max:  maximal joint torques 
         t_min:  minimal joint torques 
         t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces
 
-    Returns:
-        f_vertex(list):  vertices of the polytope
-        faces(list): list of vertex indexes belonging to faces
+    Returns
+    ---------
+        f_vertex(list):  
+            vertices of the polytope
+        faces(list): 
+            list of vertex indexes belonging to faces
     """ 
     force_vertex, t_vertex, t_bias = force_polytope(Jacobian, t_max, t_min, t_bias)
     m, n = Jacobian.shape
@@ -193,6 +249,12 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
 
+    .. math:: t_1  = J_1^Tf_1,\quad t_2  = J_2^Tf_2, \quad f_1=f_2
+    .. math:: {t}_{1,min} \leq t_1 \leq {t}_{1,max}
+    .. math:: {t}_{2,min} \leq t_1 \leq {t}_{2,max}
+
+    Based on the ``vertex_enumeration_auctus`` algorihtm.
+
     Args:
         Jacobian1:  position jacobian robot 1
         Jacobian2: Jacobian2 position jacobian robot 2
@@ -203,9 +265,12 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
         t1_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
         t2_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
 
-    Returns:
-        f_vertex(list):  vertices of the polytope
-        faces(list): list of vertex indexes belonging to faces
+    Returns
+    ---------
+        f_vertex(list):  
+            vertices of the polytope
+        faces(list): 
+            list of vertex indexes belonging to faces
     """
     force_vertex, t_vertex, t_bias = force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias, t2_bias)
     m, n = Jacobian1.shape
@@ -226,6 +291,12 @@ def velocity_polytope(Jacobian, dq_max, dq_min):
     """
     Velocity polytope calculating function
 
+
+    .. math:: \dot{x} = J\dot{q}
+    .. math:: {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}
+
+    Based on the ``hyper_plane_shifting_method`` algorihtm.
+
     Args:
         Jacobian:  position jacobian 
         dq_max:  maximal joint velocities 
@@ -241,14 +312,22 @@ def velocity_polytope_withfaces(Jacobian, dq_max, dq_min):
     """
     Velocity polytope calculating function, with faces
 
+    .. math:: \dot{x} = J\dot{q}
+    .. math:: {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}
+
+    Based on the ``hyper_plane_shifting_method`` algorihtm.
+
     Args:
         Jacobian:  position jacobian 
         dq_max:  maximal joint velocities 
         dq_min:  minimal joint velocities 
 
-    Returns:
-        velocity_vertex(list):  vertices of the polytope
-        faces(list): list of vertex indexes belonging to faces
+    Returns
+    ---------
+        velocity_vertex(list):  
+            vertices of the polytope
+        faces(list): 
+            list of vertex indexes belonging to faces
     """ 
     velocity_vertex, H, d, vel_faces = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
     return velocity_vertex, vel_faces
@@ -257,12 +336,18 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None):
     """
     Acceleration polytope calculating function
 
+    .. math:: \ddot{x} = JM^{-1}t
+    .. math:: {t}_{min} \leq t \leq {t}_{max}
+
+    Based on the ``hyper_plane_shifting_method`` algorihtm.
+
     Args:
         J:  position jacobian 
         M:  inertia matrix 
         t_max:  maximal joint torque 
         t_min:  minimal joint torque 
         t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces
+
     Returns:
         acceleration_vertex(list):  vertices of the polytope
     """ 
@@ -278,15 +363,24 @@ def acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias= None):
     """
     Acceleration polytope calculating function
 
+    .. math:: \ddot{x} = JM^{-1}t
+    .. math:: {t}_{min} \leq t \leq {t}_{max}
+
+    Based on the ``hyper_plane_shifting_method`` algorihtm.
+
     Args:
         J:  position jacobian 
         M:  inertia matrix 
         t_max:  maximal joint torque 
         t_min:  minimal joint torque 
         t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces
-    Returns:
-        acceleration_vertex(list):  vertices of the polytope
-        faces(list): list of vertex indexes belonging to faces
+    
+    Returns
+    ---------
+        acceleration_vertex(list):  
+            vertices of the polytope
+        faces(list):
+            list of vertex indexes belonging to faces
     """ 
     B = J.dot(np.linalg.pinv(M))
     if t_bias is None:

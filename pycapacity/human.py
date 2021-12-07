@@ -10,10 +10,12 @@ from pycapacity.algorithms import stack, face_index_to_vertex
 def joint_torques_polytope(N, F_min, F_max, tol=1e-15):
     """
     A function calculating the polytopes of achievable joint torques
-    based on the moment arm matrix N :
+    based on the moment arm matrix `N` :
     
-    t = N.F
-    st F_min <= F <= F_max
+    .. math:: t = NF
+    .. math:: F_{min} \leq F \leq F_{max}
+
+    Based on the ``hyper_plane_shifting_method`` algorihtm.
 
     Args:
         N: moment arm matrix
@@ -21,21 +23,29 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-15):
         F_max: maximal isometric forces 
         tolerance: tolerance for the polytope calculation
         
-    Returns:
-        t_vert(array):  list of torque vertices
-        H(array):  half-space rep matrix H - H.t < d
-        d(array):  half-space rep vector d
-        faces: indexes of verteices forming the polytope faces
+
+    Returns
+    --------
+        t_vert(array):  
+            list of torque vertices
+        H(array):  
+            half-space rep matrix H -  :math:`Ht < d`
+        d(array):  
+            half-space rep vector d
+        faces: 
+            indexes of verteices forming the polytope faces
     """
     return hyper_plane_shift_method(N, F_min, F_max)
     
 def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-15):
     """
     A function calculating the polytopes of achievable accelerations
-    based on the jacobian matrix J, moment arm matrix N and mass matrix M
+    based on the jacobian matrix `J`, moment arm matrix `N` and mass matrix `M`
 
-    a = ddx = J.M^(-1).N.F
-    st F_min <= F <= F_max
+    .. math:: a = \ddot{x}   = JM^{-1}NF
+    .. math:: F_{min} \leq F \leq F_{max}
+
+    Based on the ``hyper_plane_shifting_method`` algorihtm.
 
     Args:
         J: jacobian matrix
@@ -45,21 +55,29 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-15):
         F_max: maximal isometric forces 
         tolerance: tolerance for the polytope calculation
         
-    Returns:
-        a_vert(array):  list of acceleraiton vertices
-        H(array):  half-space rep matrix H - H.a < d
-        d(array):  half-space rep vectors d
-        faces: indexes of verteices forming the polytope faces
+        
+    Returns
+    ---------
+        a_vert(array):  
+            list of acceleraiton vertices
+        H(array):  
+            half-space rep matrix H - :math:`Ha < d`
+        d(array):  
+            half-space rep vectors d
+        faces: 
+            indexes of verteices forming the polytope faces
     """
     return hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
 
 def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
     """
     A function calculating the polytopes of achievable foreces based 
-    on the jacobian matrix J and moment arm matrix N
+    on the jacobian matrix `J` and moment arm matrix `N`
 
-    J^T.f = N.F (+ t_bias  optional) 
-    st F_min <= F <= F_max
+    .. math:: J^Tf = NF \quad(+\, t_{bias})
+    .. math::  F_{min} \leq F \leq F_{max}
+        
+    Based on the ``iterative_convex_hull_method`` algorihtm.
 
     Args:
         J: jacobian matrix
@@ -69,41 +87,53 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
         tolerance: tolerance for the polytope calculation
         torque_bias: torque bias optional (gravity or movement or applied forces ....) 
         
-    Returns:
-        f_vert(list):  list of cartesian force vertices
-        H(array):  half-space rep matrix H - H.a < d
-        d(array):  half-space rep vectors d
-        faces(list):   list of vertex indexes forming polytope faces  
+    Returns
+    ---------
+        f_vert(list): 
+            list of cartesian force vertices
+        H(array):  
+            half-space rep matrix H - :math:`Hf < d`
+        d(array):  
+            half-space rep vectors d
+        faces(list):   
+            list of vertex indexes forming polytope faces  
     """
     return iterative_convex_hull_method(J.T, N, F_min, F_max, tol, bias=torque_bias)
 
 def velocity_polytope(J, N, dl_min , dl_max, tol):
     """
     A function calculating the polytopes of achievable velocity based 
-    on the jacobian matrix J and moment arm matrix N
+    on the jacobian matrix `J` and moment arm matrix `N`
 
-    L.q = dl
-    J.q = v
-    st dl_min <= dl <= dl_max
+    .. math:: L\dot{q} = \dot{l}, \quad J\dot{q} = \dot{x} = v
+    .. math:: \dot{l}_{min} \leq \dot{l} \leq \dot{l}_{max}
+    
+    Based on the ``iterative_convex_hull_method`` algorihtm.
 
     Args:
         J: jacobian matrix
-        N: moment arm matrix L = -N^T
+        N: moment arm matrix :math:`L = -N^T`
         dl_min: minimal achievable muscle contraction veclocity
         dl_max: maximal achievable muscle contraction veclocity
         tolerance: tolerance for the polytope calculation
         
-    Returns:
-        v_vert(list):  list of cartesian velocity vertices
-        H(array):  half-space rep matrix H - H.a < d
-        d(array):  half-space rep vectors d
-        faces(list):   list of vertex indexes forming velocity polytope faces  
+    Returns
+    ---------
+        v_vert(list):  
+            list of cartesian velocity vertices
+        H(array):  
+            half-space rep matrix H - :math:`Hv < d`
+        d(array):  
+            half-space rep vectors d
+        faces(list):   
+            list of vertex indexes forming velocity polytope faces  
     """
     return iterative_convex_hull_method(A=-N.T, B=np.eye(dl_min.shape[0]), P = J, y_min=dl_min, y_max=dl_max, tol=tol)
 
 def torque_to_muscle_force(N, F_min, F_max, tau, options="lp"):
     """
-    A function calculating muscle forces needed to create the joint torques tau
+    A function calculating muscle forces needed to create the joint torques tau.
+    It uses eaither the linear programming or quadratic programming, set with the ``options`` parameter.
 
     Args:
         N: moment arm matrix

@@ -10,27 +10,28 @@ import cvxopt.glpk
 def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None):
     """
     A function calculating the polytopes of achievable x for equations form:
-    
-    z = B.y
-    A.x = z
-    s.t. y_min <= y <= y_max
+
+    .. math:: z = By, \quad Ax = z
+    .. math:: y_{min} \leq y \leq y_{max}
     
     or
     
-    A.x = B.y 
-    s.t. y_min <= y <= y_max
+    .. math:: Ax = By
+    .. math:: y_{min} \leq y \leq y_{max}
 
     (optionally - additional projection matrix)
-    A.z = B.y 
-    P.z = x
-    s.t. y_min <= y <= y_max
+
+    .. math:: Az = By, \quad Pz = x
+    .. math:: y_{min} \leq y \leq y_{max}
 
     (optionally - additional bias)
-    A.z = B.y + bias
-    s.t. y_min <= y <= y_max
 
-    On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
-    A.Skuric,V.Padois,N.Rezzoug,D.Daney 
+    .. math:: Az = By + bias
+    .. math:: y_{min} \leq y \leq y_{max}
+
+    Note:
+        On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
+        A.Skuric,V.Padois,N.Rezzoug,D.Daney 
 
     Args:
         A: matrix
@@ -40,12 +41,18 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None)
         tol: tolerance for the polytope calculation
         P: an additional projection matrix 
         bias: bias in the intermediate space 
+    
+    Returns
+    ---------
+        x_vert(list):  
+            list of vertices
+        H(list):  
+            matrix of half-space representation `Hx<d`
+        d(list): 
+            vector of half-space representation `Hx<d`
+        faces(list):   
+            list of vertex indexes forming polytope faces  
         
-    Returns:
-        x_vert(list):  list of cartesian force vertices
-        H(list):  matrix of half-space representation Hx<d
-        d(list):  vector of half-space representation Hx<d
-        faces(list):   list of vertex indexes forming polytope faces  
     """
     # svd of jacobian
     n, m = A.shape
@@ -178,11 +185,13 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None)
 def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     """
     Hyper plane shifting method implementation used to solve problems of a form:
-    y = Ax
-    s.t. x_min <= x <= x_max
 
-    Hyperplane shifting method: 
-    *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht*
+    .. math:: y = Ax
+    .. math:: x_min <= x <= x_max
+
+
+    Note:
+        *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht*
 
 
     This algorithm can be used to calcualte acceleration polytope, velocity polytoe and even 
@@ -193,10 +202,16 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
         x_min: minimal values
         x_max: maximal values 
         
-    Returns:
-        H: half space representation matrix H - Hx < d
-        d: half space representaiton vector d - Hx < d
-        vertices: vertex representation of the polytope
+    Returns
+    --------
+        x_vert(list):  
+            list of vertices
+        H(list):  
+            matrix of half-space representation `Hx<d`
+        d(list): 
+            vector of half-space representation `Hx<d`
+        faces(list):   
+            list of vertex indexes forming polytope faces  
     """
     H = []
     d = []
@@ -249,15 +264,18 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
 def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
     """
     Efficient vertex enumeration algorithm for a problem of a form:
-    Ax = b
-    s.t. b_min <= b <= b_max 
+    
+    .. math:: Ax = b
+    .. math:: b_{min} \leq b \leq b_{max}
 
     Optional (if b_bias added): 
-    Ax = b
-    s.t. b_min <= b - b_bias <= b_max
+    
+    .. math:: Ax = b - b_{bias}
+    .. math:: b_{min} \leq b \leq b_{max}
 
-    On-line force capability evaluation based on efficient polytope vertex search
-    by A. Skuric, V. Padois, D. Daney
+    Note:
+        On-line force capability evaluation based on efficient polytope vertex search
+        by A. Skuric, V. Padois, D. Daney
 
     Args:
         A:      system matrix A
@@ -265,8 +283,8 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
         b_min:  minimal b  
         b_bias: b bias vector ( offset from 0 )
 
-    Returns:
-        f_vertex(list):  vertices of the polytope
+    Returns
+        f_vertex(list): vertices of the polytope
     """ 
     # Size calculation
     n, m = A.shape
@@ -351,10 +369,12 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
 def order_index(points):
     """
     Order clockwise 2D points
+
     Args:
         points:  matrix of 2D points
-    Returns:
-        indexes(array): ordered indexes
+
+    Returns
+        indexes(array) : ordered indexes
     """
     px = np.array(points[0,:]).ravel()
     py = np.array(points[1,:]).ravel()
@@ -367,6 +387,14 @@ def order_index(points):
 def face_index_to_vertex(vertices, indexes):
     """
     Helping function for transforming the list of faces with indexes to the vertices
+
+    Args:
+        vertices: list of vertices
+        indexes: list of vertex indexes forming faces
+
+    Returns:
+        faces: list of faces composed of vertices
+
     """
     dim = min(np.array(vertices).shape)
     if dim == 2:
@@ -375,6 +403,9 @@ def face_index_to_vertex(vertices, indexes):
         return [vertices[:,face] for face in indexes]
 
 def stack(A, B, dir='v'):
+    """
+    Helping function enabling vertical and horisontal stacking of numpy arrays
+    """
     if not len(A):
         return B
     elif not len(B):
