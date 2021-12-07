@@ -126,8 +126,6 @@ pip install git+https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacit
 
 ## Package API docs
 
-See full docs at the [link](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/tree/master/docs)
-
 ### Modules
 
 - [`human`](pycapacity.human.html#module-pycapacity.human)
