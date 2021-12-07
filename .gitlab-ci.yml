@@ -3,7 +3,10 @@ image: alpine:latest
 pages:
   stage: deploy
   script:
-  - echo 'Nothing to do...'
+  - cd docs
+  - pip install -r requirements.txt
+  - make html
+  - cp build/html/ ../public
   artifacts:
     paths:
     - public
