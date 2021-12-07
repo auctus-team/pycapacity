@@ -183,3 +183,4 @@ epub_exclude_files = ['search.html']
 
 
 # -- Extension configuration -------------------------------------------------
+#napoleon_custom_sections = [('Returns', 'params_style')]
