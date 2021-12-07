@@ -61,7 +61,7 @@ There are three methods implemented in this paper to resolve all the polytope ca
 - Iterative convex hull method
 - Vertex enumeration auctus
 
-All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](pycapacity.algorithms). 
+All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](pycapacity.algorithms.html). 
 
 ### Hyper-plane shifting method
 [**Characterization of Parallel Manipulator Available Wrench Set Facets**](http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf)<br>
