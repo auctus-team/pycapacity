@@ -12,7 +12,7 @@ This package also provides a module `pycapacity.algorithms` with a set of polyto
 
 Additionally, `pycapacity.visual` module provides a set of visualisaiton tools using the `matplotlib` for visualising 2d and 3d polytopes.
 
-See [full API documentation adn docs.](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/)
+See [full API documentation and docs.](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/)
 
 ## Robotic manipulator capacity metrics
 <img src='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/robot.png' height='300px'>
