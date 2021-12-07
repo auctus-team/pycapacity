@@ -1,4 +1,4 @@
-image: python:3.7-alpine
+image: python:2.7-alpine
 
 pages:
   stage: deploy
@@ -6,6 +6,7 @@ pages:
   - cd docs
   - pip install -r requirements.txt
   - sphinx-build -M html "source" "build" 
+  - cp source/my_theme.css build/html/_static/css
   - cp -r build/html/ ../public
   artifacts:
     paths:
