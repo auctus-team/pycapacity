@@ -14,7 +14,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('pycapacity'))
+sys.path.insert(0, os.path.realpath('../../pycapacity'))
 
 
 # -- Project information -----------------------------------------------------
