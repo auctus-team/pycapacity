@@ -13,6 +13,7 @@ def plot_polytope_faces(faces,ax=None, plt=None, face_color=None, edge_color=Non
     Examples:
         >>> import pycapacity.visual
         >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
         >>> ax = pycapacity.visual.plot_polytope_faces([[6,5,4,3],[1,2,2,1]],plt=plt,face_color='blue')
         >>> pycapacity.visual.plot_polytope_faces([[10,8,7,6],[1,2,2,1]],ax=ax,face_color='red')
         >>> plt.show()
@@ -79,6 +80,7 @@ def plot_polytope_vertex(vertex, ax=None, plt=None, label=None, color='black' , 
     Examples:
         >>> import pycapacity.visual
         >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
         >>> ax = pycapacity.visual.plot_polytope_vertex(np.array([[6,5,4,3],[1,2,2,1]]),plt=plt,color='blue')
         >>> pycapacity.visual.plot_polytope_vertex(np.array([[10,8,7,6],[1,2,2,1]]),ax=ax, color='red')
         >>> plt.show()
@@ -136,17 +138,20 @@ def plot_ellipsoid(radii, rotation, center=None, ax=None, plt=None, label=None, 
     Examples:
         >>> import pycapacity.visual
         >>> import matplotlib.pyplot as plt
-        >>> ax = pycapacity.visual.plot_polytope_vertex(np.array([[6,5,4,3],[1,2,2,1]]),plt=plt,color='blue')
-        >>> pycapacity.visual.plot_polytope_vertex(np.array([[10,8,7,6],[1,2,2,1]]),ax=ax, color='red')
+        >>> import numpy as np
+        >>> ax = pycapacity.visual.plot_ellipsoid([6,5,4],np.eye(3),plt=plt, color='blue', alpha=0.5)
+        >>> pycapacity.visual.plot_ellipsoid([1,2,3],np.eye(3),ax=ax, color='red', alpha=0.5)
         >>> plt.show()
         
     Args:
-        radii :  position jacobian 
-        rotation : rotation matrix
+        radii : radii of the ellipsoid in each axis
+        rotation : rotation matrix 
         center : offset of the ellispoid from origin
         ax :  matplotlib ax to plot on 
         plt : matplotlib plot to plot on - it will find the ax automatically
-        color :  vertex color 
+        color :  face color 
+        edge_color : egde collor
+        alpha : opacity
         label :  legend label
 
     Returns:
