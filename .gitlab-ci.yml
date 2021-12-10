@@ -2,6 +2,8 @@ image: python:3.6-slim
 
 pages:
   stage: deploy
+  tags:
+    shell
   script:
   - pip install .
   - cd docs
