@@ -294,7 +294,7 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
         b_min:  minimal b  
         b_bias: b bias vector ( offset from 0 )
 
-    Returns
+    Returns:
         x_vertex(list): vertices of the polytope
         b_vartex(list): b values producing x_vertex
     """ 
@@ -392,11 +392,8 @@ def hsapce_to_vertex(H,d):
         d(list): 
             vector of half-space representation `Hx<d`
     Returns:
-    ---------
-        f_vertex : 
-            vertices of the polytope
-        t_vertex : 
-            joint torques corresponging to the force vertices
+        f_vertex(list)  : vertices of the polytope
+        t_vertex(list) : joint torques corresponging to the force vertices
 
     """
     if len(H):
