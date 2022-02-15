@@ -7,7 +7,7 @@ from cvxopt import matrix
 import cvxopt.glpk
 
 
-def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None):
+def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None,):
     """
     A function calculating the polytopes of achievable x for equations form:
 
@@ -52,11 +52,20 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None)
             vector of half-space representation `Hx<d`
         faces(list):   
             list of vertex indexes forming polytope faces  
+        y_vert(list):
+            list of y values producing x_vert
+        z_vert(list):
+            list of z values producing x_vert
         
     """
     # svd of jacobian
     n, m = A.shape
     L = len(y_min)
+    if m > n or n > L:
+        raise ValueError('Matrix dimensions must be L >= n >= m. In your case L:'+str(L)+', n:'+str(n)+' m:'+str(m))
+
+    y_min = np.array(y_min).reshape((-1,))
+    y_max = np.array(y_max).reshape((-1,))
 
     u, s, v = np.linalg.svd(A.T)
     r = len(s)
@@ -98,8 +107,12 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None)
         x_bias = P.dot(x_bias)
         u = P.dot(u)     
 
-    G = matrix(np.vstack((-np.identity(L),np.identity(L))))
-    h = matrix(np.hstack((list(-np.array(y_min)),y_max)))
+    if G_in is not None:
+        G = matrix(np.vstack((-np.identity(L),np.identity(L),G_in)))
+        h = matrix(np.hstack((list(-np.array(y_min)),y_max, h_in)))
+    else:
+        G = matrix(np.vstack((-np.identity(L),np.identity(L))))
+        h = matrix(np.hstack((list(-np.array(y_min)),y_max)))
     #solvers.options['show_progress'] = False
     solvers_opt = ""#"glpk"
     #solvers.options['glpk'] = dict(msg_lev='GLP_MSG_OFF')
@@ -114,7 +127,8 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None)
         y_vert = stack(y_vert, res[1],'h')
         res = cvxopt.glpk.lp(c=c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
         y_vert = stack(y_vert, res[1],'h')
-    x_p  = M.dot(y_vert)# + x_bias
+    x_p  = M.dot(y_vert) + x_bias
+    z_vert = B.dot(y_vert) + bias
 
     try:
         hull = ConvexHull(x_p.T, incremental=True)
@@ -173,14 +187,21 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None)
 
         if len(y_vert_new):
             x_p_new = M.dot(y_vert_new) + x_bias
-            #print(x_p_new.shape,x_bias.shape,(x_p_new+x_bias).shape)
-            hull.add_points(x_p_new.T)
+            try:
+                hull.add_points(x_p_new.T)
+            except:
+                hull.add_points(x_p_new.T, qhull_options="QJ")
+            
             y_vert = stack(y_vert, y_vert_new,'h')
             x_p  = stack(x_p, x_p_new,'h')
 
+            z_new = B.dot(y_vert_new) + bias
+            z_vert = stack(z_vert, z_new,'h')
+            
         n_faces = len(hull.simplices)
     
-    return x_p, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices
+    return x_p, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices, y_vert, z_vert
+
 
 def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     """
@@ -204,15 +225,12 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
         
     Returns
     --------
-        x_vert(list):  
-            list of vertices
         H(list):  
             matrix of half-space representation `Hx<d`
         d(list): 
             vector of half-space representation `Hx<d`
-        faces(list):   
-            list of vertex indexes forming polytope faces  
     """
+
     H = []
     d = []
 
@@ -251,14 +269,7 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
                 H = stack(H, -c)
                 d = stack(d, [d_positive, d_negative])
 
-    if len(H):
-        # calculate the certices
-        hd_mat = np.hstack((np.array(H),-np.array(d)))
-        hd = HalfspaceIntersection(hd_mat,np.zeros(A.shape[0]),'QJ')
-        hull = ConvexHull(hd.intersections)
-        return hd.intersections.T, H, d, hull.simplices
-    else:
-        return [], H, d, []
+    return H, d
 
 # maximal end effector force
 def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
@@ -284,10 +295,14 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
         b_bias: b bias vector ( offset from 0 )
 
     Returns
-        f_vertex(list): vertices of the polytope
+        x_vertex(list): vertices of the polytope
+        b_vartex(list): b values producing x_vertex
     """ 
     # Size calculation
     n, m = A.shape
+    if m > n:
+        raise ValueError('Matrix dimensions must be n >= m.  In your case n:'+str(n)+' m:'+str(m))
+
     b_min = np.array(b_min).reshape(n,1)
     b_max = np.array(b_max).reshape(n,1)
     # if b_bias not specified
@@ -364,8 +379,25 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
     b_vertex = np.unique(np.around(b_vertex,7), axis=1)
     # calculate the forces based on the vertex torques
     x_vertex = A_inv.dot( b_vertex )
-    return x_vertex, b_vertex, b_bias
-   
+    return x_vertex, b_vertex
+
+
+def hsapce_to_vertex(H,d):
+    if len(H):
+        # calculate the certices
+        hd_mat = np.hstack((np.array(H),-np.array(d)))
+        hd = HalfspaceIntersection(hd_mat,np.zeros(H.shape[1]),'QJ')
+        hull = ConvexHull(hd.intersections)
+        return hd.intersections.T, hull.simplices
+
+def vertex_to_faces(vertex):
+    if vertex.shape[0] == 1:
+        faces = [0, 1]
+    else:        
+        hull = ConvexHull(vertex.T, qhull_options='QJ')
+        faces = hull.simplices
+    return faces
+
 def order_index(points):
     """
     Order clockwise 2D points
@@ -398,7 +430,8 @@ def face_index_to_vertex(vertices, indexes):
     """
     dim = min(np.array(vertices).shape)
     if dim == 2:
-        return vertices[:,order_index(vertices)]
+        v = vertices[:,np.unique(indexes.flatten())]
+        return v[:,order_index(v)]
     else:
         return [vertices[:,face] for face in indexes]
 

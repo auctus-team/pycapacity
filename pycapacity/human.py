@@ -4,7 +4,7 @@ import cvxopt.glpk
 
 # import the algos
 from pycapacity.algorithms import iterative_convex_hull_method, hyper_plane_shift_method
-from pycapacity.algorithms import stack, face_index_to_vertex
+from pycapacity.algorithms import stack, face_index_to_vertex,hsapce_to_vertex
 
 
 def joint_torques_polytope(N, F_min, F_max, tol=1e-15):
@@ -35,7 +35,9 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-15):
         faces: 
             indexes of verteices forming the polytope faces
     """
-    return hyper_plane_shift_method(N, F_min, F_max)
+    H, d = hyper_plane_shift_method(N, F_min, F_max)
+    vert, faces = hsapce_to_vertex(H,d)
+    return vert, H, d, faces
     
 def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-15):
     """
@@ -67,7 +69,9 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-15):
         faces: 
             indexes of verteices forming the polytope faces
     """
-    return hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
+    H,d = hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
+    vert, faces = hsapce_to_vertex(H,d)
+    return vert, H, d, faces
 
 def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
     """
@@ -98,7 +102,8 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
         faces(list):   
             list of vertex indexes forming polytope faces  
     """
-    return iterative_convex_hull_method(J.T, N, F_min, F_max, tol, bias=torque_bias)
+    f_vert, H, d, faces , F_vert, t_vert = iterative_convex_hull_method(J.T, N, F_min, F_max, tol, bias=torque_bias)
+    return f_vert, H, d, faces
 
 def velocity_polytope(J, N, dl_min , dl_max, tol):
     """
@@ -128,7 +133,8 @@ def velocity_polytope(J, N, dl_min , dl_max, tol):
         faces(list):   
             list of vertex indexes forming velocity polytope faces  
     """
-    return iterative_convex_hull_method(A=-N.T, B=np.eye(dl_min.shape[0]), P = J, y_min=dl_min, y_max=dl_max, tol=tol)
+    v_vert, H, d, faces , dl_vert, dq_vert = iterative_convex_hull_method(A=-N.T, B=np.eye(dl_min.shape[0]), P = J, y_min=dl_min, y_max=dl_max, tol=tol)
+    return v_vert, H, d, faces
 
 def torque_to_muscle_force(N, F_min, F_max, tau, options="lp"):
     """

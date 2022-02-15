@@ -7,7 +7,7 @@ from scipy.spatial import ConvexHull, HalfspaceIntersection
 
 # import the algos
 from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_auctus
-from pycapacity.algorithms import order_index, face_index_to_vertex
+from pycapacity.algorithms import order_index, face_index_to_vertex, hsapce_to_vertex
 
 # velocity manipulability calculation
 def velocity_ellipsoid(J, dq_max):
@@ -122,8 +122,6 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
             vertices of the polytope
         t_vertex : 
             joint torques corresponging to the force vertices
-        t_bias : 
-            combined bias vector
     """
     # jacobian calculation
     Jac =  np.hstack((Jacobian1,Jacobian2))
@@ -165,8 +163,8 @@ def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t
             list of vertex indexes belonging to faces
     """ 
     # calculate two polytopes
-    f_vertex1, t_vertex1, t1_bias = force_polytope(Jacobian1, t1_max, t1_min, t1_bias)
-    f_vertex2, t_vertex2, t2_bias = force_polytope(Jacobian2, t2_max, t2_min, t2_bias)
+    f_vertex1, t_vertex1 = force_polytope(Jacobian1, t1_max, t1_min, t1_bias)
+    f_vertex2, t_vertex2 = force_polytope(Jacobian2, t2_max, t2_min, t2_bias)
     # then do a minkowski sum
     m, n = Jacobian1.shape
     f_sum = np.zeros((f_vertex1.shape[1]*f_vertex2.shape[1],m))
@@ -200,8 +198,6 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None):
             vertices of the polytope
         t_vertex : 
             joint torques corresponging to the force vertices
-        t_bias : 
-            bias vector used for the calculation
     """ 
 
     # jacobian calculation
@@ -231,7 +227,7 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, t_bias = None):
         faces(list): 
             list of vertex indexes belonging to faces
     """ 
-    force_vertex, t_vertex, t_bias = force_polytope(Jacobian, t_max, t_min, t_bias)
+    force_vertex, t_vertex = force_polytope(Jacobian, t_max, t_min, t_bias)
     m, n = Jacobian.shape
     
     # find the polytope faces
@@ -272,7 +268,7 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
         faces(list): 
             list of vertex indexes belonging to faces
     """
-    force_vertex, t_vertex, t_bias = force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias, t2_bias)
+    force_vertex, t_vertex = force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias, t2_bias)
     m, n = Jacobian1.shape
     t_max_int = np.vstack((t1_max,t2_max))
     t_min_int = np.vstack((t1_min,t2_min))
@@ -305,7 +301,8 @@ def velocity_polytope(Jacobian, dq_max, dq_min):
     Returns:
         velocity_vertex(list):  vertices of the polytope
     """ 
-    velocity_vertex, H, d, vel_faces = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
+    H, d = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
+    velocity_vertex, vel_faces = hsapce_to_vertex(H,d)
     return velocity_vertex
 
 def velocity_polytope_withfaces(Jacobian, dq_max, dq_min):
@@ -329,7 +326,8 @@ def velocity_polytope_withfaces(Jacobian, dq_max, dq_min):
         faces(list): 
             list of vertex indexes belonging to faces
     """ 
-    velocity_vertex, H, d, vel_faces = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
+    H, d = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
+    velocity_vertex, vel_faces = hsapce_to_vertex(H,d)
     return velocity_vertex, vel_faces
 
 def acceleration_polytope(J, M, t_max, t_min, t_bias= None):
@@ -352,11 +350,12 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None):
         acceleration_vertex(list):  vertices of the polytope
     """ 
     B = J.dot(np.linalg.pinv(M))
-    if t_bias is None:
-        vertex, H, d, faces = hyper_plane_shift_method(B,t_min,t_max)
-    else:
-       vertex, H, d, faces = hyper_plane_shift_method(B,t_min-t_bias, t_max-t_bias)
+    if t_bias is not None:
+        t_min = t_min - t_bias
+        t_max = t_max - t_bias
     
+    H, d = hyper_plane_shift_method(B,t_min, t_max)
+    vertex, faces = hsapce_to_vertex(H,d)
     return vertex
 
 def acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias= None):
@@ -383,11 +382,13 @@ def acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias= None):
             list of vertex indexes belonging to faces
     """ 
     B = J.dot(np.linalg.pinv(M))
-    if t_bias is None:
-        vertex, H, d, faces_index = hyper_plane_shift_method(B,t_min,t_max)
-    else:
-        vertex, H, d, faces_index = hyper_plane_shift_method(B,t_min-t_bias,t_max-t_bias)
-    return vertex, faces_index
+    if t_bias is not None:
+        t_min = t_min - t_bias
+        t_max = t_max - t_bias
+    
+    H, d = hyper_plane_shift_method(B,t_min, t_max)
+    vertex, faces = hsapce_to_vertex(H,d)
+    return vertex, faces
 
 # definition of the testing functions module
 if __name__ == '__main__':
