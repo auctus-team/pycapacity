@@ -367,11 +367,7 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
         # check if inverse correct - all error 0
         b_err = np.any( abs(S_v2 - Z.dot(X)) > 10**-7, axis=0) 
         # remove the solutions that are not in polytope 
-        to_remove = (np.any(X < -10**-7, axis=0) + np.any(X - 1 > 10**-7 , axis=0)) + b_err
-        X= X[:, ~to_remove]
-        S= S[:, ~to_remove]
-        if len(b_vertex) == 0:
-            b_vertex =  S+T.dot(X)
+        H: 
         # add b vertex - corresponding to the x vertex
         b_vertex = np.hstack((b_vertex, S+T.dot(X)))
     
@@ -383,20 +379,28 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
 
 
 def hsapce_to_vertex(H,d):
+    """
+    From half-space representaiton to the vertex representation
+
+    Args:
+        H(list):  
+            matrix of half-space representation `Hx<d`
+        d(list): 
+            vector of half-space representation `Hx<d`
+    Returns:
+    ---------
+        f_vertex : 
+            vertices of the polytope
+        t_vertex : 
+            joint torques corresponging to the force vertices
+
+    """
     if len(H):
         # calculate the certices
         hd_mat = np.hstack((np.array(H),-np.array(d)))
         hd = HalfspaceIntersection(hd_mat,np.zeros(H.shape[1]),'QJ')
         hull = ConvexHull(hd.intersections)
         return hd.intersections.T, hull.simplices
-
-def vertex_to_faces(vertex):
-    if vertex.shape[0] == 1:
-        faces = [0, 1]
-    else:        
-        hull = ConvexHull(vertex.T, qhull_options='QJ')
-        faces = hull.simplices
-    return faces
 
 def order_index(points):
     """
