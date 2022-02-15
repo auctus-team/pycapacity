@@ -8,8 +8,7 @@ pages:
   - pip install .
   - cd docs
   - pip install -r requirements.txt
-  - apt-get install python3-sphinx
-  - command sphinx-build -M html "source" "build" 
+  - python -m sphinx.cmd.build -M html "source" "build" 
   - cp source/my_theme.css build/html/_static/css
   - cp -r build/html/ ../public
   artifacts:
