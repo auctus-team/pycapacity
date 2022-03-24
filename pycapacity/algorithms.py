@@ -31,11 +31,11 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
     (optionally - additional inequality constaints)
 
-    .. math:: G{in} x \leq h_{in}    
+    .. math:: G_{in} x \leq h_{in}    
     
     (optionally - additional equality constaints)
-    
-    .. math:: G{eq} x = h_{eq}
+
+    .. math:: G_{eq} x = h_{eq}
 
     Note:
         On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
