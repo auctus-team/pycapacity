@@ -7,7 +7,7 @@ from cvxopt import matrix
 import cvxopt.glpk
 
 
-def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None,):
+def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None):
     """
     A function calculating the polytopes of achievable x for equations form:
 
@@ -29,6 +29,12 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     .. math:: Az = By + bias
     .. math:: y_{min} \leq y \leq y_{max}
 
+    (optionally - additional inequality constaints)
+    .. math:: G{in} x \leq h_{in}    
+    
+    (optionally - additional equality constaints)
+    .. math:: G{eq} x = h_{eq}
+
     Note:
         On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
         A.Skuric,V.Padois,N.Rezzoug,D.Daney 
@@ -41,6 +47,10 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         tol: tolerance for the polytope calculation
         P: an additional projection matrix 
         bias: bias in the intermediate space 
+        G_in: matrix - inegality constraint G_in x < h_in
+        h_in: vector - inegality constraint G_in x < h_in
+        G_eq: matrix - equality constraint G_eq x = h_eq
+        h_eq: vector - equality constraint G_eq x = h_eq
     
     Returns
     ---------
@@ -60,9 +70,17 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     """
     # svd of jacobian
     n, m = A.shape
-    L = len(y_min)
-    if m > n or n > L:
-        raise ValueError('Matrix dimensions must be L >= n >= m. In your case L:'+str(L)+', n:'+str(n)+' m:'+str(m))
+    nB,L = B.shape
+    #L = len(y_min)
+    if n != nB:
+        raise ValueError('Matrix A and B must have same number fo rows. In your case A: {}, B: {} '.format(A.shape,B.shape))
+
+    if m > n or n > L :
+        raise ValueError('Matrix A and B dimensions must be colB >= rowB = rowA >= colA. In your case A: {}, B: {} '.format(A.shape,B.shape))
+
+    if L!= len(y_max) or L!= len(y_min):
+        raise ValueError('Limits dimensios are not valid, should have {:d} entries. In your case y_min:{} and y_max:{}'.format(L,len(y_min),len(y_max)))
+
 
     y_min = np.array(y_min).reshape((-1,))
     y_max = np.array(y_max).reshape((-1,))
@@ -100,19 +118,48 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         if m == n and np.all(np.equal(A,np.identity(n))):
             # use u vector of the B instead of A
             u, sn, vn = np.linalg.svd(B)
+        # for 1d jacobian case
+        if m == 1:
+            u = np.array([[1]])
 
     # if optional projection defined
     if P is not None:
+        # check the size
+        nP, mP = P.shape
+        if mP != m or nP > mP:
+            raise ValueError('Matrix P dimensions error - (rows,cols) = P.shape should be: rows > cols and cols = {:d}. In your case P.shape = {}.'.format(m,P.shape))
         M = P.dot(M)
         x_bias = P.dot(x_bias)
         u = P.dot(u)     
 
     if G_in is not None:
+        # check the size
+        nG, mG = G_in.shape
+        if mG != L:
+            raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case P.shape = {}.'.format(m,G_in.shape))
+        if nG != len(h_in):
+            raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case P.shape = {}.'.format(nG,len(h_in)))    
+
         G = matrix(np.vstack((-np.identity(L),np.identity(L),G_in)))
         h = matrix(np.hstack((list(-np.array(y_min)),y_max, h_in)))
     else:
         G = matrix(np.vstack((-np.identity(L),np.identity(L))))
         h = matrix(np.hstack((list(-np.array(y_min)),y_max)))
+
+    if G_eq is not None:
+        # # check the size
+        # nG, mG = G_in.shape
+        # if mG != L:
+        #     raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case P.shape = {}.'.format(m,G_in.shape))
+        # if nG != len(h_in):
+        #     raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case P.shape = {}.'.format(nG,len(h_in)))    
+        if Aeq is not None:
+            Aeq = matrix(np.vstack((Aeq,G_eq)))
+            beq = matrix(np.hstack((beq,h_eq)))
+        else:
+            Aeq = matrix(G_eq)
+            beq = matrix(h_eq)
+
     #solvers.options['show_progress'] = False
     solvers_opt = ""#"glpk"
     #solvers.options['glpk'] = dict(msg_lev='GLP_MSG_OFF')
@@ -130,6 +177,11 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     x_p  = M.dot(y_vert) + x_bias
     z_vert = B.dot(y_vert) + bias
 
+    # if one directin only
+    if m == 1:
+        return x_p, np.array([[1],[-1]]), np.array([[np.max(x_p)],[-np.max(x_p)]]), [], y_vert, z_vert
+
+
     try:
         hull = ConvexHull(x_p.T, incremental=True)
     except:
@@ -138,7 +190,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         except:
             z_vert = B.dot(y_vert) + bias
             x_vert  = M.dot(y_vert) + x_bias
-            return x_vert, [], [], []
+            return x_vert, [], [], [], [], []
 
     n_faces, n_faces_old,  = len(hull.simplices), 0
     face_final, cnt = {}, 2*m
@@ -190,7 +242,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
             try:
                 hull.add_points(x_p_new.T)
             except:
-                hull.add_points(x_p_new.T, qhull_options="QJ")
+                hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
             
             y_vert = stack(y_vert, y_vert_new,'h')
             x_p  = stack(x_p, x_p_new,'h')
@@ -304,11 +356,18 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
     if m > n:
         raise ValueError('Matrix dimensions must be n >= m.  In your case n:'+str(n)+' m:'+str(m))
 
+    if n!= len(b_max) or n!= len(b_min):
+        raise ValueError('Limits dimensios are not valid, should have {:d} entries. In your case b_min:{} and b_max:{}'.format(n,len(b_min),len(b_max)))
+
     b_min = np.array(b_min).reshape(n,1)
     b_max = np.array(b_max).reshape(n,1)
     # if b_bias not specified
     if b_bias is None:
         b_bias = np.zeros((n,1))
+    elif n!= len(b_bias) :
+        raise ValueError('Bias dimensios are not valid, should have {:d} entries. In your case b_bias:{}'.format(n,len(b_bias)))
+    else :
+        b_bias = np.array(b_bias).reshape(n,1)
 
     # calculate svd
     U, S, V = np.linalg.svd(A.T)
@@ -394,8 +453,8 @@ def hsapce_to_vertex(H,d):
             vector of half-space representation `Hx<d`
     Returns
     --------
-        f_vertex(list)  : vertices of the polytope
-        t_vertex(list) : joint torques corresponging to the force vertices
+        vertices(list)  : vertices of the polytope
+        face_indexes(list) : indexes of verteices forming triangulated faces of the polytope
 
     """
     if len(H):

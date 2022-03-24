@@ -125,12 +125,12 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     """
     # jacobian calculation
     Jac =  np.hstack((Jacobian1,Jacobian2))
-    t_min = np.vstack((t1_min,t2_min))
-    t_max = np.vstack((t1_max,t1_max))
+    t_min = np.hstack((t1_min.flatten(),t2_min.flatten()))
+    t_max = np.hstack((t1_max.flatten(),t1_max.flatten()))
     if t1_bias is None:
         t_bias = None
     else:
-        t_bias = np.vstack((t1_bias, t2_bias))
+        t_bias = np.hstack((t1_bias.flatten(), t2_bias.flatten()))
 
     return force_polytope(Jac, t_max,t_min, t_bias)
 
