@@ -30,9 +30,11 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     .. math:: y_{min} \leq y \leq y_{max}
 
     (optionally - additional inequality constaints)
+
     .. math:: G{in} x \leq h_{in}    
     
     (optionally - additional equality constaints)
+    
     .. math:: G{eq} x = h_{eq}
 
     Note:
