@@ -36,6 +36,7 @@ Module contents
 
 
 .. toctree::
+   :maxdepth: 2
 
-   Examples <examples/index>
+   Coding examples <examples/index>
    

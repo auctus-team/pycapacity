@@ -20,13 +20,13 @@ sys.path.insert(0, os.path.realpath('../../pycapacity'))
 # -- Project information -----------------------------------------------------
 
 project = u'pycapacity'
-copyright = u'2021, Antun Skuric'
+copyright = u'2022, Antun Skuric'
 author = u'Antun Skuric'
 
 # The short X.Y version
 version = u'1.2'
 # The full version, including alpha/beta/rc tags
-release = u'v1.2.5'
+release = u'v1.2.8'
 
 
 # -- General configuration ---------------------------------------------------

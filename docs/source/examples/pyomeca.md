@@ -48,8 +48,8 @@ pip install pycapacity
 you can use any pyomeca `.bioMod` model, however to jump-start the development we suggest you to download our small database of models at the [link](https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/pyomeca_models)
 
 You can download it using terminal:
-```
-git clone git@gitlab.inria.fr:auctus-team/components/modelisation/humanmodels/pyomeca_models.git
+```bash
+git clone https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/pyomeca_models.git
 ```
 Or downloading the zip from the link [https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/pyomeca_models](https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/pyomeca_models)
 
