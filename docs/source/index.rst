@@ -33,4 +33,9 @@ Module contents
    Human capacity <pycapacity.human>
    Algortihms <pycapacity.algorithms>
    Visualisation <pycapacity.visual>
+
+
+.. toctree::
+
+   Examples <examples/index>
    
