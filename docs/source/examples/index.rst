@@ -4,7 +4,7 @@ Getting started coding examples
 Robot  workspace analysis
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
     Randomized robot model <randomised_rob.md>
     Robotics toolbox <robotics_toolbox.md>
@@ -15,7 +15,7 @@ Robot  workspace analysis
 Human musculoskeletal models
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
     Randomized human model <randomised_human.md>
     Pyomeca <pyomeca.md>
