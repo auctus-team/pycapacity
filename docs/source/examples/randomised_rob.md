@@ -1,8 +1,9 @@
 Randomized robot
 ==================
 
-A simple example program for 3d force polytope 
-evaluation of a randomised 6dof robot 
+A simple example program for force polytope  evaluation of a randomised robot model. 
+Simply change the number of dof torque limits and see how the calculation time and shape evaluates.
+
 
 ```python
 import pycapacity.robot as capacity # robot capacity module
