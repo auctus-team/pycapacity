@@ -5,6 +5,7 @@ import itertools
 from scipy.spatial import ConvexHull, HalfspaceIntersection
 from cvxopt import matrix
 import cvxopt.glpk
+from scipy.optimize import linprog
 
 
 def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None):
@@ -132,15 +133,15 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
             raise ValueError('Matrix P dimensions error - (rows,cols) = P.shape should be: rows > cols and cols = {:d}. In your case P.shape = {}.'.format(m,P.shape))
         M = P.dot(M)
         x_bias = P.dot(x_bias)
-        u = P.dot(u)     
+        u = P.dot(u)  
 
     if G_in is not None:
         # check the size
         nG, mG = G_in.shape
         if mG != L:
-            raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case P.shape = {}.'.format(m,G_in.shape))
+            raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case G_in.shape = {}.'.format(L,G_in.shape))
         if nG != len(h_in):
-            raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case P.shape = {}.'.format(nG,len(h_in)))    
+            raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case h_in.shape = {}.'.format(nG,len(h_in)))    
 
         G = matrix(np.vstack((-np.identity(L),np.identity(L),G_in)))
         h = matrix(np.hstack((list(-np.array(y_min)),y_max, h_in)))
@@ -149,12 +150,12 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         h = matrix(np.hstack((list(-np.array(y_min)),y_max)))
 
     if G_eq is not None:
-        # # check the size
-        # nG, mG = G_in.shape
-        # if mG != L:
-        #     raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case P.shape = {}.'.format(m,G_in.shape))
-        # if nG != len(h_in):
-        #     raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case P.shape = {}.'.format(nG,len(h_in)))    
+        # check the size
+        nG, mG = G_eq.shape
+        if mG != L:
+            raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case Geq.shape = {}.'.format(L,G_eq.shape))
+        if nG != len(h_eq):
+            raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case h_eq.shape = {}.'.format(nG,len(h_eq)))    
         if Aeq is not None:
             Aeq = matrix(np.vstack((Aeq,G_eq)))
             beq = matrix(np.hstack((beq,h_eq)))
@@ -173,9 +174,11 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     for i in range(m):
         c = matrix((u[:,i].T).dot(M))
         res = cvxopt.glpk.lp(c=-c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
-        y_vert = stack(y_vert, res[1],'h')
+        if res[1]:
+            y_vert = stack(y_vert, res[1],'h')
         res = cvxopt.glpk.lp(c=c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
-        y_vert = stack(y_vert, res[1],'h')
+        if res[1]:
+            y_vert = stack(y_vert, res[1],'h')
     x_p  = M.dot(y_vert) + x_bias
     z_vert = B.dot(y_vert) + bias
 
@@ -200,7 +203,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     while n_faces > n_faces_old:
         n_faces_old = n_faces
         
-        x_center = np.mean(x_p)
+        x_center = np.mean(x_p,axis=1)
         
         y_vert_new = []
 
@@ -251,9 +254,10 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
             z_new = B.dot(y_vert_new) + bias
             z_vert = stack(z_vert, z_new,'h')
-            
+ 
         n_faces = len(hull.simplices)
-    
+  
+
     return x_p, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices, y_vert, z_vert
 
 
@@ -462,7 +466,22 @@ def hsapce_to_vertex(H,d):
     if len(H):
         # calculate the certices
         hd_mat = np.hstack((np.array(H),-np.array(d)))
-        hd = HalfspaceIntersection(hd_mat,np.zeros(H.shape[1]),'QJ')
+
+        # calculating chebyshev center
+        # https://pageperso.lis-lab.fr/~francois.denis/IAAM1/scipy-html-1.0.0/generated/scipy.spatial.HalfspaceIntersection.html
+        norm_vector = np.reshape(np.linalg.norm(H[:, :-1], axis=1), (H.shape[0], 1))
+        c = np.zeros((hd_mat.shape[1],))
+        c[-1] = -1
+        A = np.hstack((hd_mat[:, :-1], norm_vector))
+        b = - hd_mat[:, -1:]
+        G = matrix(A)
+        h = matrix(b)
+        solvers_opt={'tm_lim': 100000, 'msg_lev': 'GLP_MSG_OFF', 'it_lim':10000}
+        res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
+        feasible_point = np.array(res[1][:-1]).reshape((-1,))
+
+        # calculate the convex hull
+        hd = HalfspaceIntersection(hd_mat,feasible_point,'QJ')
         hull = ConvexHull(hd.intersections)
         return hd.intersections.T, hull.simplices
 
