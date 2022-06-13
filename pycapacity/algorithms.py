@@ -8,7 +8,7 @@ import cvxopt.glpk
 from scipy.optimize import linprog
 
 
-def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None):
+def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None, max_iter=1000):
     """
     A function calculating the polytopes of achievable x for equations form:
 
@@ -168,10 +168,13 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     #solvers.options['glpk'] = dict(msg_lev='GLP_MSG_OFF')
     # solvers_opt.options['solver'] = 'mosek' # 'glpk'
 
+    linprog_count = 0
+
     solvers_opt={'tm_lim': 100000, 'msg_lev': 'GLP_MSG_OFF', 'it_lim':10000}
 
     y_vert, x_p = [],[]
     for i in range(m):
+        linprog_count = linprog_count + 2
         c = matrix((u[:,i].T).dot(M))
         res = cvxopt.glpk.lp(c=-c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
         if res[1]:
@@ -193,6 +196,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         try:
             hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
         except:
+            print("ICHM: Search stopped prematurely - inital convex hull not found!")
             z_vert = B.dot(y_vert) + bias
             x_vert  = M.dot(y_vert) + x_bias
             return x_vert, [], [], [], [], []
@@ -204,7 +208,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     max_delta = tol*100
     # iterate until the maximal distance between the target and 
     # the aproximated polytope is under tol value
-    while max_delta > tol:
+    while max_delta > tol and linprog_count <= max_iter:
         
         x_center = np.mean(x_p,axis=1)
         
@@ -220,6 +224,9 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
             # check if this face (face index) has been found as final
             if face_key in face_final.keys():
                 continue; 
+            
+            # update linprog counter
+            linprog_count = linprog_count + 1
 
             # calculate the normal vector to the face
             face_normal = equation[:-1]
@@ -261,9 +268,13 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
             z_new = B.dot(y_vert_new) + bias
             z_vert = stack(z_vert, z_new,'h')
-        else: 
-            break 
+        elif max_delta > tol: 
+            print("ICHM: Search stopped prematurely - search stuck at precision: {}!".format(max_delta))
             # raise error here instead
+            break 
+
+    if linprog_count >= max_iter:
+        print("ICHM: Max iteration number reached: {}".format(max_iter))
 
     return hull.points.T, hull.equations[:,:-1], -hull.equations[:,-1], hull.simplices, y_vert, z_vert
 
@@ -466,20 +477,17 @@ def chebyshev_center(A,b):
         b(list): 
             vector of half-space representation `Ax<b`
     Returns:
-        center: returns a chebyshev center of the polytope
+        center(array): returns a chebyshev center of the polytope
     """
     # calculate the certices
     Ab_mat = np.hstack((np.array(A),-np.array(b)))
 
     # calculating chebyshev center
-    # https://pageperso.lis-lab.fr/~francois.denis/IAAM1/scipy-html-1.0.0/generated/scipy.spatial.HalfspaceIntersection.html
     norm_vector = np.reshape(np.linalg.norm(A[:, :-1], axis=1), (A.shape[0], 1))
     c = np.zeros((Ab_mat.shape[1],))
     c[-1] = -1
-    A_ = np.hstack((Ab_mat[:, :-1], norm_vector))
-    b_ = - Ab_mat[:, -1:]
-    G = matrix(A)
-    h = matrix(b)
+    G = matrix(np.hstack((Ab_mat[:, :-1], norm_vector)))
+    h = matrix(- Ab_mat[:, -1:])
     solvers_opt={'tm_lim': 100000, 'msg_lev': 'GLP_MSG_OFF', 'it_lim':10000}
     res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
     return np.array(res[1][:-1]).reshape((-1,))
@@ -501,6 +509,7 @@ def hsapce_to_vertex(H,d):
     """
     if len(H):
 
+        hd_mat = np.hstack((np.array(H),-np.array(d)))
         # calculate a feasible point inside the polytope
         feasible_point = chebyshev_center(H,d)
 
