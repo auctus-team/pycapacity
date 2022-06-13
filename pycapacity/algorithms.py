@@ -50,10 +50,10 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         tol: tolerance for the polytope calculation
         P: an additional projection matrix 
         bias: bias in the intermediate space 
-        G_in: matrix - inegality constraint G_in x < h_in
-        h_in: vector - inegality constraint G_in x < h_in
-        G_eq: matrix - equality constraint G_eq x = h_eq
-        h_eq: vector - equality constraint G_eq x = h_eq
+        G_in: matrix - inegality constraint G_in y < h_in
+        h_in: vector - inegality constraint G_in y < h_in
+        G_eq: matrix - equality constraint G_eq y = h_eq
+        h_eq: vector - equality constraint G_eq y = h_eq
     
     Returns
     ---------
@@ -200,19 +200,23 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     n_faces, n_faces_old,  = len(hull.simplices), 0
     face_final, cnt = {}, 2*m
 
-    while n_faces > n_faces_old:
-        n_faces_old = n_faces
+
+    max_delta = tol*100
+    # iterate until the maximal distance between the target and 
+    # the aproximated polytope is under tol value
+    while max_delta > tol:
         
         x_center = np.mean(x_p,axis=1)
         
         y_vert_new = []
 
+        max_delta = 0
         for face, equation in zip(hull.simplices,hull.equations):
             
             # create a string index of the face 
             # this value is used as a hash map index
             # to store dyamically the faces that have been found as final
-            face_key = str(np.sort(face))
+            face_key = str(np.sort(equation))
             # check if this face (face index) has been found as final
             if face_key in face_final.keys():
                 continue; 
@@ -241,6 +245,9 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
                 y_vert_new = stack(y_vert_new, res, 'h')
             else:
                 face_final[face_key] = 1
+            
+            if distance > max_delta:
+                max_delta = distance
 
         if len(y_vert_new):
             x_p_new = M.dot(y_vert_new) + x_bias
@@ -254,11 +261,11 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
             z_new = B.dot(y_vert_new) + bias
             z_vert = stack(z_vert, z_new,'h')
- 
-        n_faces = len(hull.simplices)
-  
+        else: 
+            break 
+            # raise error here instead
 
-    return x_p, hull.equations[:,:-1], hull.equations[:,-1], hull.simplices, y_vert, z_vert
+    return hull.points.T, hull.equations[:,:-1], -hull.equations[:,-1], hull.simplices, y_vert, z_vert
 
 
 def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
@@ -447,6 +454,35 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
     x_vertex = A_inv.dot( b_vertex )
     return x_vertex, b_vertex
 
+def chebyshev_center(A,b):
+    """
+    Calculating chebyshev center of a polytope given the half-space representation
+
+    https://pageperso.lis-lab.fr/~francois.denis/IAAM1/scipy-html-1.0.0/generated/scipy.spatial.HalfspaceIntersection.html
+
+    Args:
+        A(list):  
+            matrix of half-space representation `Ax<b`
+        b(list): 
+            vector of half-space representation `Ax<b`
+    Returns:
+        center: returns a chebyshev center of the polytope
+    """
+    # calculate the certices
+    Ab_mat = np.hstack((np.array(A),-np.array(b)))
+
+    # calculating chebyshev center
+    # https://pageperso.lis-lab.fr/~francois.denis/IAAM1/scipy-html-1.0.0/generated/scipy.spatial.HalfspaceIntersection.html
+    norm_vector = np.reshape(np.linalg.norm(A[:, :-1], axis=1), (A.shape[0], 1))
+    c = np.zeros((Ab_mat.shape[1],))
+    c[-1] = -1
+    A_ = np.hstack((Ab_mat[:, :-1], norm_vector))
+    b_ = - Ab_mat[:, -1:]
+    G = matrix(A)
+    h = matrix(b)
+    solvers_opt={'tm_lim': 100000, 'msg_lev': 'GLP_MSG_OFF', 'it_lim':10000}
+    res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
+    return np.array(res[1][:-1]).reshape((-1,))
 
 def hsapce_to_vertex(H,d):
     """
@@ -464,21 +500,9 @@ def hsapce_to_vertex(H,d):
 
     """
     if len(H):
-        # calculate the certices
-        hd_mat = np.hstack((np.array(H),-np.array(d)))
 
-        # calculating chebyshev center
-        # https://pageperso.lis-lab.fr/~francois.denis/IAAM1/scipy-html-1.0.0/generated/scipy.spatial.HalfspaceIntersection.html
-        norm_vector = np.reshape(np.linalg.norm(H[:, :-1], axis=1), (H.shape[0], 1))
-        c = np.zeros((hd_mat.shape[1],))
-        c[-1] = -1
-        A = np.hstack((hd_mat[:, :-1], norm_vector))
-        b = - hd_mat[:, -1:]
-        G = matrix(A)
-        h = matrix(b)
-        solvers_opt={'tm_lim': 100000, 'msg_lev': 'GLP_MSG_OFF', 'it_lim':10000}
-        res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
-        feasible_point = np.array(res[1][:-1]).reshape((-1,))
+        # calculate a feasible point inside the polytope
+        feasible_point = chebyshev_center(H,d)
 
         # calculate the convex hull
         hd = HalfspaceIntersection(hd_mat,feasible_point,'QJ')
@@ -486,6 +510,16 @@ def hsapce_to_vertex(H,d):
         return hd.intersections.T, hull.simplices
 
 def vertex_to_faces(vertex):
+    """
+    Function grouping the vertices to faces using a ConvexHull algorithm
+
+
+    Args:
+        vertex(array):  list of verteices
+
+    Returns:
+        faces(array) : list of triangle faces with vertex indexes which form them
+    """
     if vertex.shape[0] == 1:
         faces = [0, 1]
     else:        
