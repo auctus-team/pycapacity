@@ -54,6 +54,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         h_in: vector - inegality constraint G_in y < h_in
         G_eq: matrix - equality constraint G_eq y = h_eq
         h_eq: vector - equality constraint G_eq y = h_eq
+        max_iter: maximum number of iterations (number of linera programmes solved) - default 1000
     
     Returns
     ---------
@@ -153,12 +154,8 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         # check the size
         nG, mG = G_eq.shape
         if mG != L:
-            raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case Geq.shape = {}.'.format(L,G_eq.shape))
-        if nG != len(h_eq):
-            raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case h_eq.shape = {}.'.format(nG,len(h_eq)))    
-        if Aeq is not None:
-            Aeq = matrix(np.vstack((Aeq,G_eq)))
-            beq = matrix(np.hstack((beq,h_eq)))
+            raise ValueEr
+            # raise error here insteadnp.hstack((beq,h_eq)))
         else:
             Aeq = matrix(G_eq)
             beq = matrix(h_eq)
@@ -206,7 +203,8 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
 
     max_delta = tol*100
-    # iterate until the maximal distance between the target and 
+    # iterate until the maxima
+            # raise error here insteadl distance between the target and 
     # the aproximated polytope is under tol value
     while max_delta > tol and linprog_count <= max_iter:
         
