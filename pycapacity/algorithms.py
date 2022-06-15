@@ -190,6 +190,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     try:
         hull = ConvexHull(x_p.T, incremental=True)
     except:
+        print("ICHM: Convex hull issue at init - continuing with a QJ option!")
         try:
             hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
         except:
@@ -211,7 +212,6 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         x_center = np.mean(x_p,axis=1)
         
         y_vert_new = []
-
         max_delta = 0
         for face, equation in zip(hull.simplices,hull.equations):
             
@@ -221,7 +221,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
             face_key = str(np.sort(equation))
             # check if this face (face index) has been found as final
             if face_key in face_final.keys():
-                continue; 
+                continue;
             
             # update linprog counter
             linprog_count = linprog_count + 1
@@ -245,6 +245,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
             # vertex distance from the face
             distance = np.abs( face_normal.dot( M.dot(res) + x_bias) -face_normal.dot( x_p[:,face[0]] ))
+
             if distance > tol:
                 # new vertex found
                 y_vert_new = stack(y_vert_new, res, 'h')
@@ -256,16 +257,19 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
         if len(y_vert_new):
             x_p_new = M.dot(y_vert_new) + x_bias
-            try:
-                hull.add_points(x_p_new.T)
-            except:
-                hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
-            
-            y_vert = stack(y_vert, y_vert_new,'h')
+
             x_p  = stack(x_p, x_p_new,'h')
+            y_vert = stack(y_vert, y_vert_new,'h')
 
             z_new = B.dot(y_vert_new) + bias
             z_vert = stack(z_vert, z_new,'h')
+
+            try:
+                hull.add_points(x_p_new.T)
+            except:
+                print("ICHM: Convex hull issue - continuing with a QJ option!")
+                hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
+            
         elif max_delta > tol: 
             print("ICHM: Search stopped prematurely - search stuck at precision: {}!".format(max_delta))
             # raise error here instead
@@ -512,8 +516,13 @@ def hsapce_to_vertex(H,d):
         feasible_point = chebyshev_center(H,d)
 
         # calculate the convex hull
-        hd = HalfspaceIntersection(hd_mat,feasible_point,'QJ')
-        hull = ConvexHull(hd.intersections)
+        try:
+            hd = HalfspaceIntersection(hd_mat,feasible_point)
+            hull = ConvexHull(hd.intersections)
+        except:
+            print("H2V: Convex hull issue: using QJ option! ")
+            hd = HalfspaceIntersection(hd_mat,feasible_point,'QJ')
+            hull = ConvexHull(hd.intersections,qhull_options='QJ')
         return hd.intersections.T, hull.simplices
 
 def vertex_to_faces(vertex):
