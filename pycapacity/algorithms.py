@@ -521,8 +521,13 @@ def hsapce_to_vertex(H,d):
             hull = ConvexHull(hd.intersections)
         except:
             print("H2V: Convex hull issue: using QJ option! ")
-            hd = HalfspaceIntersection(hd_mat,feasible_point,'QJ')
-            hull = ConvexHull(hd.intersections,qhull_options='QJ')
+            try:
+                hd = HalfspaceIntersection(hd_mat,feasible_point,qhull_options='QJ')
+                hull = ConvexHull(hd.intersections)
+            except:
+                print("H2V: Convex hull issue: using Q0 option! ")
+                hd = HalfspaceIntersection(hd_mat,feasible_point,qhull_options='Q0')
+                hull = ConvexHull(hd.intersections)
         return hd.intersections.T, hull.simplices
 
 def vertex_to_faces(vertex):
