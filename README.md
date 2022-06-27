@@ -1,8 +1,10 @@
 
 # Real-time capable task-space capacity calculation python module
 
-<img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif" height="250px">
-<img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/bimanual1.png" height="150px">
+
+[![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/)
+
+<img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif" height="200px"><img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/bimanual1.png" height="200px">
 
 The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
 - Robotic serial manipulators - `pycapacity.robot`
