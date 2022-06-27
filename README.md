@@ -1,5 +1,5 @@
 
-# Real-time capable task-space capacity calculation python module
+# Real-time capable task-space capacity calculation python pip package
 
 
 [![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/)
