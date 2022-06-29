@@ -77,17 +77,20 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     nB,L = B.shape
     #L = len(y_min)
     if n != nB:
-        raise ValueError('Matrix A and B must have same number fo rows. In your case A: {}, B: {} '.format(A.shape,B.shape))
+        raise ValueError('ICHM: Matrix A and B must have same number fo rows. In your case A: {}, B: {} '.format(A.shape,B.shape))
 
     if m > n or n > L :
-        raise ValueError('Matrix A and B dimensions must be colB >= rowB = rowA >= colA. In your case A: {}, B: {} '.format(A.shape,B.shape))
+        raise ValueError('ICHM: Matrix A and B dimensions must be colB >= rowB = rowA >= colA. In your case A: {}, B: {} '.format(A.shape,B.shape))
 
     if L!= len(y_max) or L!= len(y_min):
-        raise ValueError('Limits dimensios are not valid, should have {:d} entries. In your case y_min:{} and y_max:{}'.format(L,len(y_min),len(y_max)))
+        raise ValueError('ICHM: Limits dimensios are not valid, should have {:d} entries. In your case y_min:{} and y_max:{}'.format(L,len(y_min),len(y_max)))
 
 
     y_min = np.array(y_min).reshape((-1,))
     y_max = np.array(y_max).reshape((-1,))
+
+    if np.min(y_max - y_min) < 0:
+        raise ValueError('ICHM: Limits not valid, minimal value is higher than maximal value.')
 
     u, s, v = np.linalg.svd(A.T)
     r = len(s)
@@ -131,7 +134,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         # check the size
         nP, mP = P.shape
         if mP != m or nP > mP:
-            raise ValueError('Matrix P dimensions error - (rows,cols) = P.shape should be: rows > cols and cols = {:d}. In your case P.shape = {}.'.format(m,P.shape))
+            raise ValueError('ICHM: Matrix P dimensions error - (rows,cols) = P.shape should be: rows > cols and cols = {:d}. In your case P.shape = {}.'.format(m,P.shape))
         M = P.dot(M)
         x_bias = P.dot(x_bias)
         u = P.dot(u)  
@@ -140,9 +143,9 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         # check the size
         nG, mG = G_in.shape
         if mG != L:
-            raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case G_in.shape = {}.'.format(L,G_in.shape))
+            raise ValueError('ICHM: Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case G_in.shape = {}.'.format(L,G_in.shape))
         if nG != len(h_in):
-            raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case h_in.shape = {}.'.format(nG,len(h_in)))    
+            raise ValueError('ICHM: Vector h_in dimensions error - should have {:d} entries. In your case h_in.shape = {}.'.format(nG,len(h_in)))    
 
         G = matrix(np.vstack((-np.identity(L),np.identity(L),G_in)))
         h = matrix(np.hstack((list(-np.array(y_min)),y_max, h_in)))
@@ -153,9 +156,13 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     if G_eq is not None:
         # check the size
         nG, mG = G_eq.shape
-        if mG != L:
-            raise ValueEr
-            # raise error here insteadnp.hstack((beq,h_eq)))
+        if mG != L: 
+            raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case Geq.shape = {}.'.format(L,G_eq.shape))
+        if nG != len(h_eq):
+            raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case h_eq.shape = {}.'.format(nG,len(h_eq)))    
+        if Aeq is not None:
+            Aeq = matrix(np.vstack((Aeq,G_eq)))
+            beq = matrix(np.hstack((beq,h_eq)))
         else:
             Aeq = matrix(G_eq)
             beq = matrix(h_eq)
@@ -174,10 +181,10 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         linprog_count = linprog_count + 2
         c = matrix((u[:,i].T).dot(M))
         res = cvxopt.glpk.lp(c=-c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
-        if res[1]:
+        if res[1] is not None:
             y_vert = stack(y_vert, res[1],'h')
         res = cvxopt.glpk.lp(c=c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
-        if res[1]:
+        if res[1] is not None:
             y_vert = stack(y_vert, res[1],'h')
     x_p  = M.dot(y_vert) + x_bias
     z_vert = B.dot(y_vert) + bias
@@ -205,7 +212,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
     max_delta = tol*100
     # iterate until the maxima
-            # raise error here insteadl distance between the target and 
+    # insteadl distance between the target and 
     # the aproximated polytope is under tol value
     while max_delta > tol and linprog_count <= max_iter:
         
