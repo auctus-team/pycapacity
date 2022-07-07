@@ -538,6 +538,27 @@ def hsapce_to_vertex(H,d):
                 hull = ConvexHull(hd.intersections)
         return hd.intersections.T, hull.simplices
 
+
+def vertex_to_hspace(vertex):
+    """
+    Function transforming vertice to half-sapoce representation using a ConvexHull algorithm
+
+    Args:
+        vertex(array):  list of verteices
+
+    Returns:
+        H(list):  
+            matrix of half-space representation `Hx<d`
+        d(list): 
+            vector of half-space representation `Hx<d`
+    """
+    if vertex.shape[0] == 1:
+        faces = [0, 1]
+    else:        
+        hull = ConvexHull(vertex.T, qhull_options='QJ')
+        faces = hull.simplices
+    return  hull.equations[:,:-1], -hull.equations[:,-1]
+
 def vertex_to_faces(vertex):
     """
     Function grouping the vertices to faces using a ConvexHull algorithm
