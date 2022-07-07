@@ -7,3 +7,11 @@ lazydocs pycapacity --overview-file="README.md" --src-base-url="https://gitlab.i
 
 # sphinx
 everything automatic on gitlab
+
+# testing
+pytest tests/* # only tests
+
+# code coverage
+coverage run -m pytest tests/* # generate report code coverage
+coverage report -m # in terminal report
+coverage html # html report

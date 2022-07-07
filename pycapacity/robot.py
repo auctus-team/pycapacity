@@ -235,9 +235,14 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, t_bias = None):
     if force_vertex.shape[0] == 1:
         polytope_faces = [0, 1]
     else:        
-        hull = ConvexHull(force_vertex.T, qhull_options='QJ')
-        polytope_faces = hull.simplices
-        
+        try:
+            hull = ConvexHull(force_vertex.T, qhull_options='QJ')
+            polytope_faces = hull.simplices
+        except :
+            print("Convex hull error - cannot create faces")
+            return force_vertex, []    
+
+
     return force_vertex, polytope_faces
 
 def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias=None, t2_bias=None):
@@ -390,21 +395,3 @@ def acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias= None):
     vertex, faces = hsapce_to_vertex(H,d)
     return vertex, faces
 
-# definition of the testing functions module
-if __name__ == '__main__':
-   
-    n = 5 # nb joints
-    m = 3 # cartesian forces
-    J = np.random.rand(m,n)*2 - 1
-    M = np.random.rand(n,n)
-    t_min = np.zeros(n)
-    t_max = np.ones(n)
-    dq_min = -t_max
-    dq_max = t_max
-
-    force_polytope(J, t_min, t_max)
-    force_polytope_withfaces(J, t_min, t_max)
-    acceleration_polytope(J, M, t_min, t_max)
-    acceleration_polytope_withfaces(J, M, t_min, t_max)
-    velocity_polytope(J, dq_min, dq_max)
-    velocity_polytope_withfaces(J, dq_min, dq_max)

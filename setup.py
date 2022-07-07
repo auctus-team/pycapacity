@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='pycapacity',
-    version='1.2.15',
+    version='1.2.16',
     author='Antun Skuric',
     author_email='antun.skuric@inria.fr',
     description='A real-time task space capacity calculation module for robotic manipulators and human musculoskeletal models',

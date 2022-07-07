@@ -1,6 +1,5 @@
 from math import sin, cos 
 import numpy as np
-import numpy.matlib 
 import itertools
 from scipy.spatial import ConvexHull, HalfspaceIntersection
 from cvxopt import matrix
@@ -8,7 +7,7 @@ import cvxopt.glpk
 from scipy.optimize import linprog
 
 
-def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None, max_iter=1000):
+def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None, max_iter=1000, verbose=False):
     """
     A function calculating the polytopes of achievable x for equations form:
 
@@ -55,6 +54,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         G_eq: matrix - equality constraint G_eq y = h_eq
         h_eq: vector - equality constraint G_eq y = h_eq
         max_iter: maximum number of iterations (number of linera programmes solved) - default 1000
+        verbose: verbose program output - showing execution warnings - default False
     
     Returns
     ---------
@@ -197,11 +197,11 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     try:
         hull = ConvexHull(x_p.T, incremental=True)
     except:
-        print("ICHM: Convex hull issue at init - continuing with a QJ option!")
+        if(verbose): print("ICHM: Convex hull issue at init - continuing with a QJ option!")
         try:
             hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
         except:
-            print("ICHM: Search stopped prematurely - inital convex hull not found!")
+            if(verbose): print("ICHM: Search stopped prematurely - inital convex hull not found!")
             z_vert = B.dot(y_vert) + bias
             x_vert  = M.dot(y_vert) + x_bias
             return x_vert, [], [], [], [], []
@@ -274,16 +274,16 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
             try:
                 hull.add_points(x_p_new.T)
             except:
-                print("ICHM: Convex hull issue - continuing with a QJ option!")
+                if(verbose): print("ICHM: Convex hull issue - continuing with a QJ option!")
                 hull = ConvexHull(x_p.T, incremental=True, qhull_options="QJ")
             
         elif max_delta > tol: 
-            print("ICHM: Search stopped prematurely - search stuck at precision: {}!".format(max_delta))
+            if(verbose): print("ICHM: Search stopped prematurely - search stuck at precision: {}!".format(max_delta))
             # raise error here instead
             break 
 
     if linprog_count >= max_iter:
-        print("ICHM: Max iteration number reached: {}".format(max_iter))
+        if(verbose): print("ICHM: Max iteration number reached: {}".format(max_iter))
 
     return hull.points.T, hull.equations[:,:-1], -hull.equations[:,-1], hull.simplices, y_vert, z_vert
 
@@ -383,6 +383,7 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
     --------
         x_vertex(list): vertices of the polytope
         b_vartex(list): b values producing x_vertex
+
     """ 
     # Size calculation
     n, m = A.shape
@@ -413,7 +414,7 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
 
     # matrix of axis vectors - for polytope search
     T_vec = np.diagflat(b_max-b_min)
-    T_min = np.matlib.repmat(b_min - b_bias,1,2**m)
+    T_min = np.tile(b_min - b_bias,(1,2**m))
     b_max_bias = b_max - b_bias
 
     # all the face origin vector combiantions
@@ -604,25 +605,4 @@ def stack(A, B, dir='v'):
         return  np.vstack((A, B))
     else:
         return  np.hstack((A, B))
-         
-# definition of the four_link_solver module
-if __name__ == '__main__':
-    L = 10
-    n = 5 
-    m = 3 
-    B = (np.random.rand(n,L)*2 -1)
-    A = (np.random.rand(n,m)*2 -1)
-    y_min = np.zeros(L)
-    y_max = np.ones(L)
-
-    # Ax = By
-    # s.t. y in [y_min, y_max]
-    iterative_convex_hull_method(A, B, y_min, y_max,0.1)
-    # x = By
-    # s.t. y in [y_min, y_max]
-    hyper_plane_shift_method(B, y_min, y_max)
-    # Ax = y
-    # s.t. y in [y_min, y_max]
-    y_min = np.zeros(n)
-    y_max = np.ones(n)
-    vertex_enumeration_auctus(A, y_min, y_max)
+        

@@ -7,7 +7,7 @@ from pycapacity.algorithms import iterative_convex_hull_method, hyper_plane_shif
 from pycapacity.algorithms import stack, face_index_to_vertex,hsapce_to_vertex
 
 
-def joint_torques_polytope(N, F_min, F_max, tol=1e-15):
+def joint_torques_polytope(N, F_min, F_max, tol=1e-5):
     """
     A function calculating the polytopes of achievable joint torques
     based on the moment arm matrix `N` :
@@ -39,7 +39,7 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-15):
     vert, faces = hsapce_to_vertex(H,d)
     return vert, H, d, faces
     
-def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-15):
+def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5):
     """
     A function calculating the polytopes of achievable accelerations
     based on the jacobian matrix `J`, moment arm matrix `N` and mass matrix `M`
@@ -105,7 +105,7 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
     f_vert, H, d, faces , F_vert, t_vert = iterative_convex_hull_method(J.T, N, F_min, F_max, tol, bias=torque_bias)
     return f_vert, H, d, faces
 
-def velocity_polytope(J, N, dl_min , dl_max, tol):
+def velocity_polytope(J, N, dl_min , dl_max, tol=1e-5):
     """
     A function calculating the polytopes of achievable velocity based 
     on the jacobian matrix `J` and moment arm matrix `N`
@@ -120,7 +120,7 @@ def velocity_polytope(J, N, dl_min , dl_max, tol):
         N: moment arm matrix :math:`L = -N^T`
         dl_min: minimal achievable muscle contraction veclocity
         dl_max: maximal achievable muscle contraction veclocity
-        tolerance: tolerance for the polytope calculation
+        tol: tolerance for the polytope calculation
         
     Returns
     ---------
@@ -187,21 +187,3 @@ def torque_to_muscle_force(N, F_min, F_max, tau, options="lp"):
         else:
             print("None")
             return F_min
-
-
-if __name__ == "__main__":
-  
-    L = 20 # nb muslces
-    n = 5 # nb joints
-    m = 3 # cartesian forces
-    N = (np.random.rand(n,L)*2 -1)
-    J = np.random.rand(m,n)
-    M = np.random.rand(n,n)
-    F_min = np.zeros(L)
-    F_max = np.ones(L)
-
-    force_polytope(J,N, F_min, F_max, 0.1)
-    acceleration_polytope(J, N, M, F_min, F_max)
-    # direct acceleration polytope calculation
-    iterative_convex_hull_method(np.identity(m), J.dot(np.linalg.inv(M).dot(N)), F_min, F_max,0.1)
-    acceleration_polytope(J, N, M, F_min, F_max)
