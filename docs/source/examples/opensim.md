@@ -6,19 +6,10 @@ Opensim examples
 
 To install opensim follow the tutorial at their official github page [link](https://github.com/opensim-org/opensim-core).
 
+We suggest to use the anaconda version of the opensim [link](https://github.com/opensim-org/conda-opensim/tree/use_opensim43)
 
-## pyosim module downlaod
 
-Installing a simple opensim python wrapper that implement useful functions to make your life easy when using opensim. It can be found using the [link](https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/pyosim). 
-
-You can download it using zip download directly from the link or by using terminal:
-
-```bash
-git clone https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/pyosim.git
-```
-
-Make sure to put the downloaded folder to the same directory you will be writing your code in.
-## Downloading opensim models
+## Library of opensim models
 
 You will be able to use aany `.osim` model for the `pycapacity` package calculations, but to jump-start the development we suggest you to download our small model database on the [link](https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/opensim_models). Either download it directly using zip download on the same link or using terminal:
 
@@ -26,17 +17,23 @@ You will be able to use aany `.osim` model for the `pycapacity` package calculat
 git clone https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/opensim_models.git
 ```
 
-Make sure to put the downloaded folder to the same directory you will be writing your code in.
+
+# Opensim exmple project
+If you wanna jump start the polytope calculation using pycapacity and OpenSim, we've prepared a simple gitlab repo that you can clone and calculate some polytopes right away :
+
+Here is the [link](https://gitlab.inria.fr/auctus-team/people/antunskuric/example/opensim_examples).
+
 
 
 ## Visualise models code example
 A simple example to test that everything is installed well. You should be able to visualise different models by uncommenting different lines of this example.
 ```python
-from pyosim.OsimModel import OsimModel
+import opensim as osim
 
 ## uncomment for different models
 # one arm
-model_path = './opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim'
+model_path = './opensim_models/upper_body/unimanual/Holzbaur-Stanford-UpperExtremityModel/Stanford VA upper limb model_0.osim'
+# model_path = './opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim'
 # model_path = './opensim_models/upper_body/unimanual/arm26.osim'
 # model_path = './opensim_models/upper_body/unimanual/OSarm412.osim'
 # model_path = './opensim_models/upper_body/unimanual/Wu_Shoulder_Model.osim'
@@ -52,7 +49,9 @@ model_path = './opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Mo
 # model_path = './opensim_models/lower_body/leg6dof9musc.osim'
 
 ## Constructor of the OsimModel class.
-OsimModel(model_path,visualize=True).displayModel()
+model = osim.Model(model_path)
+viz = osim.VisualizerUtilities()
+viz.showModel(model)
 
 ```
 ![](../images/osim_test.png)
@@ -62,12 +61,12 @@ OsimModel(model_path,visualize=True).displayModel()
 
 ```python
 # include the pyosim module
-from pyosim.OsimModel import OsimModel
+from utils import getStationJacobian, getMomentArmMatrix, getQIndicesOfClampedCoord, getMuscleTensions, getBodyPosition, setCoordinateValues
 
 # include opensim package
 import opensim as osim
 
-# pycappacity for polytope calculationreate the 
+# pycappacity for polytope calculationreate 
 from pycapacity.human import force_polytope as polytope
 
 # some utils 
@@ -75,40 +74,36 @@ import numpy as np
 import time
 
 ## Constructor of the OsimModel class.
-OS_model = OsimModel("opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim", visualize=True)
+model = osim.Model("opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim")
+# model = osim.Model('./opensim_models/upper_body/unimanual/Holzbaur-Stanford-UpperExtremityModel/Stanford VA upper limb model_0.osim')
+endEffectorBody = 'hand'
+
+state  = model.initSystem()
+
+joint_pos = [0,0.5,0,1.3,0,1.0,0]
+setCoordinateValues(model,state,joint_pos)
 
 start = time.time()
-joint_pos = [0,0.5,0,1.3,0,1.0,0.0]
-OS_model.setJointValues(joint_pos)
-
-# find unconstrained joint only
-real_dof = []
-for i, joint in enumerate(OS_model.osimModel.getCoordinateSet()):
-    if not joint.isConstrained(OS_model.osimState):
-        real_dof.append(i)
-print(real_dof)
- 
-start = time.time()
-J = OS_model.getJacobian( n=11 )
-# only position jacobian
-J = J[-3:,real_dof]
-N = OS_model.getMomentArm(real_dof)
-
-# force limits 
-F_min, F_max = OS_model.getForceLimits()
-print(F_max)
+coordNames, coordIds = getQIndicesOfClampedCoord(model, state)
+model.equilibrateMuscles(state)
+J = getStationJacobian(model, state, endEffectorBody, osim.Vec3(0), coordIds)
+N = getMomentArmMatrix(model, state, coordNames=coordNames)
+F_min, F_max = getMuscleTensions(model, state)
 print("time", time.time() - start)
 
 # polytope calculation
 start = time.time()
-f_vert, H, d, faces_indexes = polytope(J, N, F_min, F_max, 5)
+f_vert, H, d, faces_indexes = polytope(J, N, F_min, F_max, 0.01)
 print("time", time.time() - start)
-print(f_vert.shape)
 
-# find hand position
-hand_position = OS_model.getBodiesPositions()['hand'][1]
+
+
 # create the polytope
 import trimesh
+
+# find hand position
+hand_orientation, hand_position = getBodyPosition(model,state, endEffectorBody)
+# save the mesh to disk
 mesh = trimesh.Trimesh(vertices=(f_vert.T/2000 + hand_position.reshape((3,))) ,
                        faces=faces_indexes,  use_embree=True, validate=True)
 # save polytope as stl file
@@ -118,20 +113,21 @@ f.close()
 
 # adding polytope faces 
 mesh = osim.Mesh("./polytope.stl")
-OS_model.osimModel.get_ground().attachGeometry(mesh)
+model.get_ground().attachGeometry(mesh)
 mesh.setColor(osim.Vec3(0.1,0.1,1))
 mesh.setOpacity(0.3)
 # adding polytope vireframe
 mesh = osim.Mesh("./polytope.stl")
-OS_model.osimModel.get_ground().attachGeometry(mesh)
+model.get_ground().attachGeometry(mesh)
 mesh.setColor(osim.Vec3(0.1,0.1,1))
 mesh.setRepresentation(2)
 
-# re-init the model
-OS_model.osimModel.initSystem()
-OS_model.setJointValues(joint_pos)
+# visualise the model and polytope
+model.setUseVisualizer(True)
+state  = model.initSystem()
+mviz = model.getVisualizer()
+setCoordinateValues(model,state,joint_pos)
+mviz.show(state)
 
-# visualise the model
-OS_model.simulateModel()
 ```
 ![](../images/osim_poly.png)
