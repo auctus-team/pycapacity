@@ -32,8 +32,8 @@ import opensim as osim
 
 ## uncomment for different models
 # one arm
-model_path = './opensim_models/upper_body/unimanual/Holzbaur-Stanford-UpperExtremityModel/Stanford VA upper limb model_0.osim'
-# model_path = './opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim'
+# model_path = './opensim_models/upper_body/unimanual/Holzbaur-Stanford-UpperExtremityModel/Stanford VA upper limb model_0.osim'
+model_path = './opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim'
 # model_path = './opensim_models/upper_body/unimanual/arm26.osim'
 # model_path = './opensim_models/upper_body/unimanual/OSarm412.osim'
 # model_path = './opensim_models/upper_body/unimanual/Wu_Shoulder_Model.osim'
@@ -75,7 +75,6 @@ import time
 
 ## Constructor of the OsimModel class.
 model = osim.Model("opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim")
-# model = osim.Model('./opensim_models/upper_body/unimanual/Holzbaur-Stanford-UpperExtremityModel/Stanford VA upper limb model_0.osim')
 endEffectorBody = 'hand'
 
 state  = model.initSystem()
