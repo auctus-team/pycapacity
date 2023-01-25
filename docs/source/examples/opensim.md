@@ -18,7 +18,7 @@ git clone https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodel
 ```
 
 
-# Opensim exmple project
+##  Opensim exmple project
 If you wanna jump start the polytope calculation using pycapacity and OpenSim, we've prepared a simple gitlab repo that you can clone and calculate some polytopes right away :
 
 Here is the [link](https://gitlab.inria.fr/auctus-team/people/antunskuric/example/opensim_examples).
