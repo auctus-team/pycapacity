@@ -1,10 +1,8 @@
-from math import sin, cos 
 import numpy as np
 import itertools
 from scipy.spatial import ConvexHull, HalfspaceIntersection
 from cvxopt import matrix
 import cvxopt.glpk
-from scipy.optimize import linprog
 
 
 def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None, max_iter=1000, verbose=False):
@@ -206,11 +204,10 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
             x_vert  = M.dot(y_vert) + x_bias
             return x_vert, [], [], [], [], []
 
-    n_faces, n_faces_old,  = len(hull.simplices), 0
-    face_final, cnt = {}, 2*m
-
-
-    max_delta = tol*100
+    # dictionary of face normals
+    face_final = {}
+    # set the initial max delta to some random value higher than the tolerance
+    max_delta = tol*100 
     # iterate until the maxima
     # insteadl distance between the target and 
     # the aproximated polytope is under tol value
@@ -247,8 +244,6 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
                 res = cvxopt.glpk.lp(c=c,  A=Aeq, b=beq, G=G,h=h, options=solvers_opt)
                 
             res = np.array(res[1])
-            # a simple counter of linprog execuitions
-            cnt = cnt+1
 
             # vertex distance from the face
             distance = np.abs( face_normal.dot( M.dot(res) + x_bias) -face_normal.dot( x_p[:,face[0]] ))
@@ -493,7 +488,7 @@ def chebyshev_center(A,b):
     Ab_mat = np.hstack((np.array(A),-np.array(b)))
 
     # calculating chebyshev center
-    norm_vector = np.reshape(np.linalg.norm(A[:, :-1], axis=1), (A.shape[0], 1))
+    norm_vector = np.reshape(np.linalg.norm(Ab_mat[:, :-1], axis=1), (A.shape[0], 1))
     c = np.zeros((Ab_mat.shape[1],))
     c[-1] = -1
     G = matrix(np.hstack((Ab_mat[:, :-1], norm_vector)))
@@ -522,7 +517,6 @@ def hsapce_to_vertex(H,d):
         hd_mat = np.hstack((np.array(H),-np.array(d)))
         # calculate a feasible point inside the polytope
         feasible_point = chebyshev_center(H,d)
-
         # calculate the convex hull
         try:
             hd = HalfspaceIntersection(hd_mat,feasible_point)

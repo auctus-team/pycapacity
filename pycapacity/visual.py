@@ -31,7 +31,7 @@ def plot_polytope_faces(faces,ax=None, plt=None, face_color=None, edge_color=Non
     Returns:
         ax:  matplotlib ax used for plotting
     """ 
-    dim = min(np.array(faces).shape)
+    dim = np.array(faces).shape[1]
     if dim == 2:
         if center is None:
             center = (0,0)
