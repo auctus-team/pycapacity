@@ -3,7 +3,7 @@ image: python:3.6-slim
 pages:
   stage: deploy
   tags:
-  - shell
+  - ci.inria.fr
   script:
   - pip install .
   - cd docs
