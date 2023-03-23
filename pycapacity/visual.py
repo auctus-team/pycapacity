@@ -31,7 +31,11 @@ def plot_polytope_faces(faces,ax=None, plt=None, face_color=None, edge_color=Non
     Returns:
         ax:  matplotlib ax used for plotting
     """ 
-    dim = np.array(faces).shape[1]
+    # check if face shape is equal to 2 or 3 
+    dim = np.array(faces).shape
+    if 2 in dim:    dim = 2
+    elif 3 in dim:  dim = 3
+
     if dim == 2:
         if center is None:
             center = (0,0)
@@ -95,8 +99,12 @@ def plot_polytope_vertex(vertex, ax=None, plt=None, label=None, color='black' , 
 
     Returns:
         ax :  matplotlib ax used for plotting
-    """ 
-    dim = np.array(vertex).shape[0]
+    """     
+    # check if face shape is equal to 2 or 3 
+    dim = np.array(vertex).shape
+    if 2 in dim:    dim = 2
+    elif 3 in dim:  dim = 3
+
     if dim == 2:
         if center is None:
             center = np.array([[0],[0]]).reshape(-1,1)
