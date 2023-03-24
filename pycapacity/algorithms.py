@@ -100,7 +100,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         bias = np.zeros((n,1))  
     else:
         bias = np.array(bias).reshape((n,1))  
-
+    
     # optimisation setup
     if n > m:
         # for redundant case
@@ -140,6 +140,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     if G_in is not None:
         # check the size
         nG, mG = G_in.shape
+        h_in = np.array(h_in).reshape((-1,))
         if mG != L:
             raise ValueError('ICHM: Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case G_in.shape = {}.'.format(L,G_in.shape))
         if nG != len(h_in):
@@ -154,13 +155,14 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     if G_eq is not None:
         # check the size
         nG, mG = G_eq.shape
+        h_eq = np.array(h_eq).reshape((-1,1))
         if mG != L: 
             raise ValueError('Matrix G_in dimensions error - (rows,cols) = G_in.shape should be: col = {:d}. In your case Geq.shape = {}.'.format(L,G_eq.shape))
         if nG != len(h_eq):
             raise ValueError('Vector h_in dimensions error - should have {:d} entries. In your case h_eq.shape = {}.'.format(nG,len(h_eq)))    
         if Aeq is not None:
             Aeq = matrix(np.vstack((Aeq,G_eq)))
-            beq = matrix(np.hstack((beq,h_eq)))
+            beq = matrix(np.vstack((beq,h_eq)))
         else:
             Aeq = matrix(G_eq)
             beq = matrix(h_eq)
@@ -225,7 +227,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
             face_key = str(np.sort(equation))
             # check if this face (face index) has been found as final
             if face_key in face_final.keys():
-                continue;
+                continue
             
             # update linprog counter
             linprog_count = linprog_count + 1
@@ -513,7 +515,7 @@ def hsapce_to_vertex(H,d):
 
     """
     if len(H):
-
+        d = d.reshape(-1,1)
         hd_mat = np.hstack((np.array(H),-np.array(d)))
         # calculate a feasible point inside the polytope
         feasible_point = chebyshev_center(H,d)
@@ -546,11 +548,7 @@ def vertex_to_hspace(vertex):
         d(list): 
             vector of half-space representation `Hx<d`
     """
-    if vertex.shape[0] == 1:
-        faces = [0, 1]
-    else:        
-        hull = ConvexHull(vertex.T, qhull_options='QJ')
-        faces = hull.simplices
+    hull = ConvexHull(vertex.T, qhull_options='QJ')
     return  hull.equations[:,:-1], -hull.equations[:,-1]
 
 def vertex_to_faces(vertex):
@@ -612,9 +610,9 @@ def stack(A, B, dir='v'):
     """
     Helping function enabling vertical and horisontal stacking of numpy arrays
     """
-    if not len(A):
+    if A is None or not len(A):
         return B
-    elif not len(B):
+    elif B is None or not len(B):
         return A
     elif dir == 'v':
         return  np.vstack((A, B))

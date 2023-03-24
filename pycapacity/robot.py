@@ -1,13 +1,10 @@
 import numpy as np
-import numpy.matlib
-import itertools
-
 # minkowski sum
-from scipy.spatial import ConvexHull, HalfspaceIntersection
+from scipy.spatial import ConvexHull
 
 # import the algos
 from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_auctus
-from pycapacity.algorithms import order_index, face_index_to_vertex, hsapce_to_vertex
+from pycapacity.algorithms import hsapce_to_vertex
 
 # velocity manipulability calculation
 def velocity_ellipsoid(J, dq_max):
@@ -126,7 +123,7 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     # jacobian calculation
     Jac =  np.hstack((Jacobian1,Jacobian2))
     t_min = np.hstack((t1_min.flatten(),t2_min.flatten()))
-    t_max = np.hstack((t1_max.flatten(),t1_max.flatten()))
+    t_max = np.hstack((t1_max.flatten(),t2_max.flatten()))
     if t1_bias is None:
         t_bias = None
     else:
@@ -228,7 +225,6 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, t_bias = None):
             list of vertex indexes belonging to faces
     """ 
     force_vertex, t_vertex = force_polytope(Jacobian, t_max, t_min, t_bias)
-    m, n = Jacobian.shape
     
     # find the polytope faces
     polytope_faces = []
@@ -274,10 +270,8 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
             list of vertex indexes belonging to faces
     """
     force_vertex, t_vertex = force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias, t2_bias)
-    m, n = Jacobian1.shape
-    t_max_int = np.vstack((t1_max,t2_max))
-    t_min_int = np.vstack((t1_min,t2_min))
 
+    print(force_vertex.shape)
     polytope_faces = []
     if force_vertex.shape[0] == 1:
         polytope_faces = [0, 1]
