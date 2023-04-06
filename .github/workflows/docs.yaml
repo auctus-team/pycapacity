@@ -7,6 +7,8 @@ on:
 jobs:
   pages:
     runs-on: ubuntu-20.04
+    with:
+      documentation_path: docs/source/
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
