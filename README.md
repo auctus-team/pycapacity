@@ -65,7 +65,7 @@ There are three methods implemented in this paper to resolve all the polytope ca
 - Iterative convex hull method
 - Vertex enumeration auctus
 
-All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md). 
+All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#). 
 
 ### Hyper-plane shifting method
 [**Characterization of Parallel Manipulator Available Wrench Set Facets**](http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf)<br>
@@ -77,7 +77,7 @@ P = {x | x = By, y_min <= y <= y_max }
 ```
 To find the vertices of the polytope after finding the half-space representation `Hx <= d` an convex-hull algorithm is used. 
 
-The method is a part of the `pycapacity.algorithms` module `hyper_plane_shift_method`, See in [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-hyper_plane_shift_method). 
+The method is a part of the `pycapacity.algorithms` module `hyper_plane_shift_method`, See in [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#pycapacity.algorithms.hyper_plane_shift_method). 
 
 ### Iterative convex-hull method
 [**On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method**](https://hal.inria.fr/hal-03369576)<br> 
@@ -92,7 +92,7 @@ And it can be additionally extended to the case where there is an additional pro
 P = {x | x= Pz, Az = By, y_min <= y <= y_max }
 ``` 
 
-The method is a part of the `pycapacity.algorithms` module `iterative_convex_hull_method`. See the [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-iterative_convex_hull_method)
+The method is a part of the `pycapacity.algorithms` module `iterative_convex_hull_method`. See the [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#pycapacity.algorithms.iterative_convex_hull_method)
 
 ### Vertex enumeration auctus
 [**On-line force capability evaluation based on efficient polytope vertex search**](https://arxiv.org/abs/2011.05226)<br> 
@@ -104,7 +104,7 @@ P = {x | Ax = y, y_min <= y <= y_max }
 ``` 
 To find the half-space representation (faces) of the polytope after finding the vertex representation  an convex-hull algorithm is used. 
 
-The method is a part of the `pycapacity.algorithms` module `vertex_enumeration_auctus`. See the [docs for more info](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/docs/algorithms.md#function-vertex_enumeration_auctus)
+The method is a part of the `pycapacity.algorithms` module `vertex_enumeration_auctus`. See the [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_auctus)
 
 ## Installation
 
@@ -125,58 +125,58 @@ import pycapacity.visual
 
 Other way to install the code is by installing it directly from the git repo:
 ```
-pip install git+https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/
+pip install git+https://github.com/auctus-team/pycapacity.git
 ```
 
 ## Package API docs
 
-See full docs at the [link](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/)
+See full docs at the [link](https://auctus-team.github.io/pycapacity/)
 
 ### Modules
 
-- [`human`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity.human.html#module-pycapacity.human)
-- [`robot`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity.robot.html#module-pycapacity.robot)
-- [`algorithms`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity.algorithms.html#module-pycapacity.algorithms)
-- [`visual`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity.visual.html#module-pycapacity.visual)
+- [`human`](https://auctus-team.github.io/pycapacity/pycapacity.human.html#module-pycapacity.human)
+- [`robot`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#module-pycapacity.robot)
+- [`algorithms`](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#module-pycapacity.algorithms)
+- [`visual`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#module-pycapacity.visual)
 
 ### Functions
 
 Robot metrics
-- [`robot.acceleration_ellipsoid`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity.robot.html#pycapacity.robot.acceleration_ellipsoid): acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
-- [`robot.acceleration_polytope`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope): Acceleration polytope calculating function
-- [`robot.acceleration_polytope_withfaces`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope_withfaces): Acceleration polytope calculating function
-- [`robot.force_ellipsoid`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_ellipsoid): force manipulability ellipsoid calculation
-- [`robot.force_polytope`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope): Force polytope representing the capacities of the two robots in a certain configuration
-- [`robot.force_polytope_intersection`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
-- [`robot.force_polytope_intersection_withfaces`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection_withfaces): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
-- [`robot.force_polytope_sum_withfaces`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_sum_withfaces): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
-- [`robot.force_polytope_withfaces`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_withfaces): Force polytope representing the capacities of the two robots in a certain configuration.
-- [`robot.velocity_ellipsoid`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_ellipsoid): velocity manipulability ellipsoid calculation
-- [`robot.velocity_polytope`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope): Velocity polytope calculating function
-- [`robot.velocity_polytope_withfaces`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope_withfaces): Velocity polytope calculating function, with faces
+- [`robot.acceleration_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#pycapacity.robot.acceleration_ellipsoid): acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
+- [`robot.acceleration_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope): Acceleration polytope calculating function
+- [`robot.acceleration_polytope_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope_withfaces): Acceleration polytope calculating function
+- [`robot.force_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_ellipsoid): force manipulability ellipsoid calculation
+- [`robot.force_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope): Force polytope representing the capacities of the two robots in a certain configuration
+- [`robot.force_polytope_intersection`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
+- [`robot.force_polytope_intersection_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection_withfaces): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
+- [`robot.force_polytope_sum_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_sum_withfaces): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
+- [`robot.force_polytope_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_withfaces): Force polytope representing the capacities of the two robots in a certain configuration.
+- [`robot.velocity_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_ellipsoid): velocity manipulability ellipsoid calculation
+- [`robot.velocity_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope): Velocity polytope calculating function
+- [`robot.velocity_polytope_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope_withfaces): Velocity polytope calculating function, with faces
 
 Human metrics
-- [`human.acceleration_polytope`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.human\.html#pycapacity\.human\.acceleration_polytope): A function calculating the polytopes of achievable accelerations
-- [`human.force_polytope`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.human\.html#pycapacity\.human\.force_polytope): A function calculating the polytopes of achievable foreces based 
-- [`human.joint_torques_polytope`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.human\.html#pycapacity\.human\.joint_torques_polytope): A function calculating the polytopes of achievable joint torques
-- [`human.torque_to_muscle_force`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.human\.html#pycapacity\.human\.torque_to_muscle_force): A function calculating muscle forces needed to create the joint torques tau
-- [`human.velocity_polytope`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.human\.html#pycapacity\.human\.velocity_polytope): A function calculating the  polytopes of achievable velocity based 
+- [`human.acceleration_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.acceleration_polytope): A function calculating the polytopes of achievable accelerations
+- [`human.force_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.force_polytope): A function calculating the polytopes of achievable foreces based 
+- [`human.joint_torques_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.joint_torques_polytope): A function calculating the polytopes of achievable joint torques
+- [`human.torque_to_muscle_force`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.torque_to_muscle_force): A function calculating muscle forces needed to create the joint torques tau
+- [`human.velocity_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.velocity_polytope): A function calculating the  polytopes of achievable velocity based 
 
 
 Algorithms
-- [`algorithms.hyper_plane_shift_method`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
-- [`algorithms.iterative_convex_hull_method`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
-- [`algorithms.vertex_enumeration_auctus`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.vertex_enumeration_auctus): Efficient vertex enumeration algorithm for a problem of a form:
+- [`algorithms.hyper_plane_shift_method`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
+- [`algorithms.iterative_convex_hull_method`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
+- [`algorithms.vertex_enumeration_auctus`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.vertex_enumeration_auctus): Efficient vertex enumeration algorithm for a problem of a form:
 
 
 Visualisation tools
-- [`visual.plot_polytope_faces`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
-- [`visual.plot_polytope_vertex`](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/pycapacity.visual.html#fpycapacity.visual.plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
+- [`visual.plot_polytope_faces`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
+- [`visual.plot_polytope_vertex`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#fpycapacity.visual.plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
 ---
 
 ## Code examples
 
-See [`demo_notebook.ipynb`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/demo_notebook.ipynb) for more examples of how ot use the module.
+See [`demo_notebook.ipynb`](https://github.com/auctus-team/pycapacity/blob/master/demo_notebook.ipynb) for more examples of how ot use the module.
 
 ### Randomised serial robot example
 ```python
