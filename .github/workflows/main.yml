@@ -19,6 +19,7 @@ jobs:
       - name: Sphinx build
         run: |
           cd docs
+          rm -r public
           python3 -m sphinx.cmd.build -M html "source" "_build" 
           cp source/my_theme.css _build/html/_static/css
           cp -r _build/html/ ../public
