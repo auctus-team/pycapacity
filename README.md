@@ -4,7 +4,7 @@
 
 [![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/)
 
-<img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif" height="250px"><img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/human_poly.gif" height="250px">
+<img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" height="250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" height="250px">
 
 The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
 - Robotic serial manipulators - `pycapacity.robot`
@@ -14,10 +14,10 @@ This package also provides a module `pycapacity.algorithms` with a set of polyto
 
 Additionally, `pycapacity.visual` module provides a set of visualisaiton tools using the `matplotlib` for visualising 2d and 3d polytopes.
 
-See [full API documentation and docs.](https://auctus-team.gitlabpages.inria.fr/people/antunskuric/pycapacity/)
+See [full API documentation and docs.](https://auctus-team.github.io/pycapacity/)
 
 ## Robotic manipulator capacity metrics
-<img src='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/robot.png' height='300px'>
+<img src='https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/robot.png' height='300px'>
 
 For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
 - Velocity (manipulability) ellipsoid <br> `E_vel = {dx | dx = J.dq, ||dq||<1 }`
@@ -41,7 +41,7 @@ And the velocity and acceleration polytopes are resolved using the *Hyper-plane 
 by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)
 
 ## Human musculoskeletal models capacity metrics
-<img src='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/force.png' height='200px'>
+<img src='https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/force.png' height='200px'>
 
 For the human musculoskeletal models this package implements the polytope metrics:
 - Velocity polytope <br> `P_vel = {dx | dx = J.dq, dl = L.dq  dl_min < dl < dl_max}`
