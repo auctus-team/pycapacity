@@ -562,10 +562,8 @@ def vertex_to_hspace(vertex):
 
     Returns
     --------
-        H(list):  
-            matrix of half-space representation `Hx<d`
-        d(list): 
-            vector of half-space representation `Hx<d`
+        H(list): matrix of half-space representation `Hx<d`
+        d(list): vector of half-space representation `Hx<d`
     """
     hull = ConvexHull(vertex.T, qhull_options='QJ')
     return  hull.equations[:,:-1], -hull.equations[:,-1]
