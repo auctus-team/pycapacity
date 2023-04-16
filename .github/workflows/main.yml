@@ -13,7 +13,6 @@ jobs:
           pip install sphinx sphinx_rtd_theme
           sudo apt install libsuitesparse-dev
           export CPPFLAGS="-I/usr/include/suitesparse"  # <-- NEW STEP
-          sudo apt-get install python-glpk
           sudo apt-get install glpk-utils
           pip install -r docs/requirements.txt
       - name: Sphinx build
