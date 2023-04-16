@@ -14,6 +14,7 @@ jobs:
           sudo apt install libsuitesparse-dev
           export CPPFLAGS="-I/usr/include/suitesparse"  # <-- NEW STEP
           sudo apt-get install glpk-utils
+          export CVXOPT_BUILD_GLPK=1    # optional
           pip install -r docs/requirements.txt
       - name: Sphinx build
         run: |
