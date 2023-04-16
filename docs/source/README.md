@@ -1,8 +1,8 @@
 
 # Real-time capable task-space capacity calculation python module
 
-<img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif" style="max-height:300px" height="250px">
-<img src="https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/bimanual1.png" style="max-height:300px" height="150px">
+
+<img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" style="height:250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" style="height:250px">
 
 The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
 - Robotic serial manipulators - `pycapacity.robot`
@@ -13,7 +13,7 @@ This package also provides a module `pycapacity.algorithms` with a set of polyto
 Additionally, `pycapacity.visual` module provides a set of visualisaiton tools using the `matplotlib` for visualising 2d and 3d polytopes.
 
 ## Robotic manipulator capacity metrics
-<img src='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/robot.png' style="height:300px" height='300px'>
+<img src='https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/robot.png' style="height:300px">
 
 For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
 - Velocity (manipulability) ellipsoid <br> `E_vel = {dx | dx = J.dq, ||dq||<1 }`
@@ -37,7 +37,7 @@ And the velocity and acceleration polytopes are resolved using the *Hyper-plane 
 by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)
 
 ## Human musculoskeletal models capacity metrics
-<img src='https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/force.png' style="max-height:300px" height='200px'>
+<img src='https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/force.png' style="max-height:300px" height='200px'>
 
 For the human musculoskeletal models this package implements the polytope metrics:
 - Velocity polytope <br> `P_vel = {dx | dx = J.dq, dl = L.dq  dl_min < dl < dl_max}`
@@ -102,28 +102,6 @@ To find the half-space representation (faces) of the polytope after finding the 
 
 The method is a part of the `pycapacity.algorithms` module `vertex_enumeration_auctus`. See the [docs for more info](pycapacity\.algorithms\.html#pycapacity\.algorithms\.vertex_enumeration_auctus)
 
-## Installation
-
-All you need to do to install it is:
-```
-pip install pycapacity
-```
-And include it to your python project
-```python
-import pycapacity.robot 
-# and/or
-import pycapacity.human 
-#and/or
-import pycapacity.algorithms 
-#and/or
-import pycapacity.visual 
-```
-
-Other way to install the code is by installing it directly from the git repo:
-```
-pip install git+https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/
-```
-
 ## Package API docs
 
 ### Modules
@@ -167,86 +145,3 @@ Visualisation tools
 - [`visual.plot_polytope_faces`](pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
 - [`visual.plot_polytope_vertex`](pycapacity.visual.html#fpycapacity.visual.plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
 ---
-
-## Code examples
-
-
-See [`demo_notebook.ipynb`](https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/blob/master/demo_notebook.ipynb) for more examples of how ot use the module.
-
-### Randomised serial robot example
-```python
-"""
-A simple example program for 3d force polytope 
-evaluation of a randomised 6dof robot 
-"""
-import pycapacity.robot as capacity # robot capacity module
-import numpy as np
-
-m = 3 # 3d forces
-n = 6 # robot dof
-
-J = np.array(np.random.rand(m,n)) # random jacobian matrix
-
-t_max = np.ones(n)  # joint torque limits max and min
-t_min = -np.ones(n)
-
-vertices, face_indexes = capacity.force_polytope_withfaces(J,t_min, t_max) # calculate the polytope vertices and faces
-faces = capacity.face_index_to_vertex(vertices, face_indexes)
-
-print(vertices) # display the vertices
-
-# plotting the polytope
-import matplotlib.pyplot as plt
-from pycapacity.visual import plot_polytope_faces, plot_polytope_vertex # pycapacity visualisation tools
-fig = plt.figure(4)
-
-# draw faces and vertices
-ax = plot_polytope_vertex(plt=plt, vertex=vertices, label='force',color='blue')
-plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
-
-plt.tight_layout()
-plt.legend()
-plt.show()
-```
-
-
-### Randomised muslucoskeletal model example
-```python
-"""
-A simple example program for 3d force polytope 
-evaluation of a randomised 30 muscle 7dof 
-human musculoskeletal model 
-"""
-
-import pycapacity.human as capacity # robot capacity module
-import numpy as np
-
-L = 30 # number of muscles
-m = 3 # 3d forces
-n = 6 # number of joints - dof
-
-J = np.array(np.random.rand(m,n))*2-1 # random jacobian matrix
-N = np.array(np.random.rand(n,L))*2-1 # random moment arm matrix
-
-F_max = 100*np.ones(L)  # muscle forces limits max and min
-F_min = np.zeros(L)
-
-vertices, H,d, face_indexes = capacity.force_polytope(J,N, F_min, F_max, 0.1) # calculate the polytope vertices and faces
-faces = capacity.face_index_to_vertex(vertices, face_indexes)
-
-print(vertices) # display the vertices
-
-# plotting the polytope
-import matplotlib.pyplot as plt
-from pycapacity.visual import plot_polytope_faces, plot_polytope_vertex # pycapacity visualisation tools
-fig = plt.figure(4)
-
-# draw faces and vertices
-ax = plot_polytope_vertex(plt=plt, vertex=vertices, label='force',color='blue')
-plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
-
-plt.tight_layout()
-plt.legend()
-plt.show()
-
-```

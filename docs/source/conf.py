@@ -20,13 +20,13 @@ sys.path.insert(0, os.path.realpath('../../pycapacity'))
 # -- Project information -----------------------------------------------------
 
 project = u'pycapacity'
-copyright = u'2022, Antun Skuric'
+copyright = u'2023, Antun Skuric'
 author = u'Antun Skuric'
 
 # The short X.Y version
 version = u'1.2'
 # The full version, including alpha/beta/rc tags
-release = u'v1.2.8'
+release = u'v1.2.19'
 
 
 # -- General configuration ---------------------------------------------------
@@ -64,7 +64,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -85,6 +85,14 @@ html_theme = 'sphinx_rtd_theme'
 def setup(app):
     app.add_css_file('css/my_theme.css')
 
+html_context = {
+    "display_github": True, # Integrate GitHub
+    "github_user": "auctus-team", # Username
+    "github_repo": "pycapacity", # Repo name
+    "github_version": "master", # Version
+    "conf_py_path": "/docs/source/", # Path in the checkout to the docs root
+}
+
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
@@ -104,7 +112,7 @@ html_static_path = ['_static']
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
 #
-# html_sidebars = {}
+html_sidebars = {}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------
@@ -151,7 +159,7 @@ man_pages = [
      [author], 1)
 ]
 
-
+html_show_sourcelink = True
 # -- Options for Texinfo output ----------------------------------------------
 
 # Grouping the document tree into Texinfo files. List of tuples

@@ -1,5 +1,5 @@
 Getting started coding examples
-==================
+===============================
 
 Robot  workspace analysis
 
@@ -20,3 +20,12 @@ Human musculoskeletal models
     Randomized human model <randomised_human.md>
     Pyomeca <pyomeca.md>
     Opensim <opensim.md>
+
+
+A few generic examples
+
+.. toctree::
+   :maxdepth: 1
+
+    Find a half-plane representation of a set of vertices <hspace_from_vert>
+    Find a vertex representation of a set of half-planes <vert_from_hspace>

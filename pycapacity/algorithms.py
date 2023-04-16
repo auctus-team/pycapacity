@@ -1,3 +1,29 @@
+"""
+Overview
+---------
+
+There are three main polytope evaluation algorithms implemented:
+
+* `hyper_plane_shift_method <pycapacity\.algorithms\.hyper_plane_shift_method>`_: Hyper plane shifting method implementation used to find half-space representaiton of problems of a form 
+
+.. math:: P = \{x~ |~ y = Ax,\quad x_{min} <= x <= x_{max}\}
+
+* `vertex_enumeration_auctus  <pycapacity\.algorithms\.vertex_enumeration_auctus>`_: Efficient vertex enumeration algorithm for a problem of a form: 
+
+.. math:: P = \{x~ |~ Ax = b,\quad b_{min} \leq b \leq b_{max}\}
+
+* `iterative_convex_hull_method <pycapacity\.algorithms\.iterative_convex_hull_method>`_: A function calculating the polytopes given by the equations form: 
+
+.. math:: P = \{x~ |~ Ax = By,\quad y_{min} \leq y \leq y_{max}\}
+
+Additionally this module implements different helping functions to half-plane and vertex representation manipulaitons of the polytopes:
+
+* `hspace_to_vertex <#pycapacity\.algorithms\.hspace_to_vertex>`_: Function transforming H-representation to V-representation
+* `vertex_to_hspace <#pycapacity\.algorithms\.vertex_to_hspace>`_: Function transforming V-representation to H-representation
+* `vertex_to_faces <#pycapacity\.algorithms\.vertex_to_faces>`_: Helping function transforming vertices of the polytope to a triangulated faces
+
+"""
+
 import numpy as np
 import itertools
 from scipy.spatial import ConvexHull, HalfspaceIntersection
@@ -9,23 +35,15 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     """
     A function calculating the polytopes of achievable x for equations form:
 
-    .. math:: z = By, \quad Ax = z
-    .. math:: y_{min} \leq y \leq y_{max}
-    
-    or
-    
-    .. math:: Ax = By
-    .. math:: y_{min} \leq y \leq y_{max}
+    .. math:: P_x = \{x~ |~ Ax = By,\quad y_{min} \leq y \leq y_{max}\}
 
     (optionally - additional projection matrix)
 
-    .. math:: Az = By, \quad Pz = x
-    .. math:: y_{min} \leq y \leq y_{max}
+    .. math:: P_x = \{x~ |~Pz = x,~~ Az = By,\quad y_{min} \leq y \leq y_{max}\}
 
-    (optionally - additional bias)
+    (optionally - additional bias :math:`b`)
 
-    .. math:: Az = By + bias
-    .. math:: y_{min} \leq y \leq y_{max}
+    .. math:: P_x = \{x~ |~Ax = By + b, \quad y_{min} \leq y \leq y_{max}\}
 
     (optionally - additional inequality constaints)
 
@@ -34,6 +52,10 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
     (optionally - additional equality constaints)
 
     .. math:: G_{eq} y = h_{eq}
+
+    Finally, the most general equation supported is
+
+    .. math:: P_x = \{x~ |~Pz = x,~~ Az = By,~~ G_{in} y \leq h_{in} ,~~ G_{eq} y = h_{eq}, ~~ y_{min} \leq y \leq y_{max}\}
 
     Note:
         On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
@@ -289,9 +311,7 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     """
     Hyper plane shifting method implementation used to solve problems of a form:
 
-    .. math:: y = Ax
-    .. math:: x_min <= x <= x_max
-
+    .. math:: P = \{y~ |~y = Ax, \quad x_{min} \leq x \leq x_{max}\}
 
     Note:
         *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht*
@@ -358,13 +378,11 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
     """
     Efficient vertex enumeration algorithm for a problem of a form:
     
-    .. math:: Ax = b
-    .. math:: b_{min} \leq b \leq b_{max}
+    .. math:: P = \{x~ |~Ax = b, \quad b_{min} \leq b \leq b_{max}\}
 
-    Optional (if b_bias added): 
+    Optional (bias :math:`b_{bias}` can be added): 
     
-    .. math:: Ax = b - b_{bias}
-    .. math:: b_{min} \leq b \leq b_{max}
+    .. math:: P = \{x~ |~Ax = b - b_{bias}, \quad b_{min} \leq b \leq b_{max}\}
 
     Note:
         On-line force capability evaluation based on efficient polytope vertex search
@@ -499,7 +517,7 @@ def chebyshev_center(A,b):
     res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
     return np.array(res[1][:-1]).reshape((-1,))
 
-def hsapce_to_vertex(H,d):
+def hspace_to_vertex(H,d):
     """
     From half-space representaiton to the vertex representation
 
@@ -542,7 +560,8 @@ def vertex_to_hspace(vertex):
     Args:
         vertex(array):  list of verteices
 
-    Returns:
+    Returns
+    --------
         H(list):  
             matrix of half-space representation `Hx<d`
         d(list): 

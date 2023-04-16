@@ -606,7 +606,7 @@ def test37():
     H = np.vstack((np.eye(3),-np.eye(3)))
     d = np.hstack((np.ones(3), np.ones(3)))
 
-    v, f =algos.hsapce_to_vertex(H,d)
+    v, f =algos.hspace_to_vertex(H,d)
     v_correct = np.array([[-1.,  1., -1.,  1.,  1., -1.,  1., -1.],
        [-1., -1., -1., -1.,  1.,  1.,  1.,  1.],
        [-1., -1.,  1.,  1., -1., -1.,  1.,  1.]])
@@ -619,6 +619,6 @@ def test38():
     vert = np.random.rand(5,3).T
 
     H, d = algos.vertex_to_hspace(vert)
-    v, f = algos.hsapce_to_vertex(H, d)
+    v, f = algos.hspace_to_vertex(H, d)
     print(v.shape, vert.shape)
     assert np.allclose(np.sort(vert,axis=1), np.sort(v,axis=1))

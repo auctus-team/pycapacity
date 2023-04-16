@@ -1,3 +1,15 @@
+"""
+Overview
+---------
+
+This is a pyhton module helping to visualise 2d and 3d polytopes and ellipsoids. It is based on the module  ``matplotlib``.
+
+* visualising 2d and 3d polytope `faces <#pycapacity\.visual\.plot_polytope_faces>`_ and `vertices  <#pycapacity\.visual\.plot_polytope_vertex>`_
+* visualising 2d and 3d `ellipsoids <#pycapacity\.visual\.plot_ellipsoid>`_
+
+"""
+
+
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.patches import Ellipse

@@ -1,3 +1,16 @@
+"""
+Overview
+---------
+
+This is a pyhton module which implements different robot performance metrics based on polytopes and ellipsoids.
+
+* acceleration `polytope <#pycapacity\.robot\.acceleration_polytope>`_ and `ellipsoid <#pycapacity\.robot\.acceleration_ellipsoid>`_
+* velocity (manipulability) `polytope <#pycapacity\.robot\.velocity_polytope>`_ and `ellipsoid <#pycapacity\.robot\.velocity_ellipsoid>`_
+* force `polytope <#pycapacity\.robot\.force_polytope>`_ and `ellipsoid <#pycapacity\.robot\.force_ellipsoid>`_
+* force polytope `minkowski sum <#pycapacity\.robot\.force_polytope_sum_withfaces>`  and `intersection <#pycapacity\.robot\.force_polytope_intersection>`_
+
+"""
+
 import numpy as np
 # minkowski sum
 from scipy.spatial import ConvexHull
@@ -11,8 +24,7 @@ def velocity_ellipsoid(J, dq_max):
     """
     Velocity manipulability ellipsoid calculation
 
-    .. math:: J\dot{q} = \dot{x}
-    .. math:: ||\dot{q}|| \leq \dot{q}_{max}
+    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad ||\dot{q}|| \leq \dot{q}_{max}\}
 
     Args:
         J: position jacobian
@@ -39,9 +51,8 @@ def acceleration_ellipsoid(J, M, t_max):
     """
     Acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
-    .. math:: \ddot{x}   = JM^{-1} t
-    .. math:: ||{t}|| \leq {t}_{max}
-     
+    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}t,\quad ||{t}|| \leq {t}_{max}\}
+
     Args:
         J: matrix jacobian
         M: matrix inertia 
@@ -68,8 +79,7 @@ def force_ellipsoid(J, t_max):
     """
     Force manipulability ellipsoid calculation
 
-    .. math:: t  = J^Tf
-    .. math:: ||{t}|| \leq {t}_{max}
+    .. math:: E_f = \{f~ |~ t  = J^Tf,\quad ||{t}|| \leq {t}_{max}\}
 
     Args:
         J: matrix jacobian
@@ -96,9 +106,8 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     """
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
 
-    .. math:: t_1  = J_1^Tf_1,\quad t_2  = J_2^Tf_2, \quad f_1=f_2
-    .. math:: {t}_{1,min} \leq t_1 \leq {t}_{1,max}
-    .. math:: {t}_{2,min} \leq t_1 \leq {t}_{2,max}
+
+    .. math:: P_f = \{f~ | ~ f_1\! =\! f_2\! =\! f, ~~ t_1  = J_1^Tf_1, ~~ t_2  = J_2^Tf_2, ~~ {t}_{1,min} \leq t_1 \leq {t}_{1,max},~~~ {t}_{2,min} \leq t_1 \leq {t}_{2,max}\}
 
 
     Based on the ``vertex_enumeration_auctus`` algorihtm.
@@ -136,9 +145,7 @@ def force_polytope_sum_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t
     Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
 
-    .. math:: t_1  = J_1^Tf_1,\quad t_2  = J_2^Tf_2, \quad f = f_1 + f_2
-    .. math:: {t}_{1,min} \leq t_1 \leq {t}_{1,max}
-    .. math:: {t}_{2,min} \leq t_1 \leq {t}_{2,max}
+    .. math:: P_f = \{f~ | ~ f\! =\! f_1\! +\! f_2, ~~ t_1  = J_1^Tf_1, ~~ t_2  = J_2^Tf_2, ~~ {t}_{1,min} \leq t_1 \leq {t}_{1,max},~~~ {t}_{2,min} \leq t_1 \leq {t}_{2,max}\}
 
     Based on the ``vertex_enumeration_auctus`` algorihtm.
 
@@ -178,8 +185,7 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None):
     """
     Force polytope representing the capacities of the two robots in a certain configuration
 
-    .. math:: t = J^Tf
-    .. math:: {t}_{min} \leq t \leq {t}_{max}
+    .. math:: P_f = \{f~ |~ t  = J^Tf,\quad {t}_{min} \leq t \leq {t}_{max}\}
 
     Based on the ``vertex_enumeration_auctus`` algorihtm.
 
@@ -205,9 +211,7 @@ def force_polytope_withfaces(Jacobian, t_max, t_min, t_bias = None):
     Force polytope representing the capacities of the two robots in a certain configuration.
     With vertices ordered into the faces
 
-
-    .. math:: t = J^Tf
-    .. math:: {t}_{min} \leq t \leq {t}_{max}
+    .. math:: P_f = \{f~ |~ t  = J^Tf,\quad {t}_{min} \leq t \leq {t}_{max}\}
 
     Based on the ``vertex_enumeration_auctus`` algorihtm.
 
@@ -246,10 +250,8 @@ def force_polytope_intersection_withfaces(Jacobian1, Jacobian2, t1_max, t1_min, 
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
 
-    .. math:: t_1  = J_1^Tf_1,\quad t_2  = J_2^Tf_2, \quad f_1=f_2
-    .. math:: {t}_{1,min} \leq t_1 \leq {t}_{1,max}
-    .. math:: {t}_{2,min} \leq t_1 \leq {t}_{2,max}
-
+    .. math:: P_f = \{f~ | ~ f_1\! =\! f_2\! =\! f, ~~ t_1  = J_1^Tf_1, ~~ t_2  = J_2^Tf_2, ~~ {t}_{1,min} \leq t_1 \leq {t}_{1,max},~~~ {t}_{2,min} \leq t_1 \leq {t}_{2,max}\}
+    
     Based on the ``vertex_enumeration_auctus`` algorihtm.
 
     Args:
@@ -286,9 +288,7 @@ def velocity_polytope(Jacobian, dq_max, dq_min):
     """
     Velocity polytope calculating function
 
-
-    .. math:: \dot{x} = J\dot{q}
-    .. math:: {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}
+    .. math:: P_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}\}
 
     Based on the ``hyper_plane_shifting_method`` algorihtm.
 
@@ -301,15 +301,14 @@ def velocity_polytope(Jacobian, dq_max, dq_min):
         velocity_vertex(list):  vertices of the polytope
     """ 
     H, d = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
-    velocity_vertex, vel_faces = hsapce_to_vertex(H,d)
+    velocity_vertex, vel_faces = hspace_to_vertex(H,d)
     return velocity_vertex
 
 def velocity_polytope_withfaces(Jacobian, dq_max, dq_min):
     """
     Velocity polytope calculating function, with faces
 
-    .. math:: \dot{x} = J\dot{q}
-    .. math:: {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}
+    .. math:: P_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}\}
 
     Based on the ``hyper_plane_shifting_method`` algorihtm.
 
@@ -326,15 +325,14 @@ def velocity_polytope_withfaces(Jacobian, dq_max, dq_min):
             list of vertex indexes belonging to faces
     """ 
     H, d = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
-    velocity_vertex, vel_faces = hsapce_to_vertex(H,d)
+    velocity_vertex, vel_faces = hspace_to_vertex(H,d)
     return velocity_vertex, vel_faces
 
 def acceleration_polytope(J, M, t_max, t_min, t_bias= None):
     """
     Acceleration polytope calculating function
 
-    .. math:: \ddot{x} = JM^{-1}t
-    .. math:: {t}_{min} \leq t \leq {t}_{max}
+    .. math:: P_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}t,\quad {t}_{min} \leq t \leq {t}_{max}\} 
 
     Based on the ``hyper_plane_shifting_method`` algorihtm.
 
@@ -354,15 +352,15 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None):
         t_max = t_max - t_bias
     
     H, d = hyper_plane_shift_method(B,t_min, t_max)
-    vertex, faces = hsapce_to_vertex(H,d)
+    vertex, faces = hspace_to_vertex(H,d)
     return vertex
 
 def acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias= None):
     """
     Acceleration polytope calculating function
 
-    .. math:: \ddot{x} = JM^{-1}t
-    .. math:: {t}_{min} \leq t \leq {t}_{max}
+    
+    .. math:: P_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}t,\quad {t}_{min} \leq t \leq {t}_{max}\} 
 
     Based on the ``hyper_plane_shifting_method`` algorihtm.
 
@@ -386,6 +384,6 @@ def acceleration_polytope_withfaces(J, M, t_max, t_min, t_bias= None):
         t_max = t_max - t_bias
     
     H, d = hyper_plane_shift_method(B,t_min, t_max)
-    vertex, faces = hsapce_to_vertex(H,d)
+    vertex, faces = hspace_to_vertex(H,d)
     return vertex, faces
 

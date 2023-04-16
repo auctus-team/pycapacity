@@ -1,3 +1,16 @@
+"""
+Overview
+---------
+
+This is a pyhton module which implements different human performance metrics based on their musculoskeletal models
+
+* `joint torque polytope <#pycapacity\.human\.joint_torques_polytope>`_
+* `acceleration polytope <#pycapacity\.human\.acceleration_polytope>`_
+* `force polytope <#pycapacity\.human\.force_polytope>`_
+* `velocity polytope <#pycapacity\.human\.velocity_polytope>`_
+
+"""
+
 import numpy as np
 from cvxopt import matrix
 import cvxopt.glpk
@@ -12,8 +25,7 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-5):
     A function calculating the polytopes of achievable joint torques
     based on the moment arm matrix `N` :
     
-    .. math:: t = NF
-    .. math:: F_{min} \leq F \leq F_{max}
+    .. math:: P_{t} = \{ t ~ | ~ t= NF, \quad F_{min} \leq F \leq F_{max}\}
 
     Based on the ``hyper_plane_shifting_method`` algorihtm.
 
@@ -36,7 +48,7 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-5):
             indexes of verteices forming the polytope faces
     """
     H, d = hyper_plane_shift_method(N, F_min, F_max)
-    vert, faces = hsapce_to_vertex(H,d)
+    vert, faces = hspace_to_vertex(H,d)
     return vert, H, d, faces
     
 def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5):
@@ -44,8 +56,7 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5):
     A function calculating the polytopes of achievable accelerations
     based on the jacobian matrix `J`, moment arm matrix `N` and mass matrix `M`
 
-    .. math:: a = \ddot{x}   = JM^{-1}NF
-    .. math:: F_{min} \leq F \leq F_{max}
+    .. math:: P_{a} = \{ \ddot{x} ~ | ~ \ddot{x} = JM^{-1}NF, \quad F_{min} \leq F \leq F_{max}\}
 
     Based on the ``hyper_plane_shifting_method`` algorihtm.
 
@@ -70,7 +81,7 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5):
             indexes of verteices forming the polytope faces
     """
     H,d = hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
-    vert, faces = hsapce_to_vertex(H,d)
+    vert, faces = hspace_to_vertex(H,d)
     return vert, H, d, faces
 
 def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
@@ -78,9 +89,12 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
     A function calculating the polytopes of achievable foreces based 
     on the jacobian matrix `J` and moment arm matrix `N`
 
-    .. math:: J^Tf = NF \quad(+\, t_{bias})
-    .. math::  F_{min} \leq F \leq F_{max}
+    .. math:: P_{f} = \{ f ~ | ~ J^Tf = NF, \quad F_{min} \leq F \leq F_{max}\}
+
+    optionally an additional bias :math:`t_{bias}` can be added
         
+    .. math:: P_{f} = \{ f ~ | ~ J^Tf = NF + t_{bias}, \quad F_{min} \leq F \leq F_{max}\}
+
     Based on the ``iterative_convex_hull_method`` algorihtm.
 
     Args:
@@ -110,9 +124,8 @@ def velocity_polytope(J, N, dl_min , dl_max, tol=1e-5):
     A function calculating the polytopes of achievable velocity based 
     on the jacobian matrix `J` and moment arm matrix `N`
 
-    .. math:: L\dot{q} = \dot{l}, \quad J\dot{q} = \dot{x} = v
-    .. math:: \dot{l}_{min} \leq \dot{l} \leq \dot{l}_{max}
-    
+    .. math:: P_{v} = \{ \dot{x} ~ | ~ L\dot{q} = \dot{l},~~ J\dot{q} = \dot{x}, \quad \dot{l}_{min} \leq \dot{l} \leq \dot{l}_{max}\}
+
     Based on the ``iterative_convex_hull_method`` algorihtm.
 
     Args:

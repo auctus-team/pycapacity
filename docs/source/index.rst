@@ -1,5 +1,5 @@
 Real-time capable task-space capacity calculation python module
-==================
+===============================================================
 
 
 
@@ -23,20 +23,17 @@ Additionally, ``pycapacity.visual`` module provides a set of visualisaiton tools
 
 .. toctree::
 
-   About <README.md>
-
-Module contents
----------------
+   ABOUT <README.md>
+   🚀 INSTALLATION <install.md>
 
 .. toctree::
-   Robot capacity <pycapacity.robot>
-   Human capacity <pycapacity.human>
-   Algortihms <pycapacity.algorithms>
-   Visualisation <pycapacity.visual>
+   📄 API DOCS <pycapacity>
 
+.. toctree::
+   📝 CONTRIBUTING & ISSUES <contirbuting.md>
 
 .. toctree::
    :maxdepth: 2
 
-   Coding examples <examples/index>
+   🎓 TUTORIALS <examples/index>
    
