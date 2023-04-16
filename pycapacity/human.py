@@ -4,7 +4,7 @@ import cvxopt.glpk
 
 # import the algos
 from pycapacity.algorithms import iterative_convex_hull_method, hyper_plane_shift_method
-from pycapacity.algorithms import hsapce_to_vertex
+from pycapacity.algorithms import *
 
 
 def joint_torques_polytope(N, F_min, F_max, tol=1e-5):

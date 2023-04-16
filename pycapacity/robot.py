@@ -4,7 +4,7 @@ from scipy.spatial import ConvexHull
 
 # import the algos
 from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_auctus
-from pycapacity.algorithms import hsapce_to_vertex
+from pycapacity.algorithms import *
 
 # velocity manipulability calculation
 def velocity_ellipsoid(J, dq_max):
