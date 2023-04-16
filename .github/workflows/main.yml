@@ -10,11 +10,12 @@ jobs:
       - uses: actions/setup-python@v3
       - name: Install dependencies
         run: |
-          pip install .
+          pip install sphinx sphinx_rtd_theme
           sudo apt install libsuitesparse-dev
           export CPPFLAGS="-I/usr/include/suitesparse"  # <-- NEW STEP
           sudo apt-get install libglpk-dev
           export CVXOPT_BUILD_GLPK=1    # optional
+          pip install .
           pip install -r docs/requirements.txt
       - name: Sphinx build
         run: |
