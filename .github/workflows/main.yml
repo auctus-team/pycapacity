@@ -16,12 +16,15 @@ jobs:
           pip install -r docs/requirements.txt
       - name: Sphinx build
         run: |
-          sphinx-build "docs/source" _build
+          cd docs
+          python3 -m sphinx.cmd.build -M html "source" "_build" 
+          cp source/my_theme.css _build/html/_static/css
+          cp -r _build/html/ ../public
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         with:
           publish_branch: master
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: _build/
+          publish_dir: public/
           force_orphan: true
