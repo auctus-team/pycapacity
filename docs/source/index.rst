@@ -10,6 +10,9 @@ Real-time capable task-space capacity calculation python module
 
 .. image:: https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg
 
+.. raw:: html
+
+   <br />
 
 .. image:: https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif
   :height: 300
