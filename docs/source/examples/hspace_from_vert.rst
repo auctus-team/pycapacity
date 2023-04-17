@@ -11,7 +11,7 @@ A simple example program for find a half-plane representation of a set of vertic
     N = 100 # hundred vertices
     m = 3   # space dimension
 
-    points = np.array(np.random.rand(m,N))*2-1 # random jacobian matrix
+    points = np.array(np.random.rand(m,N))*2-1 # points
 
     # find half-plane representaiton Ax <= b
     A, b = algos.vertex_to_hspace(points)

@@ -4,15 +4,15 @@ Overview
 
 There are three main polytope evaluation algorithms implemented:
 
-* `hyper_plane_shift_method <pycapacity\.algorithms\.hyper_plane_shift_method>`_: Hyper plane shifting method implementation used to find half-space representaiton of problems of a form 
+* `hyper_plane_shift_method <#pycapacity\.algorithms\.hyper_plane_shift_method>`_: Hyper plane shifting method implementation used to find half-space representaiton of problems of a form 
 
 .. math:: P = \{x~ |~ y = Ax,\quad x_{min} <= x <= x_{max}\}
 
-* `vertex_enumeration_auctus  <pycapacity\.algorithms\.vertex_enumeration_auctus>`_: Efficient vertex enumeration algorithm for a problem of a form: 
+* `vertex_enumeration_auctus  <#pycapacity\.algorithms\.vertex_enumeration_auctus>`_: Efficient vertex enumeration algorithm for a problem of a form: 
 
 .. math:: P = \{x~ |~ Ax = b,\quad b_{min} \leq b \leq b_{max}\}
 
-* `iterative_convex_hull_method <pycapacity\.algorithms\.iterative_convex_hull_method>`_: A function calculating the polytopes given by the equations form: 
+* `iterative_convex_hull_method <#pycapacity\.algorithms\.iterative_convex_hull_method>`_: A function calculating the polytopes given by the equations form: 
 
 .. math:: P = \{x~ |~ Ax = By,\quad y_{min} \leq y \leq y_{max}\}
 
@@ -561,7 +561,7 @@ def vertex_to_hspace(vertex):
         vertex(array):  list of verteices
 
     Returns
-    --------
+    -------
         H(list): matrix of half-space representation `Hx<d`
         d(list): vector of half-space representation `Hx<d`
     """

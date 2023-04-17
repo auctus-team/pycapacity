@@ -1,6 +1,9 @@
 
-# Real-time capable task-space capacity calculation python module
+# About pycapacity
 
+Real-time capable task-space capacity calculation python pip package
+
+[![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/) [![Tests](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml) ![](https://img.shields.io/pypi/dm/pycapacity?color=blue&label=pip%20downloads)  [![Docs](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml)
 
 <img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" style="height:250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" style="height:250px">
 
@@ -144,4 +147,3 @@ Algorithms
 Visualisation tools
 - [`visual.plot_polytope_faces`](pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
 - [`visual.plot_polytope_vertex`](pycapacity.visual.html#fpycapacity.visual.plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
----
