@@ -28,7 +28,7 @@ dependencies:
 And create a new ready to go environment:
 ```
 conda env create -f env.yaml    # create the new environemnt and install biorbd,bioviz 
-conda actiavte pyomeca
+conda activate pyomeca
 ```
 
 #### Creating the custom environment from scratch
