@@ -25,7 +25,7 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-5):
     A function calculating the polytopes of achievable joint torques
     based on the moment arm matrix `N` :
     
-    .. math:: P_{t} = \{ t ~ | ~ t= NF, \quad F_{min} \leq F \leq F_{max}\}
+    .. math:: P_{t} = \{ \\tau ~ | ~ \\tau= NF, \quad F_{min} \leq F \leq F_{max}\}
 
     Based on the ``hyper_plane_shifting_method`` algorihtm.
 
@@ -91,9 +91,9 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None):
 
     .. math:: P_{f} = \{ f ~ | ~ J^Tf = NF, \quad F_{min} \leq F \leq F_{max}\}
 
-    optionally an additional bias :math:`t_{bias}` can be added
+    optionally an additional bias :math:`\\tau_{bias}` can be added
         
-    .. math:: P_{f} = \{ f ~ | ~ J^Tf = NF + t_{bias}, \quad F_{min} \leq F \leq F_{max}\}
+    .. math:: P_{f} = \{ f ~ | ~ J^Tf = NF + \\tau_{bias}, \quad F_{min} \leq F \leq F_{max}\}
 
     Based on the ``iterative_convex_hull_method`` algorihtm.
 
