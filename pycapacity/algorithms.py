@@ -91,6 +91,13 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
         z_vert(list):
             list of z values producing x_vert
         
+            
+    :raises ValueError: if the dimensions of the input matrices are not valid
+    :raises ValueError: if the limits dimensions are not valid
+    :raises ValueError: if the limits min and max are not valid
+    :raises ValueError: if the inequality/equality constraints dimensions are not valid
+    :raises ValueError: if the the projection matrix dimensions are not valid
+    
     """
     # svd of jacobian
     n, m = A.shape
@@ -331,10 +338,23 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
             matrix of half-space representation `Hx<d`
         d(list): 
             vector of half-space representation `Hx<d`
+
+    
+    :raises ValueError: if the limits are not of the same size as the projection matrix
+    :raises ValueError: if the limits are not of the same size
+
     """
 
     H = []
     d = []
+
+    # check if the limits are the same size
+    if len(x_min) != len(x_max):
+        raise ValueError("x_min and x_max must be of the same size {} != {}".format(len(x_min),len(x_max)))
+    # check if the limits are the same size as the projection matrix
+    if len(x_min) != A.shape[1]:
+        raise ValueError("x_min and x_max must be of the same size as the projection matrix {} != {}".format(len(x_min),A.shape[1]))
+    
 
     x_min = np.array(x_min).reshape((-1,1))
     x_max = np.array(x_max).reshape((-1,1))
@@ -398,6 +418,10 @@ def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
     --------
         x_vertex(list): vertices of the polytope
         b_vartex(list): b values producing x_vertex
+
+    :raises ValueError: if the A matrix dimensions are not valid  
+    :raises ValueError: if the b_min and b_max are not of the same size as the A matrix
+    :raises ValueError: if the b_bias is not of the same size as the A matrix
 
     """ 
     # Size calculation

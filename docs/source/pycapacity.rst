@@ -8,4 +8,8 @@ pycapacity package
    pycapacity.human
    pycapacity.robot
    pycapacity.visual
+   pycapacity.polytope
 
+
+
+See more detailed module map `here <modules.html>`_
