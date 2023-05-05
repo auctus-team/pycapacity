@@ -26,29 +26,125 @@ bibliography: paper.bib
 
 # Statement of need
 
+# Implemented algorithms
 
-# Mathematics
+## Hyper-plane shifting method
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+This is an algorihtm based on the paper by [@Gouttefarde:2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
 
-Double dollars make self-standing equations:
-
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
-
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
+\begin{equation}\label{eq:hpsm}
+P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
 \end{equation}
-and refer to \autoref{eq:fourier} from text.
+
+## Vertex enumeration auctus
+
+This is an algorithm based on the paper by [@Skuric:2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
+
+\begin{equation}\label{eq:vertex_auctus}
+P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
+\end{equation}
+
+
+## Iterative convex-hull method
+
+This is an algorihtm descirbed in the paper by [@Skuric:2022] which implements an efficient method which iteratively approximates the polytope
+
+\begin{equation}\label{eq:ichm}
+P = \{ x ~|~ Ax = By, \quad y_{min}\leq y \leq y_{max} \}
+\end{equation}
+
+The method finds both vertex $\mathcal{V}$ and half-plane $\mathcal{H}$ representation of the polytope at the same time. 
+  
+And it can be additionally extended to the case where there is an additional projection matrix $P$ making a class of problems:
+
+\begin{equation}\label{eq:ichm_full}
+P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
+\end{equation}
+
+
+
+
+
+# Physical capacity metrics available
+
+
+## Robotic manipulators metrics
+
+For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
+
+### Ellipsoids
+- Velocity (manipulability) ellipsoid  
+\begin{equation}\label{eq:ev_r}
+E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||\dot{q}||\leq1 \}
+\end{equation}
+
+- Acceleration (dynamic manipulability) ellipsoid  
+\begin{equation}\label{eq:ea_r}
+E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||\tau||\leq1 \}
+\end{equation}
+
+- Force ellipsoid 
+\begin{equation}\label{eq:ef_r}
+E_{f} = \{{f} ~| J^{T}f = \tau,~ ||\tau||\leq1 \}
+\end{equation}
+
+### Polytopes
+- Velocity polytope  
+\begin{equation}\label{eq:pv_r}
+P_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ \dot{q}_{min}\leq\dot{q}\leq\dot{q}_{max} \}
+\end{equation}
+- Acceleration polytope 
+
+\begin{equation}\label{eq:pa_r}
+P_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
+\end{equation}
+- Force polytope  
+
+\begin{equation}\label{eq:pf_r}
+P_{f} = \{f ~| J^{T}f = \tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
+\end{equation}
+- Force polytopes *Minkowski sum and intersection*  
+
+\begin{equation}\label{eq:psi_r}
+P_{\cap} = \mathcal{P}_{f1} \cap \mathcal{P}_{f1} \qquad P_{\oplus} = \mathcal{P}_{f1} \oplus \mathcal{P}_{f1} 
+\end{equation}
+
+- Reachable space approximation of in the desired horizon of interest $\Delta t_{h}$ using the convex polytope formulation:
+
+\begin{equation}\label{eq:prs_r}
+\begin{split}
+P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
+  {\tau}_{min} &\leq \tau \leq {\tau}_{max},\\
+   \dot{q}_{min} &\leq M^{-1}\tau \Delta t_{h}  \leq \dot{q}_{max}, \\
+  {q}_{min} &\leq M^{-1}\tau \frac{\Delta t_{h}^2}{2}  \leq {q}_{max} \}\\
+  \end{split}
+\end{equation}
+
+
+Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
+
+## Human musculoskeletal model metrics
+
+For the human musculoskeletal models this package implements the polytope metrics:
+- Velocity polytope  
+\begin{equation}\label{eq:pv_h}
+P_{v} = \{\dot{x} ~|~\dot{l} = L\dot{q},~ \dot{x} = J\dot{q},~ \dot{q}_{min}, ~ \leq\dot{q}\leq\dot{q}_{max}, ~\dot{l}_{min}\leq\dot{l}\leq\dot{l}_{max} \}
+\end{equation}
+
+- Acceleration polytope   
+\begin{equation}\label{eq:pa_h}
+ P_{a} = \{\ddot{x} ~|~ \ddot{x} = JM^{-1}NF,~ F_{min}\leq F\leq F_{max} \}
+\end{equation}
+
+- Force polytope   
+\begin{equation}\label{eq:pf_h}
+P_{f} = \{f ~|~ J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}
+\end{equation}
+
+Where $J$ is the model's jacobian matrix, $L$ si the muscle length jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
 
 # Citations
 
-Citations to entries in paper.bib should be in
-[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
-format.
 
 If you want to cite a software repository URL (e.g. something on GitHub without a preferred
 citation) then you can do it with the example BibTeX entry below for @fidgit.
@@ -69,7 +165,5 @@ Figure sizes can be customized by adding an optional second parameter:
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
 
 # References
