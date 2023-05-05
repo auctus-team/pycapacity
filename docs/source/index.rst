@@ -1,7 +1,12 @@
 Real-time capable task-space capacity calculation python module
-##################
+###############################################################
 
+.. Note::
 
+  | 📢 New version of the ``pycapacity`` package is out- version v2.0! 
+  | 🚨 Beware beacause there are some breaking changes in the API,  please check the `changelog <changelog.html>`_ for more details.
+
+|
 .. image:: https://img.shields.io/pypi/v/pycapacity
 
 .. image:: https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg
@@ -10,10 +15,7 @@ Real-time capable task-space capacity calculation python module
 
 .. image:: https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg
 
-.. raw:: html
-
-   <br />
-
+|
 .. image:: https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif
   :height: 300
   :alt: Alternative text
@@ -32,8 +34,8 @@ This package also provides a module ``pycapacity.algorithms`` with a set of poly
 
 Additionally, ``pycapacity.visual`` module provides a set of visualisaiton tools using the ``matplotlib`` for visualising 2d and 3d polytopes.
 
-Learn more about the ``pycapacity``
-
+Learn more about the ``pycapacity`` package
+-------------------------------------------
 .. toctree::
    :maxdepth: 1
 
@@ -42,4 +44,5 @@ Learn more about the ``pycapacity``
    📄 API DOCS <pycapacity>
    📝 CONTRIBUTING & ISSUES <contirbuting.md>
    🎓 TUTORIALS <examples/index>
+   📑 CHANGELOG <changelog>
    

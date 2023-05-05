@@ -27,5 +27,5 @@ A few generic examples
 .. toctree::
    :maxdepth: 1
 
-    Find a half-plane representation of a set of vertices <hspace_from_vert>
+    Find a half-plane representation of a point cloud <hspace_from_vert>
     Find a vertex representation of a set of half-planes <vert_from_hspace>

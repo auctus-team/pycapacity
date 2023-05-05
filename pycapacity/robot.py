@@ -177,7 +177,7 @@ def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_
 
     # check if the faces should be calculated
     if options is not None and 'calculate_faces' in options.keys() and options['calculate_faces'] == True:
-        poly.findFaces()    
+        poly.find_faces()    
 
     return poly
 

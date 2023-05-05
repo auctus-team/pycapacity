@@ -121,9 +121,9 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None, options=None):
     poly = Polytope(vertices=f_vert, H=H, d=d)
     poly.torque_vertices = t_vert
     poly.mucsle_force_vertices = F_vert
+    poly.face_indices = faces
     # calculate faces if option is set to True
     if options is not None and 'calculate_faces' in options.keys() and options['calculate_faces'] is True:
-        poly.face_indices = faces
         poly.faces = face_index_to_vertex(poly.vertices, faces)
     return poly
 
@@ -185,14 +185,14 @@ def velocity_polytope(J, N, dl_min=None , dl_max=None, dq_max=None, dq_min=None,
             poly.vertices = None
             poly.H = np.vstack((H, poly_dq.H))
             poly.d = np.hstack((d.flatten(), poly_dq.d.flatten()))
-            poly.findVertices()
+            poly.find_vertices()
         else:
             poly = poly_dq
     
 
     # calculate faces if option is set to True
     if options is not None and 'calculate_faces' in options.keys() and options['calculate_faces'] is True:
-        poly.findFaces()
+        poly.find_faces()
 
     return poly
 

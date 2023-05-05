@@ -6,6 +6,11 @@
 A colleciton of simple examples codes for simpler starting with  [pyomeca](https://github.com/pyomeca) solftware, particularly wiht [biorbd](https://github.com/pyomeca/biorbd) and [bioviz](https://github.com/pyomeca/bioviz)
 
 
+
+This is an example tutorial of how to setup `biorbd` and `bioviz` with `pycapacity` to calcualte and visualise the human capacities
+
+![](../images/pyomeca_gif.gif)
+
 ## Installing Pyomeca biorbd and bioviz
 
 the best way to download and install the pyomeca biordb and bioviz libraries is to use anaconda.
@@ -106,18 +111,25 @@ import time
 
 # polytope algorithm
 from pycapacity.human import force_polytope
-from pycapacity.human import torque_to_muscle_force
 
 # Load a predefined model
 model = biorbd.Model("pyomeca_models/MOBL_ARMS_fixed_33.bioMod")
-# model = biorbd.Model("pyomeca_models/BrasComplet.bioMod")
 
 # get the number of dof and muslces
 nq = model.nbQ()
 nb_mus = model.nbMuscles()
 
 # Animate the results if biorbd viz is installed
-b = bioviz.Viz(loaded_model=model,background_color=(1,1,1),show_local_ref_frame=False, show_global_ref_frame=False, show_markers=True,show_global_center_of_mass=False,show_segments_center_of_mass=False, show_wrappings=False)
+b = bioviz.Viz(loaded_model=model,
+                background_color=(1,1,1), 
+                show_local_ref_frame=False, 
+                show_global_ref_frame=False, 
+                show_markers=True,
+                show_global_center_of_mass=False,
+                show_segments_center_of_mass=False, 
+                show_wrappings=False, 
+                show_floor=False, 
+                show_gravity_vector=False)
 # define the meshes for the polytope - without robot
 vtkMeshView = VtkModel(b.vtk_window, patch_color=[[0,0.5,0.8]],mesh_opacity=0.5)
 vtkMeshView1 = VtkModel(b.vtk_window, patch_color=[[0,0.5,0.8]],mesh_opacity=0.8, force_wireframe=True)
@@ -143,30 +155,27 @@ while b.vtk_window.is_active:
     start = time.time()
     N = -model.musclesLengthJacobian(Q).to_array().T
     J = model.markersJacobian(Q, False, False)[-1].to_array()
-    print("time", time.time() - start)
+    print("matrices time", time.time() - start)
 
     # Proceed with the inverse dynamics
     Tau_grav = model.InverseDynamics(Q, np.zeros(nq), np.zeros(nq))
     
     start = time.time()
-    f_vert, H, d, faces = force_polytope(J, N, F_min, F_max, 10, -Tau_grav.to_array())
-    print("time", time.time() - start)
+    f_poly = force_polytope(J, N, F_min, F_max, 10, -Tau_grav.to_array())
+    print("polytope time", time.time() - start)
 
     ## display polytope in the bioviz
-    f_vert_show = np.vstack((f_vert[0,:],f_vert[1,:],f_vert[2,:]))/2000
-    f_vert_show = f_vert_show + model.markers(Q)[model.nbMarkers()-1].to_array().reshape(3,1)
-    s = f_vert_show.shape
-    vert = f_vert_show.reshape(s[0],s[1],1)
+    f_vert_show = f_poly.vertices/2000 + model.markers(Q)[model.nbMarkers()-1].to_array()[:,None]
 
-    # plot polytope (blue) - with the robot
+    # plot polytope (blue) - with the edges
     meshes = []
-    meshes.append(Mesh(vertex=vert, triangles=faces.T))
-    vtkMeshView.update_mesh(meshes)
-    vtkMeshView1.update_mesh(meshes)
+    meshes.append(Mesh(vertex=f_vert_show[:,:,None], triangles=f_poly.face_indices.T))
+    vtkMeshView.new_mesh_set(meshes)
+    vtkMeshView1.new_mesh_set(meshes)
 
     # update visualisation
     b.update()
 
 ```
 
-![](../images/pyomeca_force.png)
+![](../images/pyomeca_gif.gif)

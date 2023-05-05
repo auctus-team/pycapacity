@@ -67,7 +67,7 @@ from utils import getStationJacobian, getMomentArmMatrix, getQIndicesOfClampedCo
 import opensim as osim
 
 # pycappacity for polytope calculationreate 
-from pycapacity.human import force_polytope as polytope
+from pycapacity.human import force_polytope
 
 # some utils 
 import numpy as np
@@ -92,7 +92,7 @@ print("time", time.time() - start)
 
 # polytope calculation
 start = time.time()
-f_vert, H, d, faces_indexes = polytope(J, N, F_min, F_max, 0.01)
+f_poly = force_polytope(J, N, F_min, F_max, 0.01)
 print("time", time.time() - start)
 
 
@@ -103,8 +103,8 @@ import trimesh
 # find hand position
 hand_orientation, hand_position = getBodyPosition(model,state, endEffectorBody)
 # save the mesh to disk
-mesh = trimesh.Trimesh(vertices=(f_vert.T/2000 + hand_position.reshape((3,))) ,
-                       faces=faces_indexes,  use_embree=True, validate=True)
+mesh = trimesh.Trimesh(vertices=(f_poly.vertices.T/2000 + hand_position.reshape((3,))) ,
+                       faces=f_poly.face_indices,  use_embree=True, validate=True)
 # save polytope as stl file
 f = open("polytope.stl", "wb")
 f.write(trimesh.exchange.stl.export_stl(mesh))

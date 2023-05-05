@@ -10,28 +10,29 @@ import pycapacity.robot as capacity # robot capacity module
 import numpy as np
 
 m = 3 # 3d forces
-n = 6 # robot dof
+n = 6 # robot dof 
 
 J = np.array(np.random.rand(m,n)) # random jacobian matrix
 
 t_max = np.ones(n)  # joint torque limits max and min
 t_min = -np.ones(n)
 
-vertices, face_indexes = capacity.force_polytope_withfaces(J,t_min, t_max) # calculate the polytope vertices and faces
-faces = capacity.face_index_to_vertex(vertices, face_indexes)
+f_poly = capacity.force_polytope(J,t_min, t_max) # calculate the polytope
 
-print(vertices) # display the vertices
+print(f_poly.vertices) # display the vertices
 
 # plotting the polytope
 import matplotlib.pyplot as plt
-from pycapacity.visual import plot_polytope_faces, plot_polytope_vertex # pycapacity visualisation tools
+from pycapacity.visual import * # pycapacity visualisation tools
 fig = plt.figure(4)
 
 # draw faces and vertices
-ax = plot_polytope_vertex(plt=plt, vertex=vertices, label='force',color='blue')
-plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
+plot_polytope(plot=plt, 
+            polytope=f_poly, 
+            label='force', 
+            edge_color='black', 
+            alpha = 0.4)
 
-plt.tight_layout()
 plt.legend()
 plt.show()
 ```

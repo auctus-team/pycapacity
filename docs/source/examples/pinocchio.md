@@ -1,6 +1,9 @@
 # Pinocchio examples
 ![](https://github.com/stack-of-tasks/pinocchio/raw/master/doc/images/pinocchio-logo-large.png)
 
+This is an example tutorial of how to setup `pinochchio` with `pycapacity` to calcualte and visualise the robot capacities
+
+![](../images/pin_animation.gif)
 
 ## Installing Pinocchio
 
@@ -24,6 +27,7 @@ dependencies:
   - conda-forge::gepetto-viewer
   - conda-forge::gepetto-viewer-corba
   - conda-forge::example-robot-data
+  - conda-forge::meshcat-python
   - pip
   - pip:
     - pycapacity
@@ -54,15 +58,15 @@ pip install pycapacity
 ```
 
 ## Code example
-Calculating the force polytope and ellipsoid of the panda robot and visualising it using matplotlib.
+Calculating the force polytope and ellipsoid of the panda robot and visualising it using `matplotlib`.
 
 ```python
 import pinocchio as pin
 import numpy as np
 
-from example_robot_data import loadPanda
+from example_robot_data import load
 
-robot = loadPanda()
+robot = load('panda')
 
 # Display a robot configuration.
 # q0 = pin.neutral(robot.model)
@@ -83,25 +87,181 @@ import pycapacity.robot as pycap
 t_max = robot.model.effortLimit
 t_min = -t_max
 # calculate force polytope
-vertices, faces_index =  pycap.force_polytope_withfaces(J, t_max, t_min)
-faces = pycap.face_index_to_vertex(vertices,faces_index)
+f_poly =  pycap.force_polytope(J, t_max, t_min)
 # calculate force ellipsoid
-radii, rot_mat =  pycap.force_ellipsoid(J, t_max)
+f_ellipsoid =  pycap.force_ellipsoid(J, t_max)
 
 
 # plotting the polytope
 import matplotlib.pyplot as plt
-import pycapacity.visual as pcvis # pycapacity visualisation tools
+from pycapacity.visual import * # pycapacity visualisation tools
 
 fig = plt.figure()
 # draw faces and vertices
-ax = pcvis.plot_polytope_vertex(plt=plt, vertex=vertices, label='force polytope',color='blue')
-pcvis.plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
+plot_polytope(plot=plt, polytope=f_poly, label='force polytope', vertex_color='blue', face_color='blue', edge_color='blue', alpha=0.2)
 # draw the ellipsoid
-pcvis.plot_ellipsoid(radii=radii, rotation=rot_mat,ax=ax,color='yellow', edge_color='yellow', alpha=0.2, label="force ellopsoid")
+plot_ellipsoid(ellipsoid=f_ellipsoid,plot=plt,color='yellow', edge_color='yellow', alpha=0.2, label="force ellopsoid")
 
-plt.tight_layout()
 plt.legend()
 plt.show()
 ```
 ![](../images/pin_matlplotlib.png)
+
+
+## Visualise polytopes in Meshcat
+
+Calculating the velocity polytope and ellipsoid of the panda robot and visualising it using `meshcat`.
+
+```python
+import pinocchio as pin
+import numpy as np
+
+from example_robot_data import load
+
+# get panda robot usinf example_robot_data
+robot = load('panda')
+
+# get joint position ranges
+q_max = robot.model.upperPositionLimit.T
+q_min = robot.model.lowerPositionLimit.T
+# get max velocity
+dq_max = robot.model.velocityLimit
+dq_min = -dq_max
+
+# Use robot configuration.
+# q0 = np.random.uniform(q_min,q_max)
+q0 = (q_min+q_max)/2
+
+
+# calculate the jacobian
+data = robot.model.createData()
+pin.framesForwardKinematics(robot.model,data,q0)
+pin.computeJointJacobians(robot.model,data, q0)
+J = pin.getFrameJacobian(robot.model, data, robot.model.getFrameId(robot.model.frames[-1].name), pin.LOCAL_WORLD_ALIGNED)
+# use only position jacobian
+J = J[:3,:]
+
+# end-effector pose
+Xee = data.oMf[robot.model.getFrameId(robot.model.frames[-1].name)]
+
+
+import pycapacity as pycap
+
+
+
+## visualise the robot
+from pinocchio.visualize import MeshcatVisualizer
+
+viz = MeshcatVisualizer(robot.model, robot.collision_model, robot.visual_model)
+# Start a new MeshCat server and client.
+viz.initViewer(open=True)
+# Load the robot in the viewer.
+viz.loadViewerModel()
+viz.display(q0)
+
+
+## visualise the plytope and the ellipsoid
+import meshcat.geometry as g 
+
+# calculate the polytope
+opt = {'calculate_faces':True}
+# calculate the polytope
+vel_poly = pycap.robot.velocity_polytope(J, dq_min, dq_max,options=opt)
+# meshcat triangulated mesh
+poly = g.TriangularMeshGeometry(vertices=vel_poly.vertices.T/10 + Xee.translation, faces=vel_poly.face_indices)
+viz.viewer['poly'].set_object(poly, g.MeshBasicMaterial(color=0x0022ff, wireframe=True, linewidth=3, opacity=0.2))
+
+# calculate the ellipsoid
+vel_ellipsoid = pycap.robot.velocity_ellipsoid(J, dq_max)
+# meshcat ellipsoid
+ellipsoid = g.Ellipsoid(radii=vel_ellipsoid.radii/10)
+viz.viewer['ellipse'].set_object(ellipsoid, g.MeshBasicMaterial(color=0xff5500, transparent=True, opacity=0.2))
+viz.viewer['ellipse'].set_transform(pin.SE3(vel_ellipsoid.rotation, Xee.translation).homogeneous)
+
+```
+![](../images/pin_meshcat.png)
+
+
+
+## Animante polytopes in Meshcat
+
+Calculating the velocity polytope and ellipsoid of the panda robot and visualising it using `meshcat`.
+
+```python
+import pinocchio as pin
+import numpy as np
+
+from example_robot_data import load
+
+# get panda robot usinf example_robot_data
+robot = load('panda')
+
+# get joint position ranges
+q_max = robot.model.upperPositionLimit.T
+q_min = robot.model.lowerPositionLimit.T
+# get max velocity
+dq_max = robot.model.velocityLimit
+dq_min = -dq_max
+
+# Use robot configuration.
+q = (q_min+q_max)/2
+
+
+
+## visualise the robot
+from pinocchio.visualize import MeshcatVisualizer
+
+viz = MeshcatVisualizer(robot.model, robot.collision_model, robot.visual_model)
+# Start a new MeshCat server and client.
+viz.initViewer(open=True)
+# Load the robot in the viewer.
+viz.loadViewerModel()
+viz.display(q)
+
+
+import pycapacity as pycap
+import meshcat.geometry as g 
+
+
+while True:
+    # some sinusoidal motion
+    for i in np.sin(np.linspace(-np.pi,np.pi,200)):
+
+        # update the joint position
+        q[0] = i
+        q[1] = i
+        q[2] = i
+
+        # calculate the jacobian
+        data = robot.model.createData()
+        pin.framesForwardKinematics(robot.model,data,q)
+        pin.computeJointJacobians(robot.model,data, q)
+        J = pin.getFrameJacobian(robot.model, data, robot.model.getFrameId(robot.model.frames[-1].name), pin.LOCAL_WORLD_ALIGNED)
+        # use only position jacobian
+        J = J[:3,:]
+
+        # end-effector pose
+        Xee = data.oMf[robot.model.getFrameId(robot.model.frames[-1].name)]
+
+        # calculate the polytope
+        opt = {'calculate_faces':True}
+        # calculate the polytope
+        vel_poly = pycap.robot.velocity_polytope(J, dq_min, dq_max,options=opt)
+
+        # visualise the robot
+        viz.display(q)
+
+        # visualise the plytope and the ellipsoid
+        # meshcat triangulated mesh
+        poly = g.TriangularMeshGeometry(vertices=vel_poly.vertices.T/10 + Xee.translation, faces=vel_poly.face_indices)
+        viz.viewer['poly'].set_object(poly, g.MeshBasicMaterial(color=0x0022ff, wireframe=True, linewidth=3, opacity=0.2))
+
+        # calculate the ellipsoid
+        vel_ellipsoid = pycap.robot.velocity_ellipsoid(J, dq_max)
+        # meshcat ellipsoid
+        ellipsoid = g.Ellipsoid(radii=vel_ellipsoid.radii/10)
+        viz.viewer['ellipse'].set_object(ellipsoid, g.MeshBasicMaterial(color=0xff5500, transparent=True, opacity=0.2))
+        viz.viewer['ellipse'].set_transform(pin.SE3(vel_ellipsoid.rotation, Xee.translation).homogeneous)
+
+```
+![](../images/pin_animation.gif)

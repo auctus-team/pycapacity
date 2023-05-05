@@ -4,6 +4,7 @@ Overview
 
 This is a pyhton module helping to visualise 2d and 3d polytopes and ellipsoids. It is based on the module  ``matplotlib``.
 
+* visualising 2d and 3d `polytope <#pycapacity\.visual\.plot_polytope>`_
 * visualising 2d and 3d polytope `faces <#pycapacity\.visual\.plot_polytope_faces>`_ and `vertices  <#pycapacity\.visual\.plot_polytope_vertex>`_
 * visualising 2d and 3d `ellipsoids <#pycapacity\.visual\.plot_ellipsoid>`_
 
@@ -18,16 +19,16 @@ from matplotlib.patches import Ellipse
 import numpy as np
 from pycapacity.objects import *
 
-def plot_polytope(polytope, plot=None, face_color=None, edge_color=None, vertex_color='black', alpha=None,label=None, center=None, scale=1.0, show_vertices=True):
+def plot_polytope(polytope, plot=None, face_color=None, edge_color=None, vertex_color='black', alpha=None,label=None, center=None, scale=1.0, show_vertices=True, wireframe=False):
     """
     A polytope plotting function in 2d and 3d. It plots the polytope faces and vertices from the polytope object.
 
     Note:
-        ``plot`` parameter can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure.
+        ``plot`` parameter can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``.
 
     Args:
-        plot:  matplotlib ax to plot on, can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure
-        polytope (Polytope) :  polytope object it has to be provided
+        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``
+        polytope(Polytope) :  polytope object it has to be provided
         face_color:  polytope face color (optional)
         edge_color:  polytope edge color  (optional)
         vertex_color:  polytope vertex color  (optional)
@@ -36,7 +37,7 @@ def plot_polytope(polytope, plot=None, face_color=None, edge_color=None, vertex_
         center: offset the polytope (optional)
         scale: scale the polytope with a scalar (optional)
         show_vertices: show the vertices of the polytope (optional)
-    
+        wireframe: show the polytope as a wireframe (optional)
 
     """
     if not isinstance(polytope, Polytope):
@@ -46,10 +47,25 @@ def plot_polytope(polytope, plot=None, face_color=None, edge_color=None, vertex_
     if label is None:
         label = ''
     if show_vertices:
-        plot = plot_polytope_vertex(polytope=polytope, plot=plot, label=label+' vertex', color=vertex_color, center=center, scale=scale)
-    plot_polytope_faces(polytope=polytope, plot=plot, face_color=face_color, edge_color=edge_color, alpha=alpha,label=label+' faces', center=center, scale=scale)
+        if polytope.vertices is None:
+            print("Visual: no vertices found, calculating vertices")
+            polytope.find_vertices()
+        if polytope.vertices is not None:
+            plot = plot_polytope_vertex(polytope=polytope, plot=plot, label=label+' vertex', color=vertex_color, center=center, scale=scale)
+        else:
+            print("Visual: cannot find vertices")
+           
+    if polytope.faces is None:
+        print("Visual: no faces found, calculating faces")
+        polytope.find_faces()
+    if polytope.faces is not None:
+        plot = plot_polytope_faces(polytope=polytope, plot=plot, face_color=face_color, edge_color=edge_color, alpha=alpha,label=label+' faces', center=center, scale=scale, wireframe=wireframe)
+    else:
+        print("Visual: cannot find faces")
 
-def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, edge_color=None, alpha=None,label=None, center=None, scale=1.0):
+    return plot
+
+def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, edge_color=None, alpha=None,label=None, center=None, scale=1.0, wireframe=False):
     """ 
     Polytope faces plotting function in 2d and 3d. 
     
@@ -66,15 +82,16 @@ def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, e
         >>> plt.show()
 
     Args:
-        plot:  matplotlib ax to plot on, can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure
-        faces:  list of faces (optional either vertex or polytope must be provided)
-        polytope :  polytope object - if it is provided, it will use polytope.faces (optional either vertex or polytope must be provided)
+        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``
+        faces:  list of faces (optional **either vertex or polytope must be provided**)
+        polytope(Polytope):  polytope object - if it is provided, it will use polytope.faces (optional **either vertex or polytope must be provided**)
         face_color:  polytope face color (optional)
         edge_color:  polytope edge color  (optional)
         alpha:  polytope opacity  (optional)
         label:  legend label (optional)
         center: offset the polytope (optional)
         scale: scale the polytope with a scalar (optional)
+        wireframe: show the polytope as a wireframe (optional)
 
     Returns:
         ax:  matplotlib ax used for plotting
@@ -144,7 +161,10 @@ def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, e
         if center is None:
             center = (0,0)
         
-        ax.fill(faces[0]+center[0],faces[1]+center[1], alpha=0.4, facecolor=face_color, edgecolor=edge_color, linewidth=3,label=label)
+        if wireframe:
+            ax.fill(faces[0]+center[0],faces[1]+center[1], alpha=0.4, facecolor='none', edgecolor=edge_color, linewidth=3,label=label)
+        else:
+            ax.fill(faces[0]+center[0],faces[1]+center[1], alpha=0.4, facecolor=face_color, edgecolor=edge_color, linewidth=3,label=label)
     elif dim == 3:
         if center is None:
             center = (0,0,0)
@@ -154,15 +174,23 @@ def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, e
                 poly = Poly3DCollection([list(zip(polygone[0,:]+center[0],polygone[1,:]+center[1],polygone[2,:]+center[2]))])
             except ValueError: # vs python2
                 poly = Poly3DCollection(list([zip(polygone[0,:]+center[0],polygone[1,:]+center[1],polygone[2,:]+center[2])]))
-                
-            if alpha != None:
-                poly.set_alpha(alpha)
-            if face_color != None:
-                poly.set_facecolor(face_color)
-            if edge_color != None:
-                poly.set_edgecolor(edge_color)
-            ax.add_collection3d(poly)
             
+            if not wireframe:
+                if alpha != None:
+                    poly.set_alpha(alpha)
+                if face_color != None:
+                    poly.set_facecolors(face_color)
+                if edge_color != None:
+                    poly.set_edgecolor(edge_color)
+            else:
+                poly.set_facecolors((0,0,0,0))
+                if edge_color != None:
+                    poly.set_edgecolor(edge_color) # cannot set alpha for the moment
+                else:
+                    poly.set_edgecolor((0,0,0,alpha))
+                
+            ax.add_collection3d(poly)
+        
         try: # a small management of python3
             poly._facecolors2d = poly._facecolor3d
             poly._edgecolors2d = poly._edgecolor3d
@@ -181,7 +209,7 @@ def plot_polytope_vertex(vertex=None, polytope=None, plot=None, label=None, colo
     Polytope vertices plotting function in 2d and 3d
 
     Note:
-        ``plot`` parameter can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure.
+        ``plot`` parameter can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``.
 
     Examples:
         >>> import pycapacity.visual
@@ -193,9 +221,9 @@ def plot_polytope_vertex(vertex=None, polytope=None, plot=None, label=None, colo
         >>> plt.show()
         
     Args:
-        plot:  matplotlib ax to plot on, can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure
-        vertex :  vertices to be plotted (optional either vertex or polytope must be provided)
-        polytope :  polytope object - if it is provided, it will use the polytope vertices  (optional either vertex or polytope must be provided)
+        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``
+        vertex :  vertices to be plotted (optional **either vertex or polytope must be provided**)
+        polytope(Polytope):  polytope object - if it is provided, it will use the polytope vertices  (optional **either vertex or polytope must be provided**)
         color :  vertex color  (optional)
         label :  legend label (optional)
         center: offset the polytope (optional)
@@ -264,7 +292,7 @@ def plot_polytope_vertex(vertex=None, polytope=None, plot=None, label=None, colo
 
 
     # scale the vertices
-    vertex = vertex*scale
+    vertex = np.array(vertex)*scale
 
     if dim == 2:
         if center is None:
@@ -298,7 +326,7 @@ def plot_ellipsoid(radii=None, rotation=None, ellipsoid=None, center=None, plot=
     Plotting ellipsoid in 2d and 3d
 
     Note:
-        ``plot`` parameter can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure.
+        ``plot`` parameter can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``.
 
     Examples:
         >>> import pycapacity.visual
@@ -310,10 +338,10 @@ def plot_ellipsoid(radii=None, rotation=None, ellipsoid=None, center=None, plot=
         >>> plt.show()
         
     Args:
-        plot:  matplotlib ax to plot on, can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure
-        radii : radii of the ellipsoid in each axis (optional either radii and rotation or ellipsoid must be provided)
-        rotation : rotation matrix (optional either radii and rotation or ellipsoid must be provided)
-        ellipsoid : ellipsoid object - if it is provided, it will use the ellipsoid radii and rotation (optional either radii and rotation or ellipsoid must be provided)
+        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``
+        radii : radii of the ellipsoid in each axis (optional **either radii and rotation or ellipsoid must be provided**)
+        rotation : rotation matrix (optional ***either radii and rotation or ellipsoid must be provided***)
+        ellipsoid(Ellipsoid): ellipsoid object - if it is provided, it will use the ellipsoid radii and rotation (optional either radii and rotation or ellipsoid must be provided)
         center : offset of the ellispoid from origin (optional)
         color :  face color (optional)
         edge_color : egde collor (optional)
@@ -338,7 +366,7 @@ def plot_ellipsoid(radii=None, rotation=None, ellipsoid=None, center=None, plot=
     U = rotation
 
     # scaling the ellipsoid
-    radii = radii*scale
+    radii = np.array(radii)*scale
 
 
     # figure out what axes to plot on

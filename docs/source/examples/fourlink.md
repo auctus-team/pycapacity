@@ -34,14 +34,21 @@ def four_link_inertia(joints):
     cq3 = np.cos(joints[3])
     return np.reshape([cq1*(5.0/8.0)+cq2*(3.0/8.0)+cq3/8.0+cq1*cq2*(3.0/8.0)+(cq2*cq3)/8.0-sq1*sq2*(3.0/8.0)-(sq2*sq3)/8.0+(cq1*cq2*cq3)/8.0-(cq1*sq2*sq3)/8.0-(cq2*sq1*sq3)/8.0-(cq3*sq1*sq2)/8.0+7.0/8.0,cq1*(5.0/1.6e+1)+cq2*(3.0/8.0)+cq3/8.0+cq1*cq2*(3.0/1.6e+1)+(cq2*cq3)/8.0-sq1*sq2*(3.0/1.6e+1)-(sq2*sq3)/8.0+(cq1*cq2*cq3)/1.6e+1-(cq1*sq2*sq3)/1.6e+1-(cq2*sq1*sq3)/1.6e+1-(cq3*sq1*sq2)/1.6e+1+1.5e+1/3.2e+1,cq2*(3.0/1.6e+1)+cq3/8.0+cq1*cq2*(3.0/1.6e+1)+(cq2*cq3)/1.6e+1-sq1*sq2*(3.0/1.6e+1)-(sq2*sq3)/1.6e+1+(cq1*cq2*cq3)/1.6e+1-(cq1*sq2*sq3)/1.6e+1-(cq2*sq1*sq3)/1.6e+1-(cq3*sq1*sq2)/1.6e+1+3.0/1.6e+1,cq3/1.6e+1+(cq2*cq3)/1.6e+1-(sq2*sq3)/1.6e+1+(cq1*cq2*cq3)/1.6e+1-(cq1*sq2*sq3)/1.6e+1-(cq2*sq1*sq3)/1.6e+1-(cq3*sq1*sq2)/1.6e+1+1.0/3.2e+1,cq1*(5.0/1.6e+1)+cq2*(3.0/8.0)+cq3/8.0+cq1*cq2*(3.0/1.6e+1)+(cq2*cq3)/8.0-sq1*sq2*(3.0/1.6e+1)-(sq2*sq3)/8.0+(cq1*cq2*cq3)/1.6e+1-(cq1*sq2*sq3)/1.6e+1-(cq2*sq1*sq3)/1.6e+1-(cq3*sq1*sq2)/1.6e+1+1.5e+1/3.2e+1,cq2*(3.0/8.0)+cq3/8.0+(cq2*cq3)/8.0-(sq2*sq3)/8.0+1.5e+1/3.2e+1,cq2*(3.0/1.6e+1)+cq3/8.0+(cq2*cq3)/1.6e+1-(sq2*sq3)/1.6e+1+3.0/1.6e+1,cq3/1.6e+1+(cq2*cq3)/1.6e+1-(sq2*sq3)/1.6e+1+1.0/3.2e+1,cq2*(3.0/1.6e+1)+cq3/8.0+cq1*cq2*(3.0/1.6e+1)+(cq2*cq3)/1.6e+1-sq1*sq2*(3.0/1.6e+1)-(sq2*sq3)/1.6e+1+(cq1*cq2*cq3)/1.6e+1-(cq1*sq2*sq3)/1.6e+1-(cq2*sq1*sq3)/1.6e+1-(cq3*sq1*sq2)/1.6e+1+3.0/1.6e+1,cq2*(3.0/1.6e+1)+cq3/8.0+(cq2*cq3)/1.6e+1-(sq2*sq3)/1.6e+1+3.0/1.6e+1,cq3/8.0+3.0/1.6e+1,cq3/1.6e+1+1.0/3.2e+1,cq3/1.6e+1+(cq2*cq3)/1.6e+1-(sq2*sq3)/1.6e+1+(cq1*cq2*cq3)/1.6e+1-(cq1*sq2*sq3)/1.6e+1-(cq2*sq1*sq3)/1.6e+1-(cq3*sq1*sq2)/1.6e+1+1.0/3.2e+1,cq3/1.6e+1+(cq2*cq3)/1.6e+1-(sq2*sq3)/1.6e+1+1.0/3.2e+1,cq3/1.6e+1+1.0/3.2e+1,1.0/3.2e+1],[4,4]);
 
-# joint posiaions in cartesian space given the configuaiton
-def four_link_robot_plot(joints):
-    L = [0, 0.5,0.5,0.5,0.3] # link lengths
+def four_link_forward_kinematics(joints):
+    return four_link_joints_forward_kinematics(joints)[:,-1]
+
+def four_link_joints_forward_kinematics(joints):
+    L = [0, 0.5,0.5,0.5,0.3]
     x = np.zeros((2,1))
     for i in range(5):
         sq = np.sum(joints[:i])
-        x = np.hstack((x, x[:,-1].reshape(2,1)+ L[i]*np.array([[np.sin(sq)], [np.cos(sq)]])))
+        x = np.hstack((x, x[:,-1].reshape(2,1)+ L[i]*np.array([[np.sin(sq)], [np.cos(sq)]])));
     return x
+
+def plot_robot(plt, q):
+    robot_position = four_link_joints_forward_kinematics(q)
+    plt.plot(robot_position[0,:],robot_position[1,:], linewidth=5, label="robot", marker='o', markerfacecolor='k', markersize=10)
+    plt.plot(robot_position[0,0],robot_position[1,0]-0.08,'ks',markersize=20)
 ```
 
 Once you've done so you can run the following examples and calculate different capacity metrics for you 4dof planar robot.
@@ -54,10 +61,10 @@ Force polytope and ellipsoid for 4dof planar robot with random joint angles. The
 import numpy as np
 import matplotlib.pyplot as plt
 
-import pycapacity.robot as capacity # robot capacity module
-import pycapacity.visual as visual # visualistion tools
+from pycapacity.robot import * # robot capacity module
+from pycapacity.visual import * # visualistion tools
 
-from four_link_utils import four_link_jacobian, four_link_robot_plot 
+from four_link_utils import *
 
 # joint positions q
 q  = np.random.rand(4)*np.pi/3*2-1
@@ -65,32 +72,41 @@ q  = np.random.rand(4)*np.pi/3*2-1
 tau_min = -np.ones((4,1))
 tau_max = np.ones((4,1))
 
-# find robot position
-# a bit of scaling
-robot_position = four_link_robot_plot(q)*5 
-
 # jacobian
 J = four_link_jacobian(q)
-# calculate the velocity polytope
-f_vert, faces_indices = capacity.force_polytope_withfaces(J,tau_min,tau_max)
-faces = capacity.face_index_to_vertex(f_vert, faces_indices)
+# calculate the force polytope
+f_poly = force_polytope(J,tau_min,tau_max)
 
-# calculate the velocity ellipsoid
-S,U = capacity.force_ellipsoid(J, tau_max)
+# calculate the force ellipsoid
+f_ellipsoid = force_ellipsoid(J, tau_max)
 
 # visualise polytope ellispoid
-fig = plt.figure(12)
-ax = fig.gca()
-#plot the robot
-plt.plot(robot_position[0,:],robot_position[1,:],linewidth=5, label="robot")
-plt.plot(robot_position[0,:],robot_position[1,:],'ko',linewidth=5)
-#plot the polytope
-visual.plot_polytope_faces(ax=ax,faces=faces,center=robot_position[:,-1], face_color='lightsalmon', edge_color='orangered',label='polytope')
-visual.plot_polytope_vertex(ax=ax,vertex=f_vert,center=robot_position[:,-1], color='gray')
-# plot ellispoid
-visual.plot_ellipsoid(S, U, center=robot_position[:,-1], ax=ax, label='ellipsoid', color=None, edge_color='blue', alpha=1.0)
+fig = plt.figure(12, figsize=[10,10])
+scale = 1/5
 
-plt.title("Force capacity")
+#plot the robot
+robot_position = four_link_forward_kinematics(q) 
+plot_robot(plt, q)
+
+#plot the polytope
+plot_polytope(plot=plt,
+              polytope=f_poly,
+              center=robot_position, 
+              face_color='lightsalmon', 
+              edge_color='orangered',
+              vertex_color='gray',
+              label='polytope', 
+              scale=scale)
+
+# plot ellispoid
+plot_ellipsoid(ellipsoid=f_ellipsoid, 
+               center=robot_position, 
+               plot=plt, 
+               label='ellipsoid', 
+               edge_color='blue', 
+               alpha=1.0,
+               scale=scale)
+plt.title('Force capacity')
 plt.grid()
 plt.axis('equal')
 plt.legend()
@@ -102,6 +118,7 @@ plt.show()
 ## Acceleration capacity polytope
 
 Acceleration polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -117,37 +134,50 @@ q  = np.random.rand(4)*np.pi/2
 tau_min = -np.ones((4,1))
 tau_max = np.ones((4,1))
 
-# find robot position
-# a bit of scaling
-robot_position = four_link_robot_plot(q)*50 
 
 # jacobian
 J = four_link_jacobian(q)
 # jacobian
 M = four_link_inertia(q)
-# calculate the acceleration polytope
-acc_vert, faces_indices = capacity.acceleration_polytope_withfaces(J, M, tau_min ,tau_max)
-faces = capacity.face_index_to_vertex(acc_vert, faces_indices)
 
-# calculate the acceleration ellipsoid
-S,U = capacity.acceleration_ellipsoid(J, M, tau_max)
+# calculate the velocity polytope
+a_poly = acceleration_polytope(J, M, tau_min ,tau_max)
+
+# calculate the velocity ellipsoid
+a_ellipsoid = acceleration_ellipsoid(J, M, tau_max)
 
 
 # visualise polytope ellispoid
-fig = plt.figure(13)
-ax = plt.gca()
+fig = plt.figure(13, figsize=[10,10])
+scale = 1/50
+
 
 #plot the robot
-plt.plot(robot_position[0,:],robot_position[1,:],linewidth=5, label="robot")
-plt.plot(robot_position[0,:],robot_position[1,:],'ko',linewidth=5)
+robot_position = four_link_forward_kinematics(q) 
+plot_robot(plt, q)
+
 #plot the polytope
-visual.plot_polytope_faces(ax=plt,faces=faces, center=robot_position[:,-1], face_color='lightsalmon', edge_color='orangered',label='polytope')
-visual.plot_polytope_vertex(ax=ax,vertex=acc_vert, center=robot_position[:,-1],color='gray')
+plot_polytope(plot=plt,
+              polytope=a_poly,
+              center=robot_position, 
+              face_color='lightsalmon', 
+              edge_color='orangered',
+              vertex_color='gray',
+              label='polytope', 
+              scale=scale)
+
 # plot ellispoid
-visual.plot_ellipsoid(S, U, center=robot_position[:,-1], ax=ax, label='ellipsoid', color=None, edge_color='blue', alpha=1.0)
+plot_ellipsoid(ellipsoid=a_ellipsoid, 
+               center=robot_position, 
+               plot=plt, 
+               label='ellipsoid', 
+               edge_color='blue', 
+               alpha=1.0,
+               scale=scale)
 
 plt.title("Acceleration capacity")
 plt.grid()
+plt.axis('equal')
 plt.legend()
 plt.show()
 ```
@@ -155,7 +185,8 @@ plt.show()
 
 ## Velocity capacity polytope
 
-Acceleration polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.
+Velocity polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.
+
 ```python
 import numpy as np
 import matplotlib.pyplot as plt
@@ -171,35 +202,44 @@ q  = np.random.rand(4)*np.pi/3*2-1
 dq_min = -np.ones((4,1))
 dq_max = np.ones((4,1))
 
-# find robot position
-# a bit of scaling
-robot_position = four_link_robot_plot(q)*5
-
 # jacobian
 J = four_link_jacobian(q)
-# calculate the force polytope
-vel_vert, faces_indices = capacity.velocity_polytope_withfaces(J, dq_min ,dq_max)
-faces = capacity.face_index_to_vertex(vel_vert, faces_indices)
+# calculate the velocity polytope
+v_poly = velocity_polytope(J, dq_min ,dq_max)
 
-# calculate the force ellipsoid
-S,U = capacity.velocity_ellipsoid(J, dq_max)
+# calculate the velocity ellipsoid
+v_ellipsoid = velocity_ellipsoid(J, dq_max)
 
-
-# visualise polytope ellipsoid
-fig = plt.figure(14)
-ax = plt.gca()
+# visualise polytope ellispoid
+fig = plt.figure(14, figsize=[10,10])
+scale = 1/5
 
 #plot the robot
-plt.plot(robot_position[0,:],robot_position[1,:],linewidth=5, label="robot")
-plt.plot(robot_position[0,:],robot_position[1,:],'ko',linewidth=5)
+robot_position = four_link_forward_kinematics(q) 
+plot_robot(plt, q)
+
 #plot the polytope
-visual.plot_polytope_faces(ax=plt,faces=faces,center=robot_position[:,-1],face_color='lightsalmon', edge_color='orangered',label='polytope')
-visual.plot_polytope_vertex(ax=ax,vertex=vel_vert,center=robot_position[:,-1],color='gray')
-# plot the ellipsoid
-visual.plot_ellipsoid(S, U, center=robot_position[:,-1], ax=ax, label='ellipsoid', color=None, edge_color='blue', alpha=1.0)
+plot_polytope(plot=plt,
+              polytope=v_poly,
+              center=robot_position, 
+              face_color='lightsalmon', 
+              edge_color='orangered',
+              vertex_color='gray',
+              label='polytope', 
+              scale=scale)
+
+# plot ellispoid
+plot_ellipsoid(ellipsoid=v_ellipsoid, 
+               center=robot_position, 
+               plot=plt, 
+               label='ellipsoid', 
+               edge_color='blue', 
+               alpha=1.0,
+               scale=scale)
 
 plt.title("Velocity capacity")
 plt.grid()
+plt.axis('equal')
 plt.legend()
 plt.show()
 ```

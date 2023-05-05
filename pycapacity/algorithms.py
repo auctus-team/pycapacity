@@ -592,6 +592,8 @@ def vertex_to_hspace(vertex):
     hull = ConvexHull(vertex.T, qhull_options='QJ')
     return  hull.equations[:,:-1], -hull.equations[:,-1]
 
+
+
 def vertex_to_faces(vertex):
     """
     Function grouping the vertices to faces using a ConvexHull algorithm

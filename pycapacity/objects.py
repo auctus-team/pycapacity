@@ -1,8 +1,34 @@
+"""
+Overview
+---------
+
+There two  genertic classes implemented in this module:
+
+* `Polytope <#pycapacity\.objects\.Polytope>`_: A generic class representing a polytope with different representations (vertex, half-plane, face)
+* `Ellipsoid <#pycapacity\.objects\.Ellipsoid>`_: A generic class representing an ellipsoid with a list of radii and rotation matrix
+"""
+
 from pycapacity.algorithms import *
 
 class Polytope:
     """
     A generic class representing a polytope with different representations (vertex, half-plane, face)
+
+    Vertex representaiton is a list of vertices of the polytope
+
+    .. math::
+        \mathcal{H}\!-\!rep = \{x \in \mathbb{R}^n | Hx \leq d \}
+
+        
+    Half-plane representaiton is a list of inequalities defining the polytope
+
+    .. math::
+        \mathcal{V}\!-\!rep = \{x_{v1},~ x_{v2},~ \ldots, ~x_{vn} \}
+
+    Face representaiton is a list of triangles forming faces of the polytope, each triangle is represented as a list of tree vertices
+
+    .. math::
+        \mathcal{F}\!-\!rep = \{ [x_{v1},~ x_{v2}, ~x_{v2}],  ~ \ldots , ~[x_{vi},~ x_{vj}, ~x_{vk}], \ldots \}
 
 
     :ivar vertices: vertex representation of the polytope
@@ -45,17 +71,18 @@ class Polytope:
         self.H = H
         self.d = d
     
-    def findVertices(self):
+    def find_vertices(self):
         """
         A function calculating the vertex representation of the polytope from the half-plane representation
 
         """
         if self.H is not None and self.d is not None:
+            # finding vertices of the polytope from the half-plane representation
             self.vertices, self.face_indices = hspace_to_vertex(self.H,self.d)
         else:
             print("No half-plane representation of the polytope is available")
 
-    def findHalfplanes(self):
+    def find_halfplanes(self):
         """
         A function calculating the half-plane representation of the polytope from the vertex representation
         """
@@ -65,7 +92,7 @@ class Polytope:
             print("No vertex representation of the polytope is available")
 
 
-    def findFaces(self):
+    def find_faces(self):
         """
         A function calculating the face representation of the polytope from the vertex representation
         """
@@ -78,11 +105,32 @@ class Polytope:
         else:
             print("No vertex representation of the polytope is available")
 
+    def find_from_point_cloud(self, points):
+        """
+        A function updating the polytope object from a point cloud it calculates the vertex and half-plane representation of the polytope. 
+        
+        Note:
+            The polytope will be constructed as a convex hull of the point cloud
+
+        Args:
+            points (np.array): an array of points forming a point cloud 
+        """
+        self.H, self.d = vertex_to_hspace(points)
+        self.vertices = hspace_to_vertex(self.H,self.d)
+
+
+
 
 class Ellipsoid:
     """
-    A generic class representing a polytope with different representations (vertex, half-plane, face)
+    A generic class representing an ellipsoid with a list of radii and rotation matrix, where 
+    every column of the rotation matrix is a vector of the ellipsoid's axes
 
+    .. math::
+        \mathcal E = \{x ~|~ x^T R^T W R x \leq 1 \}
+
+    where :math:`W = diag(r_1^{-2}, r_2^{-2}, \ldots, r_n^{-2})` and :math:`r_i` are radii of the ellipsoid, while :math:`R` is the rotation matrix
+    
 
     :ivar center: ellipsoid center
     :ivar radii: radii of the ellipsoid
