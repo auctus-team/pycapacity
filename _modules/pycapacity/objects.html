@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.objects &mdash; pycapacity v2.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">ABOUT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">🚀 INSTALLATION</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.html">📄 API DOCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contirbuting.html">📝 CONTRIBUTING &amp; ISSUES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">🎓 TUTORIALS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">📑 CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pycapacity.objects</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycapacity.objects</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Overview</span>
+<span class="sd">---------</span>
+
+<span class="sd">There two  genertic classes implemented in this module:</span>
+
+<span class="sd">* `Polytope &lt;#pycapacity\.objects\.Polytope&gt;`_: A generic class representing a polytope with different representations (vertex, half-plane, face)</span>
+<span class="sd">* `Ellipsoid &lt;#pycapacity\.objects\.Ellipsoid&gt;`_: A generic class representing an ellipsoid with a list of radii and rotation matrix</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pycapacity.algorithms</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="Polytope"><a class="viewcode-back" href="../../pycapacity.polytope.html#pycapacity.objects.Polytope">[docs]</a><span class="k">class</span> <span class="nc">Polytope</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A generic class representing a polytope with different representations (vertex, half-plane, face)</span>
+
+<span class="sd">    Vertex representaiton is a list of vertices of the polytope</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \mathcal{H}\!-\!rep = \{x \in \mathbb{R}^n | Hx \leq d \}</span>
+
+<span class="sd">        </span>
+<span class="sd">    Half-plane representaiton is a list of inequalities defining the polytope</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \mathcal{V}\!-\!rep = \{x_{v1},~ x_{v2},~ \ldots, ~x_{vn} \}</span>
+
+<span class="sd">    Face representaiton is a list of triangles forming faces of the polytope, each triangle is represented as a list of tree vertices</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \mathcal{F}\!-\!rep = \{ [x_{v1},~ x_{v2}, ~x_{v2}],  ~ \ldots , ~[x_{vi},~ x_{vj}, ~x_{vk}], \ldots \}</span>
+
+
+<span class="sd">    :ivar vertices: vertex representation of the polytope</span>
+<span class="sd">    :ivar H: half-plane representation of the polytope Hx&lt;d - matrix H</span>
+<span class="sd">    :ivar d: half-plane representation of the polytope Hx&lt;d- vector d</span>
+<span class="sd">    :ivar faces: face representation of the polytope - faces are represented as a list of triangulated vertices</span>
+<span class="sd">    :ivar face_indices: face representation of the polytope - faces are represented as a list of indices of vertices</span>
+
+
+<span class="sd">    Additionally for robot&#39;s force polytopes will have additional attributes:</span>
+<span class="sd">    </span>
+<span class="sd">    - **torque_vertices**: (if applicable) joint torques corresponding to the vertices of the polytope</span>
+
+<span class="sd">    Additionally for human&#39;s force polytopes will have additional attributes:</span>
+
+<span class="sd">    - **torque_vertices**: (if applicable) joint torques corresponding to the vertices of the polytope</span>
+<span class="sd">    - **muscle_forces_vertices**: (if applicable) muscle forces corresponding to the vertices of the polytope</span>
+
+<span class="sd">    Human&#39;s velocity polytopes will have additional attributes:</span>
+
+<span class="sd">    - **dq_vertices**: (if applicable) joint velocities corresponding to the vertices of the polytope</span>
+<span class="sd">    - **dl_vert**: (if applicable) muscle elongation velocities corresponding to the vertices of the polytope</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vertices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">face_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A constructor of the polytope object</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            vertices (np.array): vertices of the polytope (optional)</span>
+<span class="sd">            faces (list): list of triangulated faces of the polytope (optional)</span>
+<span class="sd">            face_indices (list): list of indices of vertices of the polytope (optional)</span>
+<span class="sd">            H (np.array): half-plane representation of the polytope Hx&lt;d - matrix H (optional)</span>
+<span class="sd">            d (np.array): half-plane representation of the polytope Hx&lt;d- vector d (optional)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">vertices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">faces</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">face_indices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="o">=</span> <span class="n">H</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">d</span>
+    
+<div class="viewcode-block" id="Polytope.find_vertices"><a class="viewcode-back" href="../../pycapacity.polytope.html#pycapacity.objects.Polytope.find_vertices">[docs]</a>    <span class="k">def</span> <span class="nf">find_vertices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A function calculating the vertex representation of the polytope from the half-plane representation</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># finding vertices of the polytope from the half-plane representation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">hspace_to_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No half-plane representation of the polytope is available&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Polytope.find_halfplanes"><a class="viewcode-back" href="../../pycapacity.polytope.html#pycapacity.objects.Polytope.find_halfplanes">[docs]</a>    <span class="k">def</span> <span class="nf">find_halfplanes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A function calculating the half-plane representation of the polytope from the vertex representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">vertex_to_hspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No vertex representation of the polytope is available&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Polytope.find_faces"><a class="viewcode-back" href="../../pycapacity.polytope.html#pycapacity.objects.Polytope.find_faces">[docs]</a>    <span class="k">def</span> <span class="nf">find_faces</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A function calculating the face representation of the polytope from the vertex representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">face_indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">face_index_to_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">vertex_to_faces</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">face_index_to_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No vertex representation of the polytope is available&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Polytope.find_from_point_cloud"><a class="viewcode-back" href="../../pycapacity.polytope.html#pycapacity.objects.Polytope.find_from_point_cloud">[docs]</a>    <span class="k">def</span> <span class="nf">find_from_point_cloud</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">points</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A function updating the polytope object from a point cloud it calculates the vertex and half-plane representation of the polytope. </span>
+<span class="sd">        </span>
+<span class="sd">        Note:</span>
+<span class="sd">            The polytope will be constructed as a convex hull of the point cloud</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            points (np.array): an array of points forming a point cloud </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d</span> <span class="o">=</span> <span class="n">vertex_to_hspace</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">hspace_to_vertex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">d</span><span class="p">)</span></div></div>
+
+
+
+
+<div class="viewcode-block" id="Ellipsoid"><a class="viewcode-back" href="../../pycapacity.polytope.html#pycapacity.objects.Ellipsoid">[docs]</a><span class="k">class</span> <span class="nc">Ellipsoid</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A generic class representing an ellipsoid with a list of radii and rotation matrix, where </span>
+<span class="sd">    every column of the rotation matrix is a vector of the ellipsoid&#39;s axes</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \mathcal E = \{x ~|~ x^T R^T W R x \leq 1 \}</span>
+
+<span class="sd">    where :math:`W = diag(r_1^{-2}, r_2^{-2}, \ldots, r_n^{-2})` and :math:`r_i` are radii of the ellipsoid, while :math:`R` is the rotation matrix</span>
+<span class="sd">    </span>
+
+<span class="sd">    :ivar center: ellipsoid center</span>
+<span class="sd">    :ivar radii: radii of the ellipsoid</span>
+<span class="sd">    :ivar rotation: rotation of the ellipsoid SO3 matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radii</span> <span class="o">=</span> <span class="n">radii</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">rotation</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

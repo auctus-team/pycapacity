@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.human module &mdash; pycapacity v2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pycapacity.robot module" href="pycapacity.robot.html" />
+    <link rel="prev" title="pycapacity.algorithms module" href="pycapacity.algorithms.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pycapacity
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">ABOUT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">🚀 INSTALLATION</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="pycapacity.html">📄 API DOCS</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.algorithms.html">pycapacity.algorithms module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pycapacity.human module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.human.acceleration_polytope"><code class="docutils literal notranslate"><span class="pre">acceleration_polytope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.human.force_polytope"><code class="docutils literal notranslate"><span class="pre">force_polytope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.human.joint_torques_polytope"><code class="docutils literal notranslate"><span class="pre">joint_torques_polytope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.human.torque_to_muscle_force"><code class="docutils literal notranslate"><span class="pre">torque_to_muscle_force()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.human.velocity_polytope"><code class="docutils literal notranslate"><span class="pre">velocity_polytope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.robot.html">pycapacity.robot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.visual.html">pycapacity.visual module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.polytope.html">pycapacity.objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contirbuting.html">📝 CONTRIBUTING &amp; ISSUES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">🎓 TUTORIALS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">📑 CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="pycapacity.html">pycapacity package</a></li>
+      <li class="breadcrumb-item active">pycapacity.human module</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/pycapacity.human.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pycapacity.human">
+<span id="pycapacity-human-module"></span><h1>pycapacity.human module<a class="headerlink" href="#module-pycapacity.human" title="Permalink to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>This is a pyhton module which implements different human performance metrics based on their musculoskeletal models</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#pycapacity.human.joint_torques_polytope">joint torque polytope</a></p></li>
+<li><p><a class="reference external" href="#pycapacity.human.acceleration_polytope">acceleration polytope</a></p></li>
+<li><p><a class="reference external" href="#pycapacity.human.force_polytope">force polytope</a></p></li>
+<li><p><a class="reference external" href="#pycapacity.human.velocity_polytope">velocity polytope</a></p></li>
+</ul>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.human.acceleration_polytope">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.human.</span></span><span class="sig-name descname"><span class="pre">acceleration_polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/human.html#acceleration_polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.human.acceleration_polytope" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating the polytopes of achievable accelerations
+based on the jacobian matrix <cite>J</cite>, moment arm matrix <cite>N</cite> and mass matrix <cite>M</cite></p>
+<div class="math notranslate nohighlight">
+\[P_{a} = \{ \ddot{x} ~ | ~ \ddot{x} = JM^{-1}NF, \quad F_{min} \leq F \leq F_{max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">hyper_plane_shifting_method</span></code> algorihtm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>J</strong> – jacobian matrix</p></li>
+<li><p><strong>N</strong> – moment arm matrix</p></li>
+<li><p><strong>M</strong> – mass matrix</p></li>
+<li><p><strong>F_min</strong> – minimal muscular forces (passive forces or 0)</p></li>
+<li><p><strong>F_max</strong> – maximal isometric forces</p></li>
+<li><p><strong>tolerance</strong> – tolerance for the polytope calculation</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation (currently only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is supported)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with the following attributes <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, half-plane representation <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, (and <code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>poly(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.human.force_polytope">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.human.</span></span><span class="sig-name descname"><span class="pre">force_polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">torque_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/human.html#force_polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.human.force_polytope" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating the polytopes of achievable foreces based
+on the jacobian matrix <cite>J</cite> and moment arm matrix <cite>N</cite></p>
+<div class="math notranslate nohighlight">
+\[P_{f} = \{ f ~ | ~ J^Tf = NF, \quad F_{min} \leq F \leq F_{max}\}\]</div>
+<p>optionally an additional bias <span class="math notranslate nohighlight">\(\tau_{bias}\)</span> can be added</p>
+<div class="math notranslate nohighlight">
+\[P_{f} = \{ f ~ | ~ J^Tf = NF + \tau_{bias}, \quad F_{min} \leq F \leq F_{max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">iterative_convex_hull_method</span></code> algorihtm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>J</strong> – jacobian matrix</p></li>
+<li><p><strong>N</strong> – moment arm matrix</p></li>
+<li><p><strong>F_min</strong> – minimal muscular forces (passive forces or 0)</p></li>
+<li><p><strong>F_max</strong> – maximal isometric forces</p></li>
+<li><p><strong>tolerance</strong> – tolerance for the polytope calculation</p></li>
+<li><p><strong>torque_bias</strong> – torque bias optional (gravity or movement or applied forces ….)</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation (currently only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is supported)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with the following attributes <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, torque vertices <code class="docutils literal notranslate"><span class="pre">torque_vertices</span></code>, muscle force vertices <code class="docutils literal notranslate"><span class="pre">muscle_force_vertices</span></code>, half-plane representation <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, (and <code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.human.joint_torques_polytope">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.human.</span></span><span class="sig-name descname"><span class="pre">joint_torques_polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/human.html#joint_torques_polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.human.joint_torques_polytope" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating the polytopes of achievable joint torques
+based on the moment arm matrix <cite>N</cite> :</p>
+<div class="math notranslate nohighlight">
+\[P_{t} = \{ \tau ~ | ~ \tau= NF, \quad F_{min} \leq F \leq F_{max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">hyper_plane_shifting_method</span></code> algorihtm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> – moment arm matrix</p></li>
+<li><p><strong>F_min</strong> – minimal muscular forces (passive forces or 0)</p></li>
+<li><p><strong>F_max</strong> – maximal isometric forces</p></li>
+<li><p><strong>tolerance</strong> – tolerance for the polytope calculation</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation (currently only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is supported)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with the following attributes <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, half-plane representation <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, (and <code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>poly(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.human.torque_to_muscle_force">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.human.</span></span><span class="sig-name descname"><span class="pre">torque_to_muscle_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lp'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/human.html#torque_to_muscle_force"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.human.torque_to_muscle_force" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating muscle forces needed to create the joint torques tau.
+It uses eaither the linear programming or quadratic programming, set with the <code class="docutils literal notranslate"><span class="pre">options</span></code> parameter.</p>
+<p>The quadratic programming problem is formulated as:</p>
+<div class="math notranslate nohighlight">
+\[F = \text{arg}\min_F ||F||^2 \quad s.t. \quad N^TF = \tau, \quad F_{min} \leq F \leq F_{max}\]</div>
+<p>The linear programming problem is formulated as:</p>
+<div class="math notranslate nohighlight">
+\[F = \text{arg}\min_F \sum_i \frac{1}{F_{max,i} - F_{min,i}}F_i \quad s.t. \quad N^TF = \tau, \quad F_{min} \leq F \leq F_{max}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>N</strong> – moment arm matrix</p></li>
+<li><p><strong>F_min</strong> – minimal muscular forces (passive forces or 0)</p></li>
+<li><p><strong>F_max</strong> – maximal isometric forces</p></li>
+<li><p><strong>tau</strong> – joint torque</p></li>
+<li><p><strong>options</strong> – dictionary of options (currently supported <code class="docutils literal notranslate"><span class="pre">solver</span></code> type to use: <code class="docutils literal notranslate"><span class="pre">lp</span></code> - linear programming (defualt), <code class="docutils literal notranslate"><span class="pre">qp</span></code> - quadratic programming)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of muscle forces</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>F(list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.human.velocity_polytope">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.human.</span></span><span class="sig-name descname"><span class="pre">velocity_polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dl_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dl_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/human.html#velocity_polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.human.velocity_polytope" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating the polytopes of achievable velocity based
+on the jacobian matrix <cite>J</cite> and moment arm matrix <cite>N</cite></p>
+<p>If only muscle contraction velocity limits are given</p>
+<div class="math notranslate nohighlight">
+\[P_{v,\dot{l}} = \{ \dot{x} ~ | ~ L\dot{q} = \dot{l},~~ J\dot{q} = \dot{x}, \quad \dot{l}_{min} \leq \dot{l} \leq \dot{l}_{max}\}\]</div>
+<p>If only joint velocity limits are given</p>
+<div class="math notranslate nohighlight">
+\[P_{v,\dot{q}} = \{ \dot{x} ~ | ~ J\dot{q} = \dot{x}, \quad \dot{q}_{min} \leq \dot{q} \leq \dot{q}_{max}\}\]</div>
+<p>If both are provided thefunction will calculate both and intersect them (much longer execution time)</p>
+<div class="math notranslate nohighlight">
+\[P_{v} = P_{v,\dot{l}}~~ \bigcap ~~P_{v,\dot{q}}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">iterative_convex_hull_method</span></code> algorihtm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>J</strong> – jacobian matrix</p></li>
+<li><p><strong>N</strong> – moment arm matrix <span class="math notranslate nohighlight">\(L = -N^T\)</span></p></li>
+<li><p><strong>dl_min</strong> – minimal achievable muscle contraction veclocity</p></li>
+<li><p><strong>dl_max</strong> – maximal achievable muscle contraction veclocity</p></li>
+<li><p><strong>dq_min</strong> – minimal achievable joint velocity</p></li>
+<li><p><strong>dq_max</strong> – maximal achievable joint velocity</p></li>
+<li><p><strong>tol</strong> – tolerance for the polytope calculation</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation (currently only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is supported)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with the following attributes <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, joint velocity vertices <code class="docutils literal notranslate"><span class="pre">dq_vertices</span></code> and muscle elongation vertices <code class="docutils literal notranslate"><span class="pre">dl_vertices</span></code>, half-plane representation <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, (and <code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pycapacity.algorithms.html" class="btn btn-neutral float-left" title="pycapacity.algorithms module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pycapacity.robot.html" class="btn btn-neutral float-right" title="pycapacity.robot module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

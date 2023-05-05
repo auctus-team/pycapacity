@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About pycapacity &mdash; pycapacity v2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="install.html" />
+    <link rel="prev" title="Real-time capable task-space capacity calculation python module" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pycapacity
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ABOUT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#robotic-manipulator-capacity-metrics">Robotic manipulator capacity metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#human-musculoskeletal-models-capacity-metrics">Human musculoskeletal models capacity metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#polytope-evaluation-algorithms">Polytope evaluation algorithms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hyper-plane-shifting-method">Hyper-plane shifting method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#iterative-convex-hull-method">Iterative convex-hull method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vertex-enumeration-auctus">Vertex enumeration auctus</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#read-more">Read more</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="install.html">🚀 INSTALLATION</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pycapacity.html">📄 API DOCS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contirbuting.html">📝 CONTRIBUTING &amp; ISSUES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/index.html">🎓 TUTORIALS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">🚀 INSTALLATION</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pycapacity.html">📄 API DOCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contirbuting.html">📝 CONTRIBUTING &amp; ISSUES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">🎓 TUTORIALS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">📑 CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">About pycapacity</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/README.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="about-pycapacity">
+<h1>About pycapacity<a class="headerlink" href="#about-pycapacity" title="Permalink to this heading"></a></h1>
+<p>Real-time capable task-space capacity calculation python pip package</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<div class="line-block">
+<div class="line">📢 New version of the <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> package is out- version v2.0!</div>
+<div class="line">🚨 Beware beacause there are some breaking changes in the API,  please check the <a class="reference external" href="changelog.html">changelog</a> for more details.</div>
+</div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<img alt="Alternative text" src="https://img.shields.io/pypi/v/pycapacity" />
+<img alt="Alternative text" src="https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg" /><img alt="Alternative text" src="https://img.shields.io/pypi/dm/pycapacity?color=blue&amp;label=pip%20downloads" />
+<img alt="Alternative text" src="https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg" /><div class="line-block">
+<div class="line"><br /></div>
+</div>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif"><img alt="Alternative text" src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" style="width: 250px;" /></a>
+<a class="reference internal image-reference" href="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true"><img alt="Alternative text" src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" style="width: 250px;" /></a>
+<p>The <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> package provides a framework for the generic task-space capacity calculation for:</p>
+<ul class="simple">
+<li><p>Robotic serial manipulators - <code class="docutils literal notranslate"><span class="pre">pycapacity.robot</span></code></p></li>
+<li><p>Human musculoskeletal models - <code class="docutils literal notranslate"><span class="pre">pycapacity.human`</span></code></p></li>
+</ul>
+<p>This package also provides a module <code class="docutils literal notranslate"><span class="pre">pycapacity.algorithms</span></code> with a set of polytope evaluation algorithms for standard polytope formulations, that can be used as a standalone library.</p>
+<p>Additionally, <code class="docutils literal notranslate"><span class="pre">pycapacity.visual</span></code> module provides a set of visualisaiton tools using the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> for visualising 2d and 3d polytopes.</p>
+<section id="robotic-manipulator-capacity-metrics">
+<h2>Robotic manipulator capacity metrics<a class="headerlink" href="#robotic-manipulator-capacity-metrics" title="Permalink to this heading"></a></h2>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/robot.png"><img alt="Alternative text" src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/robot.png" style="height: 250px;" /></a>
+<p>For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
+- Velocity (manipulability) ellipsoid</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||\dot{q}||\leq1 \}\]</div>
+</div></blockquote>
+<ul>
+<li><p>Acceleration (dynamic manipulability) ellipsoid</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||\tau||\leq1 \}\]</div>
+</div></blockquote>
+</li>
+<li><p>Force ellipsoid</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[E_{f} = \{{f} ~| J^{T}f = \tau,~ ||\tau||\leq1 \}\]</div>
+</div></blockquote>
+</li>
+</ul>
+<p>And polytopes:
+- Velocity polytope</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ \dot{q}_{min}\leq\dot{q}\leq\dot{q}_{max} \}\]</div>
+</div></blockquote>
+<ul>
+<li><p>Acceleration polytope</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}\]</div>
+</div></blockquote>
+</li>
+<li><p>Force polytope</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_{f} = \{f ~| J^{T}f = \tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}\]</div>
+</div></blockquote>
+</li>
+<li><p>Force polytopes <em>Minkowski sum and intersection</em></p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_{\cap} = \mathcal{P}_{f1} \cap \mathcal{P}_{f1} \qquad P_{\oplus} = \mathcal{P}_{f1} \oplus \mathcal{P}_{f1}\]</div>
+</div></blockquote>
+</li>
+</ul>
+<p>Where <span class="math notranslate nohighlight">\(J\)</span> is the robot jacobian matrix, <span class="math notranslate nohighlight">\(f\)</span> is the vector of cartesian forces, <span class="math notranslate nohighlight">\(\dot{x}\)</span> and <span class="math notranslate nohighlight">\(\ddot{x}\)</span> are vectors fo cartesian velocities and accretions, <span class="math notranslate nohighlight">\(\dot{q}\)</span> is the vector of the joint velocities and <span class="math notranslate nohighlight">\(\tau\)</span> is the vector of joint torques.</p>
+<ul>
+<li><p>New 📢 : Reachable space approximation of in the desired horizon of interest <span class="math notranslate nohighlight">\(\Delta t_{h}\)</span> using the convex polytope formulation:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\tau \Delta t_{h}^2/2,\]</div>
+<div class="math notranslate nohighlight">
+\[{\tau}_{min} \leq \tau \leq {\tau}_{max},\]</div>
+<div class="math notranslate nohighlight">
+\[\dot{q}_{min} \leq M^{-1}\tau \Delta t_{h}  \leq \dot{q}_{max},\]</div>
+<div class="math notranslate nohighlight">
+\[{q}_{min} \leq M^{-1}\tau \Delta t_{h}^2/2  \leq {q}_{max} \}\]</div>
+</div></blockquote>
+<div class="line-block">
+<div class="line">Based on the paper:</div>
+<div class="line"><a class="reference external" href="https://arxiv.org/pdf/2211.17054.pdf">Approximating robot reachable space using convex polytopes.</a></div>
+<div class="line">by Skuric, Antun, Vincent Padois, and David Daney.</div>
+<div class="line">In: Human-Friendly Robotics 2022: HFR: 15th International Workshop on Human-Friendly Robotics. Cham: Springer International Publishing, 2023.</div>
+</div>
+<p>See the full formulaiton in the <a class="reference external" href="pycapacity.robot.html#pycapacity.robot.reachable_space_approximation">api docs</a>.</p>
+</li>
+</ul>
+</section>
+<section id="human-musculoskeletal-models-capacity-metrics">
+<h2>Human musculoskeletal models capacity metrics<a class="headerlink" href="#human-musculoskeletal-models-capacity-metrics" title="Permalink to this heading"></a></h2>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/force.png"><img alt="Alternative text" src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/force.png" style="height: 250px;" /></a>
+<p>For the human musculoskeletal models this package implements the polytope metrics:
+- Velocity polytope</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_{v} = \{\dot{x} ~| \dot{l} = L\dot{q},~ \dot{x} = J\dot{q},~ \dot{l}_{min}\leq\dot{l}\leq\dot{l}_{max} \}\]</div>
+</div></blockquote>
+<ul>
+<li><p>Acceleration polytope</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}NF,~ F_{min}\leq F\leq F_{max} \}\]</div>
+</div></blockquote>
+</li>
+<li><p>Force polytope</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[P_{f} = \{f ~| J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}\]</div>
+</div></blockquote>
+</li>
+</ul>
+<p>Where <span class="math notranslate nohighlight">\(J\)</span> is the model’s jacobian matrix, <span class="math notranslate nohighlight">\(L\)</span> si the muscle length jacobian matrix, <span class="math notranslate nohighlight">\(N= -L^T\)</span> is the moment arm matrix, <span class="math notranslate nohighlight">\(f\)</span> is the vector of cartesian forces, <span class="math notranslate nohighlight">\($\dot{x}\)</span> and <span class="math notranslate nohighlight">\(\ddot{x}\)</span> are vectors fo cartesian velocities and accretions, <span class="math notranslate nohighlight">\(\dot{q}\)</span> is the vector of the joint velocities, <span class="math notranslate nohighlight">\(\tau\)</span> is the vector of joint torques, <span class="math notranslate nohighlight">\(\dot{l}\)</span> is the vector of the muscle stretching velocities and <span class="math notranslate nohighlight">\(F\)</span> is the vector of muscular forces.</p>
+</section>
+<section id="polytope-evaluation-algorithms">
+<h2>Polytope evaluation algorithms<a class="headerlink" href="#polytope-evaluation-algorithms" title="Permalink to this heading"></a></h2>
+<p>There are three methods implemented in this paper to resolve all the polytope calculations:</p>
+<ul class="simple">
+<li><p>Hyper-plane shifting method</p></li>
+<li><p>Iterative convex hull method</p></li>
+<li><p>Vertex enumeration auctus</p></li>
+</ul>
+<p>All of the methods are implemented in the module <cite>pycapacity.algorithms</cite> and can be used as standalone functions.  See in [docs for more info](pycapacity.algorithms.html).</p>
+<section id="hyper-plane-shifting-method">
+<h3>Hyper-plane shifting method<a class="headerlink" href="#hyper-plane-shifting-method" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Based on the paper:</div>
+<div class="line"><a class="reference external" href="http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf">Characterization of Parallel Manipulator Available Wrench Set Facets</a></div>
+<div class="line">by Gouttefarde M., Krut S.</div>
+<div class="line">In: Lenarcic J., Stanisic M. Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)</div>
+</div>
+<p>This method finds the half-space representation of the polytope of a class:</p>
+<div class="math notranslate nohighlight">
+\[P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}\]</div>
+<p>To find the vertices of the polytope after finding the half-space representation <span class="math notranslate nohighlight">\(Hx \leq d\)</span> an convex-hull algorithm is used.</p>
+<p>The method is a part of the <code class="docutils literal notranslate"><span class="pre">pycapacity.algorithms`</span></code> module <code class="docutils literal notranslate"><span class="pre">hyper_plane_shift_method</span></code>, See in <a class="reference external" href="pycapacity.algorithms.html#pycapacity.algorithms.hyper_plane_shift_method">docs for more info</a></p>
+</section>
+<section id="iterative-convex-hull-method">
+<h3>Iterative convex-hull method<a class="headerlink" href="#iterative-convex-hull-method" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Based on the paper:</div>
+<div class="line"><a class="reference external" href="https://hal.inria.fr/hal-03369576">On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method</a></div>
+<div class="line">by A.Skuric, V.Padois, N.Rezzoug and D.Daney</div>
+<div class="line">Published in RAL &amp; ICRA2022</div>
+</div>
+<p>This method finds both vertex and half-space representation of the class of polytopes:</p>
+<div class="math notranslate nohighlight">
+\[P = \{ x ~|~ Ax = By, \quad y_{min}\leq y \leq y_{max} \}\]</div>
+<p>And it can be additionally extended to the case where there is an additional projection matrix $P$ making a class of problems:</p>
+<div class="math notranslate nohighlight">
+\[P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}\]</div>
+<p>The method is a part of the <code class="docutils literal notranslate"><span class="pre">pycapacity.algorithms</span></code> module <code class="docutils literal notranslate"><span class="pre">iterative_convex_hull_method</span></code>. See the <a class="reference external" href="pycapacity.algorithms.html#pycapacity.algorithms.iterative_convex_hull_method">docs for more info</a></p>
+</section>
+<section id="vertex-enumeration-auctus">
+<h3>Vertex enumeration auctus<a class="headerlink" href="#vertex-enumeration-auctus" title="Permalink to this heading"></a></h3>
+<div class="line-block">
+<div class="line">Based on the paper:</div>
+<div class="line"><a class="reference external" href="https://arxiv.org/abs/2011.05226">On-line force capability evaluation based on efficient polytope vertex search</a></div>
+<div class="line">by A.Skuric, V.Padois and D.Daney</div>
+<div class="line">Published on ICRA2021</div>
+</div>
+<p>This method finds vertex representation of the class of polytopes:</p>
+<div class="math notranslate nohighlight">
+\[P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}\]</div>
+<p>To find the half-space representation (faces) of the polytope after finding the vertex representation  an convex-hull algorithm is used.</p>
+<p>The method is a part of the <code class="docutils literal notranslate"><span class="pre">pycapacity.algorithms</span></code> module <code class="docutils literal notranslate"><span class="pre">vertex_enumeration_auctus</span></code>. See the <a class="reference external" href="pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_auctus">docs for more info</a></p>
+</section>
+</section>
+<section id="read-more">
+<h2>Read more<a class="headerlink" href="#read-more" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="install.html">🚀 INSTALLATION</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pycapacity.html">📄 API DOCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contirbuting.html">📝 CONTRIBUTING &amp; ISSUES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">🎓 TUTORIALS</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Real-time capable task-space capacity calculation python module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="install.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

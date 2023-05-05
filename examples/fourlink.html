@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Four link planar robot examples &mdash; pycapacity v2.0.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Randomized Human musculoskeletal models" href="randomised_human.html" />
+    <link rel="prev" title="Pinocchio examples" href="pinocchio.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html">ABOUT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">🚀 INSTALLATION</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pycapacity.html">📄 API DOCS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contirbuting.html">📝 CONTRIBUTING &amp; ISSUES</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">🎓 TUTORIALS</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="randomised_rob.html"> Randomized robot model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="robotics_toolbox.html"> Robotics toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pinocchio.html"> Pinocchio</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Four link planar robot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#force-capacity-polytope">Force capacity polytope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acceleration-capacity-polytope">Acceleration capacity polytope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#velocity-capacity-polytope">Velocity capacity polytope</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="randomised_human.html"> Randomized human model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyomeca.html"> Pyomeca</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opensim.html"> Opensim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hspace_from_vert.html"> Find a half-plane representation of a point cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vert_from_hspace.html"> Find a vertex representation of a set of half-planes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">📑 CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Getting started coding examples</a></li>
+      <li class="breadcrumb-item active">Four link planar robot examples</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/examples/fourlink.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="four-link-planar-robot-examples">
+<h1>Four link planar robot examples<a class="headerlink" href="#four-link-planar-robot-examples" title="Permalink to this heading"></a></h1>
+<p>Four link planar robot is one very common simplified robot model for different analysis and algorithm development. It is composed of 4 links and 4 joints.</p>
+<p>To run the following examples copy these functions in a file <code class="docutils literal notranslate"><span class="pre">four_link_utils.py</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Four link planar robot example</span>
+<span class="sd">- Direct kinematics and jacobian matrix calacualiton for the simple 4 dof plananr robot</span>
+<span class="sd">- n=4 and m=2</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># jacobian function for four link planar robot</span>
+<span class="k">def</span> <span class="nf">four_link_jacobian</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+    <span class="n">sq1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">sq12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">sq123</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">sq1234</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">cq1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">cq12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">cq123</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">cq1234</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">joints</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cq1</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cq12</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cq123</span><span class="o">+</span><span class="mf">0.3</span><span class="o">*</span><span class="n">cq1234</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cq12</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">cq123</span><span class="o">+</span><span class="mf">0.3</span><span class="o">*</span><span class="n">cq1234</span><span class="p">,</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">cq123</span><span class="o">+</span><span class="mf">0.7</span><span class="o">*</span><span class="n">cq1234</span><span class="p">,</span> <span class="o">+</span><span class="mf">0.3</span><span class="o">*</span><span class="n">cq1234</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sq1</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sq12</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sq123</span><span class="o">-</span><span class="mf">0.3</span><span class="o">*</span><span class="n">sq1234</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sq12</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sq123</span><span class="o">-</span><span class="mf">0.3</span><span class="o">*</span><span class="n">sq1234</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sq123</span><span class="o">-</span><span class="mf">0.3</span><span class="o">*</span><span class="n">sq1234</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="o">*</span><span class="n">sq1234</span><span class="p">]])</span>
+
+<span class="c1"># inertia matrix of a four link planar robot</span>
+<span class="k">def</span> <span class="nf">four_link_inertia</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+    <span class="n">sq1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">cq1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">sq2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">cq2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">sq3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">cq3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">joints</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="n">cq1</span><span class="o">*</span><span class="p">(</span><span class="mf">5.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span><span class="o">+</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">-</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">-</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">-</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">-</span><span class="p">(</span><span class="n">cq3</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="mf">7.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">,</span><span class="n">cq1</span><span class="o">*</span><span class="p">(</span><span class="mf">5.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">-</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq3</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.5e+1</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq3</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">,</span><span class="n">cq3</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq3</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq1</span><span class="o">*</span><span class="p">(</span><span class="mf">5.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">-</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq3</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.5e+1</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="mf">1.5e+1</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">,</span><span class="n">cq3</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq3</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">,</span><span class="n">cq2</span><span class="o">*</span><span class="p">(</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">)</span><span class="o">+</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">,</span><span class="n">cq3</span><span class="o">/</span><span class="mf">8.0</span><span class="o">+</span><span class="mf">3.0</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="p">,</span><span class="n">cq3</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq3</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq1</span><span class="o">*</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">cq3</span><span class="o">*</span><span class="n">sq1</span><span class="o">*</span><span class="n">sq2</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq3</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="p">(</span><span class="n">cq2</span><span class="o">*</span><span class="n">cq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">-</span><span class="p">(</span><span class="n">sq2</span><span class="o">*</span><span class="n">sq3</span><span class="p">)</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="n">cq3</span><span class="o">/</span><span class="mf">1.6e+1</span><span class="o">+</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">,</span><span class="mf">1.0</span><span class="o">/</span><span class="mf">3.2e+1</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]);</span>
+
+<span class="k">def</span> <span class="nf">four_link_forward_kinematics</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">four_link_joints_forward_kinematics</span><span class="p">(</span><span class="n">joints</span><span class="p">)[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">four_link_joints_forward_kinematics</span><span class="p">(</span><span class="n">joints</span><span class="p">):</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.3</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">sq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">joints</span><span class="p">[:</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span> <span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">sq</span><span class="p">)],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">sq</span><span class="p">)]])));</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+<span class="k">def</span> <span class="nf">plot_robot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="n">robot_position</span> <span class="o">=</span> <span class="n">four_link_joints_forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">robot_position</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">robot_position</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;robot&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">robot_position</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">robot_position</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mf">0.08</span><span class="p">,</span><span class="s1">&#39;ks&#39;</span><span class="p">,</span><span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once you’ve done so you can run the following examples and calculate different capacity metrics for you 4dof planar robot.</p>
+<section id="force-capacity-polytope">
+<h2>Force capacity polytope<a class="headerlink" href="#force-capacity-polytope" title="Permalink to this heading"></a></h2>
+<p>Force polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pycapacity.robot</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># robot capacity module</span>
+<span class="kn">from</span> <span class="nn">pycapacity.visual</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># visualistion tools</span>
+
+<span class="kn">from</span> <span class="nn">four_link_utils</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># joint positions q</span>
+<span class="n">q</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+<span class="c1"># joint torque limits tau</span>
+<span class="n">tau_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">tau_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># jacobian</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">four_link_jacobian</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># calculate the force polytope</span>
+<span class="n">f_poly</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">tau_min</span><span class="p">,</span><span class="n">tau_max</span><span class="p">)</span>
+
+<span class="c1"># calculate the force ellipsoid</span>
+<span class="n">f_ellipsoid</span> <span class="o">=</span> <span class="n">force_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">tau_max</span><span class="p">)</span>
+
+<span class="c1"># visualise polytope ellispoid</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span>
+
+<span class="c1">#plot the robot</span>
+<span class="n">robot_position</span> <span class="o">=</span> <span class="n">four_link_forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> 
+<span class="n">plot_robot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="c1">#plot the polytope</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">f_poly</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;lightsalmon&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope&#39;</span><span class="p">,</span> 
+              <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="c1"># plot ellispoid</span>
+<span class="n">plot_ellipsoid</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">=</span><span class="n">f_ellipsoid</span><span class="p">,</span> 
+               <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+               <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span> 
+               <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ellipsoid&#39;</span><span class="p">,</span> 
+               <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Force capacity&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/4l_force.png" src="../_images/4l_force.png" /></p>
+</section>
+<section id="acceleration-capacity-polytope">
+<h2>Acceleration capacity polytope<a class="headerlink" href="#acceleration-capacity-polytope" title="Permalink to this heading"></a></h2>
+<p>Acceleration polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">pycapacity.robot</span> <span class="k">as</span> <span class="nn">capacity</span> <span class="c1"># robot capacity module</span>
+<span class="kn">import</span> <span class="nn">pycapacity.visual</span> <span class="k">as</span> <span class="nn">visual</span> <span class="c1"># visualistion tools</span>
+
+<span class="kn">from</span> <span class="nn">four_link_utils</span> <span class="kn">import</span> <span class="n">four_link_inertia</span><span class="p">,</span> <span class="n">four_link_jacobian</span><span class="p">,</span> <span class="n">four_link_robot_plot</span> 
+
+<span class="c1">#joint positions q</span>
+<span class="n">q</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span>
+<span class="c1"># joint torque limits tau</span>
+<span class="n">tau_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">tau_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="c1"># jacobian</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">four_link_jacobian</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># jacobian</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">four_link_inertia</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+<span class="c1"># calculate the velocity polytope</span>
+<span class="n">a_poly</span> <span class="o">=</span> <span class="n">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">tau_min</span> <span class="p">,</span><span class="n">tau_max</span><span class="p">)</span>
+
+<span class="c1"># calculate the velocity ellipsoid</span>
+<span class="n">a_ellipsoid</span> <span class="o">=</span> <span class="n">acceleration_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">tau_max</span><span class="p">)</span>
+
+
+<span class="c1"># visualise polytope ellispoid</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">50</span>
+
+
+<span class="c1">#plot the robot</span>
+<span class="n">robot_position</span> <span class="o">=</span> <span class="n">four_link_forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> 
+<span class="n">plot_robot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="c1">#plot the polytope</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">a_poly</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;lightsalmon&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope&#39;</span><span class="p">,</span> 
+              <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="c1"># plot ellispoid</span>
+<span class="n">plot_ellipsoid</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">=</span><span class="n">a_ellipsoid</span><span class="p">,</span> 
+               <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+               <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span> 
+               <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ellipsoid&#39;</span><span class="p">,</span> 
+               <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Acceleration capacity&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/4l_accel.png" src="../_images/4l_accel.png" /></p>
+</section>
+<section id="velocity-capacity-polytope">
+<h2>Velocity capacity polytope<a class="headerlink" href="#velocity-capacity-polytope" title="Permalink to this heading"></a></h2>
+<p>Velocity polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">pycapacity.robot</span> <span class="k">as</span> <span class="nn">capacity</span> <span class="c1"># robot capacity module</span>
+<span class="kn">import</span> <span class="nn">pycapacity.visual</span> <span class="k">as</span> <span class="nn">visual</span> <span class="c1"># visualistion tools</span>
+
+<span class="kn">from</span> <span class="nn">four_link_utils</span> <span class="kn">import</span> <span class="n">four_link_jacobian</span><span class="p">,</span> <span class="n">four_link_robot_plot</span> 
+
+<span class="c1">#joint positions q</span>
+<span class="n">q</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="o">*</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+<span class="c1"># joint torque limits tau</span>
+<span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">dq_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># jacobian</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">four_link_jacobian</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># calculate the velocity polytope</span>
+<span class="n">v_poly</span> <span class="o">=</span> <span class="n">velocity_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_min</span> <span class="p">,</span><span class="n">dq_max</span><span class="p">)</span>
+
+<span class="c1"># calculate the velocity ellipsoid</span>
+<span class="n">v_ellipsoid</span> <span class="o">=</span> <span class="n">velocity_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">)</span>
+
+<span class="c1"># visualise polytope ellispoid</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span>
+
+<span class="c1">#plot the robot</span>
+<span class="n">robot_position</span> <span class="o">=</span> <span class="n">four_link_forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> 
+<span class="n">plot_robot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="c1">#plot the polytope</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">v_poly</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;lightsalmon&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope&#39;</span><span class="p">,</span> 
+              <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="c1"># plot ellispoid</span>
+<span class="n">plot_ellipsoid</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">=</span><span class="n">v_ellipsoid</span><span class="p">,</span> 
+               <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+               <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span> 
+               <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ellipsoid&#39;</span><span class="p">,</span> 
+               <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Velocity capacity&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/4l_vel.png" src="../_images/4l_vel.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pinocchio.html" class="btn btn-neutral float-left" title="Pinocchio examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="randomised_human.html" class="btn btn-neutral float-right" title="Randomized Human musculoskeletal models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

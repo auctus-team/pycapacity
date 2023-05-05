@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.objects &mdash; pycapacity v2.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/my_theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing and reporting issues" href="contirbuting.html" />
+    <link rel="prev" title="pycapacity.visual module" href="pycapacity.visual.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pycapacity
+          </a>
+              <div class="version">
+                2.0
+              </div>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">ABOUT</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">🚀 INSTALLATION</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="pycapacity.html">📄 API DOCS</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.algorithms.html">pycapacity.algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.human.html">pycapacity.human module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.robot.html">pycapacity.robot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.visual.html">pycapacity.visual module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pycapacity.objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.objects.Ellipsoid"><code class="docutils literal notranslate"><span class="pre">Ellipsoid</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.objects.Polytope"><code class="docutils literal notranslate"><span class="pre">Polytope</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycapacity.objects.Polytope.find_faces"><code class="docutils literal notranslate"><span class="pre">Polytope.find_faces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycapacity.objects.Polytope.find_from_point_cloud"><code class="docutils literal notranslate"><span class="pre">Polytope.find_from_point_cloud()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycapacity.objects.Polytope.find_halfplanes"><code class="docutils literal notranslate"><span class="pre">Polytope.find_halfplanes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycapacity.objects.Polytope.find_vertices"><code class="docutils literal notranslate"><span class="pre">Polytope.find_vertices()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contirbuting.html">📝 CONTRIBUTING &amp; ISSUES</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">🎓 TUTORIALS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">📑 CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="pycapacity.html">pycapacity package</a></li>
+      <li class="breadcrumb-item active">pycapacity.objects</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/pycapacity.polytope.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pycapacity.objects">
+<span id="pycapacity-objects"></span><h1>pycapacity.objects<a class="headerlink" href="#module-pycapacity.objects" title="Permalink to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
+<p>There two  genertic classes implemented in this module:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#pycapacity.objects.Polytope">Polytope</a>: A generic class representing a polytope with different representations (vertex, half-plane, face)</p></li>
+<li><p><a class="reference external" href="#pycapacity.objects.Ellipsoid">Ellipsoid</a>: A generic class representing an ellipsoid with a list of radii and rotation matrix</p></li>
+</ul>
+</section>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycapacity.objects.Ellipsoid">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycapacity.objects.</span></span><span class="sig-name descname"><span class="pre">Ellipsoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/objects.html#Ellipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.objects.Ellipsoid" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A generic class representing an ellipsoid with a list of radii and rotation matrix, where
+every column of the rotation matrix is a vector of the ellipsoid’s axes</p>
+<div class="math notranslate nohighlight">
+\[\mathcal E = \{x ~|~ x^T R^T W R x \leq 1 \}\]</div>
+<p>where <span class="math notranslate nohighlight">\(W = diag(r_1^{-2}, r_2^{-2}, \ldots, r_n^{-2})\)</span> and <span class="math notranslate nohighlight">\(r_i\)</span> are radii of the ellipsoid, while <span class="math notranslate nohighlight">\(R\)</span> is the rotation matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> – ellipsoid center</p></li>
+<li><p><strong>radii</strong> – radii of the ellipsoid</p></li>
+<li><p><strong>rotation</strong> – rotation of the ellipsoid SO3 matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycapacity.objects.Polytope">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycapacity.objects.</span></span><span class="sig-name descname"><span class="pre">Polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">faces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">H</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/objects.html#Polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.objects.Polytope" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A generic class representing a polytope with different representations (vertex, half-plane, face)</p>
+<p>Vertex representaiton is a list of vertices of the polytope</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{H}\!-\!rep = \{x \in \mathbb{R}^n | Hx \leq d \}\]</div>
+<p>Half-plane representaiton is a list of inequalities defining the polytope</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{V}\!-\!rep = \{x_{v1},~ x_{v2},~ \ldots, ~x_{vn} \}\]</div>
+<p>Face representaiton is a list of triangles forming faces of the polytope, each triangle is represented as a list of tree vertices</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{F}\!-\!rep = \{ [x_{v1},~ x_{v2}, ~x_{v2}],  ~ \ldots , ~[x_{vi},~ x_{vj}, ~x_{vk}], \ldots \}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> – vertex representation of the polytope</p></li>
+<li><p><strong>H</strong> – half-plane representation of the polytope Hx&lt;d - matrix H</p></li>
+<li><p><strong>d</strong> – half-plane representation of the polytope Hx&lt;d- vector d</p></li>
+<li><p><strong>faces</strong> – face representation of the polytope - faces are represented as a list of triangulated vertices</p></li>
+<li><p><strong>face_indices</strong> – face representation of the polytope - faces are represented as a list of indices of vertices</p></li>
+</ul>
+</dd>
+</dl>
+<p>Additionally for robot’s force polytopes will have additional attributes:</p>
+<ul class="simple">
+<li><p><strong>torque_vertices</strong>: (if applicable) joint torques corresponding to the vertices of the polytope</p></li>
+</ul>
+<p>Additionally for human’s force polytopes will have additional attributes:</p>
+<ul class="simple">
+<li><p><strong>torque_vertices</strong>: (if applicable) joint torques corresponding to the vertices of the polytope</p></li>
+<li><p><strong>muscle_forces_vertices</strong>: (if applicable) muscle forces corresponding to the vertices of the polytope</p></li>
+</ul>
+<p>Human’s velocity polytopes will have additional attributes:</p>
+<ul class="simple">
+<li><p><strong>dq_vertices</strong>: (if applicable) joint velocities corresponding to the vertices of the polytope</p></li>
+<li><p><strong>dl_vert</strong>: (if applicable) muscle elongation velocities corresponding to the vertices of the polytope</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycapacity.objects.Polytope.find_faces">
+<span class="sig-name descname"><span class="pre">find_faces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/objects.html#Polytope.find_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.objects.Polytope.find_faces" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating the face representation of the polytope from the vertex representation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycapacity.objects.Polytope.find_from_point_cloud">
+<span class="sig-name descname"><span class="pre">find_from_point_cloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/objects.html#Polytope.find_from_point_cloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.objects.Polytope.find_from_point_cloud" title="Permalink to this definition"></a></dt>
+<dd><p>A function updating the polytope object from a point cloud it calculates the vertex and half-plane representation of the polytope.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The polytope will be constructed as a convex hull of the point cloud</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>points</strong> (<em>np.array</em>) – an array of points forming a point cloud</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycapacity.objects.Polytope.find_halfplanes">
+<span class="sig-name descname"><span class="pre">find_halfplanes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/objects.html#Polytope.find_halfplanes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.objects.Polytope.find_halfplanes" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating the half-plane representation of the polytope from the vertex representation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycapacity.objects.Polytope.find_vertices">
+<span class="sig-name descname"><span class="pre">find_vertices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/objects.html#Polytope.find_vertices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.objects.Polytope.find_vertices" title="Permalink to this definition"></a></dt>
+<dd><p>A function calculating the vertex representation of the polytope from the half-plane representation</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pycapacity.visual.html" class="btn btn-neutral float-left" title="pycapacity.visual module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contirbuting.html" class="btn btn-neutral float-right" title="Contributing and reporting issues" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>
