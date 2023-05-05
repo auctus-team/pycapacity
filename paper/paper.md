@@ -26,9 +26,13 @@ bibliography: paper.bib
 
 # Statement of need
 
-# Implemented algorithms
+aa
 
-## Hyper-plane shifting method
+# Implemented algorithms
+
+aa
+
+##  Hyper-plane shifting method
 
 This is an algorihtm based on the paper by [@Gouttefarde2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
 
@@ -36,7 +40,7 @@ This is an algorihtm based on the paper by [@Gouttefarde2010] which presents an 
 P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
 \end{equation}
 
-## Vertex enumeration auctus
+## Vertex enumeration auctus
 
 This is an algorithm based on the paper by [@Skuric2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
 
@@ -68,11 +72,12 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 # Physical capacity metrics available
 
 
-## Robotic manipulators metrics
+## Robotic manipulators metrics
 
 For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
 
-### Ellipsoids
+### Ellipsoids
+
 - Velocity (manipulability) ellipsoid  
 \begin{equation}\label{eq:ev_r}
 E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||\dot{q}||\leq1 \}
@@ -88,7 +93,8 @@ E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||\tau||\leq1 \}
 E_{f} = \{{f} ~| J^{T}f = \tau,~ ||\tau||\leq1 \}
 \end{equation}
 
-### Polytopes
+### Polytopes
+
 - Velocity polytope  
 \begin{equation}\label{eq:pv_r}
 P_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ \dot{q}_{min}\leq\dot{q}\leq\dot{q}_{max} \}
@@ -120,7 +126,7 @@ P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
   \end{split}
 \end{equation}
 
-This approaxh is described in the paper by [Skuric2023].
+This approaxh is described in the paper by [@skuric2023].
 
 
 Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
@@ -144,17 +150,6 @@ P_{f} = \{f ~|~ J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}
 \end{equation}
 
 Where $J$ is the model's jacobian matrix, $L$ si the muscle length jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
-
-# Citations
-
-
-If you want to cite a software repository URL (e.g. something on GitHub without a preferred
-citation) then you can do it with the example BibTeX entry below for @fidgit.
-
-For a quick reference, the following citation commands can be used:
-- `@author:2001`  ->  "Author et al. (2001)"
-- `[@author:2001]` -> "(Author et al., 2001)"
-- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
 
 # Figures
 
