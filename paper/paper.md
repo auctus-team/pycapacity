@@ -30,7 +30,7 @@ bibliography: paper.bib
 
 ## Hyper-plane shifting method
 
-This is an algorihtm based on the paper by [@Gouttefarde:2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
+This is an algorihtm based on the paper by [@Gouttefarde2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
 
 \begin{equation}\label{eq:hpsm}
 P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
@@ -38,7 +38,7 @@ P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
 
 ## Vertex enumeration auctus
 
-This is an algorithm based on the paper by [@Skuric:2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
+This is an algorithm based on the paper by [@Skuric2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
 
 \begin{equation}\label{eq:vertex_auctus}
 P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
@@ -47,7 +47,7 @@ P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
 
 ## Iterative convex-hull method
 
-This is an algorihtm descirbed in the paper by [@Skuric:2022] which implements an efficient method which iteratively approximates the polytope
+This is an algorihtm descirbed in the paper by [@Skuric2022] which implements an efficient method which iteratively approximates the polytope
 
 \begin{equation}\label{eq:ichm}
 P = \{ x ~|~ Ax = By, \quad y_{min}\leq y \leq y_{max} \}
@@ -109,7 +109,7 @@ P_{f} = \{f ~| J^{T}f = \tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
 P_{\cap} = \mathcal{P}_{f1} \cap \mathcal{P}_{f1} \qquad P_{\oplus} = \mathcal{P}_{f1} \oplus \mathcal{P}_{f1} 
 \end{equation}
 
-- Reachable space approximation of in the desired horizon of interest $\Delta t_{h}$ using the convex polytope formulation:
+- Reachable space approximation of in the desired horizon of interest $\Delta t_{h}$ using the convex polytope formulation 
 
 \begin{equation}\label{eq:prs_r}
 \begin{split}
@@ -119,6 +119,8 @@ P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
   {q}_{min} &\leq M^{-1}\tau \frac{\Delta t_{h}^2}{2}  \leq {q}_{max} \}\\
   \end{split}
 \end{equation}
+
+This approaxh is described in the paper by [Skuric2023].
 
 
 Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
