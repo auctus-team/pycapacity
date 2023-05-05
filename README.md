@@ -9,21 +9,16 @@
 ### changelog v2.0 (05-2023)
 
 
-* polyope and ellipsoid algorithms now return `Polytope`  and `Ellipsoid`  objects (see [api docs](https://auctus-team.github.io/pycapacity/pycapacity.polytope.html))
-
-  * `Polytope`  class can be used as a standalone class to find  vertex, halfplane and face representation of a polytope
-
-* Visualisation tools improved: (see [api docs](https://auctus-team.github.io/pycapacity/pycapacity.visual.html))
-
-  * new `plot_polytope` function for plotting polytopes
-  * functions `plot_polytope_vertex` and `plot_polytope_faces` now can receive a polyope object
-  * function `plot_ellipsoid` now can receive a ellipsoid object
-  * better management of the `matplotlib` figures and axes, now user can provide an `ax`, `plt` or `figure` to the plotting functions
-
-* Added support for robot reachable workspace approximation using convex polytopes (see [api docs](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#pycapacity.robot.reachable_space_approximation))
-
-* Added unit testing + continuous integration
-* improved docs with sphinx
+- polyope and ellipsoid algorithms now return `Polytope`  and `Ellipsoid`  objects (see [api docs](https://auctus-team.github.io/pycapacity/pycapacity.polytope.html))
+  - `Polytope`  class can be used as a standalone class to find  vertex, halfplane and face representation of a polytope
+- Visualisation tools improved: (see [api docs](https://auctus-team.github.io/pycapacity/pycapacity.visual.html))
+  - new `plot_polytope` function for plotting polytopes
+  - functions `plot_polytope_vertex` and `plot_polytope_faces` now can receive a polyope object
+  - function `plot_ellipsoid` now can receive a ellipsoid object
+  - better management of the `matplotlib` figures and axes, now user can provide an `ax`, `plt` or `figure` to the plotting functions
+- Added support for robot reachable workspace approximation using convex polytopes (see [api docs](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#pycapacity.robot.reachable_space_approximation))
+- Added unit testing + continuous integration
+- improved docs with sphinx
 
 ## About 
 [![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/) [![Tests](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml) ![](https://img.shields.io/pypi/dm/pycapacity?color=blue&label=pip%20downloads)  [![Docs](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml)
