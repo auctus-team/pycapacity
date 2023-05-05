@@ -23,7 +23,7 @@ v2.0 (05-2023)
   * new ``plot_polytope`` function for plotting polytopes
   * functions ``plot_polytope_vertex`` and ``plot_polytope_faces`` now can receive a polyope object
   * function ``plot_ellipsoid`` now can receive a ellipsoid object
-  * better management of the ``matplotlib`` figures and axes, now user can provide an `ax`, `plt` or `figure` to the plotting functions
+  * better management of the ``matplotlib`` figures and axes, now user can provide an ``ax``, ``plt`` or ``figure`` to the plotting functions
 
 * Added support for robot reachable workspace approximation using convex polytopes (see `api docs <pycapacity.robot.html#pycapacity.robot.reachable_space_approximation>`_)
 

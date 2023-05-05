@@ -47,9 +47,17 @@ And polytopes:
 - Velocity polytope <br> `P_vel = {dx | dx = J.dq,  dq_min < dq < dq_max}`
 - Acceleration polytope <br> `P_acc = {ddx | ddx = J.M^(-1).t, t_min < t < t_max}`
 - Force polytope <br> `P_for = {f | J^T.f = t, t_min < t < t_max}`
+- **NEW** 📢: Reachable space of the robot with the horizon `T`  <br> `P_x = {x | x = JM(-1)tT^2/2, t_min < t < t_max,   dq_min < M^(-1)tT < dq_max,   q_min < M^(-1)tT^2/2 < q_max}`
 - Force polytopes *Minkowski sum and intersection*
 
 Where `J` is the robot jacobian matrix, `f` is the vector of cartesian forces,`dx` and `ddx` are vectors fo cartesian velocities and accretions, `dq` is the vector of the joint velocities and `t` is the vector of joint torques.
+
+Reachable space polytope approximation is based on this paper: <br>
+[**Approximating robot reachable space using convex polytopes**](https://arxiv.org/pdf/2211.17054.pdf)<br> by Skuric, Antun, Vincent Padois, and David Daney. <br> In: Human-Friendly Robotics 2022: HFR: 15th International Workshop on Human-Friendly Robotics. Cham: Springer International Publishing, 2023.
+
+The force polytope functions have been implemented according to the paper:<br>
+[**On-line force capability evaluation based on efficient polytope vertex search**](https://arxiv.org/abs/2011.05226)<br> 
+by A.Skuric, V.Padois and D.Daney<br> Published on ICRA2021
 
 The force polytope functions have been implemented according to the paper:<br>
 [**On-line force capability evaluation based on efficient polytope vertex search**](https://arxiv.org/abs/2011.05226)<br> 

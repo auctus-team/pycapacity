@@ -294,8 +294,8 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
     
     .. math:: P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\\tau \Delta t_{h}^2/2,
     .. math:: {\\tau}_{min} - \\tau_{bias} \leq \\tau \leq {\\tau}_{max} - \\tau_{bias}
-    .. math::  \dot{q}_{min} \leq JM^{-1}\\tau \Delta t_{h}  \leq \dot{q}_{max}
-    .. math::  {q}_{min} \leq JM^{-1}\\tau \Delta t_{h}^2/2  \leq {q}_{max} \}
+    .. math::  \dot{q}_{min} \leq M^{-1}\\tau \Delta t_{h}  \leq \dot{q}_{max}
+    .. math::  {q}_{min} \leq M^{-1}\\tau \Delta t_{h}^2/2  \leq {q}_{max} \}
 
     where :math:`\\tau_{bias}` is the bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces which is optional.
     and :math:`\Delta t_{h}` is the time horizon. If limits on joint velocity :math:`\dot{q}_{min}` and :math:`\dot{q}_{max}` or joint postion limits :math:`{q}_{min}` and :math:`{q}_{max}` are not given, the function calculates the ploytope  without them.

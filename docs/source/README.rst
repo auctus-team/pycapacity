@@ -80,8 +80,8 @@ Where :math:`J` is the robot jacobian matrix, :math:`f` is the vector of cartesi
 
     .. math::  P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\tau \Delta t_{h}^2/2,
     .. math:: {\tau}_{min} \leq \tau \leq {\tau}_{max},
-    .. math::  \dot{q}_{min} \leq JM^{-1}\tau \Delta t_{h}  \leq \dot{q}_{max},
-    .. math::  {q}_{min} \leq JM^{-1}\tau \Delta t_{h}^2/2  \leq {q}_{max} \}
+    .. math::  \dot{q}_{min} \leq M^{-1}\tau \Delta t_{h}  \leq \dot{q}_{max},
+    .. math::  {q}_{min} \leq M^{-1}\tau \Delta t_{h}^2/2  \leq {q}_{max} \}
 
   | Based on the paper:
   | `Approximating robot reachable space using convex polytopes. <https://arxiv.org/pdf/2211.17054.pdf>`_
