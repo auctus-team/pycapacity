@@ -2,7 +2,6 @@
 # Real-time capable task-space capacity calculation python pip package
 
 
-
 > 📢 New version of the pycapacity package is out - version v2.0!
 > 🚨 Beware beacause there are some breaking changes in the API, please check the changelog for more details.
 
