@@ -135,3 +135,23 @@ def test10():
     robot.acceleration_polytope(J, M, t_min, t_max, t_bias)
     assert True
     
+
+# unit test for reachable space approaximation using random data
+def test11():
+    n = 5 # nb joints
+    m = 3 # cartesian forces
+    
+    J = np.random.rand(m,n)*2 - 1
+    M = np.random.rand(n,n)
+
+    q0 = np.random.rand(n)*2 - 1
+    dq_max = np.ones(n)
+    dq_min = -np.ones(n)
+    q_min = -np.ones(n)
+    q_max = np.ones(n)
+    t_min = np.zeros(n)
+    t_max = np.ones(n)
+    t_h = 0.1
+    
+    robot.reachable_space_approximation(M,J,q0,horizon=t_h,t_max=t_max,t_min=t_min,dq_max=dq_max,dq_min=dq_min,q_min=q_min,q_max=q_max)
+    assert True

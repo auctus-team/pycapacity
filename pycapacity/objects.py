@@ -116,7 +116,7 @@ class Polytope:
             points (np.array): an array of points forming a point cloud 
         """
         self.H, self.d = vertex_to_hspace(points)
-        self.vertices = hspace_to_vertex(self.H,self.d)
+        self.vertices, self.face_indices = hspace_to_vertex(self.H,self.d)
 
 
 

@@ -65,3 +65,20 @@ def test5():
 
     human.torque_to_muscle_force(N, F_min, F_max, tau, options='qp')
     assert True
+
+
+
+# unit test for velocity polytope with both elongation and joint velocity max provided
+def test6():
+    L = 20 # nb muslces
+    n = 5 # nb joints
+    m = 3 # cartesian forces
+    N = (np.random.rand(n,L)*2 -1)
+    J = np.random.rand(m,n)*2-1
+    dl_min = np.zeros(L)
+    dl_max = np.ones(L)
+    dtheta_min = -np.ones(n)
+    dtheta_max = np.ones(n)
+
+    human.velocity_polytope(J, N, dl_min , dl_max, dtheta_min, dtheta_max, tol=1e-5)
+    assert True
