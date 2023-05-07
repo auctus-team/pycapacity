@@ -163,6 +163,7 @@ See full docs at the [link](https://auctus-team.github.io/pycapacity/)
 
 - [`human`](https://auctus-team.github.io/pycapacity/pycapacity.human.html#module-pycapacity.human)
 - [`robot`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#module-pycapacity.robot)
+- [`objects`](https://auctus-team.github.io/pycapacity/pycapacity.polytope.html)
 - [`algorithms`](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#module-pycapacity.algorithms)
 - [`visual`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#module-pycapacity.visual)
 
@@ -171,16 +172,12 @@ See full docs at the [link](https://auctus-team.github.io/pycapacity/)
 Robot metrics
 - [`robot.acceleration_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#pycapacity.robot.acceleration_ellipsoid): acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
 - [`robot.acceleration_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope): Acceleration polytope calculating function
-- [`robot.acceleration_polytope_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope_withfaces): Acceleration polytope calculating function
 - [`robot.force_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_ellipsoid): force manipulability ellipsoid calculation
 - [`robot.force_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope): Force polytope representing the capacities of the two robots in a certain configuration
 - [`robot.force_polytope_intersection`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
-- [`robot.force_polytope_intersection_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection_withfaces): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
-- [`robot.force_polytope_sum_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_sum_withfaces): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
-- [`robot.force_polytope_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_withfaces): Force polytope representing the capacities of the two robots in a certain configuration.
+- [`robot.force_polytope_sum`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#pycapacity.robot.force_polytope_sum): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
 - [`robot.velocity_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_ellipsoid): velocity manipulability ellipsoid calculation
 - [`robot.velocity_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope): Velocity polytope calculating function
-- [`robot.velocity_polytope_withfaces`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope_withfaces): Velocity polytope calculating function, with faces
 
 Human metrics
 - [`human.acceleration_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.acceleration_polytope): A function calculating the polytopes of achievable accelerations
@@ -197,6 +194,8 @@ Algorithms
 
 
 Visualisation tools
+- [`visual.plot_polytope`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
+- [`visual.plot_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
 - [`visual.plot_polytope_faces`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
 - [`visual.plot_polytope_vertex`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#fpycapacity.visual.plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
 ---
@@ -222,21 +221,18 @@ J = np.array(np.random.rand(m,n)) # random jacobian matrix
 t_max = np.ones(n)  # joint torque limits max and min
 t_min = -np.ones(n)
 
-vertices, face_indexes = capacity.force_polytope_withfaces(J,t_min, t_max) # calculate the polytope vertices and faces
-faces = capacity.face_index_to_vertex(vertices, face_indexes)
+f_poly = capacity.force_polytope(J,t_min, t_max) # calculate the polytope vertices and faces
 
-print(vertices) # display the vertices
+print(f_poly.vertices) # display the vertices
 
 # plotting the polytope
 import matplotlib.pyplot as plt
-from pycapacity.visual import plot_polytope_faces, plot_polytope_vertex # pycapacity visualisation tools
+from pycapacity.visual import * # pycapacity visualisation tools
 fig = plt.figure(4)
 
 # draw faces and vertices
-ax = plot_polytope_vertex(plt=plt, vertex=vertices, label='force',color='blue')
-plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
+plot_polytope(polytope=f_poly, plot=plt, label='force polytope', vertex_color='blue', edge_color='blue', alpha=0.2)
 
-plt.tight_layout()
 plt.legend()
 plt.show()
 ```
@@ -263,22 +259,19 @@ N = np.array(np.random.rand(n,L))*2-1 # random moment arm matrix
 F_max = 100*np.ones(L)  # muscle forces limits max and min
 F_min = np.zeros(L)
 
-vertices, H,d, face_indexes = capacity.force_polytope(J,N, F_min, F_max, 0.1) # calculate the polytope vertices and faces
-faces = capacity.face_index_to_vertex(vertices, face_indexes)
+f_poly = capacity.force_polytope(J,N, F_min, F_max, 0.1) # calculate the polytope vertices and faces
 
-print(vertices) # display the vertices
+print(f_poly.vertices) # display the vertices
+
 
 # plotting the polytope
 import matplotlib.pyplot as plt
-from pycapacity.visual import plot_polytope_faces, plot_polytope_vertex # pycapacity visualisation tools
+from pycapacity.visual import * # pycapacity visualisation tools
 fig = plt.figure(4)
 
 # draw faces and vertices
-ax = plot_polytope_vertex(plt=plt, vertex=vertices, label='force',color='blue')
-plot_polytope_faces(ax=ax, faces=faces, face_color='blue', edge_color='blue', alpha=0.2)
+plot_polytope(polytope=f_poly, plot=plt, label='force polytope', vertex_color='blue', edge_color='blue', alpha=0.2)
 
-plt.tight_layout()
 plt.legend()
 plt.show()
-
 ```

@@ -16,21 +16,20 @@ t_max = 10*np.ones(n)
 
 
 # force polytope calculation
-f_vert, faces_indices = capacity.force_polytope_withfaces(J,t_max,t_min)
-faces_force = capacity.face_index_to_vertex(f_vert, faces_indices)
+f_poly =  capacity.force_polytope(J,t_max,t_min)
 
 # force ellispoid calcualtion
-S,U = capacity.force_ellipsoid(J, t_max)
+f_ellipsoid = capacity.force_ellipsoid(J, t_max)
 
 # visualisaiton
 fig = plt.figure(2)
 
 # plot polygones
-ax = visual.plot_polytope_faces(plt=plt, faces=faces_force, face_color='blue', edge_color='black',label='polytope',alpha=0.2)
-visual.plot_polytope_vertex(ax=ax, vertex=f_vert,color='blue')
-    
+# plot polytope
+visual.plot_polytope(plot=plt, polytope=f_poly, label='polytope', vertex_color='blue', edge_color='blue', alpha=0.2)
+
 # plot ellipsoid
-visual.plot_ellipsoid(S, U, ax=ax, label='ellipsoid', color='orange',alpha=0.5)
+visual.plot_ellipsoid(ellipsoid=f_ellipsoid, plot=plt, label='ellipsoid', color='orange',alpha=0.5)
 
 plt.title('Force capacity for random matrices')
 plt.tight_layout()

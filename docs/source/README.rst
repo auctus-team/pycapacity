@@ -173,51 +173,6 @@ To find the half-space representation (faces) of the polytope after finding the 
 
 The method is a part of the ``pycapacity.algorithms`` module ``vertex_enumeration_auctus``. See the `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_auctus>`_
 
-.. Package API docs
-.. ================
-
-.. ### Modules
-
-.. - [`human`](pycapacity.human.html#module-pycapacity.human)
-.. - [`robot`](pycapacity.robot.html#module-pycapacity.robot)
-.. - [`algorithms`](pycapacity.algorithms.html#module-pycapacity.algorithms)
-.. - [`visual`](pycapacity.visual.html#module-pycapacity.visual)
-
-.. ### Functions
-
-.. Robot metrics
-.. - [`robot.acceleration_ellipsoid`](pycapacity.robot.html#pycapacity.robot.acceleration_ellipsoid): acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
-.. - [`robot.acceleration_polytope`](pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope): Acceleration polytope calculating function
-.. - [`robot.acceleration_polytope_withfaces`](pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope_withfaces): Acceleration polytope calculating function
-.. - [`robot.force_ellipsoid`](pycapacity\.robot\.html#pycapacity\.robot\.force_ellipsoid): force manipulability ellipsoid calculation
-.. - [`robot.force_polytope`](pycapacity\.robot\.html#pycapacity\.robot\.force_polytope): Force polytope representing the capacities of the two robots in a certain configuration
-.. - [`robot.force_polytope_intersection`](pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
-.. - [`robot.force_polytope_intersection_withfaces`](pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection_withfaces): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
-.. - [`robot.force_polytope_sum_withfaces`](pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_sum_withfaces): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
-.. - [`robot.force_polytope_withfaces`](pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_withfaces): Force polytope representing the capacities of the two robots in a certain configuration.
-.. - [`robot.velocity_ellipsoid`](pycapacity\.robot\.html#pycapacity\.robot\.velocity_ellipsoid): velocity manipulability ellipsoid calculation
-.. - [`robot.velocity_polytope`](pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope): Velocity polytope calculating function
-.. - [`robot.velocity_polytope_withfaces`](pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope_withfaces): Velocity polytope calculating function, with faces
-
-.. Human metrics
-.. - [`human.acceleration_polytope`](pycapacity\.human\.html#pycapacity\.human\.acceleration_polytope): A function calculating the polytopes of achievable accelerations
-.. - [`human.force_polytope`](pycapacity\.human\.html#pycapacity\.human\.force_polytope): A function calculating the polytopes of achievable foreces based 
-.. - [`human.joint_torques_polytope`](pycapacity\.human\.html#pycapacity\.human\.joint_torques_polytope): A function calculating the polytopes of achievable joint torques
-.. - [`human.torque_to_muscle_force`](pycapacity\.human\.html#pycapacity\.human\.torque_to_muscle_force): A function calculating muscle forces needed to create the joint torques tau
-.. - [`human.velocity_polytope`](pycapacity\.human\.html#pycapacity\.human\.velocity_polytope): A function calculating the  polytopes of achievable velocity based 
-
-
-.. Algorithms
-.. - [`algorithms.hyper_plane_shift_method`](pycapacity\.algorithms\.html#pycapacity\.algorithms\.hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
-.. - [`algorithms.iterative_convex_hull_method`](pycapacity\.algorithms\.html#pycapacity\.algorithms\.iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
-.. - [`algorithms.vertex_enumeration_auctus`](pycapacity\.algorithms\.html#pycapacity\.algorithms\.vertex_enumeration_auctus): Efficient vertex enumeration algorithm for a problem of a form:
-
-
-.. Visualisation tools
-.. - [`visual.plot_polytope_faces`](pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
-.. - [`visual.plot_polytope_vertex`](pycapacity.visual.html#fpycapacity.visual.plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
-
-
 Read more
 ---------
 

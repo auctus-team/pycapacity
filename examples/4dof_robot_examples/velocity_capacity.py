@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pycapacity.robot as capacity # robot capacity module
 import pycapacity.visual as visual # visualistion tools
 
-from four_link_utils import four_link_jacobian, four_link_robot_plot 
+from four_link_utils import *
 
 #joint positions q
 q  = np.random.rand(4)*np.pi/3*2-1
@@ -12,34 +12,44 @@ q  = np.random.rand(4)*np.pi/3*2-1
 dq_min = -np.ones((4,1))
 dq_max = np.ones((4,1))
 
-# find robot position
-# a bit of scaling
-robot_position = four_link_robot_plot(q)*5
 
 # jacobian
 J = four_link_jacobian(q)
 # calculate the force polytope
-vel_vert, faces_indices = capacity.velocity_polytope_withfaces(J, dq_min ,dq_max)
-faces = capacity.face_index_to_vertex(vel_vert, faces_indices)
+
+vel_poly = capacity.velocity_polytope(J, dq_min ,dq_max)
 
 # calculate the force ellipsoid
-S,U = capacity.velocity_ellipsoid(J, dq_max)
+vel_ellipsoid = capacity.velocity_ellipsoid(J, dq_max)
 
 
-# visualise polytope ellipsoid
-fig = plt.figure(14)
-ax = plt.gca()
+# visualise polytope ellispoid
+fig = plt.figure(13, figsize=[10,10])
+
+scale = 1/5
 
 #plot the robot
-plt.plot(robot_position[0,:],robot_position[1,:],linewidth=5, label="robot")
-plt.plot(robot_position[0,:],robot_position[1,:],'ko',linewidth=5)
-#plot the polytope
-visual.plot_polytope_faces(ax=plt,faces=faces,center=robot_position[:,-1],face_color='lightsalmon', edge_color='orangered',label='polytope')
-visual.plot_polytope_vertex(ax=ax,vertex=vel_vert,center=robot_position[:,-1],color='gray')
-# plot the ellipsoid
-visual.plot_ellipsoid(S, U, center=robot_position[:,-1], ax=ax, label='ellipsoid', color=None, edge_color='blue', alpha=1.0)
+robot_position = four_link_forward_kinematics(q) 
+four_link_plot_robot(plt, q)
 
-plt.title("Velocity capacity")
+#plot the polytope
+visual.plot_polytope(plot=fig,
+                    polytope=vel_poly,
+                    center=robot_position, 
+                    face_color='lightsalmon', 
+                    edge_color='orangered',
+                    vertex_color='gray',
+                    label='polytope', 
+                    scale=scale)
+# plot ellispoid
+visual.plot_ellipsoid(ellipsoid=vel_ellipsoid, 
+               center=robot_position, 
+               plot=fig,
+               label='ellipsoid', 
+               edge_color='blue', 
+               alpha=1.0, 
+               scale=scale)
 plt.grid()
 plt.legend()
+plt.axis('equal')
 plt.show()
