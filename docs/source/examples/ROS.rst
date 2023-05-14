@@ -384,7 +384,6 @@ The full code of the ROS node is shown below.
 
 
 .. figure:: ../images/rviz.gif
-    :width: 100%
     :align: center
     :alt: vel_polytope_rviz
 
