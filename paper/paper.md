@@ -24,6 +24,16 @@ bibliography: paper.bib
 
 # Summary
 
+As there is a rising interest in collaborative robotics and physical human robot interaction, where the robot's addapt to certain needs of the human in real-time. The fundamental challenge of today is to be able to evaluate the need of assistance of the operator. One of ways to quantify the need of assistance is by evaluating the operator's physical abilities in real-time and comparing them to the required physical abilities required by the collaborative task. Then the robot can assit the operator where he lask the physical ability to accomplish the task.
+
+Furthermore, as todays collaborative robotic manipulators are designed for safety, their performance characteristics are relatively limited with respect to the more standard industrial robots. Therefore it is becoming increasingly important to exploit their full (physical) abilities when executing the task.  
+
+There are many different physical ability metrics available in the literature that might be used in such way, such as: force capapcity, velocity capacity, acceleratio capacity, precition and similar. Most of these metrics can be represented by two families of geometric shapes ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. 
+
+Therefore this python package implements several different robotic manipulator and human musculoskeletal model based physical capacity metrics, based on ellipsoids and polytopes. All the algorihtms are implemented in python and are tested in real-time applications having execution time of a fraction of a second. The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomecanics software `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. 
+
+This package has been used in several scientific papers for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has been used to calculate the approaximation of the robot's reachable space using convex polytope [@skuric2023].
+
 # Statement of need
 
 aa
