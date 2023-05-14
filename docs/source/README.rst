@@ -26,11 +26,16 @@ Real-time capable task-space capacity calculation python pip package
 
 |
 .. image:: https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif
-  :width: 250
+  :width: 200
   :alt: Alternative text
 
 .. image:: https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true
-  :width: 250
+  :width: 200
+  :alt: Alternative text
+
+
+.. image:: images/output2.gif
+  :height: 200
   :alt: Alternative text
 
 The ``pycapacity`` package provides a framework for the generic task-space capacity calculation for:

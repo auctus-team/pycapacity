@@ -17,11 +17,15 @@ Real-time capable task-space capacity calculation python module
 
 |
 .. image:: https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif
-  :height: 300
+  :height: 200
   :alt: Alternative text
 
 .. image:: https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/human_poly.gif
-  :height: 300
+  :height: 200
+  :alt: Alternative text
+
+.. image:: images/output2.gif
+  :height: 200
   :alt: Alternative text
 
 
