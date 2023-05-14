@@ -40,7 +40,13 @@ aa
 
 # Implemented algorithms
 
-aa
+This package implements several different algorithms for polytope evaluation 
+
+- Hyper-plane shifting method
+- Vertex enumeration auctus
+- Iterative Convex Hull method
+
+These algorithms are all implemented in python and used to evaluate different polytope based physical ability metrics. Additionally the algorihtms are availible to the users to be used standalone as well.
 
 ##  Hyper-plane shifting method
 
@@ -81,10 +87,11 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 
 # Physical capacity metrics available
 
+The package implements different physical ability metrics for robotic manipulators and humans based on musculoskeletal models.
 
 ## Robotic manipulators metrics
 
-For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
+For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids.
 
 ### Ellipsoids
 
@@ -114,11 +121,13 @@ P_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ \dot{q}_{min}\leq\dot{q}\leq\dot{q}_{m
 \begin{equation}\label{eq:pa_r}
 P_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
 \end{equation}
+
 - Force polytope  
 
 \begin{equation}\label{eq:pf_r}
 P_{f} = \{f ~| J^{T}f = \tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
 \end{equation}
+
 - Force polytopes *Minkowski sum and intersection*  
 
 \begin{equation}\label{eq:psi_r}
@@ -160,15 +169,6 @@ P_{f} = \{f ~|~ J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}
 \end{equation}
 
 Where $J$ is the model's jacobian matrix, $L$ si the muscle length jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
-
-# Figures
-
-Figures can be included like this:
-![Caption for example figure.\label{fig:example}](figure.png)
-and referenced from text using \autoref{fig:example}.
-
-Figure sizes can be customized by adding an optional second parameter:
-![Caption for example figure.](figure.png){ width=20% }
 
 # Acknowledgements
 
