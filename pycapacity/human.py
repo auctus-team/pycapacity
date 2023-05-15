@@ -16,7 +16,6 @@ from cvxopt import matrix
 import cvxopt.glpk
 
 # import the algos
-from pycapacity.algorithms import iterative_convex_hull_method, hyper_plane_shift_method
 from pycapacity.algorithms import *
 from pycapacity.objects import *
 import pycapacity.robot as robot
@@ -127,7 +126,8 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None, options=None):
         poly.faces = face_index_to_vertex(poly.vertices, faces)
     return poly
 
-def velocity_polytope(J, N, dl_min=None , dl_max=None, dq_max=None, dq_min=None, tol=1e-5, options=None):
+
+def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=None, tol=1e-5, options=None):
     """
     A function calculating the polytopes of achievable velocity based 
     on the jacobian matrix `J` and moment arm matrix `N`
@@ -140,9 +140,9 @@ def velocity_polytope(J, N, dl_min=None , dl_max=None, dq_max=None, dq_min=None,
 
     .. math:: P_{v,\dot{q}} = \{ \dot{x} ~ | ~ J\dot{q} = \dot{x}, \quad \dot{q}_{min} \leq \dot{q} \leq \dot{q}_{max}\}
 
-    If both are provided thefunction will calculate both and intersect them (much longer execution time)
+    If both are provided thefunction will calculate
 
-    .. math:: P_{v} = P_{v,\dot{l}}~~ \\bigcap ~~P_{v,\dot{q}}
+    .. math:: P_{v,\dot{l}} = \{ \dot{x} ~ | ~ J\dot{q} = \dot{x}, \quad \dot{q}_{min} \leq \dot{q} \leq \dot{q}_{max}, ~~  \dot{l}_{max} \leq L\dot{q} \leq \dot{l}_{max}\}
 
 
     Based on the ``iterative_convex_hull_method`` algorihtm.
@@ -164,30 +164,51 @@ def velocity_polytope(J, N, dl_min=None , dl_max=None, dq_max=None, dq_min=None,
     """
 
 
-
-    # initial value for inequality constraints
-    G_in, h_in = None, None
-
-    
-    if dl_max is not None and dl_min is not None:
-        v_vert, H, d, faces , dl_vert, dq_vert = iterative_convex_hull_method(A=-N.T, B=np.eye(dl_min.shape[0]), P = J, y_min=dl_min, y_max=dl_max, tol=tol)
-        # construct polytope object
-        poly = Polytope(vertices=v_vert, H=H, d=d)
-        poly.dq_vertices = dq_vert
-        poly.dl_vertices = dl_vert
-
     # if limits on joint velocity are given
     if dq_max is not None and dq_min is not None:
         dq_max = np.array(dq_max).reshape((-1,1))
         dq_min = np.array(dq_min).reshape((-1,1))
-        poly_dq = robot.velocity_polytope(J, dq_max, dq_min,  options)
-        if dl_max is not None:
-            poly.vertices = None
-            poly.H = np.vstack((H, poly_dq.H))
-            poly.d = np.hstack((d.flatten(), poly_dq.d.flatten()))
-            poly.find_vertices()
+
+        # if limits both limits are given
+        if dl_max is not None and dl_min is not None:
+            # caluclate the polytope of achievable velocities
+            # given joint velocity limits 
+            # and muscle contraction velocity limits transformed to joint velocity limits
+            v_vert, H, d, faces , dq_vert, dq_vert = iterative_convex_hull_method(
+                A=np.eye(J.shape[0]), 
+                B=J, 
+                y_min=dq_min, 
+                y_max=dq_max,
+                G_in = np.vstack((-N.T, N.T)),
+                h_in = np.hstack((dl_max, -dl_min)),
+                tol=tol
+                )
+            # construct polytope object
+            poly = Polytope(vertices=v_vert, H=H, d=d)
+            poly.dq_vertices = dq_vert
+            poly.dl_vertices = -N.T@dq_vert
         else:
-            poly = poly_dq
+            # if only joint velocity limits are given
+            # caluclate the polytope of achievable velocities
+            # the same as the robot velocity polytope
+            poly = robot.velocity_polytope(J, dq_max, dq_min,  options)
+    
+    elif dl_max is not None and dl_min is not None:
+        # if only muscle contraction velocity limits are given
+        # caluclate the polytope of achievable velocities
+        # given muscle contraction velocity limits only
+        v_vert, H, d, faces , dl_vert, dq_vert = iterative_convex_hull_method(
+            A=-N.T, 
+            B=np.eye(dl_min.shape[0]), 
+            P = J, 
+            y_min=dl_min, 
+            y_max=dl_max, 
+            tol=tol
+            )
+        # construct polytope object
+        poly = Polytope(vertices=v_vert, H=H, d=d)
+        poly.dq_vertices = dq_vert
+        poly.dl_vertices = dl_vert
     
 
     # calculate faces if option is set to True
