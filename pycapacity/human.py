@@ -174,7 +174,7 @@ def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=
             # caluclate the polytope of achievable velocities
             # given joint velocity limits 
             # and muscle contraction velocity limits transformed to joint velocity limits
-            v_vert, H, d, faces , dq_vert, dq_vert = iterative_convex_hull_method(
+            v_vert, H, d, faces , dq_vert, dv_vert = iterative_convex_hull_method(
                 A=np.eye(J.shape[0]), 
                 B=J, 
                 y_min=dq_min, 

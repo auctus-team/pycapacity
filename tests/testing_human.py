@@ -80,5 +80,5 @@ def test6():
     dtheta_min = -np.ones(n)
     dtheta_max = np.ones(n)
 
-    human.velocity_polytope(J, N, dl_min , dl_max, dtheta_min, dtheta_max, tol=1e-5)
+    human.velocity_polytope(J, N=N, dl_min=dl_min , dl_max=dl_max, dq_max=dtheta_max, dq_min=dtheta_min, tol=1e-5)
     assert True
