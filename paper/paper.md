@@ -28,15 +28,16 @@ There is a rising interest in collaborative robotics and physical human robot in
 
 Furthermore, as todays collaborative robotic manipulators are designed for safety, their performance characteristics are relatively limited with respect to the more standard industrial robots. Therefore it is becoming increasingly important to exploit their full (physical) abilities when executing the task.  
 
-There are many different physical ability metrics available in the literature that might be used in such way, such as: force capapcity, velocity capacity, acceleratio capacity, precition and similar. Most of these metrics can be represented by two families of geometric shapes ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. 
-
-Therefore this python package implements several different robotic manipulator and human musculoskeletal model based physical capacity metrics, based on ellipsoids and polytopes. All the algorihtms are implemented in python, and having execution times of a fraction of the seconds, it is intended to be used in real-time applications such as robot control and visualisation to the operator as well as in robot performance . The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomecanics software `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. 
-
-This package has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has been used to calculate the approaximation of the robot's reachable space using convex polytope [@skuric2023].
+There are many different physical ability metrics available in the literature that might be used in such way, such as: force capapcity, velocity capacity, acceleratio capacity, precition and similar. Most of these metrics can be represented by two families of geometric shapes ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. However more efficient numerical tools are needed in order to evaluate these metrics in order to allow for more of their real-time applications, for example in robot control or interactive visualisaiton. Additionally efficient performance metircs can be further used for robot and workspace design as well as human motion and ergonomics analysis.
 
 # Statement of need
 
-aa
+Therefore this python package implements several different robotic manipulator and human musculoskeletal model based physical capacity metrics, based on ellipsoids and polytopes. All the algorihtms are implemented in python, and having execution times of a fraction of the seconds,they are intended to be used in real-time applications such as robot control and visualisation to the operator as well as in robot performance. The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomecanics software `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. 
+
+The package additionally implements a set of visualisation tools for polytopes and ellipsoids baes on the pyhton package `matplotlib` intended for fast prototyping and quick and interactive visualisation.
+
+This package has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has been used to calculate the approaximation of the robot's reachable space using convex polytope [@skuric2023].
+
 
 # Implemented algorithms
 
@@ -87,12 +88,13 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 
 # Physical capacity metrics available
 
-The package implements different physical ability metrics for robotic manipulators and humans based on musculoskeletal models.
+The package several implements different physical ability metrics for robotic manipulators and humans based on musculoskeletal models.
 
 ## Robotic manipulators metrics
 
 For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids.
 
+2D and 3D force polytopes and their ellipsoid counterparts for a 7 degrees of freedom (DoF) \textit{Franka Emika Panda} robot. Both polytopes and ellipsoids are calculated separately for the 3D and for each of the 2D reduced task-space cases. Both polytopes and ellipsoids take in consideration the true joint torque limits provided by the manufacturer. The underestimation of the true force capabilities of the robot by ellipsoids appears clearly.
 ### Ellipsoids
 
 - Velocity (manipulability) ellipsoid  
@@ -145,14 +147,19 @@ P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
   \end{split}
 \end{equation}
 
-This approaxh is described in the paper by [@skuric2023].
+This approach is described in the paper by [@skuric2023].
+
+![Two images show an example of 4 enveloping spaces $\mathcal{L}_i$ for each one of the robot's links, and their reachable space polytopes $\mathcal{P}_{xli}$. Robot is in its initial configuration, and the horizon time used is 150ms.](reacahable.png)
 
 
 Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
 
 ## Human musculoskeletal model metrics
 
+![Cartesian force polytope of a musculoskeletal model of both human upper limbs with 7Dof and 50 muscles each, visualised with `biorbd` The polytopes are scaled with a ratio 1m : 1000N.\label{fig:force_polytope_human}](bimanual1.png)
+
 For the human musculoskeletal models this package implements the polytope metrics:
+
 - Velocity polytope  
 \begin{equation}\label{eq:pv_h}
 P_{v} = \{\dot{x} ~|~\dot{l} = L\dot{q},~ \dot{x} = J\dot{q},~ \dot{q}_{min}, ~ \leq\dot{q}\leq\dot{q}_{max}, ~\dot{l}_{min}\leq\dot{l}\leq\dot{l}_{max} \}
