@@ -49,7 +49,7 @@ This package implements several different algorithms for polytope evaluation
 
 These algorithms are all implemented in python and used to evaluate different polytope based physical ability metrics. Additionally the algorihtms are availible to the users to be used standalone as well.
 
-## Hyper-plane shifting method
+## Hyper-plane shifting method (HPSM)
 
 This is an algorihtm based on the paper by [@Gouttefarde2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
 
@@ -57,7 +57,7 @@ This is an algorihtm based on the paper by [@Gouttefarde2010] which presents an 
 P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
 \end{equation}
 
-## Vertex enumeration auctus
+## Vertex enumeration auctus (VEA)
 
 This is an algorithm based on the paper by [@Skuric2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
 
@@ -66,7 +66,7 @@ P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
 \end{equation}
 
 
-## Iterative convex-hull method
+## Iterative convex-hull method (ICHM)
 
 This is an algorihtm descirbed in the paper by [@Skuric2022] which implements an efficient method which iteratively approximates the polytope
 
@@ -120,6 +120,7 @@ E_{f} = \{{f} ~| J^{T}f = \tau,~ ||\tau||\leq1 \}
 \begin{equation}\label{eq:pv_r}
 P_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ \dot{q}_{min}\leq\dot{q}\leq\dot{q}_{max} \}
 \end{equation}
+
 - Acceleration polytope 
 
 \begin{equation}\label{eq:pa_r}
@@ -151,14 +152,13 @@ P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
 
 This approach is described in the paper by [@skuric2023].
 
-![Two images show an example of 4 enveloping spaces $\mathcal{L}_i$ for each one of the robot's links, and their reachable space polytopes $\mathcal{P}_{xli}$. Robot is in its initial configuration, and the horizon time used is 150ms.](reacahable.png){ width=60% }
-
+![Two images show an example of 4 enveloping spaces $\mathcal{L}_i$ for each one of the robot's links, and their reachable space polytopes $\mathcal{P}_{xli}$. Robot is in its initial configuration, and the horizon time used is 150ms.](reacahable.png){ width=40% }
 
 Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
 
 ## Human musculoskeletal model metrics
 
-![Cartesian force polytope of a musculoskeletal model of both human upper limbs with 7Dof and 50 muscles each, visualised with `biorbd` The polytopes are scaled with a ratio 1m : 1000N.\label{fig:force_polytope_human}](bimanual1.png){ width=80% }
+![Cartesian force polytope of a musculoskeletal model of both human upper limbs with 7Dof and 50 muscles each, visualised with `biorbd` The polytopes are scaled with a ratio 1m : 1000N.\label{fig:force_polytope_human}](bimanual1.png){ width=70% }
 
 For the human musculoskeletal models this package implements the polytope metrics:
 
@@ -178,6 +178,33 @@ P_{f} = \{f ~|~ J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}
 \end{equation}
 
 Where $J$ is the model's jacobian matrix, $L$ si the muscle length jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
+
+
+## Polytope evaluation algorihtms used
+
+
+The methods for resolution of these polytopes are based on different algorihtms.
+
+In case of robotic manipulators the methods used are:
+
+Metric | Algorithm used
+--- | ----
+Velocity polytope | HPSM
+Acceleration polytope |  HPSM
+Reachable space polytope |  ICHM
+Force polytope  | VEA
+Force polytope intersection |  VEA
+Force polytope sum |  VEA
+
+
+In case of human musculoskeletal models the methods used are:
+
+Metric | Algorithm used
+--- | ----
+Force polytope  | ICHM
+Acceleration polytope |  HPSM
+Velocity polytope | ICHM
+
 
 # Acknowledgements
 
