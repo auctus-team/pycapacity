@@ -187,10 +187,10 @@ The methods for resolution of these polytopes are based on different algorithms.
 In case of robotic manipulators the methods used are:
 
 Robot Metric | Algorithm used | Problem type | Execution time ( 7dof robot )
---- | ---- | ---- | ---
-Velocity polytope | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max} $ | 2ms
-Acceleration polytope |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max} $ | 5ms
-Reachable space polytope |  ICHM | $x=By,~~  y \in P_{y} $ | ~50ms
+--- | -- | ----- | ---
+Velocity polytope | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 2ms
+Acceleration polytope |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 5ms
+Reachable space polytope |  ICHM | $x=By,~~  y \in P_{y}$ | ~50ms
 Force polytope  | VEA | $Ax=b, ~~ b_{min} \leq b \leq y_{max}$| ~7ms
 Force polytope intersection |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~80ms
 Force polytope sum |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | 15ms
@@ -200,10 +200,10 @@ The average execution time was calculated using 7 dof Franka Emika panda robot, 
 In case of human musculoskeletal models the methods used are:
 
 Human Metric  | Algorithm used | Problem type | Execution time ( 50 muscle 7dof upper limb model )
---- | ---- | ---- | ---- 
-Force polytope  | ICHM | $Ax=By,~~ y_{min} \leq y \leq y_{max} $ | ~ 200ms (10N tolerance)
-Acceleration polytope |  HPSM or ICHM | $x=By,~~ y_{min} \leq y \leq y_{max} $ |  ~ 300ms (HPSM) ~150ms (ICHM 50m/s^2 tolerance)
-Velocity polytope | ICHM | $x=By,~~ y \in P_{y} $ | ~ 200ms (10m/s tolerance)
+--- | -- | ----- | ----
+Force polytope  | ICHM | $Ax=By,~~ y_{min} \leq y \leq y_{max}$ | ~ 200ms (10N tolerance)
+Acceleration polytope |  HPSM or ICHM | $x=By,~~ y_{min} \leq y \leq y_{max}$ |  ~ 300ms (HPSM) ~150ms (ICHM 50m/s^2 tolerance)
+Velocity polytope | ICHM | $x=By,~~ y \in P_{y}$ | ~ 200ms (10m/s tolerance)
 
 The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software.
 
