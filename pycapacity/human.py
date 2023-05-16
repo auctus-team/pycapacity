@@ -119,7 +119,7 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None, options=None):
     # construct polytope object
     poly = Polytope(vertices=f_vert, H=H, d=d)
     poly.torque_vertices = t_vert
-    poly.mucsle_force_vertices = F_vert
+    poly.muscle_force_vertices = F_vert
     poly.face_indices = faces
     # calculate faces if option is set to True
     if options is not None and 'calculate_faces' in options.keys() and options['calculate_faces'] is True:
