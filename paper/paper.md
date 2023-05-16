@@ -188,19 +188,19 @@ In case of robotic manipulators the methods used are:
 
 Polytope Metric | Algorithm used | Problem type | Execution time
 --- | -- | ----- | ---
-Velocity | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 2ms
-Acceleration |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 5ms
-Reachable space |  ICHM | $x=By,~~  y \in P_{y}$ | ~50ms
+Velocity | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~2ms
+Acceleration |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~5ms
 Force  | VEA | $Ax=b, ~~ b_{min} \leq b \leq y_{max}$| ~7ms
 Force intersection |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~80ms
-Force sum |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | 15ms
+Force sum |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~15ms
+Reachable space |  ICHM | $x=By,~~  y \in P_{y}$ | ~50ms
 
 The average execution time was calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software.
 
 In case of human musculoskeletal models the methods used are:
 
 Polytope Metric  | Algorithm used | Problem type | Execution time 
---- | -- | ----- | ----
+-- | --- | ----- | ---
 Force  | ICHM | $Ax=By,~~ y_{min} \leq y \leq y_{max}$ | ~ 200ms 
 Acceleration |  HPSM or ICHM | $x=By,~~ y_{min} \leq y \leq y_{max}$ |  ~ 300ms 
 Velocity | ICHM | $x=By,~~ y \in P_{y}$ | ~ 200ms
