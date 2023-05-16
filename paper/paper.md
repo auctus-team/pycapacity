@@ -181,12 +181,10 @@ Where $J$ is the model's jacobian matrix, $L$ si the muscle length jacobian matr
 
 ## Polytope evaluation algorithms used
 
+The methods for resolution of the polytope based metrics depend on the family of problems they correspond to. In case of robotic manipulators the methods used are given in the following table.
 
-The methods for resolution of these polytopes are based on different algorithms.
 
-In case of robotic manipulators the methods used are:
-
-Polytope Metric | Algorithm used | Problem type | Execution time
+Polytope Metric | Algorithm | Problem type | Execution time
 --- | -- | ----- | ---
 Velocity | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~2ms
 Acceleration |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~5ms
@@ -197,9 +195,9 @@ Reachable space |  ICHM | $x=By,~~  y \in P_{y}$ | ~50ms
 
 The average execution time was calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software.
 
-In case of human musculoskeletal models the methods used are:
+In case of human musculoskeletal models the methods used are given in the table below.
 
-Polytope Metric  | Algorithm used | Problem type | Execution time 
+Polytope Metric  | Algorithm | Problem type | Execution time 
 -- | --- | ----- | ---
 Force  | ICHM | $Ax=By,~~ y_{min} \leq y \leq y_{max}$ | ~ 200ms 
 Acceleration |  HPSM or ICHM | $x=By,~~ y_{min} \leq y \leq y_{max}$ |  ~ 300ms 
