@@ -20,9 +20,6 @@ date: 15 May 2023
 bibliography: paper.bib
 ---
 
-ashjdsalhj 
-
-
 # Summary
 
 There is a rising interest in collaborative robotics and physical human robot interaction, where the robot's are required to adapt to certain needs of the human in real-time. The fundamental challenge being the ability to evaluate the need of assistance of the operator. One of ways to quantify the need of assistance is by evaluating the operator's physical abilities in real-time and comparing them to the required physical abilities required by the collaborative task. Then the robot can assist the operator where he lacks the physical ability to accomplish the task.
