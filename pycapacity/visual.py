@@ -125,8 +125,10 @@ def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, e
         else:
             if len(axes) != 0 and isinstance(axes[0], mpl_toolkits.mplot3d.axes3d.Axes3D):
                 ax = axes[0]
+                print("using existing 3d axis")
             else:
                 ax = plt.axes(projection='3d')
+                print("creating a new 3d axis")
     elif isinstance(plot, matplotlib.figure.Figure):
         # if its figure provided, get the current axes
         # see if the first one is already an axis, if not create one
@@ -138,8 +140,10 @@ def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, e
                 ax = plot.add_subplot(111)
         else:
             if len(axes) != 0  and isinstance(axes[0], mpl_toolkits.mplot3d.axes3d.Axes3D):
+                print("using existing 3d axis")
                 ax = axes[0]
             else:
+                print("creating a new 3d axis")
                 ax = plot.add_subplot(111, projection='3d')
 
     elif dim==2 and isinstance(plot, matplotlib.axes.Axes):
@@ -148,11 +152,10 @@ def plot_polytope_faces(faces=None, polytope=None, plot=None, face_color=None, e
     elif dim==3 and isinstance(plot, mpl_toolkits.mplot3d.axes3d.Axes3D):
         #if its axes provided, use it
         ax = plot
+        print("using provided 3d axis")
     else:
         print(f"no matplotlib {dim}d axes provided")
         return ax
-
-
 
     # scale the data
     faces= np.array(faces)*scale
