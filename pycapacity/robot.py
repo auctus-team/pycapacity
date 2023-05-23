@@ -15,6 +15,7 @@ This is a pyhton module which implements different robot performance metrics bas
 import numpy as np
 # minkowski sum
 from scipy.spatial import ConvexHull
+from scipy.linalg import block_diag
 
 # import the algos
 from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_auctus
@@ -107,7 +108,7 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     .. math:: P_f = \{f~ | ~ f_1\! =\! f_2\! =\! f, ~~ \\tau_1  = J_1^Tf_1, ~~ \\tau_2  = J_2^Tf_2, ~~ {t}_{1,min} \leq \\tau_1 \leq {\\tau}_{1,max},~~~ {\\tau}_{2,min} \leq \\tau_1 \leq {\\tau}_{2,max}\}
 
 
-    Based on the ``vertex_enumeration_auctus`` algorihtm.
+    Based on the ``vertex_enumeration_auctus`` algorithm.
 
     Args:
         Jacobian1:  position jacobian robot 1
@@ -116,8 +117,8 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
         t_min2:  minimal joint torques robot 2
         t_max1:  maximal joint torques robot 1
         t_max2:  maximal joint torques robot 2
-        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
-        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
+        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 1
+        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 2
         options:  dictionary of options for the algorithm (currently supported: ``calculate_faces``)
     Returns
     ---------
@@ -142,7 +143,7 @@ def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_
 
     .. math:: P_f = \{f~ | ~ f\! =\! f_1\! +\! f_2, ~~ \\tau_1  = J_1^Tf_1, ~~ \\tau_2  = J_2^Tf_2, ~~ {\\tau}_{1,min} \leq \\tau_1 \leq {\\tau}_{1,max},~~~ {\\tau}_{2,min} \leq \\tau_1 \leq {\\tau}_{2,max}\}
 
-    Based on the ``vertex_enumeration_auctus`` algorihtm.
+    Based on the ``vertex_enumeration_auctus`` algorithm.
 
     Args:
         Jacobian1:  position jacobian robot 1
@@ -151,8 +152,8 @@ def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_
         t_min2:  minimal joint torques robot 2
         t_max1:  maximal joint torques robot 1
         t_max2:  maximal joint torques robot 2
-        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 1
-        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot 2
+        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 1
+        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 2
         options: dictionary of additional options (currently supported only ``calculate_faces`` option)
 
     Returns
@@ -160,6 +161,8 @@ def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_
         polytope(Polytope):
             polytope object with ``vertices`` and half-plane representation ``H`` and ``d``, ( ``faces`` and ``face_indices`` if ``calculate_faces`` option is set to True)
     """ 
+
+
     # calculate two polytopes
     f1_poly = force_polytope(Jacobian1, t1_max, t1_min, t1_bias)
     f2_poly = force_polytope(Jacobian2, t2_max, t2_min, t2_bias)
@@ -187,7 +190,7 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None, options = None):
 
     .. math:: P_f = \{f~ |~ \\tau  = J^Tf,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\}
 
-    Based on the ``vertex_enumeration_auctus`` algorihtm.
+    Based on the ``vertex_enumeration_auctus`` algorithm.
 
     Args:
         Jacobian:  position jacobian 
@@ -222,7 +225,7 @@ def velocity_polytope(Jacobian, dq_max, dq_min, options = None):
 
     .. math:: P_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}\}
 
-    Based on the ``hyper_plane_shifting_method`` algorihtm.
+    Based on the ``hyper_plane_shifting_method`` algorithm.
 
     Args:
         Jacobian:  position jacobian 
@@ -253,7 +256,7 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None, options = None):
 
     .. math:: P_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\} 
 
-    Based on the ``hyper_plane_shifting_method`` algorihtm.
+    Based on the ``hyper_plane_shifting_method`` algorithm.
 
     Args:
         J:  position jacobian 
@@ -300,7 +303,7 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
     where :math:`\\tau_{bias}` is the bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces which is optional.
     and :math:`\Delta t_{h}` is the time horizon. If limits on joint velocity :math:`\dot{q}_{min}` and :math:`\dot{q}_{max}` or joint postion limits :math:`{q}_{min}` and :math:`{q}_{max}` are not given, the function calculates the ploytope  without them.
 
-    Based on the ``iterative_convex_hull`` algorihtm.
+    Based on the ``iterative_convex_hull`` algorithm.
 
     Args:
         M:  inertia matrix

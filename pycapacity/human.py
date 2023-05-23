@@ -27,7 +27,7 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-5, options=None):
     
     .. math:: P_{t} = \{ \\tau ~ | ~ \\tau= NF, \quad F_{min} \leq F \leq F_{max}\}
 
-    Based on the ``hyper_plane_shifting_method`` algorihtm.
+    Based on the ``hyper_plane_shifting_method`` algorithm.
 
     Args:
         N: moment arm matrix
@@ -59,7 +59,7 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5, options=None):
 
     .. math:: P_{a} = \{ \ddot{x} ~ | ~ \ddot{x} = JM^{-1}NF, \quad F_{min} \leq F \leq F_{max}\}
 
-    Based on the ``hyper_plane_shifting_method`` algorihtm.
+    Based on the ``hyper_plane_shifting_method`` algorithm (default) or the ``iterative_convex_hull_method`` algorithm (options['algorithm'] = 'ichm').
 
     Args:
         J: jacobian matrix
@@ -68,27 +68,40 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5, options=None):
         F_min: minimal muscular forces (passive forces or 0)
         F_max: maximal isometric forces 
         tolerance: tolerance for the polytope calculation
-        options: dictionary of options for the polytope calculation (currently only ``calculate_faces`` is supported)
+        options: dictionary of options for the polytope calculation (currently supported options are ``calculate_faces`` and ``algorithm``)
         
     Returns
     ---------
         poly(Polytope):
             polytope object with the following attributes ``vertices``, half-plane representation ``H``, ``d``, (and ``face_indices`` and ``faces`` if option ``calculate_faces`` is set to ``True``)
     """
-    H,d = hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
-    vert, faces = hspace_to_vertex(H,d)
 
-    # construct polytope object
-    poly = Polytope(vertices=vert, H=H, d=d)
+    if options is not None and 'algorithm' in options.keys() and options['algorithm'] == 'ichm':
+        vert, H, d, faces , F_vert, t_vert = iterative_convex_hull_method(
+            A = np.eye(J.shape[0]),
+            B = J.dot(np.linalg.inv(M).dot(N)), 
+            y_min=F_min, 
+            y_max= F_max, 
+            tol=tol)
+        # construct polytope object
+        poly = Polytope(vertices=vert, H=H, d=d)
+        poly.face_indices = faces
+    else:
+        H,d = hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
+        vert, faces = hspace_to_vertex(H,d) 
+        # construct polytope object
+        poly = Polytope(vertices=vert, H=H, d=d)
+        poly.face_indices = faces
+
+   
     # calculate faces if requested
     if options is not None and 'calculate_faces' in options.keys() and options['calculate_faces'] is True:
-        poly.face_indices = faces
         poly.faces = face_index_to_vertex(poly.vertices, faces)
     return poly
 
 def force_polytope(J, N, F_min, F_max, tol, torque_bias=None, options=None):
     """
-    A function calculating the polytopes of achievable foreces based 
+    A function calculating the polytopes of achievable forces based 
     on the jacobian matrix `J` and moment arm matrix `N`
 
     .. math:: P_{f} = \{ f ~ | ~ J^Tf = NF, \quad F_{min} \leq F \leq F_{max}\}
@@ -97,7 +110,7 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None, options=None):
         
     .. math:: P_{f} = \{ f ~ | ~ J^Tf = NF + \\tau_{bias}, \quad F_{min} \leq F \leq F_{max}\}
 
-    Based on the ``iterative_convex_hull_method`` algorihtm.
+    Based on the ``iterative_convex_hull_method`` algorithm.
 
     Args:
         J: jacobian matrix
@@ -145,7 +158,7 @@ def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=
     .. math:: P_{v,\dot{l}} = \{ \dot{x} ~ | ~ J\dot{q} = \dot{x}, \quad \dot{q}_{min} \leq \dot{q} \leq \dot{q}_{max}, ~~  \dot{l}_{max} \leq L\dot{q} \leq \dot{l}_{max}\}
 
 
-    Based on the ``iterative_convex_hull_method`` algorihtm.
+    Based on the ``iterative_convex_hull_method`` algorithm.
 
     Args:
         J: jacobian matrix
