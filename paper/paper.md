@@ -1,5 +1,5 @@
 ---
-title: 'Pycapacity: A real-time task-space capacity calculation package'
+title: 'Pycapacity: a real-time task-space capacity calculation package for robotics and biomechanics'
 tags:
   - Python
   - robotics
@@ -7,43 +7,43 @@ tags:
   - polytope algebra
 authors:
   - name: Antun Skuric
+    corresponding: true # (This is how to denote the corresponding author)
     orcid: 0000-0000-0000-0000
     affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Vincent Padois
     affiliation: 1
   - name: David Daney
-    corresponding: true # (This is how to denote the corresponding author)
     affiliation: 1
 affiliations:
- - name: INRIA Sud Ouest, Bordeaux, France
-date: 15 May 2023
+ - name: INRIA, Bordeaux, France
+date: 23 May 2023
 bibliography: paper.bib
 ---
 
 # Summary
 
-There is a rising interest in collaborative robotics and physical human robot interaction, where the robot's are required to adapt to certain needs of the human in real-time. The fundamental challenge being the ability to evaluate the need of assistance of the operator. One of ways to quantify the need of assistance is by evaluating the operator's physical abilities in real-time and comparing them to the required physical abilities required by the collaborative task. Then the robot can assist the operator where he lacks the physical ability to accomplish the task.
+There is a rising interest in collaborative robotics and physical human robot interaction, where the robot's are required to adapt to certain needs of the human in real-time. This adaptation raises a fundamental challenge: the ability to evaluate the need of assistance of the operator. One of ways to quantify the need of assistance is by evaluating the operator's physical abilities in real-time and comparing them to the required physical abilities required by the collaborative task. Then the robot can assist the operator where he lacks the physical ability to accomplish the task.
 
-Furthermore, as todays collaborative robotic manipulators are designed for safety, their performance characteristics are relatively limited with respect to the more standard industrial robots. Therefore it is becoming increasingly important to exploit their full (physical) abilities when executing the task.  
+Beyond the characterization of human physical capabilities, as todays collaborative robotic manipulators are designed for safety, their performance characteristics are relatively limited with respect to the more standard industrial robots. Therefore it is becoming increasingly important to exploit their full (physical) abilities when executing the task.  
 
-There are many different physical ability metrics available in the literature that might be used in such way, such as: force capacity, velocity capacity, acceleration capacity, precision and similar. Most of these metrics can be represented by two families of geometric shapes ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. However more efficient numerical tools are needed in order to evaluate these metrics in order to allow for more of their real-time applications, for example in robot control or interactive visualization. Additionally efficient performance metrics can be further used for robot and workspace design as well as human motion and ergonomics analysis.
+There are many different metrics available in the literature that might be used to characterize physical abilities: force capacity, velocity capacity, acceleration capacity, accuracy, stiffness etc. Most of these metrics can be represented by two families of geometric shapes ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. It can be interesting to be able to compute these metrics off line for analysis purposes (workspace design, human motion and ergonomics analysis) as well as in interactive ways for control or user feedback. The dimensionality of the problem to solve  and the limited computation time, respectively for off-line and online applications, advocate for efficient tools to evaluate these metrics.
 
 # Statement of need
 
-Therefore this python package implements several different robotic manipulator and human musculoskeletal model based physical capacity metrics, based on ellipsoids and polytopes. All the algorithms are implemented in python, and having execution times of a fraction of the seconds,they are intended to be used in real-time applications such as robot control and visualization to the operator as well as in robot performance. The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomechanics software `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. The package can also be used with Robot operating system (`ROS`) [@quigley2009ros]
+This python package implements several different physical ability metrics based on ellipsoids and polytopes, for robotic manipulators and human musculoskeletal modes. All the algorithms are implemented in python, and having execution times of a fraction of the second, they are intended to be used in real-time applications such as robot control and visualization to the operator. The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomechanics softwares `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. The package can also be used with the Robot Operating System (`ROS`) [@quigley2009ros].
 
 The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the python package `matplotlib` intended for fast prototyping and quick and interactive visualization.
 
-This package has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023].
+This package has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has aslo been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023].
 
 
 # Implemented polytope evaluation algorithms
 
-This package implements several different algorithms for polytope evaluation 
+This package implements several algorithms for polytope evaluation 
 
-- Hyper-plane shifting method (HPSM)
-- Vertex enumeration auctus (VEA)
-- Iterative Convex Hull method (ICHM)
+- Hyper-Plane Shifting Method (HPSM)
+- Vertex Enumeration Auctus (VEA)
+- Iterative Convex Hull Method (ICHM)
 
 These algorithms are all implemented in python and used to evaluate different polytope based physical ability metrics. Additionally the algorithms are available to the users to be used standalone as well.
 
@@ -86,7 +86,7 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 
 # Physical capacity metrics
 
-The package several implements different physical ability metrics for robotic manipulators and humans based on musculoskeletal models.
+The package implements different physical ability metrics for robotic manipulators and humans based on musculoskeletal models.
 
 ## Robotic manipulators metrics
 
@@ -150,7 +150,7 @@ P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
 This approach is described in the paper by [@skuric2023].
 
 
-Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
+Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accelerations, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
 
 ## Human musculoskeletal model metrics
 
@@ -190,7 +190,7 @@ Force intersection |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~80ms
 Force sum |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~15ms
 Reachable space |  ICHM | $x=By,~~  y \in P_{y}$ | ~50ms
 
-The average execution time was calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software.
+The average execution time is calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software. All the experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
 
 In case of human musculoskeletal models the methods used are given in the table below.
 
@@ -200,7 +200,7 @@ Force  | ICHM | $Ax=By,~~ y_{min} \leq y \leq y_{max}$ | ~ 200ms
 Acceleration |  HPSM or ICHM | $x=By,~~ y_{min} \leq y \leq y_{max}$ |  ~ 300ms 
 Velocity | ICHM | $x=By,~~ y \in P_{y}$ | ~ 200ms
 
-The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software.
+The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software. The experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
 
 # Acknowledgements
 This work has been funded by the BPI France Lichie project.
