@@ -1,6 +1,12 @@
 ROS example using ``pinocchio``
 ===============================================
 
+.. figure:: ../images/rviz.gif
+    :align: center
+    :alt: vel_polytope_rviz
+
+    Interactive visualisation of the polytope in ``rviz`` using ``jsk_rviz_plugins`` package.
+
 This is an example of using ``pycapacity`` with ``pinocchio`` and ``ROS``. 
 The example is based on the ``panda`` robot. 
 The robot is loaded from the ``robot_description`` parameter. 
