@@ -8,7 +8,7 @@ tags:
 authors:
   - name: Antun Skuric
     corresponding: true # (This is how to denote the corresponding author)
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-3323-4482
     affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Vincent Padois
     affiliation: 1
