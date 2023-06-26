@@ -8,15 +8,15 @@ tags:
 authors:
   - name: Antun Skuric
     corresponding: true # (This is how to denote the corresponding author)
-    orcid: 0000-0000-0000-0000
+    orcid: 0000-0002-3323-4482
     affiliation: 1 # (Multiple affiliations must be quoted)
   - name: Vincent Padois
     affiliation: 1
   - name: David Daney
     affiliation: 1
 affiliations:
-  - name: INRIA, Bordeaux, France
-    index: 1
+ - name: INRIA, Bordeaux, France
+   index: 1
 date: 23 May 2023
 bibliography: paper.bib
 ---
