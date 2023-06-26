@@ -16,6 +16,7 @@ authors:
     affiliation: 1
 affiliations:
  - name: INRIA, Bordeaux, France
+ - index: 1
 date: 23 May 2023
 bibliography: paper.bib
 ---
