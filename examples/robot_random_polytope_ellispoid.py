@@ -18,7 +18,7 @@ t_max = 10*np.ones(n)
 # force polytope calculation
 f_poly =  capacity.force_polytope(J,t_max,t_min)
 
-# force ellispoid calcualtion
+# force ellipsoid calculation
 f_ellipsoid = capacity.force_ellipsoid(J, t_max)
 
 # visualisaiton

@@ -16,7 +16,7 @@ def test1():
     robot.velocity_polytope(J, dq_min, dq_max)
 
 
-# unit test for force_polytope fucntion with randome data   
+# unit test for force_polytope function with random data   
 def test2():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -26,7 +26,7 @@ def test2():
     robot.force_polytope(J, t_min, t_max)
     assert True
 
-# unit test for velocity_polytope fucntion with randome data
+# unit test for velocity_polytope function with random data
 def test3():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -35,7 +35,7 @@ def test3():
     robot.velocity_ellipsoid(J,  dq_max)
     assert True
 
-# unit test for force_ellipsoid fucntion with randome data
+# unit test for force_ellipsoid function with random data
 def test4():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -44,7 +44,7 @@ def test4():
     robot.force_ellipsoid(J, t_max)
     assert True
 
-# unit test for acceleration_ellipsoid fucntion with randome data
+# unit test for acceleration_ellipsoid function with random data
 def test5():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -54,7 +54,7 @@ def test5():
     robot.acceleration_ellipsoid(J, M, t_max)
     assert True
 
-# unit test for force_polytope_intersection fucntion with randome data
+# unit test for force_polytope_intersection function with random data
 def test6():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -65,7 +65,7 @@ def test6():
     robot.force_polytope_intersection(J, J2, t_max, t_min, t_max, t_min)
     assert True
 
-# unit test for force_polytope_intersection fucntion with randome data with t_bias
+# unit test for force_polytope_intersection function with random data with t_bias
 def test6():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -77,7 +77,7 @@ def test6():
     robot.force_polytope_intersection(J, J2, t_max, t_min, t_max, t_min, t_bias, t_bias)
     assert True
 
-# unit test for force_polytope_sum fucntion with randome data
+# unit test for force_polytope_sum function with random data
 def test7():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -88,7 +88,7 @@ def test7():
     robot.force_polytope_sum(J, J2, t_max, t_min, t_max, t_min)
     assert True
 
-# unit test for force_polytope fucntion with randome data 1d matrix J 
+# unit test for force_polytope function with random data 1d matrix J 
 def test8():
     n = 5 # nb joints
     m = 1 # cartesian forces
@@ -98,7 +98,7 @@ def test8():
     robot.force_polytope(J, t_max, t_min)
     assert True
 
-# unit test for force_polytope_intersection fucntion with randome data 1d data
+# unit test for force_polytope_intersection function with random data 1d data
 def test16():
     n = 5 # nb joints
     m = 1 # cartesian forces
@@ -110,7 +110,7 @@ def test16():
     assert True
 
 
-# unit test for acceleration_polytope fucntion with randome data and bias   
+# unit test for acceleration_polytope function with random data and bias   
 def test9():
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -123,7 +123,7 @@ def test9():
     assert True
 
 
-# unit test for acceleration_polytope fucntion with randome data and bias   
+# unit test for acceleration_polytope function with random data and bias   
 def test10():
     n = 5 # nb joints
     m = 3 # cartesian forces

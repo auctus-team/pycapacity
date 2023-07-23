@@ -69,11 +69,11 @@ Classify points in or out the polytope
 
     # draw faces and vertices
     plot_polytope(plot=plt, 
-                polytope=p, 
-                label='polytope', 
-                edge_color='black', 
-                show_vertices=False, 
-                alpha=0.2)
+                  polytope=p, 
+                  label='polytope', 
+                  edge_color='black', 
+                  show_vertices=False, 
+                  alpha=0.2)
     # points out in red 
     plt.plot(points_out[0,:],points_out[1,:],points_out[2,:],'ro',label='points out')
     # point in in green

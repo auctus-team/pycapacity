@@ -2,7 +2,7 @@
 Overview
 ---------
 
-This is a pyhton module which implements different robot performance metrics based on polytopes and ellipsoids.
+This is a python module which implements different robot performance metrics based on polytopes and ellipsoids.
 
 * acceleration `polytope <#pycapacity\.robot\.acceleration_polytope>`_ and `ellipsoid <#pycapacity\.robot\.acceleration_ellipsoid>`_
 * velocity (manipulability) `polytope <#pycapacity\.robot\.velocity_polytope>`_ and `ellipsoid <#pycapacity\.robot\.velocity_ellipsoid>`_

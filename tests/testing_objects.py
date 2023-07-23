@@ -2,7 +2,7 @@ from pycapacity.objects import *
 import numpy as np
 
 
-# write a test for custructing the ellispoid object
+# write a test for custructing the ellipsoid object
 def test_ellipsoid():
     e = Ellipsoid(rotation=np.eye(3), radii=np.zeros((3,1)))
     assert e.radii.shape == (3,1)

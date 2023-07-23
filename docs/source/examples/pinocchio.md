@@ -1,7 +1,7 @@
 # Pinocchio examples
 ![](https://github.com/stack-of-tasks/pinocchio/raw/master/doc/images/pinocchio-logo-large.png)
 
-This is an example tutorial of how to setup `pinochchio` with `pycapacity` to calcualte and visualise the robot capacities
+This is an example tutorial of how to setup `pinocchio` with `pycapacity` to calculate and visualise the robot capacities
 
 ![](../images/pin_animation.gif)
 
@@ -35,7 +35,7 @@ dependencies:
 And create a new ready to go environment:
 ```
 conda env create -f env.yaml    # create the new environemnt and install pinocchio, gepetto, pycapacity,.. 
-conda actiavte pio_examples
+conda actvavte pio_examples
 ```
 
 #### Creating the custom environment from scratch
@@ -100,7 +100,7 @@ fig = plt.figure()
 # draw faces and vertices
 plot_polytope(plot=plt, polytope=f_poly, label='force polytope', vertex_color='blue', face_color='blue', edge_color='blue', alpha=0.2)
 # draw the ellipsoid
-plot_ellipsoid(ellipsoid=f_ellipsoid,plot=plt,color='yellow', edge_color='yellow', alpha=0.2, label="force ellopsoid")
+plot_ellipsoid(ellipsoid=f_ellipsoid,plot=plt,color='yellow', edge_color='yellow', alpha=0.2, label="force ellipsoid")
 
 plt.legend()
 plt.show()
@@ -160,7 +160,7 @@ viz.loadViewerModel()
 viz.display(q0)
 
 
-## visualise the plytope and the ellipsoid
+## visualise the polytope and the ellipsoid
 import meshcat.geometry as g 
 
 # calculate the polytope
@@ -183,7 +183,7 @@ viz.viewer['ellipse'].set_transform(pin.SE3(vel_ellipsoid.rotation, Xee.translat
 
 
 
-## Animante polytopes in Meshcat
+## Animate polytopes in Meshcat
 
 Calculating the velocity polytope and ellipsoid of the panda robot and visualising it using `meshcat`.
 
@@ -251,7 +251,7 @@ while True:
         # visualise the robot
         viz.display(q)
 
-        # visualise the plytope and the ellipsoid
+        # visualise the polytope and the ellipsoid
         # meshcat triangulated mesh
         poly = g.TriangularMeshGeometry(vertices=vel_poly.vertices.T/10 + Xee.translation, faces=vel_poly.face_indices)
         viz.viewer['poly'].set_object(poly, g.MeshBasicMaterial(color=0x0022ff, wireframe=True, linewidth=3, opacity=0.2))

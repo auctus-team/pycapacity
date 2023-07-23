@@ -359,7 +359,7 @@ The full code of the ROS node is shown below.
         publish_polytope_vertex = rospy.Publisher('velocity_polytope_vertex', PointCloud, queue_size=10)
         publish_polytope_vertex.publish(create_vertex_msg(velocity_vertex, ee_position, "world", scaling_factor))
 
-        # publish plytope
+        # publish polytope
         publish_polytope = rospy.Publisher('velocity_polytope', PolygonArray, queue_size=10)
         publish_polytope.publish(create_polytopes_msg(velocity_faces, ee_position, "world", scaling_factor))
         
