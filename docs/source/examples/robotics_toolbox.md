@@ -1,4 +1,4 @@
-# Robotics toolbox  examples
+# Robotics toolbox examples
 ![](https://github.com/petercorke/robotics-toolbox-python/raw/master/docs/figs/RobToolBox_RoundLogoB.png)
 
 
@@ -30,7 +30,7 @@ dependencies:
 And create a new ready to go environment:
 ```
 conda env create -f env.yaml    # create the new environemnt and install robotics toolbosx, pycapacity, ...
-conda actiavte rtbx_examples
+conda activate rtbx_examples
 ```
 
 #### Creating the custom environment from scratch
@@ -87,8 +87,8 @@ plot_polytope(plot=plt,
               edge_color='black', 
               alpha = 0.2, 
               show_vertices=False,
-              center=panda.fkine(q).t,  # set the polytope  center at the end effector position
-              scale=1/500) # scale the polytiope and place it to the end-effector
+              center=panda.fkine(q).t,  # set the polytope center at the end effector position
+              scale=1/500) # scale the polytope and place it to the end-effector
 
 ax.set_xlim([-1, 1.5])
 ax.set_ylim([-1, 1.5])
@@ -136,17 +136,17 @@ env.launch()
 env.add(panda)
 
 
-# polytope visualisaation
+# polytope visualisation
 import trimesh
 # save polytope as mesh file
 scaling = 500
-# creathe the mesh
+# create the mesh
 mesh = trimesh.Trimesh(vertices=(f_poly.vertices.T/scaling + panda.fkine(q).t),
                        faces=f_poly.face_indices, use_embree=True, validate=True)
 f = open("demofile.stl", "wb")
 f.write(trimesh.exchange.stl.export_stl(mesh))
 f.close()
-# robot visualisaiton
+# robot visualisation
 from spatialgeometry import Mesh
 poly_mesh = Mesh('demofile.stl')
 poly_mesh.color = (0.9,0.6,0.0,0.5)
@@ -179,7 +179,7 @@ Jac = panda.jacob0(q)[:3,:]
 gravity = panda.gravload(q).reshape((-1,1))
 
 # calculate for the polytope
-f_poly =  pyc.force_polytope(Jac, t_max, t_min, gravity)
+f_poly = pyc.force_polytope(Jac, t_max, t_min, gravity)
 
 # plotting the polytope using pycapacity
 import matplotlib.pyplot as plt

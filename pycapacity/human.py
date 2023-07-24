@@ -2,7 +2,7 @@
 Overview
 ---------
 
-This is a pyhton module which implements different human performance metrics based on their musculoskeletal models
+This is a python module which implements different human performance metrics based on their musculoskeletal models
 
 * `joint torque polytope <#pycapacity\.human\.joint_torques_polytope>`_
 * `acceleration polytope <#pycapacity\.human\.acceleration_polytope>`_

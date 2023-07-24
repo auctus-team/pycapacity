@@ -9,9 +9,9 @@ And include it to your python project
 import pycapacity.robot 
 # and/or
 import pycapacity.human 
-#and/or
+# and/or
 import pycapacity.algorithms 
-#and/or
+# and/or
 import pycapacity.visual 
 ```
 
@@ -31,7 +31,7 @@ and install it using
 cd pycapacity
 pip install -e .
 ```
-then your can make import the `pycapacity` package as usual in your applications.
+then you can import the `pycapacity` package as usual in your applications.
 
 Furthermore if installing from source you can run all the unit tests in order to verify that the installation went well
 ```sh

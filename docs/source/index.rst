@@ -43,10 +43,10 @@ Learn more about the ``pycapacity`` package
 .. toctree::
    :maxdepth: 1
 
-   ABOUT <README.md>
-   🚀 INSTALLATION <install.md>
-   📄 API DOCS <pycapacity>
-   📝 CONTRIBUTING & ISSUES <contirbuting.md>
-   🎓 TUTORIALS <examples/index>
-   📑 CHANGELOG <changelog>
+   About <README.md>
+   🚀 Installation <install.md>
+   📄 API Docs <pycapacity>
+   📝 Contributing & Issues <contirbuting.md>
+   🎓 Tutorials <examples/index>
+   📑 Changelog <changelog>
    

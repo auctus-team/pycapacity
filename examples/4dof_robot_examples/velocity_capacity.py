@@ -23,7 +23,7 @@ vel_poly = capacity.velocity_polytope(J, dq_min ,dq_max)
 vel_ellipsoid = capacity.velocity_ellipsoid(J, dq_max)
 
 
-# visualise polytope ellispoid
+# visualise polytope ellipsoid
 fig = plt.figure(13, figsize=[10,10])
 
 scale = 1/5
@@ -41,7 +41,7 @@ visual.plot_polytope(plot=fig,
                     vertex_color='gray',
                     label='polytope', 
                     scale=scale)
-# plot ellispoid
+# plot ellipsoid
 visual.plot_ellipsoid(ellipsoid=vel_ellipsoid, 
                center=robot_position, 
                plot=fig,

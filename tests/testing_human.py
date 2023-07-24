@@ -17,7 +17,7 @@ def test1():
     human.iterative_convex_hull_method(np.identity(m), J.dot(np.linalg.inv(M).dot(N)), F_min, F_max,0.1)
     human.acceleration_polytope(J, N, M, F_min, F_max)
 
-# unit test for joint_torque_polytope fucntion with randome data
+# unit test for joint_torque_polytope function with random data
 def test2():
     L = 20 # nb muslces
     n = 3 # nb joints
@@ -28,7 +28,7 @@ def test2():
     human.joint_torques_polytope(N, F_min, F_max)
     assert True
 
-# unit test velocity_polytope fucntion with randome data
+# unit test velocity_polytope function with random data
 def test3():
     L = 20 # nb muslces
     n = 5 # nb joints
@@ -42,7 +42,7 @@ def test3():
     assert True
 
 
-# unit test for torque_to_muscle_force fucntion with randome data
+# unit test for torque_to_muscle_force function with random data
 def test4():
     L = 20 # nb muslces
     n = 5 # nb joints
@@ -54,7 +54,7 @@ def test4():
     human.torque_to_muscle_force(N, F_min, F_max, tau, options='lp')
     assert True
 
-# unit test for torque_to_muscle_force fucntion with randome data
+# unit test for torque_to_muscle_force function with  data
 def test5():
     L = 20 # nb muslces
     n = 5 # nb joints

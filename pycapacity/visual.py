@@ -2,7 +2,7 @@
 Overview
 ---------
 
-This is a pyhton module helping to visualise 2d and 3d polytopes and ellipsoids. It is based on the module  ``matplotlib``.
+This is a python module helping to visualise 2d and 3d polytopes and ellipsoids. It is based on the module  ``matplotlib``.
 
 * visualising 2d and 3d `polytope <#pycapacity\.visual\.plot_polytope>`_
 * visualising 2d and 3d polytope `faces <#pycapacity\.visual\.plot_polytope_faces>`_ and `vertices  <#pycapacity\.visual\.plot_polytope_vertex>`_
@@ -345,7 +345,7 @@ def plot_ellipsoid(radii=None, rotation=None, ellipsoid=None, center=None, plot=
         radii : radii of the ellipsoid in each axis (optional **either radii and rotation or ellipsoid must be provided**)
         rotation : rotation matrix (optional ***either radii and rotation or ellipsoid must be provided***)
         ellipsoid(Ellipsoid): ellipsoid object - if it is provided, it will use the ellipsoid radii and rotation (optional either radii and rotation or ellipsoid must be provided)
-        center : offset of the ellispoid from origin (optional)
+        center : offset of the ellipsoid from origin (optional)
         color :  face color (optional)
         edge_color : egde collor (optional)
         alpha : opacity (optional)

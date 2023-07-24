@@ -1,7 +1,7 @@
 Randomized robot
-==================
+================
 
-A simple example program for force polytope  evaluation of a randomised robot model. 
+A simple example program for force polytope evaluation of a randomised robot model. 
 Simply change the number of dof torque limits and see how the calculation time and shape evaluates.
 
 
@@ -28,10 +28,10 @@ fig = plt.figure(4)
 
 # draw faces and vertices
 plot_polytope(plot=plt, 
-            polytope=f_poly, 
-            label='force', 
-            edge_color='black', 
-            alpha = 0.4)
+              polytope=f_poly, 
+              label='force', 
+              edge_color='black', 
+              alpha = 0.4)
 
 plt.legend()
 plt.show()

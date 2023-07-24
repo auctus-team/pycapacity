@@ -25,7 +25,7 @@ acc_poly = capacity.acceleration_polytope(J, M, tau_min ,tau_max)
 # calculate the acceleration ellipsoid
 acc_ellisoid= capacity.acceleration_ellipsoid(J, M, tau_max)
 
-# visualise polytope ellispoid
+# visualise polytope ellipsoid
 fig = plt.figure(13, figsize=[10,10])
 
 scale = 1/100
@@ -43,7 +43,7 @@ visual.plot_polytope(plot=fig,
                     vertex_color='gray',
                     label='polytope', 
                     scale=scale)
-# plot ellispoid
+# plot ellipsoid
 visual.plot_ellipsoid(ellipsoid=acc_ellisoid, 
                center=robot_position, 
                plot=fig,
