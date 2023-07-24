@@ -4,7 +4,7 @@ Overview
 
 There are three main polytope evaluation algorithms implemented:
 
-* `hyper_plane_shift_method <#pycapacity\.algorithms\.hyper_plane_shift_method>`_: Hyper plane shifting method implementation used to find half-space representaiton of problems of a form 
+* `hyper_plane_shift_method <#pycapacity\.algorithms\.hyper_plane_shift_method>`_: Hyper plane shifting method implementation used to find half-space representation of problems of a form 
 
 .. math:: P = \{x~ |~ y = Ax,\quad x_{min} <= x <= x_{max}\}
 
@@ -16,7 +16,7 @@ There are three main polytope evaluation algorithms implemented:
 
 .. math:: P = \{x~ |~ Ax = By,\quad y_{min} \leq y \leq y_{max}\}
 
-Additionally this module implements different helping functions to half-plane and vertex representation manipulaitons of the polytopes:
+Additionally this module implements different helping functions to half-plane and vertex representation manipulations of the polytopes:
 
 * `hspace_to_vertex <#pycapacity\.algorithms\.hspace_to_vertex>`_: Function transforming H-representation to V-representation
 * `vertex_to_hspace <#pycapacity\.algorithms\.vertex_to_hspace>`_: Function transforming V-representation to H-representation

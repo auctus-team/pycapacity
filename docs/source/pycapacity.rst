@@ -9,6 +9,7 @@ pycapacity package
    pycapacity.robot
    pycapacity.visual
    pycapacity.polytope
+   pycapacity.examples
 
 
 
