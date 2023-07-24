@@ -1,7 +1,8 @@
 import pycapacity.robot as robot
 import numpy as np
 
-def test1():
+# all functions at once unit test with random data
+def test_all_at_once_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -17,7 +18,7 @@ def test1():
 
 
 # unit test for force_polytope fucntion with randome data   
-def test2():
+def test_force_polytope_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -27,7 +28,7 @@ def test2():
     assert True
 
 # unit test for velocity_polytope fucntion with randome data
-def test3():
+def test_velocity_polytope_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -36,7 +37,7 @@ def test3():
     assert True
 
 # unit test for force_ellipsoid fucntion with randome data
-def test4():
+def test_force_ellipsoid_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -45,7 +46,7 @@ def test4():
     assert True
 
 # unit test for acceleration_ellipsoid fucntion with randome data
-def test5():
+def test_acceleration_ellipsoid_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -55,7 +56,7 @@ def test5():
     assert True
 
 # unit test for force_polytope_intersection fucntion with randome data
-def test6():
+def test_force_polytope_intersection_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -66,7 +67,7 @@ def test6():
     assert True
 
 # unit test for force_polytope_intersection fucntion with randome data with t_bias
-def test6():
+def test_force_polytope_intersection_random_bias():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -78,7 +79,7 @@ def test6():
     assert True
 
 # unit test for force_polytope_sum fucntion with randome data
-def test7():
+def test_force_polytope_sum_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -89,7 +90,7 @@ def test7():
     assert True
 
 # unit test for force_polytope fucntion with randome data 1d matrix J 
-def test8():
+def test_force_polytope_random_1d():
     n = 5 # nb joints
     m = 1 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -99,7 +100,7 @@ def test8():
     assert True
 
 # unit test for force_polytope_intersection fucntion with randome data 1d data
-def test16():
+def test_force_polytope_intersection_random_1d():
     n = 5 # nb joints
     m = 1 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -111,7 +112,7 @@ def test16():
 
 
 # unit test for acceleration_polytope fucntion with randome data and bias   
-def test9():
+def test_acceleration_poly_random_bias():
     n = 5 # nb joints
     m = 3 # cartesian forces
     J = np.random.rand(m,n)*2 - 1
@@ -122,22 +123,10 @@ def test9():
     robot.acceleration_polytope(J, M, t_min, t_max, t_bias)
     assert True
 
-
-# unit test for acceleration_polytope fucntion with randome data and bias   
-def test10():
-    n = 5 # nb joints
-    m = 3 # cartesian forces
-    J = np.random.rand(m,n)*2 - 1
-    M = np.random.rand(n,n)
-    t_min = np.zeros(n)
-    t_max = np.ones(n)
-    t_bias = np.zeros(n)
-    robot.acceleration_polytope(J, M, t_min, t_max, t_bias)
-    assert True
     
 
 # unit test for reachable space approaximation using random data
-def test11():
+def test_approximation_reachable_space_random():
     n = 5 # nb joints
     m = 3 # cartesian forces
     

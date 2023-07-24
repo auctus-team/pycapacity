@@ -3,12 +3,12 @@ import numpy as np
 
 
 # write a test for custructing the ellispoid object
-def test_ellipsoid():
+def test_ellipsoid_construction():
     e = Ellipsoid(rotation=np.eye(3), radii=np.zeros((3,1)))
     assert e.radii.shape == (3,1)
 
 # write a test for custructing the polytope object
-def test_polytope():
+def test_polytope_construction():
     p = Polytope(vertices=np.zeros((3,1)))
     assert p.vertices.shape == (3,1)
 

@@ -1,7 +1,9 @@
 import pycapacity.human as human
 import numpy as np
 
-def test1():
+
+# test all the algos with random data at once
+def test_all_at_once_random():
     L = 20 # nb muslces
     n = 5 # nb joints
     m = 3 # cartesian forces
@@ -17,8 +19,8 @@ def test1():
     human.iterative_convex_hull_method(np.identity(m), J.dot(np.linalg.inv(M).dot(N)), F_min, F_max,0.1)
     human.acceleration_polytope(J, N, M, F_min, F_max)
 
-# unit test for joint_torque_polytope fucntion with randome data
-def test2():
+# unit test for joint_torque_polytope fucntion with random data
+def test_joint_torques_random():
     L = 20 # nb muslces
     n = 3 # nb joints
     N = (np.random.rand(n,L)*2 -1)
@@ -29,7 +31,7 @@ def test2():
     assert True
 
 # unit test velocity_polytope fucntion with randome data
-def test3():
+def test_human_velocity_random():
     L = 20 # nb muslces
     n = 5 # nb joints
     m = 3
@@ -43,7 +45,7 @@ def test3():
 
 
 # unit test for torque_to_muscle_force fucntion with randome data
-def test4():
+def test_human_torque_to_force_lp():
     L = 20 # nb muslces
     n = 5 # nb joints
     N = (np.random.rand(n,L)*2 -1)
@@ -55,7 +57,7 @@ def test4():
     assert True
 
 # unit test for torque_to_muscle_force fucntion with randome data
-def test5():
+def test_human_torque_to_force_qp():
     L = 20 # nb muslces
     n = 5 # nb joints
     N = (np.random.rand(n,L)*2 -1)
@@ -69,7 +71,7 @@ def test5():
 
 
 # unit test for velocity polytope with both elongation and joint velocity max provided
-def test6():
+def test_human_force_random():
     L = 20 # nb muslces
     n = 5 # nb joints
     m = 3 # cartesian forces

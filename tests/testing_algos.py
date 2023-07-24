@@ -2,7 +2,8 @@ import pycapacity.algorithms as algos
 import numpy as np
 
 
-def test1():
+# function testing if algotrithms are execute for random data
+def test_algos_random_data():
     L = 10
     n = 5
     m = 3
@@ -27,7 +28,7 @@ def test1():
 
 # write unit test for hyper_plane_shift_method
 # with random data and return true id no exception is raised
-def test2():
+def test_hpsm_random():
     L = 10
     n = 5
     m = 3
@@ -43,7 +44,7 @@ def test2():
 
 # write unit test for vertex_enumeration_auctus
 # with random data and return true id no exception is raised
-def test3():
+def test_vea_random():
     L = 10
     n = 5
     m = 3
@@ -59,7 +60,7 @@ def test3():
 
 #  write unit test for iterative_convex_hull_method
 # with random data and return true id no exception is raised
-def test4():
+def test_ichm_random():
     L = 10
     n = 5
     m = 3
@@ -74,9 +75,9 @@ def test4():
 
     assert True
 
-# unit test for iterative_convex_hull_method return true if expection is 
+# unit test for iterative_convex_hull_method return true if exception is 
 # raised when x_min and x_max are not the same size
-def test5():
+def test_ichm_random_xmin_xmax_not_same_size():
     L = 10
     n = 5
     m = 3
@@ -94,7 +95,7 @@ def test5():
 
 # unit test for iterative_convex_hull_method check if A nad B matrices not compatible
 # return true if expection is raised
-def test6():
+def test_ichm_random_A_B_not_compatible():
     L = 10
     n = 5
     m = 3
@@ -112,7 +113,7 @@ def test6():
 
 # unit test for iterative_convex_hull_method with singular matrix A
 # return true if expection is raised
-def test7():
+def test_ichm_random_A_singular():
     L = 10
     n = 5
     m = 3
@@ -133,7 +134,7 @@ def test7():
 
 # unit test for iterative_convex_hull_method no matrix A is identity matrix
 # return true if all is ok
-def test8():
+def test_ichm_random_A_identity():
     L = 10
     n = 5
     m = 3
@@ -150,7 +151,7 @@ def test8():
 
 # unit test for iterative_convex_hull_method with matrix B is identity matrix
 # return true if all is ok
-def test9():
+def test_ichm_random_B_identity():
     L = 10
     n = 5
     m = 3
@@ -167,7 +168,7 @@ def test9():
 
 # unit test for iterative_convex_hull_method with equality constraints G_eq and h_eq
 # return true if all is ok
-def test10():
+def test_ichm_random_G_eq_h_eq():
     np.random.seed(102)
     L = 10
     n = 5
@@ -187,7 +188,7 @@ def test10():
 
 # unit test iterative_convex_hull_method if matrix A has less rows than columns
 # return is exception is raised
-def test11():
+def test_ichm_random_A_less_rows_than_columns():
     L = 10
     n = 5
     m = 3
@@ -205,7 +206,7 @@ def test11():
     
 # unit test iterative_convex_hull_method if lower limits higher than upper limits
 # return is exception is raised
-def test12():
+def test_ichm_random_y_min_higher_than_y_max():
     L = 10
     n = 5
     m = 3
@@ -223,7 +224,7 @@ def test12():
 
 # unit test iterative_convex_hull_method with bias  
 # return true if all is ok
-def test13():
+def test_ichm_random_bias():
     L = 10
     n = 5
     m = 3
@@ -242,7 +243,7 @@ def test13():
 
 # unit test for iterative_convex_hull_method with one dimensional matrix A
 # return true if all is ok
-def test14():
+def test_ichm_random_A_one_dimensional():
     L = 10
     n = 5
     m = 1
@@ -259,7 +260,7 @@ def test14():
 
 # unit test for iterative_convex_hull_method with one dimensional matrix A
 # return true if all is ok
-def test14():
+def test_ichm_random_B_one_dimensional():
     L = 10
     n = 5
     m = 1
@@ -276,7 +277,7 @@ def test14():
 
 # unit test for iterative_convex_hull_method with one dimensional matrix A and B
 # return true if all is ok
-def test15():
+def test_ichm_random_A_B_one_dimensional():
     L = 10
     n = 1
     m = 1
@@ -293,7 +294,7 @@ def test15():
 
 # unit test iterative_convex_hull_method with projection matrix P  
 # return true if all is ok
-def test16():
+def test_ichm_random_P():
     L = 10
     n = 5
     m = 3
@@ -311,7 +312,7 @@ def test16():
 
 # unit test iterative_convex_hull_method with projection matrix P which has more rows than matrix A has columns
 # return is exception is raised
-def test17():
+def test_ichm_random_P_more_rows_than_A_columns():
     L = 10
     n = 5
     m = 3
@@ -330,7 +331,7 @@ def test17():
 
 # unit test iterative_convex_hull_method with inequality constraints G_in and h_in
 # return true if all is ok
-def test18():
+def test_ichm_random_G_in_h_in():
     L = 10
     n = 5
     m = 3
@@ -350,7 +351,7 @@ def test18():
 
 # unit test for iterative_convex_hull_method with G_in matrix with more columns than y_min and y_max
 # return is exception is raised
-def test19():
+def test_ichm_random_G_in_more_columns_than_y_min_y_max():
     L = 10
     n = 5
     m = 3
@@ -371,7 +372,7 @@ def test19():
 
 # unit test iterative_convex_hull_method with h_in with more rows than G_in has
 # return is exception is raised
-def test20():
+def test_ichm_random_h_in_more_rows_than_G_in():
     L = 10
     n = 5
     m = 3
@@ -392,7 +393,7 @@ def test20():
 
 # unit test iterative_convex_hull_method with G_eq with more columns than y_min and y_max
 # return is exception is raised
-def test21():
+def test_ichm_random_G_eq_more_columns_than_y_min_y_max():
     L = 10
     n = 5
     m = 3
@@ -413,7 +414,7 @@ def test21():
 
 # unit test iterative_convex_hull_method with h_eq with more rows than G_eq has
 # return is exception is raised
-def test22():
+def test_ichm_random_h_eq_more_rows_than_G_eq():
     L = 10
     n = 5
     m = 3
@@ -434,8 +435,8 @@ def test22():
 
 
 # unit test for iterative_convex_hull_method with G_eq and h_eq and matrix A is identity matrix
-# return is everythin is ok
-def test23():
+# return is everything is ok
+def test_ichm_random_G_eq_and_h_eq_A_identity():
     L = 10
     n = 5
     m = 3
@@ -455,7 +456,7 @@ def test23():
 
 # unit test stack function
 # return true if all is ok
-def test24():
+def tes_stack_horizontal():
     A = np.array([[1, 2, 3], [4, 5, 6]])
     B = np.array([[7, 8, 9], [10, 11, 12]])
 
@@ -463,7 +464,7 @@ def test24():
 
 # unit test stack function
 # return true if all is ok
-def test25():
+def test_stack_vertical():
     A = np.array([[1, 2, 3], [4, 5, 6]])
     B = np.array([[7, 8, 9], [10, 11, 12]])
 
@@ -472,7 +473,7 @@ def test25():
 
 # unit test stack function with only one matrix
 # return true if all is ok
-def test25():
+def test_stack_A_empty():
     A = []
     B = np.array([[7, 8, 9], [10, 11, 12]])
 
@@ -480,7 +481,7 @@ def test25():
 
 # unit test stack function with only one matrix
 # return true if all is ok
-def test26():
+def test_stack_B_empty():
     B = None
     A = np.array([[7, 8, 9], [10, 11, 12]])
 
@@ -489,7 +490,7 @@ def test26():
 
 #unit test for chebyshev_center function
 #return true if all is ok
-def test27():
+def test_chebyshev_center_random():
     A = np.vstack((np.eye(3),-np.eye(3)))
     b = np.hstack((np.ones(3) + 0.5, np.ones(3) - 0.5)).reshape(6,1)
 
@@ -497,7 +498,7 @@ def test27():
 
 #unit test for  vertex_enumeration_auctus function with incompatible matrix A
 # return true if exception is raised
-def test28():
+def test_vea_random_A_incompatible():
     A = np.array([[1, 2, 3], [4, 5, 6]])
     x_min = np.zeros(3)
     x_max = np.ones(3)
@@ -509,7 +510,7 @@ def test28():
     
 # unit test for vertex_enumeration_auctus function invalid x_min 
 # return true if exception is raised
-def test29():
+def test_vea_invalid_x_min():
     A = np.array([[1, 2, 3], [4, 5, 6], [4, 5, 6]])
     x_min = np.ones(4)
     x_max = np.ones(3)
@@ -521,7 +522,7 @@ def test29():
             
 # unit test for vertex_enumeration_auctus function invalid x_max 
 # return true if exception is raised
-def test29():
+def test_vea_invalid_x_max():
     A = np.array([[1, 2, 3], [4, 5, 6], [4, 5, 6]])
     x_min = np.ones(3)
     x_max = np.ones(4)
@@ -533,7 +534,7 @@ def test29():
 
 # unit test for vertex_enumeration_auctus function with bias    
 # return true if all is ok
-def test30():
+def test_vea_random_with_bias():
     A = np.array([[1, 2, 3], [4, 5, 6],[4, 5, 6]])
     x_min = np.ones(3)
     x_max = np.ones(3)
@@ -545,7 +546,7 @@ def test30():
 
 # unit test for vertex_enumeration_auctus function with bias invalid size
 # return true if exception is raised
-def test31():
+def test_vea_invalid_bias():
     A = np.array([[1, 2, 3], [4, 5, 6],[4, 5, 6]])
     x_min = np.ones(3)
     x_max = np.ones(3)
@@ -558,7 +559,7 @@ def test31():
 
 # unit test for face_to_vertex function 
 # return true if all is ok
-def test32():
+def test_face_to_vertex_3d():
     vert = np.array([[1, 2, 3], [4, 5, 6], [4, 5, 6]]).T
     face_indeces = np.array([1, 0, 2])
 
@@ -566,7 +567,7 @@ def test32():
 
 # unit test for face_to_vertex function  in 2d
 # return true if all is ok
-def test33():
+def test_face_to_vertex_2d():
     vert = np.array([[1, 2], [4, 5], [4, 5], [6, 7]]).T
     face_indeces = np.array([2, 1, 3,0])
 
@@ -575,15 +576,15 @@ def test33():
 
 # unit test for vertex_to_face function
 # return true if all is ok
-def test34():
+def test_vertex_to_face_3d():
     vert = np.random.rand(10,3).T
 
     algos.vertex_to_faces(vert)
     assert  True
 
-# unit test for vertex_to_face function when vertice is 1d
+# unit test for vertex_to_face function when vertices is 1d
 # return true if all is ok
-def test35():
+def test_vertex_to_face_1d():
     vert = np.random.rand(2).reshape(1,2)
 
     algos.vertex_to_faces(vert)
@@ -591,7 +592,7 @@ def test35():
 
 # unit test for vertex_to_hspace function
 # return true if all is ok
-def test36():
+def test_vertex_to_hspace_random():
     np.random.seed(110)
     vert = np.random.rand(20,3).T
 
@@ -601,7 +602,7 @@ def test36():
 
 # unit test hspace_to_vertex function
 # return true if all is ok
-def test37():
+def test_hspace_to_vertex_random():
     np.random.seed(110)
     H = np.vstack((np.eye(3),-np.eye(3)))
     d = np.hstack((np.ones(3), np.ones(3)))
@@ -614,7 +615,7 @@ def test37():
 
 # unit test check that the combination of vertex_to_hspace and hspace_to_vertex works well
 # return true if all is ok
-def test38():
+def test_vertex_to_hspace_to_hspace_to_vertex_random():
     np.random.seed(193)
     vert = np.random.rand(5,3).T
 
