@@ -324,7 +324,7 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
         *Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht*
 
 
-    This algorithm can be used to calcualte acceleration polytope, velocity polytoe and even 
+    This algorithm can be used to calculate acceleration polytope, velocity polytoe and even 
     polytope of the joint achievable joint torques based on the muscle forces
 
     Args:

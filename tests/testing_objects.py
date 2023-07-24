@@ -2,12 +2,12 @@ from pycapacity.objects import *
 import numpy as np
 
 
-# write a test for custructing the ellispoid object
+# write a test for constructing the ellipsoid object
 def test_ellipsoid_construction():
     e = Ellipsoid(rotation=np.eye(3), radii=np.zeros((3,1)))
     assert e.radii.shape == (3,1)
 
-# write a test for custructing the polytope object
+# write a test for constructing the polytope object
 def test_polytope_construction():
     p = Polytope(vertices=np.zeros((3,1)))
     assert p.vertices.shape == (3,1)
@@ -46,7 +46,7 @@ def test_polytope_from_halfplane_to_vertex():
     # check if all vertices in the vertex representation are in the half-plane representation
     assert np.all(np.isin(np.round(p.vertices,2),points))
 
-# write a test for polytope face representation from a set of vetices
+# write a test for polytope face representation from a set of vertices
 def test_polytope_from_vertex_to_face():
     points = np.round(np.random.rand(3,10),2)
     p = Polytope(vertices=points)

@@ -20,7 +20,7 @@ f_poly = capacity.force_polytope(J,tau_min,tau_max)
 # calculate the velocity ellipsoid
 f_ellipsoid = capacity.force_ellipsoid(J, tau_max)
 
-# visualise polytope ellispoid
+# visualise polytope ellipsoid
 fig = plt.figure(12, figsize=[10,10])
 
 scale = 1/5
@@ -39,7 +39,7 @@ visual.plot_polytope(plot=fig,
               label='polytope', 
               scale=scale)
 
-# plot ellispoid
+# plot ellipsoid
 visual.plot_ellipsoid(ellipsoid=f_ellipsoid, 
                center=robot_position, 
                plot=fig, 

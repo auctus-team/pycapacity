@@ -1,5 +1,5 @@
 Four link planar robot examples
-==================
+===============================
 
 Four link planar robot is one very common simplified robot model for different analysis and algorithm development. It is composed of 4 links and 4 joints. 
 
@@ -80,15 +80,15 @@ f_poly = force_polytope(J,tau_min,tau_max)
 # calculate the force ellipsoid
 f_ellipsoid = force_ellipsoid(J, tau_max)
 
-# visualise polytope ellispoid
+# visualise polytope ellipsoid
 fig = plt.figure(12, figsize=[10,10])
 scale = 1/5
 
-#plot the robot
+# plot the robot
 robot_position = four_link_forward_kinematics(q) 
 plot_robot(plt, q)
 
-#plot the polytope
+# plot the polytope
 plot_polytope(plot=plt,
               polytope=f_poly,
               center=robot_position, 
@@ -98,7 +98,7 @@ plot_polytope(plot=plt,
               label='polytope', 
               scale=scale)
 
-# plot ellispoid
+# plot ellipsoid
 plot_ellipsoid(ellipsoid=f_ellipsoid, 
                center=robot_position, 
                plot=plt, 
@@ -128,7 +128,7 @@ import pycapacity.visual as visual # visualistion tools
 
 from four_link_utils import four_link_inertia, four_link_jacobian, four_link_robot_plot 
 
-#joint positions q
+# joint positions q
 q  = np.random.rand(4)*np.pi/2
 # joint torque limits tau
 tau_min = -np.ones((4,1))
@@ -147,16 +147,16 @@ a_poly = acceleration_polytope(J, M, tau_min ,tau_max)
 a_ellipsoid = acceleration_ellipsoid(J, M, tau_max)
 
 
-# visualise polytope ellispoid
+# visualise polytope ellipsoid
 fig = plt.figure(13, figsize=[10,10])
 scale = 1/50
 
 
-#plot the robot
+# plot the robot
 robot_position = four_link_forward_kinematics(q) 
 plot_robot(plt, q)
 
-#plot the polytope
+# plot the polytope
 plot_polytope(plot=plt,
               polytope=a_poly,
               center=robot_position, 
@@ -166,7 +166,7 @@ plot_polytope(plot=plt,
               label='polytope', 
               scale=scale)
 
-# plot ellispoid
+# plot ellipsoid
 plot_ellipsoid(ellipsoid=a_ellipsoid, 
                center=robot_position, 
                plot=plt, 
@@ -210,15 +210,15 @@ v_poly = velocity_polytope(J, dq_min ,dq_max)
 # calculate the velocity ellipsoid
 v_ellipsoid = velocity_ellipsoid(J, dq_max)
 
-# visualise polytope ellispoid
+# visualise polytope ellipsoid
 fig = plt.figure(14, figsize=[10,10])
 scale = 1/5
 
-#plot the robot
+# plot the robot
 robot_position = four_link_forward_kinematics(q) 
 plot_robot(plt, q)
 
-#plot the polytope
+# plot the polytope
 plot_polytope(plot=plt,
               polytope=v_poly,
               center=robot_position, 
@@ -228,7 +228,7 @@ plot_polytope(plot=plt,
               label='polytope', 
               scale=scale)
 
-# plot ellispoid
+# plot ellipsoid
 plot_ellipsoid(ellipsoid=v_ellipsoid, 
                center=robot_position, 
                plot=plt, 

@@ -3,11 +3,11 @@
 <p><img src="https://raw.githubusercontent.com/pyomeca/biorbd_design/main/logo_png/biorbd_full.png" width="300px">
 <img src="https://raw.githubusercontent.com/pyomeca/biorbd_design/main/logo_png/bioviz_full.png" width="300px"></p>
 
-A colleciton of simple examples codes for simpler starting with  [pyomeca](https://github.com/pyomeca) solftware, particularly wiht [biorbd](https://github.com/pyomeca/biorbd) and [bioviz](https://github.com/pyomeca/bioviz)
+A colleciton of simple examples codes for simpler starting with [pyomeca](https://github.com/pyomeca) software, particularly with [biorbd](https://github.com/pyomeca/biorbd) and [bioviz](https://github.com/pyomeca/bioviz)
 
 
 
-This is an example tutorial of how to setup `biorbd` and `bioviz` with `pycapacity` to calcualte and visualise the human capacities
+This is an example tutorial of how to setup `biorbd` and `bioviz` with `pycapacity` to calculate and visualise the human capacities
 
 ![](../images/pyomeca_gif.gif)
 
@@ -121,15 +121,15 @@ nb_mus = model.nbMuscles()
 
 # Animate the results if biorbd viz is installed
 b = bioviz.Viz(loaded_model=model,
-                background_color=(1,1,1), 
-                show_local_ref_frame=False, 
-                show_global_ref_frame=False, 
-                show_markers=True,
-                show_global_center_of_mass=False,
-                show_segments_center_of_mass=False, 
-                show_wrappings=False, 
-                show_floor=False, 
-                show_gravity_vector=False)
+               background_color=(1,1,1), 
+               show_local_ref_frame=False, 
+               show_global_ref_frame=False, 
+               show_markers=True,
+               show_global_center_of_mass=False,
+               show_segments_center_of_mass=False, 
+               show_wrappings=False, 
+               show_floor=False, 
+               show_gravity_vector=False)
 # define the meshes for the polytope - without robot
 vtkMeshView = VtkModel(b.vtk_window, patch_color=[[0,0.5,0.8]],mesh_opacity=0.5)
 vtkMeshView1 = VtkModel(b.vtk_window, patch_color=[[0,0.5,0.8]],mesh_opacity=0.8, force_wireframe=True)
