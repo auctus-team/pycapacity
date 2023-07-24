@@ -9,9 +9,26 @@ This is an example tutorial of how to setup `pinocchio` with `pycapacity` to cal
 
 Pinocchio library can be downloaded as sa pip package however due to the large number of different dependencies we suggest you to use anaconda.
 ### Pip package install
+
+Install the `pinocchio` library
 ```
 pip install pin
 ```
+Install an additional library with robot data `example_robot_data` provided by pinocchio community as well [more info](https://github.com/Gepetto/example-robot-data)
+```
+pip install example-robot-data
+```
+Finally install the visualisation library `meshcat` that is compatible with pinocchio simple and powerful visualisaiton library [more info](https://pypi.org/project/meshcat/)
+```
+pip install meshcat
+```
+Finally install `pycapacity` for the workspace analysis
+```bash
+pip install pycapacity
+```
+
+
+Also you can install `ipython` of `jupyter` for simplicity.
 
 ### Anaconda install
 

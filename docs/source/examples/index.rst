@@ -7,10 +7,10 @@ Robot  workspace analysis
    :maxdepth: 1
 
     Randomized robot model <randomised_rob.md>
+    Four link planar robot <fourlink.md>
     Robotics toolbox <robotics_toolbox.md>
     Pinocchio <pinocchio.md>
     ROS example <ROS.rst>
-    Four link planar robot <fourlink.md>
 
 
 Human musculoskeletal models

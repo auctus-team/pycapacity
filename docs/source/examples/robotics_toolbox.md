@@ -6,9 +6,25 @@
 
 Robotics toolbox can be easily downloaded as sa pip package or our preferred way using anaconda.
 ### Pip package install
+
+Install the robotics toolbox
 ```
 pip install roboticstoolbox-python
 ```
+If you still have not installed `pycapacity`, you can install it using
+```
+pip install pycapacity
+```
+
+Then if you want to use Swift, install the package for dealing with meshes called `trimesh`
+```
+pip install trimesh
+```
+Finally the package called `networkx` for displaying the robot in Swift correctly
+```
+pip install networkx
+```
+
 
 ### Anaconda install
 
@@ -143,12 +159,18 @@ scaling = 500
 # create the mesh
 mesh = trimesh.Trimesh(vertices=(f_poly.vertices.T/scaling + panda.fkine(q).t),
                        faces=f_poly.face_indices, use_embree=True, validate=True)
-f = open("demofile.stl", "wb")
+
+# absolute path to the temporary polytope file saved 
+# in the stl format
+import os
+file_path = os.path.join(os.getcwd(),'tmp_polytope_file.stl')
+                  
+f = open(file_path, "wb")
 f.write(trimesh.exchange.stl.export_stl(mesh))
 f.close()
 # robot visualisation
 from spatialgeometry import Mesh
-poly_mesh = Mesh('demofile.stl')
+poly_mesh = Mesh(file_path)
 poly_mesh.color = (0.9,0.6,0.0,0.5)
 env.add(poly_mesh)
 ```
