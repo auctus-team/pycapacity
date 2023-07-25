@@ -12,6 +12,10 @@ import numpy as np
 m = 3 # 3d forces
 n = 6 # robot dof 
 
+# this seed is used to generate the same image 
+# as in the examples in the docs 
+np.random.seed(12345)
+
 J = np.array(np.random.rand(m,n)) # random jacobian matrix
 
 t_max = np.ones(n)  # joint torque limits max and min

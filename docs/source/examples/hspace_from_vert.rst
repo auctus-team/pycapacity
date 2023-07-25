@@ -8,6 +8,10 @@ A simple example program for find a half-plane representation of a set of vertic
     from pycapacity.objects import Polytope # import polytope object
     import numpy as np
 
+    # this seed is used to generate the same image 
+    # as in the examples in the docs 
+    np.random.seed(12345)
+
     N = 100 # hundred vertices
     m = 3   # space dimension
 
@@ -28,13 +32,13 @@ The output of this code is something similar to this:
 .. code-block:: shell
 
     A: 
-    [[ 4.28104029e-01 -8.31204261e-01 -3.54720195e-01]
+    [[-0.05097439  0.09837403  0.99384313]
     .....
-    [-9.68921041e-01 -2.31204575e-01  8.79571563e-02]] 
+     [-0.40458275 -0.72243737 -0.5607112 ]] 
     b: 
-    [1.10637503 0.98370877 0.97940547 0.99545632 0.99011297 0.93456775
+    [0.96260094 1.06867951 0.84465369 1.0047534  1.30542889 1.04281774
     ....
-    0.90698497 0.90077881 1.04799771 0.96400478]
+     0.89077644 0.93513731 0.92662003 1.05903502 1.02233967 1.03449219]
     Zero is inside: True
 
 

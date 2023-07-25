@@ -132,8 +132,12 @@ Calculating the velocity polytope and ellipsoid of the panda robot and visualisi
 ```python
 import pinocchio as pin
 import numpy as np
+import time
 
 from example_robot_data import load
+
+# import pycapacity 
+import pycapacity as pycap
 
 # get panda robot usinf example_robot_data
 robot = load('panda')
@@ -149,7 +153,6 @@ dq_min = -dq_max
 # q0 = np.random.uniform(q_min,q_max)
 q0 = (q_min+q_max)/2
 
-
 # calculate the jacobian
 data = robot.model.createData()
 pin.framesForwardKinematics(robot.model,data,q0)
@@ -161,11 +164,6 @@ J = J[:3,:]
 # end-effector pose
 Xee = data.oMf[robot.model.getFrameId(robot.model.frames[-1].name)]
 
-
-import pycapacity as pycap
-
-
-
 ## visualise the robot
 from pinocchio.visualize import MeshcatVisualizer
 
@@ -175,7 +173,10 @@ viz.initViewer(open=True)
 # Load the robot in the viewer.
 viz.loadViewerModel()
 viz.display(q0)
-
+# small time window for loading the model 
+# if meshcat does not visualise the robot properly, augment the time
+# it can be removed in most cases
+time.sleep(0.2) 
 
 ## visualise the polytope and the ellipsoid
 import meshcat.geometry as g 
@@ -222,8 +223,6 @@ dq_min = -dq_max
 
 # Use robot configuration.
 q = (q_min+q_max)/2
-
-
 
 ## visualise the robot
 from pinocchio.visualize import MeshcatVisualizer

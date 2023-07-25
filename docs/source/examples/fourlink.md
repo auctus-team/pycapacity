@@ -23,8 +23,12 @@ from pycapacity.examples import FourLinkRobot
 # create the robot
 robot = FourLinkRobot()
 
+# this seed is used to generate the same image 
+# as in the examples in the docs 
+np.random.seed(12345)
+
 # joint positions q
-q  = np.random.rand(4)*np.pi/3*2-1
+q  = np.random.rand(4)*np.pi/2-1
 # joint torque limits tau
 tau_min = -np.ones((4,1))
 tau_max = np.ones((4,1))
@@ -89,9 +93,12 @@ from pycapacity.examples import FourLinkRobot
 # create the robot
 robot = FourLinkRobot()
 
+# this seed is used to generate the same image 
+# as in the examples in the docs 
+np.random.seed(12345)
 
 # joint positions q
-q  = np.random.rand(4)*np.pi/2
+q  = np.random.rand(4)*np.pi/2-1
 # joint torque limits tau
 tau_min = -np.ones((4,1))
 tau_max = np.ones((4,1))
@@ -159,11 +166,16 @@ from pycapacity.visual import * # visualistion tools
 # four link robot import
 from pycapacity.examples import FourLinkRobot
 
+
 # create the robot
 robot = FourLinkRobot()
 
-#joint positions q
-q  = np.random.rand(4)*np.pi/3*2-1
+# this seed is used to generate the same image 
+# as in the examples in the docs 
+np.random.seed(12345)
+
+# joint positions q
+q  = np.random.rand(4)*np.pi/2-1
 # joint torque limits tau
 dq_min = -np.ones((4,1))
 dq_max = np.ones((4,1))
@@ -210,3 +222,97 @@ plt.legend()
 plt.show()
 ```
 ![](../images/4l_vel.png)
+
+
+## Reachable space polytope approximation
+
+Reachable space polytope approximation for 4dof planar robot with random joint angles. The reachable space is calculated for two horizon times 1s and 0.5s.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+from pycapacity.robot import * # robot capacity module
+from pycapacity.visual import * # visualistion tools
+
+# four link robot import
+from pycapacity.examples import FourLinkRobot
+
+
+# create the robot
+robot = FourLinkRobot()
+
+# this seed is used to generate the same image 
+# as in the examples in the docs 
+np.random.seed(12345)
+
+# joint torque limits tau
+tau_min = -np.ones(4)*1
+tau_max = np.ones(4)*1
+# joint velocity limits
+dq_min = -np.ones(4)
+dq_max = np.ones(4)
+# joint limits 
+q_min = -np.ones(4)
+q_max = np.ones(4)
+
+# random joint configuration
+q  = np.random.uniform(q_min, q_max)
+
+# jacobian
+J = robot.jacobian(q)
+# jacobian
+M = robot.inertia(q)
+# calculate the reachable space polytope with 1s horizon
+poly_dt1000 = reachable_space_approximation(J=J, 
+                                            M=M, 
+                                            q0=q, 
+                                            horizon=1,
+                                            t_max=tau_max,
+                                            t_min=tau_min, 
+                                            dq_max=dq_max,
+                                            dq_min=dq_min,
+                                            q_min = q_min,
+                                            q_max = q_max)
+
+# calculate the reachable space polytope with 0.5s horizon
+poly_dt500 = reachable_space_approximation(J=J, 
+                                            M=M, 
+                                            q0=q, 
+                                            horizon=0.5,
+                                            t_max=tau_max,
+                                            t_min=tau_min, 
+                                            dq_max=dq_max,
+                                            dq_min=dq_min,
+                                            q_min = q_min,
+                                            q_max = q_max)
+
+# visualise polytope ellipsoid
+fig = plt.figure(12, figsize=[10,10])
+
+#plot the robot
+robot_position = robot.forward_kinematics(q) 
+robot.plot(plt, q)
+
+#plot the polytope
+plot_polytope(plot=fig,
+              polytope=poly_dt1000,
+              center=robot_position, 
+              face_color='lightsalmon', 
+              edge_color='orangered',
+              vertex_color='gray',
+              label='polytope 1s')
+plot_polytope(plot=fig,
+              polytope=poly_dt500,
+              center=robot_position, 
+              face_color='green', 
+              edge_color='green',
+              vertex_color='green',
+              label='polytope 0.5s')
+
+plt.grid()
+plt.axis('equal')
+plt.legend()
+plt.show()
+```
+![](../images/4l_reachable.png)

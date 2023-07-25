@@ -4,12 +4,16 @@ Find a vertex representation of a set of half-planes
 A simple example program for find a vertex representation of a set of half-plane :math:`Àx\leq b`
 
 .. code-block:: python
-    
+        
     from pycapacity.objects import Polytope # import polytope object
     import numpy as np
 
     N = 100 # hundred inequalities (half planes)
     m = 3   # space dimension
+
+    # this seed is used to generate the same image 
+    # as in the examples in the docs 
+    np.random.seed(12345)
 
     # define the inequalities
     A = np.random.rand(N,m)*10-5
@@ -32,11 +36,11 @@ A simple example program for find a vertex representation of a set of half-plane
 
     # draw faces and vertices
     plot_polytope(plot=plt, 
-                  polytope=p, 
-                  label='polytope', 
-                  edge_color='black', 
-                  vertex_color='red', 
-                  alpha=0.2)
+                    polytope=p, 
+                    label='polytope', 
+                    edge_color='black', 
+                    vertex_color='red', 
+                    alpha=0.2)
 
     plt.legend()
     plt.show()
@@ -69,11 +73,11 @@ Classify points in or out the polytope
 
     # draw faces and vertices
     plot_polytope(plot=plt, 
-                  polytope=p, 
-                  label='polytope', 
-                  edge_color='black', 
-                  show_vertices=False, 
-                  alpha=0.2)
+                    polytope=p, 
+                    label='polytope', 
+                    edge_color='black', 
+                    show_vertices=False, 
+                    alpha=0.2)
     # points out in red 
     plt.plot(points_out[0,:],points_out[1,:],points_out[2,:],'ro',label='points out')
     # point in in green

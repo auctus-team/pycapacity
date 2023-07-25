@@ -12,6 +12,10 @@ L = 20 # number of muscles
 m = 3 # 3d forces
 n = 6 # number of joints - dof
 
+# this seed is used to generate the same image 
+# as in the examples in the docs 
+np.random.seed(123456)
+
 J = np.array(np.random.rand(m,n))*2-1 # random jacobian matrix
 N = np.array(np.random.rand(n,L))*2-1 # random moment arm matrix
 
