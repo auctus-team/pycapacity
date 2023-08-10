@@ -38,9 +38,9 @@ Therefore, this paper presents a Python package called `pycapacity`, which provi
 
 # State of the art
 
-MMC [@Haviland2020Maximising], manipulability_metrics[@manipulability_metrics], Manipulability [@manipulability,Jaquier2021Geometry]
+MMC [@Haviland2020Maximising], manipulability_metrics[@manipulability_metrics], Manipulability [@manipulability;Jaquier2021Geometry]
 
-`pypoman` [@pypoman], MPT3 [@mpt3], Constrainde Manipulabilit [@Long2018Evaluating, @constrained_manipulability]
+`pypoman` [@pypoman], MPT3 [@mpt3], Constrainde Manipulability [@Long2018Evaluating; @constrained_manipulability]
 
 
 # Statement of need
