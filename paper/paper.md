@@ -23,19 +23,33 @@ bibliography: paper.bib
 
 # Summary
 
-There is a rising interest in collaborative robotics and physical human robot interaction, where the robot's are required to adapt to certain needs of the human in real-time. This adaptation raises a fundamental challenge: the ability to evaluate the need of assistance of the operator. One of ways to quantify the need of assistance is by evaluating the operator's physical abilities in real-time and comparing them to the required physical abilities required by the collaborative task. Then the robot can assist the operator where he lacks the physical ability to accomplish the task.
+There is a rising interest in collaborative robotics and physical human robot interaction, where the robots are often required to adapt to certain needs of the human in real-time. This adaptation raises a fundamental challenge: the ability to evaluate the need of assistance of the operator. One way to quantify the need of assistance is by evaluating the operator's physical abilities in real-time and comparing them to the physical abilities required to execute the task. Having this real-time information enables creating collaborative robot control strategies that assist the operators by compensating for their lacking physical ability to accomplish the tasks.
 
-Beyond the characterization of human physical capabilities, as todays collaborative robotic manipulators are designed for safety, their performance characteristics are relatively limited with respect to the more standard industrial robots. Therefore it is becoming increasingly important to exploit their full (physical) abilities when executing the task.  
+Beyond the characterization of human physical capabilities, as today's collaborative robotic manipulators are designed for safety, their performance characteristics are relatively limited with respect to the more standard industrial robots. Therefore it is becoming increasingly important to exploit their full (physical) abilities when executing the task.  
 
-There are many different metrics available in the literature that might be used to characterize physical abilities: force capacity, velocity capacity, acceleration capacity, accuracy, stiffness etc. Most of these metrics can be represented by two families of geometric shapes ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. It can be interesting to be able to compute these metrics off line for analysis purposes (workspace design, human motion and ergonomics analysis) as well as in interactive ways for control or user feedback. The dimensionality of the problem to solve  and the limited computation time, respectively for off-line and online applications, advocate for efficient tools to evaluate these metrics.
+There are many different metrics available in the literature that might be used to characterize physical abilities: force capacity, velocity capacity, acceleration capacity, accuracy, stiffness etc. Most of these metrics can be represented by two families of geometric shapes: ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. These metrics are traditionally important tools for off-line analysis purposes (workspace design, human motion and ergonomics analysis) and recently, they have shown a great potential to be used for interactive online applications, to be integrated in robot control strategies or as a visual feedback to the operator. 
+
+Even though different efficient tools for evaluating ellipsoids are widely available in the literature and open-source community, the tools for evaluating polytopes are still relatively scarce. The main reason for this is that the polytopes are in general more complex to evaluate and manipulate than ellipsoids. However, the polytopes are much more accurate representation of the true limits. Additionally, polytopes are easy to visualize, as they are essentially a triangulated meshes, and they can be easily integrated in the robot control strategies, as they can be expressed as a set of linear constraints. 
+
+The evaluation of polytopes is often a computationally expensive task and their computation time is often a limiting factor for the use of polytopes in real world applications, especially when it comes to their online use. Furthermore, even though there are several open-source projects that implement polytope evaluation algorithms, they are often not easy to use, and they are not trivial to integrate with the standard libraries.
+
+Therefore, this paper presents a Python package called `pycapacity`, which provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. The aim of `pycapacity` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications.
+
+
+# State of the art
+
+MMC [@Haviland2020Maximising], manipulability_metrics[@manipulability_metrics], Manipulability [@manipulability,Jaquier2021Geometry]
+
+`pypoman` [@pypoman], MPT3 [@mpt3], Constrainde Manipulabilit [@Long2018Evaluating, @constrained_manipulability]
+
 
 # Statement of need
 
-This python package implements several different physical ability metrics based on ellipsoids and polytopes, for robotic manipulators and human musculoskeletal modes. All the algorithms are implemented in python, and having execution times of a fraction of the second, they are intended to be used in real-time applications such as robot control and visualization to the operator. The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomechanics softwares `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. The package can also be used with the Robot Operating System (`ROS`) [@quigley2009ros].
+This Python package implements several different physical ability metrics based on ellipsoids and polytopes, for robotic manipulators and human musculoskeletal models. All the algorithms are implemented in Python, and having execution times of a fraction of the second, they are intended to be used in real-time applications such as robot control and visualization to the operator. The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomechanics softwares `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. The package can also be used with the Robot Operating System (`ROS`) [@quigley2009ros].
 
-The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the python package `matplotlib` intended for fast prototyping and quick and interactive visualization.
+The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the Python package `matplotlib` intended for fast prototyping and quick and interactive visualization.
 
-This package has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has aslo been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023].
+This package has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has also been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023]. On the other hand, the package has been used for the biomechanical calibration of the human musculoskeletal model [@laisne2023genetic].
 
 
 # Implemented polytope evaluation algorithms
@@ -46,7 +60,7 @@ This package implements several algorithms for polytope evaluation
 - Vertex Enumeration Auctus (VEA)
 - Iterative Convex Hull Method (ICHM)
 
-These algorithms are all implemented in python and used to evaluate different polytope based physical ability metrics. Additionally the algorithms are available to the users to be used standalone as well.
+These algorithms are all implemented in Python and used to evaluate different polytope based physical ability metrics. Additionally the algorithms are available to the users to be used standalone as well.
 
 ## Hyper-plane shifting method
 
@@ -75,7 +89,7 @@ P = \{ x ~|~ Ax = By, \quad y_{min}\leq y \leq y_{max} \}
 
 The method finds both vertex $\mathcal{V}$ and half-plane $\mathcal{H}$ representation of the polytope at the same time. 
   
-And it can be additionally extended to the case where there is an additional projection matrix $P$ making a class of problems:
+It can be additionally extended to the case where there is an additional projection matrix $P$ making a class of problems:
 
 \begin{equation}\label{eq:ichm_full}
 P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
@@ -91,7 +105,7 @@ The package implements different physical ability metrics for robotic manipulato
 
 ## Robotic manipulators metrics
 
-For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids.
+For robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids.
 
 ![2D and 3D force polytopes and their ellipsoid counterparts for a 7 degrees of freedom (DoF) \textit{Franka Emika Panda} robot. Both polytopes and ellipsoids are calculated separately for the 3D and for each of the 2D reduced task-space cases. Both polytopes and ellipsoids take in consideration the true joint torque limits provided by the manufacturer. The underestimation of the true force capabilities of the robot by ellipsoids appears clearly.](robot.png){ width=50% }
 
@@ -137,7 +151,7 @@ P_{f} = \{f ~| J^{T}f = \tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
 P_{\cap} = {P}_{f1} \cap {P}_{f1} \qquad P_{\oplus} = {P}_{f1} \oplus {P}_{f1} 
 \end{equation}
 
-- Reachable space approximation of in the desired horizon of interest $\Delta t_{h}$ using the convex polytope formulation 
+- Robot's reachable space approximation in the desired horizon of interest $\Delta t_{h}$ using the convex polytope formulation, described in the paper by [@skuric2023]
 
 \begin{equation}\label{eq:prs_r}
 \begin{split}
@@ -148,14 +162,11 @@ P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
   \end{split}
 \end{equation}
 
-This approach is described in the paper by [@skuric2023].
-
-
-Where $J$ is the robot jacobian matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accelerations, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
+Where $J$ is the robot Jacobian matrix, $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accelerations, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
 
 ## Human musculoskeletal model metrics
 
-![Cartesian force polytope of a musculoskeletal model of both human upper limbs with 7Dof and 50 muscles each, visualized with `biorbd` The polytopes are scaled with a ratio 1m : 1000N.\label{fig:force_polytope_human}](bimanual1.png){ width=70% }
+![Cartesian force polytope of a musculoskeletal model of both human upper limbs with 7Dof and 50 muscles each, visualized with `biorbd`. The polytopes are scaled with a ratio 1m : 1000N.\label{fig:force_polytope_human}](bimanual1.png){ width=70% }
 
 For the human musculoskeletal models this package implements the polytope metrics:
 
@@ -174,7 +185,7 @@ P_{v} = \{\dot{x} ~|~\dot{l} = L\dot{q},~ \dot{x} = J\dot{q},~ \dot{q}_{min}, ~ 
 P_{f} = \{f ~|~ J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}
 \end{equation}
 
-Where $J$ is the model's jacobian matrix, $L$ si the muscle length jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
+Where $J$ is the model's Jacobian matrix, $L$ si the muscle length Jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
 
 
 ## Polytope evaluation algorithms used
