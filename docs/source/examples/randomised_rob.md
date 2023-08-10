@@ -5,6 +5,17 @@ A simple example program for force polytope evaluation of a randomised robot mod
 Simply change the number of dof torque limits and see how the calculation time and shape evaluates.
 
 
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/demo_simple.ipynb">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+
+
 ```python
 import pycapacity.robot as capacity # robot capacity module
 import numpy as np

@@ -1,6 +1,13 @@
 Getting started coding examples
 ===============================
 
+
+.. admonition::  📢 NEW Examples!
+
+   For some more examples check out the ``examples`` folder of the repository.
+      - Interactive jupyter notebooks are available in the ``examples/notebooks`` folder: `see on Github <https://github.com/auctus-team/pycapacity/tree/master/examples/notebooks>`_
+      - Python scripts are available in the ``examples/scripts`` folder: `see on Github <https://github.com/auctus-team/pycapacity/tree/master/examples/scripts>`_
+
 Robot  workspace analysis
 
 .. toctree::

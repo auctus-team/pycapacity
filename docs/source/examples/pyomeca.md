@@ -179,3 +179,15 @@ while b.vtk_window.is_active:
 ```
 
 ![](../images/pyomeca_gif.gif)
+
+
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pyomeca.ipynb">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/pyomeca.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>

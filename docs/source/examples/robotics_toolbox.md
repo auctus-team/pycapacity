@@ -62,6 +62,18 @@ Then install `pycapacity` for the workspace analysis
 pip install pycapacity
 ```
 
+
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/tree/master/examples/notebooks">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/tree/master/examples/scripts">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
+
 ## Code example using pyplot
 Calculating the force polytope of the panda robot and visualising it using the pyplot.
 
@@ -114,6 +126,17 @@ plt.show()
 fig.hold()
 ```
 ![](../images/rb_pyplot.png)
+
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/robotics_toolbox_pyplot.ipynb">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/roboticstoolbox_pyplot.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
 
 ## Code example using Swift
 Calculating the force polytope of the panda robot and visualising it using the Swift.
@@ -176,6 +199,18 @@ env.add(poly_mesh)
 ```
 
 ![](../images/rb_swig.png)
+
+
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/robotics_toolbox_swift.ipynb">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/roboticstoolbox_swift.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
 
 ## Code example using matplotlib
 Calculating the force polytope of the panda robot only polytope using matplotlib

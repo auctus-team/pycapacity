@@ -1,4 +1,4 @@
-# Pinocchio examples
+# Pinocchio examples 
 ![](https://github.com/stack-of-tasks/pinocchio/raw/master/doc/images/pinocchio-logo-large.png)
 
 This is an example tutorial of how to setup `pinocchio` with `pycapacity` to calculate and visualise the robot capacities
@@ -73,6 +73,17 @@ Then install `pycapacity` for the workspace analysis
 ```bash
 pip install pycapacity
 ```
+
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio.ipynb">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/pinocchio.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
 
 ## Code example
 Calculating the force polytope and ellipsoid of the panda robot and visualising it using `matplotlib`.
@@ -281,3 +292,14 @@ while True:
 
 ```
 ![](../images/pin_animation.gif)
+
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio.ipynb">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/pinocchio.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>

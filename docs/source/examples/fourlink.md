@@ -5,6 +5,16 @@ Four link planar robot is one very common simplified robot model for different a
 It is composed of 4 links and 4 joints. 
 In order to facilitate testing with this simple robot model it is implemented within `pycapacity` package, inside the module `examples` withing the class `FourLinkRobot`, see the module for [more info](../pycapacity.examples.html)
 
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/four_link.ipynb">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/four_link.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div>
 
 ## Force capacity polytope
 
