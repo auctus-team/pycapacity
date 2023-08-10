@@ -17,7 +17,8 @@ The other scripts require additional dependencies:
 - [robotics toolbox with pyplot](robotics_toolbox_pyplot.py)
 - [pyomeca](pyomeca.py)
 
-## Running the example scripts
+
+### Running the example scripts
 
 Open the terminal in this folder `examples/scripts` and if all the dependencies are met you should be able to run the scripts with
 ```
