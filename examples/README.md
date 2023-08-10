@@ -1,4 +1,4 @@
-# Examples folder
+# Examples folder
 
 Two types of examples are provided:
 - Jupyter notebooks
