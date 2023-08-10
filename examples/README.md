@@ -18,7 +18,7 @@ The other notebooks require additional dependencies:
 - [robotics toolbox with pyplot](notebooks/robotics_toolbox_pyplot.ipynb)
 
 
-### Running the example notebooks
+### Running the example notebooks
 
 Open the terminal in this folder `examples/notebooks` and if you do not have jupyter installed, do install it
 
@@ -52,6 +52,7 @@ The other scripts require additional dependencies:
 - [robotics toolbox with swift](scripts/robotics_toolbox_swift.py)
 - [robotics toolbox with pyplot](scripts/robotics_toolbox_pyplot.py)
 - [pyomeca](scripts/pyomeca.py)
+
 
 
 ### Running the example scripts

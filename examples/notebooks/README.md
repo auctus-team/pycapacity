@@ -12,7 +12,7 @@ The other notebooks require additional dependencies:
 - [robotics toolbox with pyplot](robotics_toolbox_pyplot.ipynb)
 
 
-### Running the example notebooks
+### Running the example notebooks
 
 Open the terminal in this folder `examples/notebooks` and if you do not have jupyter installed, do install it
 
