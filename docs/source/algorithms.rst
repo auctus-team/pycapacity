@@ -63,10 +63,12 @@ To find the half-space representation (faces) of the polytope after finding the 
 The method is a part of the ``pycapacity.algorithms`` module ``vertex_enumeration_vepoli2``. See the `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_vepoli2>`_
 
 
-Polytope evaluation algorithms used for different polytopes
+Performance evaluation of polytope metrics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The methods for resolution of the polytope based metrics depend on the family of problems they correspond to. In case of robotic manipulators the methods used are given in the following table.
+The applicable methods to evaluate different polytope based metrics depend on the family of problems they correspond to. 
+Therefore this section brings the information about which algorithm is used for which polytope 
+metric and provides a brief performance evaluation their execution times.
 
 .. list-table:: Title
     :widths: 25 25 50 50

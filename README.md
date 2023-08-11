@@ -1,5 +1,5 @@
 
-# Real-time capable task-space capacity calculation python pip package
+# An efficient task-space capacity calculation package for robotics and biomechanics
 
 
 > 📢 New version of the pycapacity package is out - version v2.0!
