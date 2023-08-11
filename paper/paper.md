@@ -23,7 +23,7 @@ bibliography: paper.bib
 
 # Summary
 
-This paper presents a Python package called `pycapacity`, which provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. The aim of `pycapacity` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
+This paper presents a Python package called `pycapacity`, which provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. The aim of `pycapacity` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics and biomechanics libraries. The package implements several state of the art algorithœ for polytope evaluation that bring many of the polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
 
 The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomechanics softwares `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. The package can also be used with the Robot Operating System (`ROS`) [@quigley2009ros].
 
@@ -229,24 +229,24 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 The methods for resolution of the polytope based metrics depend on the family of problems they correspond to. In case of robotic manipulators the methods used are given in the following table.
 
 
-Polytope Metric | Algorithm | Problem type | Execution time (mean $\pm$ std) [ms]
---- | -- | ----- | ------
-Velocity | HPSM | $x=By,~ y \in [y_{min}, y_{max}]$ | 5.2ms $\pm$ 1.44 [11.7]
-Acceleration |  HPSM | $x=By,~ y \in [y_{min}, y_{max}]$ | 4.3ms $\pm$ 0.43 [7.97]
-Force  | VEPOLI$^2$ | $Ax=b, ~ y \in [y_{min}, y_{max}]$| 6.2ms $\pm$ 1.42 [15.9]
-Force intersection |  VEPOLI$^2$ | $Ax=b,~ b \in [b_{min}, b_{max}]$ | 83.9ms $\pm$ 28.4 [172.2]
-Force sum |  VEPOLI$^2$ | $Ax=b,~ b \in [b_{min}, b_{max}]$ | 18.1ms $\pm$ 6.4 [45.9]
-Reachable space |  ICHM | $x=By,~  y \in P_{y}$ | 125ms $\pm$ 25.9 [191.2]
+Polytope Metric | Algorithm | Problem type | Execution time <br> mean $\pm$ std. (max) [ms]
+--- | -- | ----- | -----
+Velocity | HPSM | $x=By,~ y \in [y_{min}, y_{max}]$ | 3.6 $\pm$ 0.21 (5.7)
+Acceleration |  HPSM | $x=By,~ y \in [y_{min}, y_{max}]$ | 6.6 $\pm$ 1.4 (14.2)
+Force  | VEPOLI$^2$ | $Ax=b, ~ y \in [y_{min}, y_{max}]$| 6.8 $\pm$ 0.88 (16.4)
+Force intersection |  VEPOLI$^2$ | $Ax=b,~ b \in [b_{min}, b_{max}]$ | 98.2 $\pm$ 29.33 (165.8)
+Force sum |  VEPOLI$^2$ | $Ax=b,~ b \in [b_{min}, b_{max}]$ | 17.1 $\pm$ 3.4 (44.9)
+Reachable space |  ICHM | $x=By,~  y \in P_{y}$ | 30.5 $\pm$ 6.6 (76.7)
 
 The average execution time is calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software. All the experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
 
 In case of human musculoskeletal models the methods used are given in the table below.
 
-Polytope Metric  | Algorithm | Problem type | Execution time (mean $\pm$ std) [ms]
+Polytope Metric  | Algorithm | Problem type | Execution time <br> mean $\pm$ std. (max) [ms]
 -- | --- | ----- | ---
-Force  | ICHM | $Ax=By,~ y \in [y_{min}, y_{max}]$ | 18.1ms $\pm$ 1.2 [22.4]
-Acceleration |  HPSM or ICHM | $x=By,~ y \in [y_{min}, y_{max}]$ |  388.4ms $\pm$ 51.2 [666.0]
-Velocity | ICHM | $x=By,~ y \in P_{y}$ | 18.1ms $\pm$ 1.2 [22.4]
+Force  | ICHM | $Ax=By,~ y \in [y_{min}, y_{max}]$ | 18.1 $\pm$ 1.2 (22.4)
+Acceleration |  HPSM or ICHM | $x=By,~ y \in [y_{min}, y_{max}]$ |  388.4 $\pm$ 51.2 (666.0)
+Velocity | ICHM | $x=By,~ y \in P_{y}$ | 18.1 $\pm$ 1.2 (22.4)
 
 The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software. The experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
 
