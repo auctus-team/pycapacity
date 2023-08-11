@@ -238,21 +238,24 @@ Force intersection |  VEPOLI$^2$ | $Ax=b,~ b \in [b_{min}, b_{max}]$ | 98.2 $\pm
 Force sum |  VEPOLI$^2$ | $Ax=b,~ b \in [b_{min}, b_{max}]$ | 17.1 $\pm$ 3.4 (44.9)
 Reachable space |  ICHM | $x=By,~  y \in P_{y}$ | 30.5 $\pm$ 6.6 (76.7)
 
-The average execution time is calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software. All the experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
+The average execution time is calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software. All the experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor. The results are obtained using the benchmarking script provided in the `examples` folder, [script link](https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/benchmarking/polytope_robot_performance_analysis_pinocchio.py).
+
 
 In case of human musculoskeletal models the methods used are given in the table below.
 
 Polytope Metric  | Algorithm | Problem type | Execution time [ms] <br> mean $\pm$ std. (max)
--- | -- | ----- | ----
+-- | --- | ----- | ----
 Force  | ICHM | $Ax=By,~ y \in [y_{min}, y_{max}]$ | 186.8 $\pm$ 45.6 (281.6)
 Acceleration |  HPSM or ICHM | $x=By,~ y \in [y_{min}, y_{max}]$ |  378.8 $\pm$ 62.3 (643.7)
 Velocity | ICHM | $x=By,~ y \in P_{y}$ | 223.1 $\pm$ 60.4 (389.1)
 
-The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software. The experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor. 
+The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software. The experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor. The results are obtained using the benchmarking script provided in the `examples` folder, [script link](https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/benchmarking/polytope_human_performance_analysis_biorbd.py).
 
+As these times can vary significantly depending on the complexity of the model used and the hardware it is run on, the users are encouraged to run the benchmark scripts themselves to get the most accurate results. This package provides several benchmarking scripts in the `examples` folder, see link for more details [link](https://github.com/auctus-team/pycapacity/tree/master/examples/scripts/benchmarking).
 
 # Conclusion
 
+This paper introduces the `pycapacity` Python package, a toolkit designed to evaluate task space physical ability metrics for both humans and robots based on polytopes and ellipsoids. The aim of this package is to provide efficient tools for evaluating these metrics within an easily accessible framework, which can seamlessly integrate with standard robotics and biomechanics libraries. By implementing state-of-the-art algorithms for polytope evaluation, pycapacity enables the evaluation of these metrics in real-time, making them applicable for interactive online applications.
 
 # Acknowledgements
 This work has been funded by the BPI France Lichie project.
