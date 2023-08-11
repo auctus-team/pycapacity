@@ -94,13 +94,14 @@ by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Ro
 ## Polytope evaluation algorithms
 
 There are three methods implemented in this paper to resolve all the polytope calculations:
-- Hyper-plane shifting method
-- Iterative convex hull method
-- Vertex enumeration auctus
+- Hyper-plane shifting method (HPSM)
+- Iterative convex hull method (ICHM)
+- Vertex enumeration algorithm (VEPOLI2)
 
 All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#). 
 
-### Hyper-plane shifting method
+### Hyper-plane shifting method (HPSM)
+
 [**Characterization of Parallel Manipulator Available Wrench Set Facets**](http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf)<br>
 by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)
 
@@ -112,7 +113,7 @@ To find the vertices of the polytope after finding the half-space representation
 
 The method is a part of the `pycapacity.algorithms` module `hyper_plane_shift_method`, See in [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#pycapacity.algorithms.hyper_plane_shift_method). 
 
-### Iterative convex-hull method
+### Iterative convex-hull method (ICHM)
 [**On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method**](https://hal.inria.fr/hal-03369576)<br> 
 by A.Skuric, V.Padois, N.Rezzoug and D.Daney<br> Submitted to RAL & ICRA2022 
 
@@ -127,7 +128,7 @@ P = {x | x= Pz, Az = By, y_min <= y <= y_max }
 
 The method is a part of the `pycapacity.algorithms` module `iterative_convex_hull_method`. See the [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#pycapacity.algorithms.iterative_convex_hull_method)
 
-### Vertex enumeration auctus
+### Vertex enumeration algorithm (VEPOLI2)
 [**On-line force capability evaluation based on efficient polytope vertex search**](https://arxiv.org/abs/2011.05226)<br> 
 by A.Skuric, V.Padois and D.Daney<br> Published on ICRA2021
 
