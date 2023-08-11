@@ -1,5 +1,5 @@
-Real-time capable task-space capacity calculation python module
-###############################################################
+An efficient task-space capacity calculation package for robotics and biomechanics
+##############################################################################################
 
 .. Note::
 
@@ -28,25 +28,33 @@ Real-time capable task-space capacity calculation python module
   :height: 200
   :alt: Alternative text
 
+What is ``pycapacity``?
+------------------------------------
 
-The ``pycapacity`` package provides a framework for the generic task-space capacity calculation for:
+Python package ``pycapacity`` provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. 
+The aim of ``pycapacity`` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics 
+and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the 
+polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
 
- *  Robotic serial manipulators - ``pycapacity.robot``
- *  Human musculoskeletal models - ``pycapacity.human``
+The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as ``robotic-toolbox`` 
+or ``pinocchio``, as well as human musculoskeletal model biomechanics 
+softwares ``opensim`` and ``biorbd``. The package can also be used with the Robot Operating System (``ROS``).
 
-This package also provides a module ``pycapacity.algorithms`` with a set of polytope evaluation algorithms for standard polytope formulations, that can be used as a standalone library.
+The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the
+Python package ``matplotlib`` intended for fast prototyping and quick and interactive visualization.
 
-Additionally, ``pycapacity.visual`` module provides a set of visualisaiton tools using the ``matplotlib`` for visualising 2d and 3d polytopes.
 
 Learn more about the ``pycapacity`` package
 -------------------------------------------
 .. toctree::
    :maxdepth: 1
 
-   About <README.md>
-   🚀 Installation <install.md>
-   📄 API Docs <pycapacity>
-   📝 Contributing & Issues <contirbuting.md>
-   🎓 Tutorials <examples/index>
-   📑 Changelog <changelog>
+    About <README.md>
+    🌟 Implemented Algorithms <algorithms.rst>
+    🚀 Installation <install.md>
+    📄 API Docs <pycapacity>
+    📝 Contributing & Issues <contirbuting.md>
+    🎓 Tutorials <examples/index>
+    📑 Changelog <changelog>
+   
    

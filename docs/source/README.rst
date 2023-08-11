@@ -38,14 +38,21 @@ Real-time capable task-space capacity calculation python pip package
   :height: 200
   :alt: Alternative text
 
-The ``pycapacity`` package provides a framework for the generic task-space capacity calculation for:
 
-* Robotic serial manipulators - ``pycapacity.robot``
-* Human musculoskeletal models - ``pycapacity.human```
+What is ``pycapacity``?
+------------------------------------
 
-This package also provides a module ``pycapacity.algorithms`` with a set of polytope evaluation algorithms for standard polytope formulations, that can be used as a standalone library.
+Python package ``pycapacity`` provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. 
+The aim of ``pycapacity`` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics 
+and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the 
+polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
 
-Additionally, ``pycapacity.visual`` module provides a set of visualisaiton tools using the ``matplotlib`` for visualising 2d and 3d polytopes.
+The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as ``robotic-toolbox`` 
+or ``pinocchio``, as well as human musculoskeletal model biomechanics 
+softwares ``opensim`` and ``biorbd``. The package can also be used with the Robot Operating System (``ROS``).
+
+The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the
+Python package ``matplotlib`` intended for fast prototyping and quick and interactive visualization.
 
 Robotic manipulator capacity metrics
 ------------------------------------
@@ -115,77 +122,17 @@ For the human musculoskeletal models this package implements the polytope metric
 
 Where :math:`J` is the model's jacobian matrix, :math:`L` si the muscle length jacobian matrix, :math:`N= -L^T` is the moment arm matrix, :math:`f` is the vector of cartesian forces, :math:`$\dot{x}` and :math:`\ddot{x}` are vectors fo cartesian velocities and accretions, :math:`\dot{q}` is the vector of the joint velocities, :math:`\tau` is the vector of joint torques, :math:`\dot{l}` is the vector of the muscle stretching velocities and :math:`F` is the vector of muscular forces. 
 
-Polytope evaluation algorithms
-------------------------------
-There are three methods implemented in this paper to resolve all the polytope calculations:
-
-* Hyper-plane shifting method (HPSM)
-* Iterative convex hull method (ICHM)
-* Vertex enumeration (VEPOLI\ :sup:`2`)
-
-All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](pycapacity.algorithms.html). 
-
-Hyper-plane shifting method (HPSM)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| Based on the paper:
-| `Characterization of Parallel Manipulator Available Wrench Set Facets <http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf>`_
-| by Gouttefarde M., Krut S. 
-| In: Lenarcic J., Stanisic M. Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht (2010)
-
-This method finds the half-space representation of the polytope of a class:
-
-.. math:: P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
-
-To find the vertices of the polytope after finding the half-space representation :math:`Hx \leq d` an convex-hull algorithm is used. 
-
-The method is a part of the ``pycapacity.algorithms``` module ``hyper_plane_shift_method``, See in `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.hyper_plane_shift_method>`_ 
-
-Iterative convex-hull method (ICHM)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-| Based on the paper:
-| `On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method <https://hal.inria.fr/hal-03369576>`_ 
-| by A.Skuric, V.Padois, N.Rezzoug and D.Daney
-| Published in RAL & ICRA2022 
-
-This method finds both vertex and half-space representation of the class of polytopes:
-
-
-.. math:: P = \{ x ~|~ Ax = By, \quad y_{min}\leq y \leq y_{max} \}
-
-
-And it can be additionally extended to the case where there is an additional projection matrix $P$ making a class of problems:
-
-.. math:: P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
-
-
-The method is a part of the ``pycapacity.algorithms`` module ``iterative_convex_hull_method``. See the `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.iterative_convex_hull_method>`_
-
-Vertex enumeration algorithm (VEPOLI\ :sup:`2`)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-| Based on the paper:
-| `On-line force capability evaluation based on efficient polytope vertex search <https://arxiv.org/abs/2011.05226>`_ 
-| by A.Skuric, V.Padois and D.Daney
-| Published on ICRA2021
-
-This method finds vertex representation of the class of polytopes:
-
-.. math:: P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
-
-
-To find the half-space representation (faces) of the polytope after finding the vertex representation  an convex-hull algorithm is used. 
-
-The method is a part of the ``pycapacity.algorithms`` module ``vertex_enumeration_vepoli2``. See the `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_vepoli2>`_
-
 Read more
 ---------
 
 .. toctree::
    :maxdepth: 1
 
-   🚀 INSTALLATION <install.md>
-   📄 API DOCS <pycapacity>
-   📝 CONTRIBUTING & ISSUES <contirbuting.md>
-   🎓 TUTORIALS <examples/index>
+      About <README.md>
+      🌟 Implemented Algorithms <algorithms.rst>
+      🚀 Installation <install.md>
+      📄 API Docs <pycapacity>
+      📝 Contributing & Issues <contirbuting.md>
+      🎓 Tutorials <examples/index>
+      📑 Changelog <changelog>
    
