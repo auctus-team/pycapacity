@@ -8,7 +8,7 @@ There are three main polytope evaluation algorithms implemented:
 
 .. math:: P = \{x~ |~ y = Ax,\quad x_{min} <= x <= x_{max}\}
 
-* `vertex_enumeration_auctus  <#pycapacity\.algorithms\.vertex_enumeration_auctus>`_: Efficient vertex enumeration algorithm for a problem of a form: 
+* `vertex_enumeration_vepoli2  <#pycapacity\.algorithms\.vertex_enumeration_vepoli2>`_: Efficient vertex enumeration algorithm for a problem of a form: 
 
 .. math:: P = \{x~ |~ Ax = b,\quad b_{min} \leq b \leq b_{max}\}
 
@@ -394,7 +394,7 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
     return H, d
 
 # maximal end effector force
-def vertex_enumeration_auctus(A, b_max, b_min, b_bias = None):
+def vertex_enumeration_vepoli2(A, b_max, b_min, b_bias = None):
     """
     Efficient vertex enumeration algorithm for a problem of a form:
     

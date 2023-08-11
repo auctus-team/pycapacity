@@ -18,7 +18,7 @@ from scipy.spatial import ConvexHull
 from scipy.linalg import block_diag
 
 # import the algos
-from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_auctus
+from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_vepoli2
 from pycapacity.algorithms import *
 
 from pycapacity.objects import *
@@ -108,7 +108,7 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     .. math:: P_f = \{f~ | ~ f_1\! =\! f_2\! =\! f, ~~ \\tau_1  = J_1^Tf_1, ~~ \\tau_2  = J_2^Tf_2, ~~ {t}_{1,min} \leq \\tau_1 \leq {\\tau}_{1,max},~~~ {\\tau}_{2,min} \leq \\tau_1 \leq {\\tau}_{2,max}\}
 
 
-    Based on the ``vertex_enumeration_auctus`` algorithm.
+    Based on the ``vertex_enumeration_vepoli2`` algorithm.
 
     Args:
         Jacobian1:  position jacobian robot 1
@@ -143,7 +143,7 @@ def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_
 
     .. math:: P_f = \{f~ | ~ f\! =\! f_1\! +\! f_2, ~~ \\tau_1  = J_1^Tf_1, ~~ \\tau_2  = J_2^Tf_2, ~~ {\\tau}_{1,min} \leq \\tau_1 \leq {\\tau}_{1,max},~~~ {\\tau}_{2,min} \leq \\tau_1 \leq {\\tau}_{2,max}\}
 
-    Based on the ``vertex_enumeration_auctus`` algorithm.
+    Based on the ``vertex_enumeration_vepoli2`` algorithm.
 
     Args:
         Jacobian1:  position jacobian robot 1
@@ -190,7 +190,7 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None, options = None):
 
     .. math:: P_f = \{f~ |~ \\tau  = J^Tf,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\}
 
-    Based on the ``vertex_enumeration_auctus`` algorithm.
+    Based on the ``vertex_enumeration_vepoli2`` algorithm.
 
     Args:
         Jacobian:  position jacobian 
@@ -206,7 +206,7 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None, options = None):
     """ 
 
     # jacobian calculation
-    f_vert, t_vert = vertex_enumeration_auctus(Jacobian.T, t_max, t_min, t_bias)
+    f_vert, t_vert = vertex_enumeration_vepoli2(Jacobian.T, t_max, t_min, t_bias)
 
     # create polytope
     poly = Polytope(vertices=f_vert)

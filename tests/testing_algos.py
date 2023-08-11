@@ -22,7 +22,7 @@ def test_algos_random_data():
     # s.t. y in [y_min, y_max]
     y_min = np.zeros(n)
     y_max = np.ones(n)
-    algos.vertex_enumeration_auctus(A, y_min, y_max)
+    algos.vertex_enumeration_vepoli2(A, y_min, y_max)
 
     assert True
 
@@ -42,9 +42,9 @@ def test_hpsm_random():
 
     assert True
 
-# write unit test for vertex_enumeration_auctus
+# write unit test for vertex_enumeration_vepoli2
 # with random data and return true id no exception is raised
-def test_vea_random():
+def test_vepoli2_random():
     L = 10
     n = 5
     m = 3
@@ -54,7 +54,7 @@ def test_vea_random():
 
     # Ax = y
     # s.t. y in [y_min, y_max]
-    algos.vertex_enumeration_auctus(A, y_min, y_max)
+    algos.vertex_enumeration_vepoli2(A, y_min, y_max)
 
     assert True
 
@@ -496,64 +496,64 @@ def test_chebyshev_center_random():
 
     assert np.array_equal(np.array([0.5, 0.5, 0.5]), algos.chebyshev_center(A, b))
 
-#unit test for  vertex_enumeration_auctus function with incompatible matrix A
+#unit test for  vertex_enumeration_vepoli2 function with incompatible matrix A
 # return true if exception is raised
-def test_vea_random_A_incompatible():
+def test_vepoli2_random_A_incompatible():
     A = np.array([[1, 2, 3], [4, 5, 6]])
     x_min = np.zeros(3)
     x_max = np.ones(3)
 
     try:
-        algos.vertex_enumeration_auctus(A,x_min,x_max)
+        algos.vertex_enumeration_vepoli2(A,x_min,x_max)
     except Exception as e:
         assert True
     
-# unit test for vertex_enumeration_auctus function invalid x_min 
+# unit test for vertex_enumeration_vepoli2 function invalid x_min 
 # return true if exception is raised
-def test_vea_invalid_x_min():
+def test_vepoli2_invalid_x_min():
     A = np.array([[1, 2, 3], [4, 5, 6], [4, 5, 6]])
     x_min = np.ones(4)
     x_max = np.ones(3)
 
     try:
-        algos.vertex_enumeration_auctus(A,x_min,x_max)
+        algos.vertex_enumeration_vepoli2(A,x_min,x_max)
     except Exception as e:
         assert True
             
-# unit test for vertex_enumeration_auctus function invalid x_max 
+# unit test for vertex_enumeration_vepoli2 function invalid x_max 
 # return true if exception is raised
-def test_vea_invalid_x_max():
+def test_vepoli2_invalid_x_max():
     A = np.array([[1, 2, 3], [4, 5, 6], [4, 5, 6]])
     x_min = np.ones(3)
     x_max = np.ones(4)
 
     try:
-        algos.vertex_enumeration_auctus(A,x_min,x_max)
+        algos.vertex_enumeration_vepoli2(A,x_min,x_max)
     except Exception as e:
         assert True
 
-# unit test for vertex_enumeration_auctus function with bias    
+# unit test for vertex_enumeration_vepoli2 function with bias    
 # return true if all is ok
-def test_vea_random_with_bias():
+def test_vepoli2_random_with_bias():
     A = np.array([[1, 2, 3], [4, 5, 6],[4, 5, 6]])
     x_min = np.ones(3)
     x_max = np.ones(3)
     bias = np.array([1, 2, 3])
 
-    algos.vertex_enumeration_auctus(A,x_min,x_max, bias)
+    algos.vertex_enumeration_vepoli2(A,x_min,x_max, bias)
 
     assert True
 
-# unit test for vertex_enumeration_auctus function with bias invalid size
+# unit test for vertex_enumeration_vepoli2 function with bias invalid size
 # return true if exception is raised
-def test_vea_invalid_bias():
+def test_vepoli2_invalid_bias():
     A = np.array([[1, 2, 3], [4, 5, 6],[4, 5, 6]])
     x_min = np.ones(3)
     x_max = np.ones(3)
     bias = np.array([1, 2, 3, 4])
 
     try:
-        algos.vertex_enumeration_auctus(A,x_min,x_max, bias)
+        algos.vertex_enumeration_vepoli2(A,x_min,x_max, bias)
     except Exception as e:
         assert True
 

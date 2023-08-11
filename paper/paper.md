@@ -48,8 +48,7 @@ Therefore, this paper presents a Python `pycapacity` package in an effort to pro
 
 `pycapacity` has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has also been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023]. On the other hand, the package has been used for the biomechanical calibration of the human musculoskeletal model [@laisne2023genetic].
 
-# Ellipsoids and polytopes as physical ability metrics
-
+# Ellipsoids and polytopes as physical ability metrics
 
 In robotics, different task space physical ability metrics establish the relationship between different limits of robot's actuators (joint positions, velocities, torques, etc.), its kinematics and dynamics, and the achievable sets of different task related physical quantities, such as achievable positions, velocities, forces and similar. Similar metrics can be established for humans as well, by leveraging their musculoskeletal models. Where the humans in addition to the joint limits (joint positions and velocities) have additional limits due to their using their muscles as actuators (contraction forces and velocities).
 
@@ -76,13 +75,13 @@ Figure 2. shows the difference between the force ellipsoid and polytope [@chiacc
 
 Ellipsoids, however, are much more present in the literature, as their computation is much faster than the computation of polytopes. 
 
-## Evaluating ellipsoids
+# Evaluating ellipsoids
 
 Evaluating ellipsoids is a computationally efficient task, as it can be done using the singular value decomposition (SVD) [@yoshikawa1985manipulability]. Ellipsoids can be fully defined using its principal axis and principal axis lengths. Once they are known, the ellipsoid can be easily visualized and used for further analysis.
 
 This package provides tools for evaluating several common ellipsoid metrics for robots and humans, such as velocity (manipulability), force and acceleration, and it provides a set of tools for their easy visualization. 
 
-## Evaluating polytopes
+## Evaluating polytopes
 
 Evaluating polytopes consists in finding either the minimal set of their vertices, $\mathcal{V}$-representation, or the minimal set of the half-planes defining their faces , $\mathcal{H}$-representation. The $\mathcal{V}$-representation is often used for visualization purposes, while the $\mathcal{H}$-representation is often integrated in different optimization problems, as it can be represented as a set of linear inequalities.
 
@@ -91,54 +90,6 @@ However, finding the $\mathcal{V}$-representation or the $\mathcal{H}$-represent
 Therefore, polytope evaluation is often a bottleneck in the computation of different physical ability metrics, especially for human musculoskeletal models, which have a large number of degrees of freedom and a large number of muscles. Furthermore, due to the inherent complexity of the polytope evaluation algorithms, finding the appropriate algorithm for a given polytope formulation and dimensionality of the input and output spaces is not a trivial task.
 
 This package aims to provide a selection of algorithms for polytope evaluation, capable of evaluating common physical ability polytopes in an easy to use and efficient way. These algorithms are implemented in Python and can be used as standalone tools as well. Additionally, the package provides tools for easy visualization the 2D and 3D polytopes.
-
-# Implemented polytope evaluation algorithms
-
-This package implements several algorithms for polytope evaluation 
-
-- Hyper-Plane Shifting Method (HPSM)
-- Vertex Enumeration Algorithm (VEPOLI$^2$)
-- Iterative Convex Hull Method (ICHM)
-
-These algorithms are all implemented in Python and used to evaluate different polytope based physical ability metrics. Additionally, the algorithms are available to the users to be used standalone as well.
-
-## Hyper-plane shifting method
-
-This is an algorithm based on the paper by [@Gouttefarde2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
-
-\begin{equation}\label{eq:hpsm}
-P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
-\end{equation}
-
-## Vertex enumeration algorithm VEPOLI$^2$ 
-
-This is an algorithm based on the paper by [@Skuric2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
-
-\begin{equation}\label{eq:vertex_auctus}
-P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
-\end{equation}
-
-
-## Iterative convex-hull method
-
-This is an algorithm described in the paper by [@Skuric2022] which implements an efficient method which iteratively approximates the polytope
-
-\begin{equation}\label{eq:ichm}
-P = \{ x ~|~ Ax = By, \quad y_{min}\leq y \leq y_{max} \}
-\end{equation}
-
-The method finds both vertex $\mathcal{V}$ and half-plane $\mathcal{H}$ representation of the polytope at the same time. 
-  
-It can be additionally extended to the case where there is an additional projection matrix $P$ making a class of problems:
-
-\begin{equation}\label{eq:ichm_full}
-P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
-\end{equation}
-
-
-
-
-
 # Physical capacity metrics
 
 The package implements different physical ability metrics for robotic manipulators and humans based on musculoskeletal models.
@@ -226,6 +177,50 @@ P_{f} = \{f ~|~ J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}
 \end{equation}
 
 Where $J$ is the model's Jacobian matrix, $L$ si the muscle length Jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
+
+# Implemented polytope evaluation algorithms
+
+This package implements several algorithms for polytope evaluation 
+
+- Hyper-Plane Shifting Method (HPSM)
+- Vertex Enumeration Algorithm (VEPOLI$^2$)
+- Iterative Convex Hull Method (ICHM)
+
+These algorithms are all implemented in Python and used to evaluate different polytope based physical ability metrics. Additionally, the algorithms are available to the users to be used standalone as well.
+
+## Hyper-plane shifting method
+
+This is an algorithm based on the paper by [@Gouttefarde2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
+
+\begin{equation}\label{eq:hpsm}
+P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
+\end{equation}
+
+## Vertex enumeration algorithm VEPOLI$^2$ 
+
+This is an algorithm based on the paper by [@Skuric2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
+
+\begin{equation}\label{eq:vertex_vepoli2}
+P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
+\end{equation}
+
+
+## Iterative convex-hull method
+
+This is an algorithm described in the paper by [@Skuric2022] which implements an efficient method which iteratively approximates the polytope
+
+\begin{equation}\label{eq:ichm}
+P = \{ x ~|~ Ax = By, \quad y_{min}\leq y \leq y_{max} \}
+\end{equation}
+
+The method finds both vertex $\mathcal{V}$ and half-plane $\mathcal{H}$ representation of the polytope at the same time. 
+  
+It can be additionally extended to the case where there is an additional projection matrix $P$ making a class of problems:
+
+\begin{equation}\label{eq:ichm_full}
+P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
+\end{equation}
+
 
 
 ## Polytope evaluation algorithms used

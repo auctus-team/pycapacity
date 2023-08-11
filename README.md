@@ -130,7 +130,7 @@ P = {x | Ax = y, y_min <= y <= y_max }
 ``` 
 To find the half-space representation (faces) of the polytope after finding the vertex representation  an convex-hull algorithm is used. 
 
-The method is a part of the `pycapacity.algorithms` module `vertex_enumeration_auctus`. See the [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_auctus)
+The method is a part of the `pycapacity.algorithms` module `vertex_enumeration_vepoli2`. See the [docs for more info](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_vepoli2)
 
 ## Installation
 
@@ -189,7 +189,7 @@ Human metrics
 Algorithms
 - [`algorithms.hyper_plane_shift_method`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
 - [`algorithms.iterative_convex_hull_method`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
-- [`algorithms.vertex_enumeration_auctus`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.vertex_enumeration_auctus): Efficient vertex enumeration algorithm for a problem of a form:
+- [`algorithms.vertex_enumeration_vepoli2`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.vertex_enumeration_vepoli2): Efficient vertex enumeration algorithm for a problem of a form:
 
 
 Visualisation tools

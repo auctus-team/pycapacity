@@ -119,14 +119,14 @@ Polytope evaluation algorithms
 ------------------------------
 There are three methods implemented in this paper to resolve all the polytope calculations:
 
-* Hyper-plane shifting method
-* Iterative convex hull method
-* Vertex enumeration auctus
+* Hyper-plane shifting method (HPSM)
+* Iterative convex hull method (ICHM)
+* Vertex enumeration (VEPOLI\ :sup:`2`)
 
 All of the methods are implemented in the module `pycapacity.algorithms` and can be used as standalone functions.  See in [docs for more info](pycapacity.algorithms.html). 
 
-Hyper-plane shifting method
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Hyper-plane shifting method (HPSM)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | Based on the paper:
 | `Characterization of Parallel Manipulator Available Wrench Set Facets <http://www.lirmm.fr/krut/pdf/2010_gouttefarde_ark-0602650368/2010_gouttefarde_ark.pdf>`_
 | by Gouttefarde M., Krut S. 
@@ -140,8 +140,8 @@ To find the vertices of the polytope after finding the half-space representation
 
 The method is a part of the ``pycapacity.algorithms``` module ``hyper_plane_shift_method``, See in `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.hyper_plane_shift_method>`_ 
 
-Iterative convex-hull method
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Iterative convex-hull method (ICHM)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 | Based on the paper:
 | `On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method <https://hal.inria.fr/hal-03369576>`_ 
@@ -161,8 +161,8 @@ And it can be additionally extended to the case where there is an additional pro
 
 The method is a part of the ``pycapacity.algorithms`` module ``iterative_convex_hull_method``. See the `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.iterative_convex_hull_method>`_
 
-Vertex enumeration auctus
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Vertex enumeration algorithm (VEPOLI\ :sup:`2`)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 | Based on the paper:
 | `On-line force capability evaluation based on efficient polytope vertex search <https://arxiv.org/abs/2011.05226>`_ 
@@ -176,7 +176,7 @@ This method finds vertex representation of the class of polytopes:
 
 To find the half-space representation (faces) of the polytope after finding the vertex representation  an convex-hull algorithm is used. 
 
-The method is a part of the ``pycapacity.algorithms`` module ``vertex_enumeration_auctus``. See the `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_auctus>`_
+The method is a part of the ``pycapacity.algorithms`` module ``vertex_enumeration_vepoli2``. See the `docs for more info <pycapacity.algorithms.html#pycapacity.algorithms.vertex_enumeration_vepoli2>`_
 
 Read more
 ---------
