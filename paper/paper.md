@@ -23,33 +23,44 @@ bibliography: paper.bib
 
 # Summary
 
+This paper presents a Python package called `pycapacity`, which provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. The aim of `pycapacity` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
+
+The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomechanics softwares `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. The package can also be used with the Robot Operating System (`ROS`) [@quigley2009ros].
+
+The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the Python package `matplotlib` intended for fast prototyping and quick and interactive visualization.
+
+
+# Statement of need
+
 There is a rising interest in collaborative robotics and physical human robot interaction, where the robots are often required to adapt to certain needs of the human in real-time. This adaptation raises a fundamental challenge: the ability to evaluate the need of assistance of the operator. One way to quantify the need of assistance is by evaluating the operator's physical abilities in real-time and comparing them to the physical abilities required to execute the task. Having this real-time information enables creating collaborative robot control strategies that assist the operators by compensating for their lacking physical ability to accomplish the tasks.
 
 Beyond the characterization of human physical capabilities, as today's collaborative robotic manipulators are designed for safety, their performance characteristics are relatively limited with respect to the more standard industrial robots. Therefore it is becoming increasingly important to exploit their full (physical) abilities when executing the task.  
 
 There are many different metrics available in the literature that might be used to characterize physical abilities: force capacity, velocity capacity, acceleration capacity, accuracy, stiffness etc. Most of these metrics can be represented by two families of geometric shapes: ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. These metrics are traditionally important tools for off-line analysis purposes (workspace design, human motion and ergonomics analysis) and recently, they have shown a great potential to be used for interactive online applications, to be integrated in robot control strategies or as a visual feedback to the operator. 
 
+Ellipsoid metrics are often used for evaluating the manipulability of the robot's end-effector. The manipulability ellipsoid is a geometric shape that represents the robot's ability to move with in the task space. The manipulability ellipsoid is defined by its principal axis that can be found very efficiently using the singular value decomposition (SVD) of the robot's Jacobian matrix [@yoshikawa1985manipulability]. Due to their computational efficiency and intuitive visualisation, they have been used in many different applications, such as robot control, workspace design, robot design, etc. Therefore there are several open-source packages that implement the manipulability ellipsoid evaluation and visualisation, such as `MMC` [@Haviland2020Maximising], `manipulability_metrics` [@manipulability_metrics], `Manipulability` [@manipulability;Jaquier2021Geometry].However, all of these packages are limited to the evaluation of the manipulability ellipsoid, representing the velocity capacity, and they do not provide tools for evaluating other ellipsoid metrics, such as force capacity, acceleration capacity, etc. Additionally these software packages are often developed for the use with a specific robotics library, such as `robotic-toolbox` [@corke2021not] or `ROS` [@carpentier2019pinocchio], and they are not trivial to integrate with other libraries.
+
 Even though different efficient tools for evaluating ellipsoids are widely available in the literature and open-source community, the tools for evaluating polytopes are still relatively scarce. The main reason for this is that the polytopes are in general more complex to evaluate and manipulate than ellipsoids. However, the polytopes are much more accurate representation of the true limits. Additionally, polytopes are easy to visualize, as they are essentially a triangulated meshes, and they can be easily integrated in the robot control strategies, as they can be expressed as a set of linear constraints. 
 
-The evaluation of polytopes is often a computationally expensive task and their computation time is often a limiting factor for the use of polytopes in real world applications, especially when it comes to their online use. Furthermore, even though there are several open-source projects that implement polytope evaluation algorithms, they are often not easy to use, and they are not trivial to integrate with the standard libraries.
+The evaluation of polytopes is often a computationally expensive task, as their resolution require using different vertex and facet enumeration algorithms [@fukuda2004frequently]. Therefore, their computation time is often the limiting factor for the use of polytopes in real world applications, especially when it comes to their online use. Furthermore, even though there are several open-source projects that implement polytope evaluation algorithms, such as `pypoman` [@pypoman], Multi-Parametric Toolbox 3 [@mpt3] or `cddlib`[@cddlib;@fukuda1997cdd], they are often very generic and not easy to use with standard physical ability polytopes. On the other hand, more specific polytope resolution software solutions, such as Constrained Manipulability package [@Long2018Evaluating; @constrained_manipulability] or `pygradientpolytope`[@pygradientpolytope], are often very specific to their applications, they lack the documentation and they are not easy to integrate with other libraries.
 
-Therefore, this paper presents a Python package called `pycapacity`, which provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. The aim of `pycapacity` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications.
+Therefore, this paper presents a Python `pycapacity` package in an effort to provide a set of tools specifically tailored for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. This package groups a set of efficient algorithms for their evaluation in an easy to use framework that can be easily integrated with standard robotics and biomechanics libraries. Futhermore, the package implements several state of the art algorithms for polytope evaluation that bring many of the polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
+
+`pycapacity` has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has also been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023]. On the other hand, the package has been used for the biomechanical calibration of the human musculoskeletal model [@laisne2023genetic].
+
+# Ellipsoids and polytopes
+
+![An example manipulability polytope and ellipsoid geometry for a planar $m=2$ robot with $n=2$. The difference between the joint space limits for ellipsoid described with $||\dot{\bm{q}}||_2\leq1$ (orange) and the range limits $\bm{-1}\leq\dot{\bm{q}}\leq\bm{1}$ (blue) is shown on the right. The difference in obtained achievable task space velocity $\dot{\bm{x}}$ polytope $\mathcal{P}$ (blue) and ellipsoid $\mathcal{E}$ (orange) is shown on the right plot. The plots show that both in joint and task space the ellipsoid metric is an underestimation of the true robot's capacity.](ellip_poly.png){ width=100% }
 
 
-# State of the art
-
-MMC [@Haviland2020Maximising], manipulability_metrics[@manipulability_metrics], Manipulability [@manipulability;Jaquier2021Geometry]
-
-`pypoman` [@pypoman], MPT3 [@mpt3], Constrainde Manipulability [@Long2018Evaluating; @constrained_manipulability]
+\begin{equation}\label{eq:hpsm}
+P = \{ \dot{x} ~|~ \dot{x} = J(\bm{q})\dot{q}, \quad -1 \leq \dot{q} \leq 1 \}
+\end{equation}
 
 
-# Statement of need
-
-This Python package implements several different physical ability metrics based on ellipsoids and polytopes, for robotic manipulators and human musculoskeletal models. All the algorithms are implemented in Python, and having execution times of a fraction of the second, they are intended to be used in real-time applications such as robot control and visualization to the operator. The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as `robotic-toolbox` [@corke2021not] or `pinocchio` [@carpentier2019pinocchio], as well as human musculoskeletal model biomechanics softwares `opensim` [@delp2007opensim] and `biorbd` [@michaudBiorbd2021]. The package can also be used with the Robot Operating System (`ROS`) [@quigley2009ros].
-
-The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the Python package `matplotlib` intended for fast prototyping and quick and interactive visualization.
-
-This package has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has also been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023]. On the other hand, the package has been used for the biomechanical calibration of the human musculoskeletal model [@laisne2023genetic].
+\begin{equation}\label{eq:hpsm}
+P = \{ \dot{x} ~|~ \dot{x} = J(\bm{q})\dot{q}, \quad ||\dot{q}|| \leq 1 \}
+\end{equation}
 
 
 # Implemented polytope evaluation algorithms
@@ -57,7 +68,7 @@ This package has been used in several scientific papers, for real-time control o
 This package implements several algorithms for polytope evaluation 
 
 - Hyper-Plane Shifting Method (HPSM)
-- Vertex Enumeration Auctus (VEA)
+- Vertex Enumeration Algorithm (VEPOLI$^2$)
 - Iterative Convex Hull Method (ICHM)
 
 These algorithms are all implemented in Python and used to evaluate different polytope based physical ability metrics. Additionally the algorithms are available to the users to be used standalone as well.
@@ -70,7 +81,7 @@ This is an algorithm based on the paper by [@Gouttefarde2010] which presents an 
 P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
 \end{equation}
 
-## Vertex enumeration auctus 
+## Vertex enumeration algorithm VEPOLI$^2$ 
 
 This is an algorithm based on the paper by [@Skuric2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
 
@@ -197,9 +208,9 @@ Polytope Metric | Algorithm | Problem type | Execution time
 --- | -- | ----- | ---
 Velocity | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~2ms
 Acceleration |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~5ms
-Force  | VEA | $Ax=b, ~~ b_{min} \leq b \leq y_{max}$| ~7ms
-Force intersection |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~80ms
-Force sum |  VEA | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~15ms
+Force  | VEPOLI$^2$ | $Ax=b, ~~ b_{min} \leq b \leq y_{max}$| ~7ms
+Force intersection |  VEPOLI$^2$ | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~80ms
+Force sum |  VEPOLI$^2$ | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~15ms
 Reachable space |  ICHM | $x=By,~~  y \in P_{y}$ | ~50ms
 
 The average execution time is calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software. All the experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
