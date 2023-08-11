@@ -229,8 +229,8 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 The methods for resolution of the polytope based metrics depend on the family of problems they correspond to. In case of robotic manipulators the methods used are given in the following table.
 
 
-Polytope Metric | Algorithm | Problem type | Execution time <br>(mean $\pm$ std) [ms]
---- | -- | ----- | ----
+Polytope Metric | Algorithm | Problem type | Execution time (mean $\pm$ std) [ms]
+--- | -- | ----- | ------
 Velocity | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 5.2ms $\pm$ 1.44 [11.7]
 Acceleration |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 4.3ms $\pm$ 0.43 [7.97]
 Force  | VEPOLI$^2$ | $Ax=b, ~~ b_{min} \leq b \leq y_{max}$| 6.2ms $\pm$ 1.42 [15.9]
