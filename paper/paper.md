@@ -50,16 +50,16 @@ Therefore, this paper presents a Python `pycapacity` package in an effort to pro
 
 # Ellipsoids and polytopes
 
-![An example manipulability polytope and ellipsoid geometry for a planar $m=2$ robot with $n=2$. The difference between the joint space limits for ellipsoid described with $||\dot{\bm{q}}||_2\leq1$ (orange) and the range limits $\bm{-1}\leq\dot{\bm{q}}\leq\bm{1}$ (blue) is shown on the right. The difference in obtained achievable task space velocity $\dot{\bm{x}}$ polytope $\mathcal{P}$ (blue) and ellipsoid $\mathcal{E}$ (orange) is shown on the right plot. The plots show that both in joint and task space the ellipsoid metric is an underestimation of the true robot's capacity.](ellip_poly.png){ width=100% }
+![An example manipulability polytope and ellipsoid geometry for a planar $m=2$ robot with $n=2$. The difference between the joint space limits for ellipsoid described with $||\dot{\boldsymbol{q}}||_2\leq1$ (orange) and the range limits $\boldsymbol{-1}\leq\dot{\boldsymbol{q}}\leq\boldsymbol{1}$ (blue) is shown on the right. The difference in obtained achievable task space velocity $\dot{\boldsymbol{x}}$ polytope $\mathcal{P}$ (blue) and ellipsoid $\mathcal{E}$ (orange) is shown on the right plot. The plots show that both in joint and task space the ellipsoid metric is an underestimation of the true robot's capacity.](ellip_poly.png){ width=100% }
 
 
 \begin{equation}\label{eq:hpsm}
-P = \{ \dot{x} ~|~ \dot{x} = J(\bm{q})\dot{q}, \quad -1 \leq \dot{q} \leq 1 \}
+P = \{ \dot{x} ~|~ \dot{x} = J(\boldsymbol{q})\dot{q}, \quad -1 \leq \dot{q} \leq 1 \}
 \end{equation}
 
 
 \begin{equation}\label{eq:hpsm}
-P = \{ \dot{x} ~|~ \dot{x} = J(\bm{q})\dot{q}, \quad ||\dot{q}|| \leq 1 \}
+P = \{ \dot{x} ~|~ \dot{x} = J(\boldsymbol{q})\dot{q}, \quad ||\dot{q}||_2 \leq 1 \}
 \end{equation}
 
 
