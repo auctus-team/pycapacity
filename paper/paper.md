@@ -38,7 +38,7 @@ Beyond the characterization of human physical capabilities, as today's collabora
 
 There are many different metrics available in the literature that might be used to characterize physical abilities: force capacity, velocity capacity, acceleration capacity, accuracy, stiffness etc. Most of these metrics can be represented by two families of geometric shapes: ellipsoids [@yoshikawa1985manipulability] and polytopes [@chiacchio1997force]. These metrics are traditionally important tools for off-line analysis purposes (workspace design, human motion and ergonomics analysis) and recently, they have shown a great potential to be used for interactive online applications, to be integrated in robot control strategies or as a visual feedback to the operator. 
 
-Ellipsoid metrics are often used for evaluating the manipulability of the robot's end-effector. The manipulability ellipsoid is a geometric shape that represents the robot's ability to move with in the task space. The manipulability ellipsoid is defined by its principal axis that can be found very efficiently using the singular value decomposition (SVD) of the robot's Jacobian matrix [@yoshikawa1985manipulability]. Due to their computational efficiency and intuitive visualisation, they have been used in many different applications, such as robot control, workspace design, robot design, etc. Therefore there are several open-source packages that implement the manipulability ellipsoid evaluation and visualisation, such as `MMC` [@Haviland2020Maximising], `manipulability_metrics` [@manipulability_metrics], `Manipulability` [@manipulability;Jaquier2021Geometry].However, all of these packages are limited to the evaluation of the manipulability ellipsoid, representing the velocity capacity, and they do not provide tools for evaluating other ellipsoid metrics, such as force capacity, acceleration capacity, etc. Additionally these software packages are often developed for the use with a specific robotics library, such as `robotic-toolbox` [@corke2021not] or `ROS` [@carpentier2019pinocchio], and they are not trivial to integrate with other libraries.
+Ellipsoid metrics are often used for evaluating the manipulability of the robot's end-effector. The manipulability ellipsoid is a geometric shape that represents the robot's ability to move with in the task space. The manipulability ellipsoid is defined by its principal axis that can be found very efficiently using the singular value decomposition (SVD) of the robot's Jacobian matrix [@yoshikawa1985manipulability]. Due to their computational efficiency and intuitive visualisation, they have been used in many different applications, such as robot control, workspace design, robot design, etc. Therefore there are several open-source packages that implement the manipulability ellipsoid evaluation and visualisation, such as `MMC` [@Haviland2020Maximising], `manipulability_metrics` [@manipulability_metrics], `Manipulability` [@manipulability;@Jaquier2021Geometry].However, all of these packages are limited to the evaluation of the manipulability ellipsoid, representing the velocity capacity, and they do not provide tools for evaluating other ellipsoid metrics, such as force capacity, acceleration capacity, etc. Additionally these software packages are often developed for the use with a specific robotics library, such as `robotic-toolbox` [@corke2021not] or `ROS` [@carpentier2019pinocchio], and they are not trivial to integrate with other libraries.
 
 Even though different efficient tools for evaluating ellipsoids are widely available in the literature and open-source community, the tools for evaluating polytopes are still relatively scarce. The main reason for this is that the polytopes are in general more complex to evaluate and manipulate than ellipsoids. However, the polytopes are much more accurate representation of the true limits. Additionally, polytopes are easy to visualize, as they are essentially a triangulated meshes, and they can be easily integrated in the robot control strategies, as they can be expressed as a set of linear constraints. 
 
@@ -48,20 +48,49 @@ Therefore, this paper presents a Python `pycapacity` package in an effort to pro
 
 `pycapacity` has been used in several scientific papers, for real-time control of collaborative carrying using two Franka Emika Panda robots [@Skuric2021], for developing an assist-as-needed control strategy for collaborative carrying task of the human operator and the Franka robot [@Skuric2022]. The package has also been used to calculate the approximation of the robot's reachable space using convex polytope [@skuric2023]. On the other hand, the package has been used for the biomechanical calibration of the human musculoskeletal model [@laisne2023genetic].
 
-# Ellipsoids and polytopes
-
-![An example manipulability polytope and ellipsoid geometry for a planar $m=2$ robot with $n=2$. The difference between the joint space limits for ellipsoid described with $||\dot{\boldsymbol{q}}||_2\leq1$ (orange) and the range limits $\boldsymbol{-1}\leq\dot{\boldsymbol{q}}\leq\boldsymbol{1}$ (blue) is shown on the right. The difference in obtained achievable task space velocity $\dot{\boldsymbol{x}}$ polytope $\mathcal{P}$ (blue) and ellipsoid $\mathcal{E}$ (orange) is shown on the right plot. The plots show that both in joint and task space the ellipsoid metric is an underestimation of the true robot's capacity.](ellip_poly.png){ width=100% }
+# Ellipsoids and polytopes as physical ability metrics
 
 
-\begin{equation}\label{eq:hpsm}
-P = \{ \dot{x} ~|~ \dot{x} = J(\boldsymbol{q})\dot{q}, \quad -1 \leq \dot{q} \leq 1 \}
+In robotics, different task space physical ability metrics establish the relationship between different limits of robot's actuators (joint positions, velocities, torques, etc.), its kinematics and dynamics, and the achievable sets of different task related physical quantities, such as achievable positions, velocities, forces and similar. Similar metrics can be established for humans as well, by leveraging their musculoskeletal models. Where the humans in addition to the joint limits (joint positions and velocities) have additional limits due to their using their muscles as actuators (contraction forces and velocities).
+
+When it comes to characterizing these achievable sets, the two most common approaches are using ellipsoids and polytopes. Ellipsoids are often used to represent the robot's velocity capacity, so called manipulability, while polytopes are used to represent the robot's force capacity. However, both ellipsoids and polytopes can be used to represent any of the task space physical ability.
+
+![An example manipulability polytope and ellipsoid geometry for a planar $m=2$ robot with $n=2$. The difference between the joint space limits for ellipsoid described with $||\dot{{q}}||_2\leq1$ (orange) and the range limits ${-1}\leq\dot{{q}}\leq{1}$ (blue) is shown on the right. The difference in obtained achievable task space velocity $\dot{{x}}$ polytope ${P}$ (blue) and ellipsoid ${E}$ (orange) is shown on the right plot. The plots show that both in joint and task space the ellipsoid metric is an underestimation of the true robot's capacity.](ellip_poly.png){ width=100% }
+
+One of the most well known ellipsoid metrics is the manipulability ellipsoid [@yoshikawa1985manipulability], which is defined as the set of all achievable task space velocities ${\dot{x}}$ for a given robot configuration ${q}$ and joint velocity limits ${\dot{q}}$, and it can be expressed as:
+
+\begin{equation}\label{eq:manip_ellipsoid}
+E = \{ \dot{x} ~|~ \dot{x} = J({q})\dot{q}, \quad ||\dot{q}||_2 \leq 1 \}
 \end{equation}
 
+The equivalent polytope representation of the manipulability ellipsoid is the manipulability polytope, which is defined as the set of all achievable task space velocities ${\dot{x}}$ for a given robot configuration ${q}$ and joint velocity limits ${\dot{q}}$, and it can be expressed as:
 
-\begin{equation}\label{eq:hpsm}
-P = \{ \dot{x} ~|~ \dot{x} = J(\boldsymbol{q})\dot{q}, \quad ||\dot{q}||_2 \leq 1 \}
+\begin{equation}\label{eq:manip_polytope}
+P = \{ \dot{x} ~|~ \dot{x} = J({q})\dot{q}, \quad -1 \leq \dot{q} \leq 1 \}
 \end{equation}
 
+Figure 1. illustrates the difference between the manipulability ellipsoid and polytope for a planar robot with two joints. The manipulability ellipsoid is an underestimation of the true robot's capacity, as it considers that the robot's velocity limits have the shape of a sphere, while in reality the robot's velocity limits are a cube. The manipulability polytope is a more accurate representation of the robot's capacity, as it considers the true shape of the robot's velocity limits. 
+
+More generally, polytope based representations of different physical abilities present the exact solution both for robots and for human musculoskeletal models, while ellipsoids present an approximation. 
+Figure 2. shows the difference between the force ellipsoid and polytope [@chiacchio1997force] for one configuration of the Franka Emika Panda robot.
+
+Ellipsoids, however, are much more present in the literature, as their computation is much faster than the computation of polytopes. 
+
+## Evaluating ellipsoids
+
+Evaluating ellipsoids is a computationally efficient task, as it can be done using the singular value decomposition (SVD) [@yoshikawa1985manipulability]. Ellipsoids can be fully defined using its principal axis and principal axis lengths. Once they are known, the ellipsoid can be easily visualized and used for further analysis.
+
+This package provides tools for evaluating several common ellipsoid metrics for robots and humans, such as velocity (manipulability), force and acceleration, and it provides a set of tools for their easy visualization. 
+
+## Evaluating polytopes
+
+Evaluating polytopes consists in finding either the minimal set of their vertices, $\mathcal{V}$-representation, or the minimal set of the half-planes defining their faces , $\mathcal{H}$-representation. The $\mathcal{V}$-representation is often used for visualization purposes, while the $\mathcal{H}$-representation is often integrated in different optimization problems, as it can be represented as a set of linear inequalities.
+
+However, finding the $\mathcal{V}$-representation or the $\mathcal{H}$-representation of a polytope is a computationally expensive task, relying on different vertex and facet enumeration algorithms [@fukuda2004frequently]. The computational complexity of these algorithms depends on the polytope formulation, the dimensionality of the input (number of robot's joints or human muscles) and output spaces (1D, 2D, 3D or 6D Cartesian space) and the complexity of the polytope geometry (number of vertices and faces). 
+
+Therefore, polytope evaluation is often a bottleneck in the computation of different physical ability metrics, especially for human musculoskeletal models, which have a large number of degrees of freedom and a large number of muscles. Furthermore, due to the inherent complexity of the polytope evaluation algorithms, finding the appropriate algorithm for a given polytope formulation and dimensionality of the input and output spaces is not a trivial task.
+
+This package aims to provide a selection of algorithms for polytope evaluation, capable of evaluating common physical ability polytopes in an easy to use and efficient way. These algorithms are implemented in Python and can be used as standalone tools as well. Additionally, the package provides tools for easy visualization the 2D and 3D polytopes.
 
 # Implemented polytope evaluation algorithms
 
@@ -71,7 +100,7 @@ This package implements several algorithms for polytope evaluation
 - Vertex Enumeration Algorithm (VEPOLI$^2$)
 - Iterative Convex Hull Method (ICHM)
 
-These algorithms are all implemented in Python and used to evaluate different polytope based physical ability metrics. Additionally the algorithms are available to the users to be used standalone as well.
+These algorithms are all implemented in Python and used to evaluate different polytope based physical ability metrics. Additionally, the algorithms are available to the users to be used standalone as well.
 
 ## Hyper-plane shifting method
 
