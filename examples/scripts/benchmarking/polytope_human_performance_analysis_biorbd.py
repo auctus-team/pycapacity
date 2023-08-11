@@ -9,6 +9,10 @@ Dependencies:
     - biorbd
     - pycapacity
 
+Additionally it requires a model file in the pyomeca_models folder. 
+You can download the pyomeca_models from gitlab
+[https://gitlab.inria.fr/auctus-team/components/modelisation/humanmodels/pyomeca_models
+
 
 """
 
@@ -21,7 +25,7 @@ import time
 
 
 # Load a predefined model
-model = biorbd.Model("/home/antun/gitlab/biomechanics/pyomeca_models/MOBL_ARMS_fixed_33.bioMod")
+model = biorbd.Model("pyomeca_models/MOBL_ARMS_fixed_33.bioMod")
 
 # get the number of dof and muslces
 nq = model.nbQ()

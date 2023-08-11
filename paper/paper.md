@@ -229,7 +229,7 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 The methods for resolution of the polytope based metrics depend on the family of problems they correspond to. In case of robotic manipulators the methods used are given in the following table.
 
 
-Polytope Metric | Algorithm | Problem type | Execution time <br> mean $\pm$ std. (max) [ms]
+Polytope Metric | Algorithm | Problem type | Execution time [ms] <br> mean $\pm$ std. (max)
 --- | -- | ----- | ----
 Velocity | HPSM | $x=By,~ y \in [y_{min}, y_{max}]$ | 3.6 $\pm$ 0.21 (5.7)
 Acceleration |  HPSM | $x=By,~ y \in [y_{min}, y_{max}]$ | 6.6 $\pm$ 1.4 (14.2)
@@ -248,7 +248,11 @@ Force  | ICHM | $Ax=By,~ y \in [y_{min}, y_{max}]$ | 186.8 $\pm$ 45.6 (281.6)
 Acceleration |  HPSM or ICHM | $x=By,~ y \in [y_{min}, y_{max}]$ |  378.8 $\pm$ 62.3 (643.7)
 Velocity | ICHM | $x=By,~ y \in P_{y}$ | 223.1 $\pm$ 60.4 (389.1)
 
-The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software. The experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
+The average execution time was calculated using 50 muscle 7 dof musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software. The experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor. 
+
+
+# Conclusion
+
 
 # Acknowledgements
 This work has been funded by the BPI France Lichie project.
