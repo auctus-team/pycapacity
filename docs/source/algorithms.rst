@@ -70,7 +70,7 @@ The applicable methods to evaluate different polytope based metrics depend on th
 Therefore this section brings the information about which algorithm is used for which polytope 
 metric and provides a brief performance evaluation their execution times.
 
-.. list-table:: Title
+.. list-table:: Polytope algorithms used for different robot polytope metrics and their performance evaluation
     :widths: 25 25 50 50
     :header-rows: 1
 
@@ -111,7 +111,7 @@ the benchmarking script provided in the ``examples`` folder, `script link <https
 In case of human musculoskeletal models the methods used are given in the table below.
 
 
-.. list-table:: Title
+.. list-table:: Polytope algorithms used for different human polytope metrics and their performance evaluation
     :widths: 25 25 50 50
     :header-rows: 1
 

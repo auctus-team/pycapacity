@@ -38,7 +38,7 @@ An efficient task-space capacity calculation package for robotics and biomechani
   :height: 200
   :alt: Alternative text
 
-
+ 
 What is ``pycapacity``?
 ------------------------------------
 
@@ -54,8 +54,14 @@ softwares ``opensim`` and ``biorbd``. The package can also be used with the Robo
 The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the
 Python package ``matplotlib`` intended for fast prototyping and quick and interactive visualization.
 
-Robotic manipulator capacity metrics
+Implemented metrics
 ------------------------------------
+
+This package implements polytope and ellipsoid based physical ability metrics for robotic manipulators and human musculoskeletal models.
+
+
+Robotic manipulator capacity metrics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/robot.png
   :height: 250
@@ -103,7 +109,7 @@ Where :math:`J` is the robot jacobian matrix, :math:`f` is the vector of cartesi
   See the full formulaiton in the `api docs <pycapacity.robot.html#pycapacity.robot.reachable_space_approximation>`_.
 
 Human musculoskeletal models capacity metrics
----------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. image:: https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/force.png
   :height: 250
@@ -123,8 +129,6 @@ For the human musculoskeletal models this package implements the polytope metric
 Where :math:`J` is the model's jacobian matrix, :math:`L` si the muscle length jacobian matrix, :math:`N= -L^T` is the moment arm matrix, :math:`f` is the vector of cartesian forces, :math:`$\dot{x}` and :math:`\ddot{x}` are vectors fo cartesian velocities and accretions, :math:`\dot{q}` is the vector of the joint velocities, :math:`\tau` is the vector of joint torques, :math:`\dot{l}` is the vector of the muscle stretching velocities and :math:`F` is the vector of muscular forces. 
 
 
-
-
 Performance evaluation of polytope metrics
 ---------------------------------------------
 
@@ -132,7 +136,7 @@ The applicable methods to evaluate different polytope based metrics depend on th
 Therefore this section brings the information about which algorithm is used for which polytope 
 metric and provides a brief performance evaluation their execution times.
 
-.. list-table:: Title
+.. list-table:: Polytope algorithms used for different robot polytope metrics and their performance evaluation
     :widths: 25 25 50 50
     :header-rows: 1
 
@@ -173,7 +177,7 @@ the benchmarking script provided in the ``examples`` folder, `script link <https
 In case of human musculoskeletal models the methods used are given in the table below.
 
 
-.. list-table:: Title
+.. list-table:: Polytope algorithms used for different human polytope metrics and their performance evaluation
     :widths: 25 25 50 50
     :header-rows: 1
 
@@ -202,6 +206,32 @@ As these times can vary significantly depending on the complexity of the model u
 the users are encouraged to run the benchmark scripts themselves to get the most accurate results. 
 This package provides several benchmarking scripts in the ``examples`` folder, see link for more 
 details: `link <https://github.com/auctus-team/pycapacity/tree/master/examples/scripts/benchmarking>`_.
+
+
+
+Compatible libraries
+---------------------------------------------
+
+The package is compatible with the following libraries:
+
+.. list-table::
+    :widths: 25 30
+    :header-rows: 1
+
+    * - Library
+      - Example
+    * - `OpenSim <https://github.com/opensim-org/opensim-core>`_
+      - `Tutorial <examples/opensim.html>`_
+    * - `pyomeca biorbd <https://github.com/pyomeca/biorbd>`_
+      - `Tutorial <examples/pyomeca.html>`_
+    * - `pinocchio <https://github.com/stack-of-tasks/pinocchio>`_
+      - `Tutorial <examples/pinocchio.html>`_
+    * - `Robotics toolbox <https://github.com/petercorke/robotics-toolbox-python>`_
+      - `Tutorial <examples/robotics_toolbox.html>`_
+    * - `Robot Operating System (ROS) <https://ros.org/>`_
+      - `Tutorial <examples/ROS.html>`_
+
+
 
 
 
