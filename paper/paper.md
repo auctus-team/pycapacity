@@ -90,7 +90,8 @@ However, finding the $\mathcal{V}$-representation or the $\mathcal{H}$-represent
 Therefore, polytope evaluation is often a bottleneck in the computation of different physical ability metrics, especially for human musculoskeletal models, which have a large number of degrees of freedom and a large number of muscles. Furthermore, due to the inherent complexity of the polytope evaluation algorithms, finding the appropriate algorithm for a given polytope formulation and dimensionality of the input and output spaces is not a trivial task.
 
 This package aims to provide a selection of algorithms for polytope evaluation, capable of evaluating common physical ability polytopes in an easy to use and efficient way. These algorithms are implemented in Python and can be used as standalone tools as well. Additionally, the package provides tools for easy visualization the 2D and 3D polytopes.
-# Physical capacity metrics
+
+# Implemented physical capacity metrics
 
 The package implements different physical ability metrics for robotic manipulators and humans based on musculoskeletal models.
 
@@ -98,7 +99,7 @@ The package implements different physical ability metrics for robotic manipulato
 
 For robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids.
 
-![2D and 3D force polytopes and their ellipsoid counterparts for a 7 degrees of freedom (DoF) \textit{Franka Emika Panda} robot. Both polytopes and ellipsoids are calculated separately for the 3D and for each of the 2D reduced task-space cases. Both polytopes and ellipsoids take in consideration the true joint torque limits provided by the manufacturer. The underestimation of the true force capabilities of the robot by ellipsoids appears clearly.](robot.png){ width=50% }
+![2D and 3D force polytopes and their ellipsoid counterparts for a 7 degrees of freedom (DoF) \textit{Franka Emika Panda} robot. Both polytopes and ellipsoids are calculated separately for the 3D and for each of the 2D reduced task-space cases. Both polytopes and ellipsoids take in consideration the true joint torque limits provided by the manufacturer. The underestimation of the true force capabilities of the robot by ellipsoids appears clearly.](robot.png){ width=70% }
 
 ### Ellipsoids
 
@@ -188,7 +189,7 @@ This package implements several algorithms for polytope evaluation
 
 These algorithms are all implemented in Python and used to evaluate different polytope based physical ability metrics. Additionally, the algorithms are available to the users to be used standalone as well.
 
-## Hyper-plane shifting method
+## Hyper-plane shifting method (HPSM)
 
 This is an algorithm based on the paper by [@Gouttefarde2010] which presents an efficient way of determining the minimal half-space $\mathcal{H}$ representation of the polytope described by the equation 
 
@@ -196,7 +197,7 @@ This is an algorithm based on the paper by [@Gouttefarde2010] which presents an 
 P = \{ x ~|~ x = By, \quad y_{min}\leq y \leq y_{max} \}
 \end{equation}
 
-## Vertex enumeration algorithm VEPOLI$^2$ 
+## Vertex enumeration algorithm (VEPOLI$^2$) 
 
 This is an algorithm based on the paper by [@Skuric2021] which describes an efficient method for finding vertex $\mathcal{V}$ representation of the polytope described by the equation
 
@@ -205,7 +206,7 @@ P = \{ x ~|~ Ax = y, \quad y_{min}\leq y \leq y_{max} \}
 \end{equation}
 
 
-## Iterative convex-hull method
+## Iterative convex-hull method (ICHM)
 
 This is an algorithm described in the paper by [@Skuric2022] which implements an efficient method which iteratively approximates the polytope
 
@@ -228,14 +229,14 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 The methods for resolution of the polytope based metrics depend on the family of problems they correspond to. In case of robotic manipulators the methods used are given in the following table.
 
 
-Polytope Metric | Algorithm | Problem type | Execution time
+Polytope Metric | Algorithm | Problem type | Execution time <br>(mean $\pm$ std) [ms]
 --- | -- | ----- | ---
-Velocity | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~2ms
-Acceleration |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | ~5ms
-Force  | VEPOLI$^2$ | $Ax=b, ~~ b_{min} \leq b \leq y_{max}$| ~7ms
-Force intersection |  VEPOLI$^2$ | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~80ms
-Force sum |  VEPOLI$^2$ | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | ~15ms
-Reachable space |  ICHM | $x=By,~~  y \in P_{y}$ | ~50ms
+Velocity | HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 5.2ms $\pm$ 1.44 [11.7]
+Acceleration |  HPSM | $x=By,~~ y_{min} \leq y \leq y_{max}$ | 4.3ms $\pm$ 0.43 [7.97]
+Force  | VEPOLI$^2$ | $Ax=b, ~~ b_{min} \leq b \leq y_{max}$| 6.2ms $\pm$ 1.42 [15.9]
+Force intersection |  VEPOLI$^2$ | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | 83.9ms $\pm$ 28.4 [172.2]
+Force sum |  VEPOLI$^2$ | $Ax=b,~~ b_{min} \leq b \leq b_{max}$ | 18.1ms $\pm$ 6.4 [45.9]
+Reachable space |  ICHM | $x=By,~~  y \in P_{y}$ | 125ms $\pm$ 25.9 [191.2]
 
 The average execution time is calculated using 7 dof Franka Emika panda robot, the model was used with `pinocchio` software. All the experiments are run on a computer equipped with 1.90GHz Intel i7-8650U processor.
 
