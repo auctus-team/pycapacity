@@ -12,10 +12,17 @@ Currently, the following scripts are available where no dependencies are require
 - [Random human model](human_random_model.py)
 
 The other scripts require additional dependencies:
-- [pinocchio](pinocchio.py)
+- [pinocchio](pinocchio_example.py)
 - [robotics toolbox with swift](robotics_toolbox_swift.py)
 - [robotics toolbox with pyplot](robotics_toolbox_pyplot.py)
-- [pyomeca](pyomeca.py)
+- [pyomeca](pyomeca_example.py)
+
+
+Performance testing and benchmarking scripts:
+- [Performance testing script for polytope algorithms using radom robot models](benchmarking/polytope_robot_performance_analysis.py)
+- [Performance testing script for polytope algorithms using radom human models](benchmarking/polytope_human_performance_analysis.py)
+- [Performance testing script for polytope algorithms using pinocchio](benchmarking/polytope_robot_performance_analysis_pinocchio.py)
+- [Performance testing script for polytope algorithms using biorbd](benchmarking/polytope_human_performance_analysis_biorbd.py)
 
 
 ### Running the example scripts
