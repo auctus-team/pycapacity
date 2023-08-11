@@ -126,7 +126,7 @@ Where :math:`J` is the model's jacobian matrix, :math:`L` si the muscle length j
 
 
 Performance evaluation of polytope metrics
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------------------
 
 The applicable methods to evaluate different polytope based metrics depend on the family of problems they correspond to. 
 Therefore this section brings the information about which algorithm is used for which polytope 
