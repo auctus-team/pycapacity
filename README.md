@@ -24,13 +24,20 @@
 
 <img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" height="250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" height="250px">
 
-The `pycapacity` package provides a framework for the generic task-space capacity calculation for:
-- Robotic serial manipulators - `pycapacity.robot`
-- Human musculoskeletal models - `pycapacity.human`
+## What is `pycapacity`?
 
-This package also provides a module `pycapacity.algorithms` with a set of polytope evaluation algorithms for standard polytope formulations, that can be used as a standalone library.
+Python package ``pycapacity`` provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. 
+The aim of ``pycapacity`` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics 
+and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the 
+polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
 
-Additionally, `pycapacity.visual` module provides a set of visualisaiton tools using the `matplotlib` for visualising 2d and 3d polytopes.
+The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as ``robotic-toolbox`` 
+or ``pinocchio``, as well as human musculoskeletal model biomechanics 
+softwares ``opensim`` and ``biorbd``. The package can also be used with the Robot Operating System (``ROS``).
+
+The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the
+Python package ``matplotlib`` intended for fast prototyping and quick and interactive visualization.
+
 
 See [full API documentation and docs.](https://auctus-team.github.io/pycapacity/)
 
