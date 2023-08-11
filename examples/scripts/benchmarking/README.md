@@ -1,4 +1,5 @@
-# pycapacity performance benchmarking
+
+# pycapacity performance testing and benchmarking
 
 Performance testing and benchmarking scripts available:
 

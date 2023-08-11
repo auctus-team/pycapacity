@@ -242,8 +242,8 @@ The average execution time is calculated using 7 dof Franka Emika panda robot, t
 
 In case of human musculoskeletal models the methods used are given in the table below.
 
-Polytope Metric  | Algorithm | Problem type | Execution time <br> mean $\pm$ std. (max) [ms]
--- | --- | ----- | ---
+Polytope Metric  | Algorithm | Problem type | Execution time [ms] <br> mean $\pm$ std. (max)
+-- | -- | ----- | ----
 Force  | ICHM | $Ax=By,~ y \in [y_{min}, y_{max}]$ | 186.8 $\pm$ 45.6 (281.6)
 Acceleration |  HPSM or ICHM | $x=By,~ y \in [y_{min}, y_{max}]$ |  378.8 $\pm$ 62.3 (643.7)
 Velocity | ICHM | $x=By,~ y \in P_{y}$ | 223.1 $\pm$ 60.4 (389.1)
