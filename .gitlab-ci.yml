@@ -1,12 +1,10 @@
-image: python:3.6-slim
+image: python:3.10-slim
 
 pages:
   stage: deploy
   tags:
   - ci.inria.fr
   script:
-  - apt update
-  - apt install build-essential
   - pip install .
   - cd docs
   - pip install -r requirements.txt
