@@ -5,7 +5,7 @@ pages:
   tags:
   - ci.inria.fr
   script:
-  - pip install --upgrade pip setuptools wheel
+  - apt-get install gcc
   - pip install .
   - cd docs
   - pip install -r requirements.txt
