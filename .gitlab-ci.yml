@@ -5,6 +5,7 @@ pages:
   tags:
   - ci.inria.fr
   script:
+  - apt update
   - apt install build-essential
   - pip install .
   - cd docs
