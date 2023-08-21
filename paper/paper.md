@@ -230,6 +230,7 @@ P = \{ x ~|~ x= Pz, Az = By, \quad y_{min}\leq y \leq y_{max} \}
 
 The applicable methods to evaluate different polytope based metrics depend on the family of problems they correspond to. Therefore this section brings the information about which algorithm is used for which polytope metric and provides a brief performance evaluation of their execution times.
 
+Additionally, to give brief information about the efficiency of the proposed methods, the section provides the execution times of the methods for the example problems. However, as these execution times can vary significantly depending on the complexity of the model used and the hardware it is run on, the users are encouraged to run the benchmark scripts themselves to get the most accurate results. This package provides several benchmarking scripts in the `examples` folder.
 
 ### Robotic manipulators
 
@@ -259,7 +260,7 @@ Velocity | ICHM | $x=By,~ y \in P_{y}$ | 223.1 $\pm$ 60.4 (389.1)
 
 The average execution time is calculated for 1000 random configuration of a 50 muscle 7 DOF musculoskeletal model introduced by [@holzbaur2005model], the model was used with `biorbd` biomechanics software.  The experiments are run on a computer equipped with a 1.90GHz Intel i7-8650U processor. The results are obtained using the benchmarking script provided in the by the repository in the `examples` folder. 
 
-As these times can vary significantly depending on the complexity of the model used and the hardware it is run on, the users are encouraged to run the benchmark scripts themselves to get the most accurate results. This package provides several benchmarking scripts in the `examples` folder.
+
 
 # Conclusion
 
