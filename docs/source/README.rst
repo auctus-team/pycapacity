@@ -153,15 +153,15 @@ metric and provides a brief performance evaluation their execution times.
       - :math:`x=By,~ y \in [y_{min}, y_{max}]`
       - 6.6 :math:`\pm` 1.4 (14.2)
     * - Force  
-      - VEPOLI$^2$ 
+      - VEPOLI :math:`\!^2` 
       - :math:`Ax=b, ~ b \in [b_{min}, b_{max}]`
       - 6.8 :math:`\pm` 0.88 (16.4)
     * - Force intersection 
-      -  VEPOLI$^2$ 
+      - VEPOLI :math:`\!^2` 
       - :math:`Ax=b,~ b \in [b_{min}, b_{max}]`
       - 98.2 :math:`\pm` 29.33 (165.8)
     * - Force sum 
-      -  VEPOLI$^2$ 
+      - VEPOLI :math:`\!^2` 
       - :math:`Ax=b,~ b \in [b_{min}, b_{max}]` 
       - 17.1 :math:`\pm` 3.4 (44.9)
     * - Reachable space 
