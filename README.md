@@ -24,7 +24,7 @@
 
 <img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" height="250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" height="250px">
 
-## What is `pycapacity`?
+## What is ``pycapacity``?
 
 Python package ``pycapacity`` provides a set of tools for evaluating task space physical ability metrics for humans and robots, based on polytopes and ellipsoids. 
 The aim of ``pycapacity`` is to provide a set of efficient tools for their evaluation in an easy to use framework that can be easily integrated with standard robotics 
