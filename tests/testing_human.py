@@ -84,3 +84,18 @@ def test_human_force_random():
 
     human.velocity_polytope(J, N=N, dl_min=dl_min , dl_max=dl_max, dq_max=dtheta_max, dq_min=dtheta_min, tol=1e-5)
     assert True
+
+# test all the ellipsoid algos with random data at once
+def test_all_ellipsoid_at_once_random():
+    L = 20 # nb muscles
+    n = 5 # nb joints
+    m = 3 # cartesian forces
+    N = (np.random.rand(n,L)*2 -1)
+    J = np.random.rand(m,n)
+    M = np.random.rand(n,n)
+    F_max = np.ones(L)
+    dl_max = np.ones(L)
+
+    human.force_ellipsoid(J,N, F_max)
+    human.acceleration_ellipsoid(J, M, N, F_max)
+    human.velocity_ellipsoid(J, N, dl_max)

@@ -68,6 +68,7 @@ Robotic manipulator capacity metrics
   :alt: Alternative text
 
 For the robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids:
+
 - Velocity (manipulability) ellipsoid  
 
     .. math:: E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||\dot{q}||\leq1 \}
@@ -79,6 +80,7 @@ For the robotic manipulators the package integrates several velocity, force and 
     .. math:: E_{f} = \{{f} ~| J^{T}f = \tau,~ ||\tau||\leq1 \}
 
 And polytopes: 
+
 - Velocity polytope  
 
     .. math:: P_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ \dot{q}_{min}\leq\dot{q}\leq\dot{q}_{max} \}
@@ -115,7 +117,22 @@ Human musculoskeletal models capacity metrics
   :height: 250
   :alt: Alternative text
 
-For the human musculoskeletal models this package implements the polytope metrics:
+
+For the robotic manipulators the package integrates velocity, force and acceleration capacity calculation functions based on ellipsoids:
+
+- Velocity (manipulability) ellipsoid  
+
+    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||\dot{l}|| \leq 1\}
+- Acceleration (dynamic manipulability) ellipsoid  
+
+    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||F|| \leq 1\}
+- Force ellipsoid 
+
+    .. math:: E_f = \{f~ |~ NF  = J^Tf,\quad ||F||\leq 1\}
+
+
+And polytopes:
+
 - Velocity polytope  
 
     .. math:: P_{v} = \{\dot{x} ~| \dot{l} = L\dot{q},~ \dot{x} = J\dot{q},~ \dot{l}_{min}\leq\dot{l}\leq\dot{l}_{max} \}

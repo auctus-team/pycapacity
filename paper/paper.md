@@ -99,7 +99,7 @@ The package implements different physical ability metrics for robotic manipulato
 
 ## Robotic manipulators metrics
 
-For robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids.
+For robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids and polytopes.
 
 ![2D and 3D force polytopes and their ellipsoid counterparts for a 7 degrees of freedom (DOF) \textit{Franka Emika Panda} robot. Both polytopes and ellipsoids are calculated separately for the 3D and for each of the 2D reduced task-space cases. Both polytopes and ellipsoids take in consideration the true joint torque limits provided by the manufacturer. The underestimation of the true force capabilities of the robot by ellipsoids appears clearly.](robot.png){ width=70% }
 
@@ -162,7 +162,26 @@ Where $J$ is the robot Jacobian matrix, $f$ is the vector of Cartesian forces, $
 
 ![Cartesian force polytope of a musculoskeletal model of both human upper limbs with 7DOf and 50 muscles each, visualized with `biorbd`. The polytopes are scaled with a ratio 1m : 1000N.\label{fig:force_polytope_human}](bimanual1.png){ width=70% }
 
-For the human musculoskeletal models this package implements the polytope metrics:
+For the human musculoskeletal models this package implements the polytope and ellipsoid evaluation functions for the following metrics.
+
+### Ellipsoids
+
+- Velocity (manipulability) ellipsoid  
+\begin{equation}\label{eq:ev_h}
+\{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||\dot{l}|| \leq \dot{l}_{max}\}
+\end{equation}
+
+- Acceleration (dynamic manipulability) ellipsoid  
+\begin{equation}\label{eq:ea_r}
+E_{a} = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||F|| \leq {F}_{max}\}
+\end{equation}
+
+- Force ellipsoid 
+\begin{equation}\label{eq:ef_r}
+E_{f} = \{f~ |~ NF  = J^Tf,\quad ||F|| \leq {F}_{max}\}
+\end{equation}
+
+### Polytopes
 
 - Velocity polytope  
 \begin{equation}\label{eq:pv_h}

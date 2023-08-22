@@ -4,10 +4,11 @@ Overview
 
 This is a python module which implements different human performance metrics based on their musculoskeletal models
 
+
+* acceleration `polytope <#pycapacity\.human\.acceleration_polytope>`_ and `ellipsoid <#pycapacity\.human\.acceleration_ellipsoid>`_
+* velocity (manipulability) `polytope <#pycapacity\.human\.velocity_polytope>`_ and `ellipsoid <#pycapacity\.human\.velocity_ellipsoid>`_
+* force `polytope <#pycapacity\.human\.force_polytope>`_ and `ellipsoid <#pycapacity\.human\.force_ellipsoid>`_
 * `joint torque polytope <#pycapacity\.human\.joint_torques_polytope>`_
-* `acceleration polytope <#pycapacity\.human\.acceleration_polytope>`_
-* `force polytope <#pycapacity\.human\.force_polytope>`_
-* `velocity polytope <#pycapacity\.human\.velocity_polytope>`_
 
 """
 
@@ -19,6 +20,88 @@ import cvxopt.glpk
 from pycapacity.algorithms import *
 from pycapacity.objects import *
 import pycapacity.robot as robot
+
+
+def velocity_ellipsoid(J, N, dl_max):
+    """
+    Human musculoskeletal velocity ellipsoid calculation
+
+    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||\dot{l}|| \leq \dot{l}_{max}\}
+
+    Args:
+        J: position jacobian
+        N: moment arm matrix (:math:`N = -L^T`, where :math:`L` is the muscle length jacobian)
+        dl_max:  maximal joint velocities
+
+    Returns
+    ---------
+        ellipsoid(Ellipsoid):
+            ellipsoid object with the following attributes ``radii``, ``axes``
+    """ 
+    # jacobian calculation
+    Jac = J@np.linalg.pinv(-N.T)
+    # limits scaling
+    W = np.diagflat(dl_max)
+    # calculate the singular value decomposition
+    U, S, V = np.linalg.svd(Jac.dot(W))
+
+    # create the ellipsoid from the singular values and the unit vector angle
+    ellipsoid = Ellipsoid(radii=S, rotation=U)
+    return ellipsoid
+
+def acceleration_ellipsoid(J, M, N, F_max):
+    """
+    Human muscuskeletal acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
+   
+    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||F|| \leq {F}_{max}\}
+
+    Args:
+        J: matrix jacobian
+        M: matrix inertia 
+        N: moment arm matrix
+        F_max:  maximal muscular forces
+        
+    Returns
+    ---------
+        ellipsoid(Ellipsoid):
+            ellipsoid object with the following attributes ``radii``, ``axes``
+    """ 
+    # jacobian calculation
+    Jac = J@np.linalg.pinv(M)@N
+    # limits scaling
+    W = np.linalg.pinv(np.diagflat(F_max))
+    # calculate the singular value decomposition
+    U, S, V = np.linalg.svd(Jac.dot(W))
+    # create the ellipsoid from the singular values and the unit vector angle
+    ellipsoid = Ellipsoid(radii=S, rotation=U)
+    return ellipsoid
+
+def force_ellipsoid(J, N, F_max):
+    """
+    Human muscuskeletal force ellipsoid calculation
+
+    .. math:: E_f = \{f~ |~ NF  = J^Tf,\quad ||F|| \leq {F}_{max}\}
+
+    Args:
+        J: matrix jacobian
+        N: moment arm matrix
+        F_max:  maximal muscular forces
+
+    Returns
+    ---------
+        ellipsoid(Ellipsoid):
+            ellipsoid object with the following attributes ``radii``, ``axes``
+    """ 
+    # jacobian calculation
+    Jac = J@np.linalg.pinv(N.T)
+    # limits scaling
+    W = np.linalg.pinv(np.diagflat(F_max))
+    # calculate the singular value decomposition
+    U, S, V = np.linalg.svd(Jac.dot(W))
+    # create the ellipsoid from the singular values and the unit vector angle
+    ellipsoid = Ellipsoid(radii=np.divide(1,S), rotation=U  )
+    return ellipsoid
+
 
 def joint_torques_polytope(N, F_min, F_max, tol=1e-5, options=None):
     """
