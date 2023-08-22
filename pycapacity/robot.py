@@ -27,7 +27,11 @@ def velocity_ellipsoid(J, dq_max):
     """
     Velocity manipulability ellipsoid calculation
 
-    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad ||\dot{q}|| \leq \dot{q}_{max}\}
+    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad ||W^{-1}\dot{q}|| \leq 1\}
+
+    where
+
+    .. math:: W=diag(\dot{q}_{max})
 
     Args:
         J: position jacobian
@@ -53,7 +57,11 @@ def acceleration_ellipsoid(J, M, t_max):
     """
     Acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
-    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad ||{\\tau}|| \leq {\\tau}_{max}\}
+    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad ||W^{-1}{\\tau}|| \leq 1\}
+
+    where
+
+    .. math:: W=diag(\\tau_{max})
 
     Args:
         J: matrix jacobian
@@ -79,7 +87,11 @@ def force_ellipsoid(J, t_max):
     """
     Force manipulability ellipsoid calculation
 
-    .. math:: E_f = \{f~ |~ \\tau  = J^Tf,\quad ||\\tau|| \leq {\\tau}_{max}\}
+    .. math:: E_f = \{f~ |~ \\tau  = J^Tf,\quad ||W^{-1}\\tau|| \leq 1\}
+
+    where
+
+    .. math:: W=diag(\\tau_{max})
 
     Args:
         J: matrix jacobian

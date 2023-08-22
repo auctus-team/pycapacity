@@ -26,12 +26,16 @@ def velocity_ellipsoid(J, N, dl_max):
     """
     Human musculoskeletal velocity ellipsoid calculation
 
-    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||\dot{l}|| \leq \dot{l}_{max}\}
+    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = W=\dot{l} \quad ||W^{-1}\dot{l}|| \leq 1\}
+   
+    where
 
+    .. math:: W=diag(\dot{l}_{max})
+    
     Args:
         J: position jacobian
         N: moment arm matrix (:math:`N = -L^T`, where :math:`L` is the muscle length jacobian)
-        dl_max:  maximal joint velocities
+        dl_max:  maximal joint velocities 
 
     Returns
     ---------
@@ -53,7 +57,11 @@ def acceleration_ellipsoid(J, M, N, F_max):
     """
     Human muscuskeletal acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
-    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||F|| \leq {F}_{max}\}
+    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad |W^{-1}|F|| \leq 1\}
+
+    where
+
+    .. math:: W=diag(F_{max})
 
     Args:
         J: matrix jacobian
@@ -80,8 +88,12 @@ def force_ellipsoid(J, N, F_max):
     """
     Human muscuskeletal force ellipsoid calculation
 
-    .. math:: E_f = \{f~ |~ NF  = J^Tf,\quad ||F|| \leq {F}_{max}\}
+    .. math:: E_f = \{f~ |~ NF  = J^Tf,\quad ||W^{-1}F|| \leq 1\}
 
+    where
+
+    .. math:: W=diag(F_{max})
+        
     Args:
         J: matrix jacobian
         N: moment arm matrix
