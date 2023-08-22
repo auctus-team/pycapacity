@@ -26,7 +26,7 @@ def velocity_ellipsoid(J, N, dl_max):
     """
     Human musculoskeletal velocity ellipsoid calculation
 
-    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = W=\dot{l} \quad ||W^{-1}\dot{l}|| \leq 1\}
+    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||W^{-1}\dot{l}|| \leq 1\}
    
     where
 
@@ -57,7 +57,7 @@ def acceleration_ellipsoid(J, M, N, F_max):
     """
     Human muscuskeletal acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
-    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad |W^{-1}|F|| \leq 1\}
+    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}
 
     where
 

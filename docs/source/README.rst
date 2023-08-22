@@ -71,13 +71,13 @@ For the robotic manipulators the package integrates several velocity, force and 
 
 - Velocity (manipulability) ellipsoid  
 
-    .. math:: E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||\dot{q}||\leq1 \}
+    .. math:: E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||W^{-1}\dot{q}||\leq1 \}, \qquad W = diag(\dot{q}_{max})
 - Acceleration (dynamic manipulability) ellipsoid  
 
-    .. math:: E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||\tau||\leq1 \}
+    .. math:: E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||W^{-1}\tau||\leq1 \}, \qquad W = diag(\tau_{max})
 - Force ellipsoid 
 
-    .. math:: E_{f} = \{{f} ~| J^{T}f = \tau,~ ||\tau||\leq1 \}
+    .. math:: E_{f} = \{{f} ~| J^{T}f = \tau,~ ||W^{-1}\tau||\leq1 \}, \qquad W = diag(\tau_{max})
 
 And polytopes: 
 
@@ -122,13 +122,13 @@ For the robotic manipulators the package integrates velocity, force and accelera
 
 - Velocity (manipulability) ellipsoid  
 
-    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||\dot{l}|| \leq 1\}
+    .. math:: E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||^{-1}\dot{l}|| \leq 1\}, \qquad W = diag(\dot{l}_{max})
 - Acceleration (dynamic manipulability) ellipsoid  
 
-    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||F|| \leq 1\}
+    .. math:: E_{a} = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 - Force ellipsoid 
 
-    .. math:: E_f = \{f~ |~ NF  = J^Tf,\quad ||F||\leq 1\}
+    .. math:: E_{f} = \{f~ |~ NF  = J^Tf,\quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 
 
 And polytopes:

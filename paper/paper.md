@@ -107,17 +107,17 @@ For robotic manipulators the package integrates several velocity, force and acce
 
 - Velocity (manipulability) ellipsoid  
 \begin{equation}\label{eq:ev_r}
-E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||\dot{q}||\leq1 \}
+E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||W^{-1}\dot{q}||\leq1 \}, \qquad W = diag(\dot{q}_{max})
 \end{equation}
 
 - Acceleration (dynamic manipulability) ellipsoid  
 \begin{equation}\label{eq:ea_r}
-E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||\tau||\leq1 \}
+E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||W^{-1}\tau||\leq1 \}, \qquad W = diag(\tau_{max})
 \end{equation}
 
 - Force ellipsoid 
 \begin{equation}\label{eq:ef_r}
-E_{f} = \{{f} ~| J^{T}f = \tau,~ ||\tau||\leq1 \}
+E_{f} = \{{f} ~| J^{T}f = \tau,~ ||W^{-1}\tau||\leq1 \}, \qquad W = diag(\tau_{max})
 \end{equation}
 
 ### Polytopes
@@ -168,17 +168,17 @@ For the human musculoskeletal models this package implements the polytope and el
 
 - Velocity (manipulability) ellipsoid  
 \begin{equation}\label{eq:ev_h}
-\{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||\dot{l}|| \leq 1\}
+E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||^{-1}\dot{l}|| \leq 1\}, \qquad W = diag(\dot{l}_{max})
 \end{equation}
 
 - Acceleration (dynamic manipulability) ellipsoid  
 \begin{equation}\label{eq:ea_r}
-E_{a} = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||F|| \leq 1\}
+E_{a} = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 \end{equation}
 
 - Force ellipsoid 
 \begin{equation}\label{eq:ef_r}
-E_{f} = \{f~ |~ NF  = J^Tf,\quad ||F|| \leq 1\}
+E_{f} = \{f~ |~ NF  = J^Tf,\quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 \end{equation}
 
 ### Polytopes
