@@ -76,7 +76,12 @@ by Gouttefarde M., Krut S. <br>In: Lenarcic J., Stanisic M. (eds) Advances in Ro
 ## Human musculoskeletal models capacity metrics
 <img src='https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/force.png' height='200px'>
 
-For the human musculoskeletal models this package implements the polytope metrics:
+For the human musculoskeletal models this package implements the ellipsoid and polytope evaluation functions. The implemented ellipsoids are:
+- Velocity (manipulability) ellipsoid <br> `E_vel = {dx | dx = J.dq, dl = L.dq, ||dl||<1 }`
+- Acceleration (dynamic manipulability) ellipsoid <br> `E_acc = {ddx | ddx = J.M^(-1).N.F, ||F||<1 }`
+- Force ellipsoid <br> `E_for = {f | J^T.f = N.F, ||F||<1 }`
+
+And polytopes: 
 - Velocity polytope <br> `P_vel = {dx | dx = J.dq, dl = L.dq  dl_min < dl < dl_max}`
 - Acceleration polytope <br> `P_acc = {ddx | ddx = J.M^(-1).N.F, F_min < F < F_max}`
 - Force polytope <br> `P_for = {f | J^T.f = N.F, F_min < F < F_max}`
