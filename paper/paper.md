@@ -168,7 +168,7 @@ For the human musculoskeletal models this package implements the polytope and el
 
 - Velocity (manipulability) ellipsoid  
 \begin{equation}\label{eq:ev_h}
-E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||^{-1}\dot{l}|| \leq 1\}, \qquad W = diag(\dot{l}_{max})
+E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||W^{-1}\dot{l}|| \leq 1\}, \qquad W = diag(\dot{l}_{max})
 \end{equation}
 
 - Acceleration (dynamic manipulability) ellipsoid  

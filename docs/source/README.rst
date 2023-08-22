@@ -122,7 +122,7 @@ For the robotic manipulators the package integrates velocity, force and accelera
 
 - Velocity (manipulability) ellipsoid  
 
-    .. math:: E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||^{-1}\dot{l}|| \leq 1\}, \qquad W = diag(\dot{l}_{max})
+    .. math:: E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||W^{-1}\dot{l}|| \leq 1\}, \qquad W = diag(\dot{l}_{max})
 - Acceleration (dynamic manipulability) ellipsoid  
 
     .. math:: E_{a} = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
