@@ -53,3 +53,22 @@ def test_polytope_from_vertex_to_face():
     p.find_faces()
     # check if all faces in the face representation are in the vertex representation
     assert np.all(np.isin(p.faces,p.vertices))
+
+# test minowski sum of two polytopes
+# testing for a cube
+def test_polytope_minkowski_sum():
+    p1 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((np.ones((3,1)),np.ones((3,1)))))
+    p2 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((2*np.ones((3,1)),2*np.ones((3,1)))))
+    p_sum = p1 + p2
+    assert np.all(p_sum.H@p1.vertices - p_sum.d[:,None]  < 1e-5) and  np.all(p_sum.H@p2.vertices - p_sum.d[:,None]  < 1e-5)
+
+# test intersection of two polytopes
+# testing for a cube
+def test_polytope_intersection():
+    p1 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((np.ones((3,1)),np.ones((3,1)))))
+    p2 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((2*np.ones((3,1)),2*np.ones((3,1)))))
+    p_int = p1 - p2
+    p1.find_halfplanes()
+    p2.find_halfplanes()
+    p_int.find_vertices()
+    assert np.all(p1.H@p_int.vertices - p1.d[:,None]  < 1e-5) and  np.all(p2.H@p_int.vertices - p2.d[:,None]  < 1e-5)

@@ -118,6 +118,29 @@ class Polytope:
         self.H, self.d = vertex_to_hspace(points)
         self.vertices, self.face_indices = hspace_to_vertex(self.H,self.d)
 
+    # minkowski sum of two polytopes
+    def __add__(self, p):
+        if self.vertices is None:
+            self.find_vertices()
+        if p.vertices is None:
+            p.find_vertices()   
+        vertices_sum = []
+        for v1 in self.vertices.T:
+            for v2 in p.vertices.T:
+                vertices_sum.append(v1+v2)
+        P_sum = Polytope()
+        P_sum.find_from_point_cloud(points=np.array(vertices_sum).T)
+        return P_sum
+    
+    # intersecting two polytopes
+    def __sub__(self, p):
+        if self.H is None or self.d is None:
+            self.find_halfplanes()
+        if p.H is None or p.d is None:
+            p.find_halfplanes()
+        H_int = np.vstack((self.H,p.H))
+        d_int = np.vstack((self.d,p.d))
+        return Polytope(H=H_int,d=d_int)
 
 
 
