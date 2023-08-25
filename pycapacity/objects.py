@@ -56,7 +56,7 @@ class Polytope:
         >>> p.find_vertices()
         >>> # create another polytope object
         >>> p1 = Polytope(vertices=np.random.rand(3,10))
-        >>> # minowski sum of two polytopes
+        >>> # minkowski sum of two polytopes
         >>> p_sum = p + p1
         >>> # intersection of two polytopes
         >>> p_int = p - p1
