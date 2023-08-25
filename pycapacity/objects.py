@@ -14,18 +14,18 @@ class Polytope:
     """
     A generic class representing a polytope with different representations (vertex, half-plane, face)
 
-    Vertex representaiton is a list of vertices of the polytope
+    Vertex representation is a list of vertices of the polytope
 
     .. math::
         \mathcal{H}\!-\!rep = \{x \in \mathbb{R}^n | Hx \leq d \}
 
         
-    Half-plane representaiton is a list of inequalities defining the polytope
+    Half-plane representation is a list of inequalities defining the polytope
 
     .. math::
         \mathcal{V}\!-\!rep = \{x_{v1},~ x_{v2},~ \ldots, ~x_{vn} \}
 
-    Face representaiton is a list of triangles forming faces of the polytope, each triangle is represented as a list of tree vertices
+    Face representation is a list of triangles forming faces of the polytope, each triangle is represented as a list of tree vertices
 
     .. math::
         \mathcal{F}\!-\!rep = \{ [x_{v1},~ x_{v2}, ~x_{v2}],  ~ \ldots , ~[x_{vi},~ x_{vj}, ~x_{vk}], \ldots \}
@@ -36,6 +36,30 @@ class Polytope:
     :ivar d: half-plane representation of the polytope Hx<d- vector d
     :ivar faces: face representation of the polytope - faces are represented as a list of triangulated vertices
     :ivar face_indices: face representation of the polytope - faces are represented as a list of indices of vertices
+
+
+    Polytope object implements the following operators:
+
+    - ``+`` : minkowski sum of two polytopes
+    - ``-`` : intersection of two polytopes
+
+    Examples:
+        >>> from pycapacity.objects import *
+        >>> import numpy as np
+        >>> # create a polytope object
+        >>> p = Polytope(vertices=np.random.rand(3,10))
+        >>> # find half-plane representation of the polytope
+        >>> p.find_halfplanes()
+        >>> # find face representation of the polytope
+        >>> p.find_faces()
+        >>> # find vertex representation of the polytope
+        >>> p.find_vertices()
+        >>> # create another polytope object
+        >>> p1 = Polytope(vertices=np.random.rand(3,10))
+        >>> # minowski sum of two polytopes
+        >>> p_sum = p + p1
+        >>> # intersection of two polytopes
+        >>> p_int = p - p1
 
 
     Additionally for robot's force polytopes will have additional attributes:

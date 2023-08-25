@@ -528,7 +528,7 @@ def chebyshev_center(A,b):
     Returns:
         center(array): returns a chebyshev center of the polytope
     """
-    # calculate the certices
+    # calculate the vertices
     Ab_mat = np.hstack((np.array(A),-np.array(b)))
 
     # calculating chebyshev center
@@ -543,7 +543,7 @@ def chebyshev_center(A,b):
 
 def hspace_to_vertex(H,d):
     """
-    From half-space representaiton to the vertex representation
+    From half-space representation to the vertex representation
 
     Args:
         H(list):  
@@ -553,7 +553,7 @@ def hspace_to_vertex(H,d):
     Returns
     --------
         vertices(list)  : vertices of the polytope
-        face_indexes(list) : indexes of verteices forming triangulated faces of the polytope
+        face_indexes(list) : indexes of vertices forming triangulated faces of the polytope
 
     """
     if len(H):
@@ -579,10 +579,10 @@ def hspace_to_vertex(H,d):
 
 def vertex_to_hspace(vertex):
     """
-    Function transforming vertice to half-sapoce representation using a ConvexHull algorithm
+    Function transforming vertices to half-space representation using a ConvexHull algorithm
 
     Args:
-        vertex(array):  list of verteices
+        vertex(array):  list of vertices
 
     Returns
     -------
@@ -600,7 +600,7 @@ def vertex_to_faces(vertex):
 
 
     Args:
-        vertex(array):  list of verteices
+        vertex(array):  list of vertices
 
     Returns:
         faces(array) : list of triangle faces with vertex indexes which form them
@@ -651,7 +651,7 @@ def face_index_to_vertex(vertices, indexes):
 
 def stack(A, B, dir='v'):
     """
-    Helping function enabling vertical and horisontal stacking of numpy arrays
+    Helping function enabling vertical and horizontal stacking of numpy arrays
     """
     if A is None or not len(A):
         return B

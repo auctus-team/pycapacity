@@ -55,7 +55,7 @@ def velocity_ellipsoid(J, N, dl_max):
 
 def acceleration_ellipsoid(J, M, N, F_max):
     """
-    Human muscuskeletal acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
+    Human musculoskeletal acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
     .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}
 
@@ -86,7 +86,7 @@ def acceleration_ellipsoid(J, M, N, F_max):
 
 def force_ellipsoid(J, N, F_max):
     """
-    Human muscuskeletal force ellipsoid calculation
+    Human musculoskeletal force ellipsoid calculation
 
     .. math:: E_f = \{f~ |~ NF  = J^Tf,\quad ||W^{-1}F|| \leq 1\}
 
@@ -248,7 +248,7 @@ def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=
 
     .. math:: P_{v,\dot{q}} = \{ \dot{x} ~ | ~ J\dot{q} = \dot{x}, \quad \dot{q}_{min} \leq \dot{q} \leq \dot{q}_{max}\}
 
-    If both are provided thefunction will calculate
+    If both are provided the function will calculate
 
     .. math:: P_{v,\dot{l}} = \{ \dot{x} ~ | ~ J\dot{q} = \dot{x}, \quad \dot{q}_{min} \leq \dot{q} \leq \dot{q}_{max}, ~~  \dot{l}_{max} \leq L\dot{q} \leq \dot{l}_{max}\}
 
@@ -258,8 +258,8 @@ def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=
     Args:
         J: jacobian matrix
         N: moment arm matrix :math:`L = -N^T`
-        dl_min: minimal achievable muscle contraction veclocity
-        dl_max: maximal achievable muscle contraction veclocity
+        dl_min: minimal achievable muscle contraction velocity
+        dl_max: maximal achievable muscle contraction velocity
         dq_min: minimal achievable joint velocity
         dq_max: maximal achievable joint velocity
         tol: tolerance for the polytope calculation
@@ -328,7 +328,7 @@ def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=
 def torque_to_muscle_force(N, F_min, F_max, tau, options="lp"):
     """
     A function calculating muscle forces needed to create the joint torques tau.
-    It uses eaither the linear programming or quadratic programming, set with the ``options`` parameter.
+    It uses either the linear programming or quadratic programming, set with the ``options`` parameter.
 
     The quadratic programming problem is formulated as:
 
@@ -343,7 +343,7 @@ def torque_to_muscle_force(N, F_min, F_max, tau, options="lp"):
         F_min: minimal muscular forces (passive forces or 0)
         F_max: maximal isometric forces 
         tau: joint torque
-        options: dictionary of options (currently supported ``solver`` type to use: ``lp`` - linear programming (defualt), ``qp`` - quadratic programming)
+        options: dictionary of options (currently supported ``solver`` type to use: ``lp`` - linear programming (default), ``qp`` - quadratic programming)
         
     Returns:
         F(list): list of muscle forces
