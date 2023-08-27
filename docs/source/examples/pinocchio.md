@@ -74,11 +74,11 @@ Then install `pycapacity` for the workspace analysis
 pip install pycapacity
 ```
 
-<div class="admonition-new-examples admonition">
+<<div class="admonition-new-examples admonition">
 <p class="admonition-title">📢 NEW Examples!</p>
 <dl class="simple">
 <dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
-<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio.ipynb">see on Github</a></p></li>
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: see on Github <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio.ipynb">velocity polytope</a> and <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio_reachable_space.ipynb">reachable space polytope</a></p></li> 
 <li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/pinocchio_example.py">see on Github</a></p></li>
 </ul>
 </dd>
@@ -297,7 +297,7 @@ while True:
 <p class="admonition-title">📢 NEW Examples!</p>
 <dl class="simple">
 <dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
-<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio.ipynb">see on Github</a></p></li>
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: see on Github <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio.ipynb">velocity polytope</a> and <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio_reachable_space.ipynb">reachable space polytope</a></p></li> 
 <li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/pinocchio_example.py">see on Github</a></p></li>
 </ul>
 </dd>

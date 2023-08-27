@@ -37,3 +37,4 @@ A few generic examples
 
     Find a half-plane representation of a point cloud <hspace_from_vert>
     Find a vertex representation of a set of half-planes <vert_from_hspace>
+    Polytope manipulation example: Minkowski sum and intersection <manipulating_polytopes>

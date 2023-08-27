@@ -19,7 +19,7 @@ A simple example program for find a half-plane representation of a set of vertic
 
     # create a polytope object
     p = Polytope()
-    # find the half-plane representation and vertezx representation
+    # find the half-plane representation and vertex representation
     # finding the convex hull of the points
     p.find_from_point_cloud(points)
     print('A: \n',p.H, '\nb: \n',p.d)

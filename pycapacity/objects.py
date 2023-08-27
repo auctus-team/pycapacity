@@ -59,7 +59,7 @@ class Polytope:
         >>> # minkowski sum of two polytopes
         >>> p_sum = p + p1
         >>> # intersection of two polytopes
-        >>> p_int = p - p1
+        >>> p_int = p & p1
 
 
     Additionally for robot's force polytopes will have additional attributes:
@@ -157,7 +157,7 @@ class Polytope:
         return P_sum
     
     # intersecting two polytopes
-    def __sub__(self, p):
+    def __and__(self, p):
         if self.H is None or self.d is None:
             self.find_halfplanes()
         if p.H is None or p.d is None:

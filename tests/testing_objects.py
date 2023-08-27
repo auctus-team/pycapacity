@@ -67,7 +67,7 @@ def test_polytope_minkowski_sum():
 def test_polytope_intersection():
     p1 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((np.ones((3,1)),np.ones((3,1)))))
     p2 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((2*np.ones((3,1)),2*np.ones((3,1)))))
-    p_int = p1 - p2
+    p_int = p1 & p2
     p1.find_halfplanes()
     p2.find_halfplanes()
     p_int.find_vertices()
