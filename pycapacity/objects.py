@@ -166,6 +166,23 @@ class Polytope:
         d_int = np.vstack((self.d,p.d))
         return Polytope(H=H_int,d=d_int)
 
+    # implement chebyshev ball
+    def chebyshev_ball(self):
+        """
+        Function calculating the Chebyshev ball of the polytope, the largest ball that can be inscribed in the polytope. 
+        The function calculates the center and radius of the ball and returns an ellipsoid object representing the Chebyshev ball of the polytope
+
+        Th function uses one Linear Programming problem to find the Chebyshev ball of the polytope.
+        See also: https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.HalfspaceIntersection.html#r9b902253b317-1
+
+        Returns:
+            Ellipsoid(Ellipsoid): an ellipsoid object representing the Chebyshev ball of the polytope
+        
+        """
+        if self.H is None or self.d is None:
+            self.find_halfplanes()
+        center, radius = chebyshev_ball(self.H,self.d.reshape(-1,1))
+        return Ellipsoid(radii=np.ones(self.H.shape[1],)*radius,rotation=np.eye(self.H.shape[1]), center=center)
 
 
 class Ellipsoid:
@@ -184,6 +201,7 @@ class Ellipsoid:
     :ivar rotation: rotation of the ellipsoid SO3 matrix
     """
 
-    def __init__(self, radii=None, rotation=None):
+    def __init__(self, radii=None, rotation=None, center=None):
         self.radii = radii
         self.rotation = rotation
+        self.center = center

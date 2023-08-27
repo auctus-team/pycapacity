@@ -541,6 +541,34 @@ def chebyshev_center(A,b):
     res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
     return np.array(res[1][:-1]).reshape((-1,))
 
+def chebyshev_ball(A,b):
+    """
+    Calculating chebyshev ball of a polytope given the half-space representation
+
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.HalfspaceIntersection.html#r9b902253b317-1
+
+    Args:
+        A(list):  
+            matrix of half-space representation `Ax<b`
+        b(list): 
+            vector of half-space representation `Ax<b`
+    Returns:
+        center(array): returns a chebyshev center of the polytope
+        radius(float): returns a chebyshev radius of the polytope
+    """
+    # calculate the vertices
+    Ab_mat = np.hstack((np.array(A),-np.array(b)))
+
+    # calculating chebyshev center
+    norm_vector = np.reshape(np.linalg.norm(Ab_mat[:, :-1], axis=1), (A.shape[0], 1))
+    c = np.zeros((Ab_mat.shape[1],))
+    c[-1] = -1
+    G = matrix(np.hstack((Ab_mat[:, :-1], norm_vector)))
+    h = matrix(- Ab_mat[:, -1:])
+    solvers_opt={'tm_lim': 100000, 'msg_lev': 'GLP_MSG_OFF', 'it_lim':10000}
+    res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
+    return np.array(res[1][:-1]).reshape((-1,)), np.array(res[1][-1]).reshape((-1,))
+
 def hspace_to_vertex(H,d):
     """
     From half-space representation to the vertex representation

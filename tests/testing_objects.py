@@ -72,3 +72,9 @@ def test_polytope_intersection():
     p2.find_halfplanes()
     p_int.find_vertices()
     assert np.all(p1.H@p_int.vertices - p1.d[:,None]  < 1e-5) and  np.all(p2.H@p_int.vertices - p2.d[:,None]  < 1e-5)
+
+# test chebychev ball of a polytope using a cube
+def chebyshev_ball():
+    p = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((np.zeros((3,1)),np.ones((3,1)))))
+    e = p.chebyshev_ball()
+    assert np.all(e.radii == 0.5) and np.all(e.rotation == np.eye(3)) and np.all(e.center == 0.5*np.ones((3,1)))

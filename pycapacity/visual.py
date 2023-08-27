@@ -359,6 +359,7 @@ def plot_ellipsoid(radii=None, rotation=None, ellipsoid=None, center=None, plot=
     if ellipsoid is not None:
         radii = ellipsoid.radii
         rotation = ellipsoid.rotation
+        center = ellipsoid.center
 
     if ellipsoid is None and radii is None:
         print("no data to plot")
