@@ -41,7 +41,7 @@ class Polytope:
     Polytope object implements the following operators:
 
     - ``+`` : minkowski sum of two polytopes
-    - ``-`` : intersection of two polytopes
+    - ``&`` : intersection of two polytopes
 
     Examples:
         >>> from pycapacity.objects import *
