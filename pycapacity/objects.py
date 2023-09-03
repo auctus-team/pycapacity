@@ -92,8 +92,12 @@ class Polytope:
         self.vertices = vertices
         self.faces = faces
         self.face_indices = face_indices
-        self.H = H
-        self.d = d
+        if H is not None and d is not None:
+            self.H = H
+            self.d = d.reshape(-1,1)
+        else:
+            self.H = None
+            self.d = None
     
     def find_vertices(self):
         """
@@ -120,14 +124,15 @@ class Polytope:
         """
         A function calculating the face representation of the polytope from the vertex representation
         """
-        if self.vertices is not None:
-            if self.face_indices is not None:
-                self.faces = face_index_to_vertex(self.vertices,self.face_indices)
-            else:
-                self.face_indices = vertex_to_faces(self.vertices)
-                self.faces = face_index_to_vertex(self.vertices,self.face_indices)
+        if self.vertices is None:
+            print("No vertex representation of the polytope is available - calculating it")
+            self.find_vertices()
+            
+        if self.face_indices is not None:
+            self.faces = face_index_to_vertex(self.vertices,self.face_indices)
         else:
-            print("No vertex representation of the polytope is available")
+            self.face_indices = vertex_to_faces(self.vertices)
+            self.faces = face_index_to_vertex(self.vertices,self.face_indices)
 
     def find_from_point_cloud(self, points):
         """

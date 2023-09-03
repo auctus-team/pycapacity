@@ -528,18 +528,9 @@ def chebyshev_center(A,b):
     Returns:
         center(array): returns a chebyshev center of the polytope
     """
-    # calculate the vertices
-    Ab_mat = np.hstack((np.array(A),-np.array(b)))
-
-    # calculating chebyshev center
-    norm_vector = np.reshape(np.linalg.norm(Ab_mat[:, :-1], axis=1), (A.shape[0], 1))
-    c = np.zeros((Ab_mat.shape[1],))
-    c[-1] = -1
-    G = matrix(np.hstack((Ab_mat[:, :-1], norm_vector)))
-    h = matrix(- Ab_mat[:, -1:])
-    solvers_opt={'tm_lim': 100000, 'msg_lev': 'GLP_MSG_OFF', 'it_lim':10000}
-    res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
-    return np.array(res[1][:-1]).reshape((-1,))
+    # calculate the chebyshev ball
+    c, r = chebyshev_ball(A,b)
+    return c
 
 def chebyshev_ball(A,b):
     """
@@ -618,7 +609,7 @@ def vertex_to_hspace(vertex):
         d(list): vector of half-space representation `Hx<d`
     """
     hull = ConvexHull(vertex.T, qhull_options='QJ')
-    return  hull.equations[:,:-1], -hull.equations[:,-1]
+    return  hull.equations[:,:-1], -hull.equations[:,-1].reshape((-1,1))
 
 
 

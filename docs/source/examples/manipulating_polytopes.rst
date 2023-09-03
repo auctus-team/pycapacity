@@ -5,7 +5,7 @@ This example shows how to manipulate polytopes using the ``pycapacity`` package.
 In particular, it shows how to perform Minkowski sum and intersection of polytopes using the ``Polytope`` object's operators ``+`` and ``&`` respectively.
 
 .. code-block:: python
-    
+
     from pycapacity.objects import Polytope # import polytope object
     import numpy as np
 

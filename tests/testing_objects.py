@@ -18,7 +18,7 @@ def test_polytope_from_point_cloud():
     p = Polytope()
     p.find_from_point_cloud(points)
     print(points, p.vertices, np.isin(p.vertices, points))
-    assert p.vertices.shape[1] <= points.shape[1] and np.all(p.H@points - p.d[:,None] < 0.001) and np.all(np.isin(np.round(p.vertices,2), points))
+    assert p.vertices.shape[1] <= points.shape[1] and np.all(p.H@points - p.d.reshape(-1,1)< 0.001) and np.all(np.isin(np.round(p.vertices,2), points))
 
 # write a test for polytope half-plane representation from a set of vertices
 def test_polytope_from_halfplane():
@@ -26,7 +26,7 @@ def test_polytope_from_halfplane():
     p = Polytope()
     p.find_from_point_cloud(points)
     p.find_halfplanes()
-    assert np.all(p.H@points - p.d[:,None] < 0.001)
+    assert np.all(p.H@points - p.d.reshape(-1,1)< 0.001)
 
 # write a test for polytope face representation from a set of vertices
 def test_polytope_from_face():
@@ -60,7 +60,7 @@ def test_polytope_minkowski_sum():
     p1 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((np.ones((3,1)),np.ones((3,1)))))
     p2 = Polytope(H = np.vstack((np.eye(3),-np.eye(3))), d = np.vstack((2*np.ones((3,1)),2*np.ones((3,1)))))
     p_sum = p1 + p2
-    assert np.all(p_sum.H@p1.vertices - p_sum.d[:,None]  < 1e-5) and  np.all(p_sum.H@p2.vertices - p_sum.d[:,None]  < 1e-5)
+    assert np.all(p_sum.H@p1.vertices - p_sum.d.reshape(-1,1)  < 1e-5) and  np.all(p_sum.H@p2.vertices - p_sum.d.reshape(-1,1) < 1e-5)
 
 # test intersection of two polytopes
 # testing for a cube
@@ -71,7 +71,7 @@ def test_polytope_intersection():
     p1.find_halfplanes()
     p2.find_halfplanes()
     p_int.find_vertices()
-    assert np.all(p1.H@p_int.vertices - p1.d[:,None]  < 1e-5) and  np.all(p2.H@p_int.vertices - p2.d[:,None]  < 1e-5)
+    assert np.all(p1.H@p_int.vertices - p1.d.reshape(-1,1) < 1e-5) and  np.all(p2.H@p_int.vertices - p2.d.reshape(-1,1) < 1e-5)
 
 # test chebychev ball of a polytope using a cube
 def chebyshev_ball():

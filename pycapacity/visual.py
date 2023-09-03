@@ -19,7 +19,7 @@ from matplotlib.patches import Ellipse
 import numpy as np
 from pycapacity.objects import *
 
-def plot_polytope(polytope, plot=None, face_color=None, edge_color=None, vertex_color='black', alpha=None,label=None, center=None, scale=1.0, show_vertices=True, wireframe=False):
+def plot_polytope(polytope, plot=None, color=None, vertex_color='black', face_color=None, edge_color=None, alpha=None,label=None, center=None, scale=1.0, show_vertices=True, wireframe=False):
     """
     A polytope plotting function in 2d and 3d. It plots the polytope faces and vertices from the polytope object.
 
@@ -44,6 +44,18 @@ def plot_polytope(polytope, plot=None, face_color=None, edge_color=None, vertex_
         print("no polytope provided")
         return plot
     
+    # if color is one value, use it for all
+    if color is not None and (isinstance(color, str) or len(color) == 1):
+        face_color=color, 
+        edge_color=color, 
+        vertex_color=color
+    # if color is a list of 3 values, use it for face, edge and vertex
+    elif color is not None and len(color) == 3:
+        face_color, edge_color, vertex_color = color
+
+    if vertex_color is None:
+        show_vertices = False
+
     if label is None:
         label = ''
     if show_vertices:
