@@ -24,9 +24,9 @@ copyright = u'2023, Antun Skuric'
 author = u'Antun Skuric'
 
 # The short X.Y version
-version = u'2.0'
+version = u'2.1'
 # The full version, including alpha/beta/rc tags
-release = u'v2.0.1'
+release = u'v2.1'
 
 
 # -- General configuration ---------------------------------------------------

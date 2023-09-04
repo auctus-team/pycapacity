@@ -11,7 +11,7 @@ If wanting to use a specific version of the library, you can install it using pi
   pip install pycapacity==1.2.17
 
 
-v2.0.1 (09-2023)
+v2.1 (09-2023)
 --------------
 
 * `Polytope <pycapacity.polytope.html#pycapacity.objects.Polytope>`_  class  - `see API docs <pycapacity.polytope.html#pycapacity.objects>`_
