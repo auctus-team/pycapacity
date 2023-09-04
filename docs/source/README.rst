@@ -6,7 +6,7 @@ An efficient task-space capacity calculation package for robotics and biomechani
 
 .. Note::
 
-  | 📢 New version of the ``pycapacity`` package is out- version v2.0.1! 
+  | 📢 New version of the ``pycapacity`` package is out- version v2.0.1!  - `see full changelog <changelog>`_
 
 
 |
