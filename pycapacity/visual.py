@@ -38,6 +38,7 @@ def plot_polytope(polytope, plot=None, color=None, vertex_color='black', face_co
         scale: scale the polytope with a scalar (optional)
         show_vertices: show the vertices of the polytope (optional)
         wireframe: show the polytope as a wireframe (optional)
+        color:  polytope color - it can be either a string (one color for faces, edges and vertices) or a list of 3 values for face, edge and vertex color (optional)
 
     """
     if not isinstance(polytope, Polytope):

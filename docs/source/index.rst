@@ -3,8 +3,7 @@ An efficient task-space capacity calculation package for robotics and biomechani
 
 .. Note::
 
-  | 📢 New version of the ``pycapacity`` package is out- version v2.0! 
-  | 🚨 Beware beacause there are some breaking changes in the API,  please check the `changelog <changelog.html>`_ for more details.
+  | 📢 New version of the ``pycapacity`` package is out- version v2.0.1! 
 
 |
 .. image:: https://img.shields.io/pypi/v/pycapacity

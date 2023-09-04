@@ -26,7 +26,7 @@ author = u'Antun Skuric'
 # The short X.Y version
 version = u'2.0'
 # The full version, including alpha/beta/rc tags
-release = u'v2.0.0'
+release = u'v2.0.1'
 
 
 # -- General configuration ---------------------------------------------------
