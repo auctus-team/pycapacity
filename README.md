@@ -4,9 +4,11 @@
 
 > 📢 New version of the pycapacity package is out - version v2.1! - [see full changelog](https://auctus-team.github.io/pycapacity/changelog.html)
 
+> 📢 `pycpacity` JOSS paper accepted 🎉
+> The full review available [here](https://github.com/openjournals/joss-reviews/issues/5670) and the  📄 paper [here](https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348)
 
 ## About 
-[![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/) [![Tests](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml) ![](https://img.shields.io/pypi/dm/pycapacity?color=blue&label=pip%20downloads)  [![Docs](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml)
+[![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/) [![Tests](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml) ![](https://img.shields.io/pypi/dm/pycapacity?color=blue&label=pip%20downloads)  [![Docs](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml)[![status](https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348/status.svg)](https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348)
 
 <img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" height="250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" height="250px">
 
