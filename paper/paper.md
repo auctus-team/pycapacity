@@ -139,7 +139,7 @@ P_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ \tau_{min}\leq\tau\leq\tau_{max} 
 P_{f} = \{f ~| J^{T}f = \tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
 \end{equation}
 
-- Force polytopes *Minkowski sum and intersection* $P_{\oplus}$ and $P_{\cap}$
+- Force polytopes *Minkowski sum* $P_{\oplus}$ and *intersection* $P_{\cap}$
 \begin{equation}\label{eq:psi_r}
 P_{\cap} = {P}_{f1} \cap {P}_{f1} \qquad P_{\oplus} = {P}_{f1} \oplus {P}_{f1} 
 \end{equation}
