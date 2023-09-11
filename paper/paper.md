@@ -54,17 +54,15 @@ In robotics, task-space physical ability metrics establish the relationship betw
 
 When it comes to characterizing these achievable sets, the two most common approaches are using ellipsoids and polytopes. Ellipsoids are often used to represent the robot's velocity capacity, so called manipulability, while polytopes are mostly used to represent the robot's force capacity. However, both ellipsoids and polytopes can be used to represent any of the task-space physical ability.
 
-![An example manipulability polytope and ellipsoid geometry for a planar $m=2$ robot with $n=2$. The difference between the joint space limits for ellipsoid described with $||\dot{{q}}||_2\leq1$ (orange) and the range limits ${-1}\leq\dot{{q}}\leq{1}$ (blue) is shown on the right. The difference in obtained achievable task-space velocity $\dot{{x}}$ polytope ${P}$ (blue) and ellipsoid ${E}$ (orange) is shown on the right plot. The plots show that both in joint and task-space the ellipsoid metric is an underestimation of the true robot's capacity.](ellip_poly.png){ width=100% }
-
 To compare the ellipsoid and polytope metrics, the example of the manipulability ellipsoid and manipulability polytope can be used. 
 
-The manipulability ellipsoid, proposed by Yoshikawa [@yoshikawa1985manipulability], is defined as the set of all achievable task-space velocities ${\dot{x}}$ for a given robot configuration ${q}$ and joint velocity limits $-1 \leq {\dot{q}}\leq 1$, and it can be expressed as:
+The manipulability ellipsoid $E$, proposed by [@yoshikawa1985manipulability], is defined as the set of all achievable task-space velocities ${\dot{x}}$ for a given robot configuration ${q}$ and joint velocity limits $-1 \leq {\dot{q}}\leq 1$, and it can be expressed as:
 
 \begin{equation}\label{eq:manip_ellipsoid}
 E = \{ \dot{x} ~|~ \dot{x} = J({q})\dot{q}, \quad ||\dot{q}||_2 \leq 1 \}
 \end{equation}
 
-The equivalent polytope representation of the manipulability ellipsoid is the manipulability polytope, which is defined as the set of all achievable task-space velocities ${\dot{x}}$ for a given robot configuration ${q}$ and joint velocity limits $-1 \leq {\dot{q}}\leq 1$, and it can be expressed as:
+The equivalent polytope $P$ representation of the manipulability ellipsoid is the manipulability polytope, which is defined as the set of all achievable task-space velocities ${\dot{x}}$ for a given robot configuration ${q}$ and joint velocity limits $-1 \leq {\dot{q}}\leq 1$, and it can be expressed as:
 
 \begin{equation}\label{eq:manip_polytope}
 P = \{ \dot{x} ~|~ \dot{x} = J({q})\dot{q}, \quad -1 \leq \dot{q} \leq 1 \}
@@ -72,10 +70,12 @@ P = \{ \dot{x} ~|~ \dot{x} = J({q})\dot{q}, \quad -1 \leq \dot{q} \leq 1 \}
 
 Figure 1. illustrates the difference between the manipulability ellipsoid and polytope for a planar robot with two joints. The manipulability ellipsoid is an underestimation of the true robot's capacity, as it considers that the robot's velocity limits have the shape of a sphere, while in reality the robot's velocity limits $-1 \leq {\dot{q}}\leq 1$ define a cube. The manipulability polytope is a more accurate representation of the robot's capacity, as it considers the true shape of the robot's velocity limits. 
 
+![An example manipulability polytope and ellipsoid geometry for a planar $m=2$ robot with $n=2$. The difference between the joint space limits for ellipsoid described with $||\dot{{q}}||_2\leq1$ (orange) and the range limits ${-1}\leq\dot{{q}}\leq{1}$ (blue) is shown on the right. The difference in obtained achievable task-space velocity $\dot{{x}}$ polytope ${P}$ (blue) and ellipsoid ${E}$ (orange) is shown on the right plot. The plots show that both in joint and task-space the ellipsoid metric is an underestimation of the true robot's capacity.](ellip_poly.png){ width=100% }
+
 More generally, polytope based representations of different physical abilities present the exact solution both for robots and for human musculoskeletal models, while ellipsoids present an approximation. 
 Figure 2. shows the difference between the force ellipsoid and polytope [@chiacchio1997force] for one configuration of the Franka Emika Panda robot.
 
-Ellipsoids, however, are much more present in the literature, as their computation is much faster than the computation of polytopes. 
+Ellipsoids, however, are much more present in the literature, as their computation is much faster than the computation of polytopes [@Finotello1998Computation]. 
 
 # Evaluating ellipsoids
 
@@ -99,53 +99,52 @@ The package implements different physical ability metrics for robotic manipulato
 
 ## Robotic manipulators metrics
 
-For robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids and polytopes.
+For robotic manipulators the package integrates several velocity, force and acceleration capacity calculation functions based on ellipsoids and polytopes. A visual comparison of the force polytope and ellipsoid, calculated using this package, is shown on Figure 2.
 
 ![2D and 3D force polytopes and their ellipsoid counterparts for a 7 degrees of freedom (DOF) \textit{Franka Emika Panda} robot. Both polytopes and ellipsoids are calculated separately for the 3D and for each of the 2D reduced task-space cases. Both polytopes and ellipsoids take in consideration the true joint torque limits provided by the manufacturer. The underestimation of the true force capabilities of the robot by ellipsoids appears clearly.](robot.png){ width=70% }
 
 ### Ellipsoids
 
-- Velocity (manipulability) ellipsoid  
+- Velocity (manipulability) ellipsoid  $E_v$
 \begin{equation}\label{eq:ev_r}
 E_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ ||W^{-1}\dot{q}||\leq1 \}, \qquad W = diag(\dot{q}_{max})
 \end{equation}
 
-- Acceleration (dynamic manipulability) ellipsoid  
+- Acceleration (dynamic manipulability) ellipsoid $E_a$  
 \begin{equation}\label{eq:ea_r}
 E_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ ||W^{-1}\tau||\leq1 \}, \qquad W = diag(\tau_{max})
 \end{equation}
 
-- Force ellipsoid 
+- Force ellipsoid $E_f$
 \begin{equation}\label{eq:ef_r}
 E_{f} = \{{f} ~| J^{T}f = \tau,~ ||W^{-1}\tau||\leq1 \}, \qquad W = diag(\tau_{max})
 \end{equation}
 
+In the above definitions, $J$ is the robot Jacobian matrix, $M$ is the inertia matrix, $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accelerations, $q$ is the vector of joint positions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques. Matrix $W$ is a scaling matrix that normalizes the joint space limits.
+
 ### Polytopes
 
-- Velocity polytope  
+- Velocity polytope $P_v$
 \begin{equation}\label{eq:pv_r}
 P_{v} = \{\dot{x} ~| \dot{x} = J\dot{q},~ \dot{q}_{min}\leq\dot{q}\leq\dot{q}_{max} \}
 \end{equation}
 
-- Acceleration polytope 
-
+- Acceleration polytope $P_a$
 \begin{equation}\label{eq:pa_r}
 P_{a} = \{\ddot{x} ~| \ddot{x} = JM^{-1}\tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
 \end{equation}
 
-- Force polytope  
-
+- Force polytope $P_f$
 \begin{equation}\label{eq:pf_r}
 P_{f} = \{f ~| J^{T}f = \tau,~ \tau_{min}\leq\tau\leq\tau_{max} \}
 \end{equation}
 
-- Force polytopes *Minkowski sum and intersection*  
-
+- Force polytopes *Minkowski sum and intersection* $P_{\oplus}$ and $P_{\cap}$
 \begin{equation}\label{eq:psi_r}
 P_{\cap} = {P}_{f1} \cap {P}_{f1} \qquad P_{\oplus} = {P}_{f1} \oplus {P}_{f1} 
 \end{equation}
 
-- Robot's reachable space approximation in the desired horizon of interest $\Delta t_{h}$ using the convex polytope formulation, described in the paper by [@skuric2023]
+- Robot's reachable space approximation in the desired horizon of interest $\Delta t_{h}$ using the convex polytope formulation $P_x$, described in the paper by [@skuric2023]
 
 \begin{equation}\label{eq:prs_r}
 \begin{split}
@@ -156,30 +155,33 @@ P_x = \{\Delta x~ |~ \Delta{x} &= JM^{-1}\tau \frac{\Delta t_{h}^2}{2},\\
   \end{split}
 \end{equation}
 
-Where $J$ is the robot Jacobian matrix, $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accelerations, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
+In the above definitions, $J$ is the robot Jacobian matrix, $M$ is the inertia matrix, $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accelerations, $q$ is the vector of joint positions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques.
 
 ## Human musculoskeletal model metrics
 
+For the human musculoskeletal models this package implements the polytope and ellipsoid evaluation functions for the following metrics. A visual representation of the force polytope of a musculoskeletal model, calculated using this package, is shown on Figure 3.
+
 ![Cartesian force polytope of a musculoskeletal model of both human upper limbs with 7DOf and 50 muscles each, visualized with `biorbd`. The polytopes are scaled with a ratio 1m : 1000N.\label{fig:force_polytope_human}](bimanual1.png){ width=70% }
 
-For the human musculoskeletal models this package implements the polytope and ellipsoid evaluation functions for the following metrics.
 
 ### Ellipsoids
 
-- Velocity (manipulability) ellipsoid  
+- Velocity (manipulability) ellipsoid  $E_v$
 \begin{equation}\label{eq:ev_h}
 E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||W^{-1}\dot{l}|| \leq 1\}, \qquad W = diag(\dot{l}_{max})
 \end{equation}
 
-- Acceleration (dynamic manipulability) ellipsoid  
+- Acceleration (dynamic manipulability) ellipsoid  $E_a$  
 \begin{equation}\label{eq:ea_r}
 E_{a} = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 \end{equation}
 
-- Force ellipsoid 
+- Force ellipsoid $E_f$
 \begin{equation}\label{eq:ef_r}
 E_{f} = \{f~ |~ NF  = J^Tf,\quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 \end{equation}
+
+In the above definitions, $J$ is the robot Jacobian matrix, $M$ is the inertia matrix,  $L$ si the muscle length Jacobian matrix and $N= -L^T$ is the moment arm matrix. $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accelerations, $q$ is the vector of joint positions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces.  Matrix $W$ is a scaling matrix that normalizes the joint space limits.
 
 ### Polytopes
 
@@ -198,7 +200,7 @@ P_{v} = \{\dot{x} ~|~\dot{l} = L\dot{q},~ \dot{x} = J\dot{q},~ \dot{q}_{min}, ~ 
 P_{f} = \{f ~|~ J^Tf = NF,~ F_{min}\leq F\leq F_{max} \}
 \end{equation}
 
-Where $J$ is the model's Jacobian matrix, $L$ si the muscle length Jacobian matrix, $N= -L^T$ is the moment arm matrix, $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accretions, $\dot{q}$ is the vector of the joint velocities, $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
+In the above definitions, $J$ is the robot Jacobian matrix, $M$ is the inertia matrix, $L$ si the muscle length Jacobian matrix and $N= -L^T$ is the moment arm matrix. $f$ is the vector of Cartesian forces, $\dot{x}$ and $\ddot{x}$ are vectors fo Cartesian velocities and accelerations, $q$ is the vector of joint positions, $\dot{q}$ is the vector of the joint velocities and $\tau$ is the vector of joint torques, $\dot{l}$ is the vector of the muscle stretching velocities and $F$ is the vector of muscular forces. 
 
 # Implemented polytope evaluation algorithms
 
