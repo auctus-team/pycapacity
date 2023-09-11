@@ -172,12 +172,12 @@ E_v = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||W^{-1}\dot{l
 \end{equation}
 
 - Acceleration (dynamic manipulability) ellipsoid  $E_a$  
-\begin{equation}\label{eq:ea_r}
+\begin{equation}\label{eq:ea_h}
 E_{a} = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 \end{equation}
 
 - Force ellipsoid $E_f$
-\begin{equation}\label{eq:ef_r}
+\begin{equation}\label{eq:ef_h}
 E_{f} = \{f~ |~ NF  = J^Tf,\quad ||W^{-1}F|| \leq 1\}, \qquad W = diag(F_{max})
 \end{equation}
 
