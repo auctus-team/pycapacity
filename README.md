@@ -148,6 +148,8 @@ import pycapacity.human
 import pycapacity.algorithms 
 #and/or
 import pycapacity.visual 
+#and/or
+import pycapacity.objects 
 ```
 
 Other way to install the code is by installing it directly from the git repo:
@@ -155,51 +157,9 @@ Other way to install the code is by installing it directly from the git repo:
 pip install git+https://github.com/auctus-team/pycapacity.git
 ```
 
-## Package API docs
+### Package API docs
 
 See full docs at the [link](https://auctus-team.github.io/pycapacity/)
-
-### Modules
-
-- [`human`](https://auctus-team.github.io/pycapacity/pycapacity.human.html#module-pycapacity.human)
-- [`robot`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#module-pycapacity.robot)
-- [`objects`](https://auctus-team.github.io/pycapacity/pycapacity.polytope.html)
-- [`algorithms`](https://auctus-team.github.io/pycapacity/pycapacity.algorithms.html#module-pycapacity.algorithms)
-- [`visual`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#module-pycapacity.visual)
-
-### Functions
-
-Robot metrics
-- [`robot.acceleration_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#pycapacity.robot.acceleration_ellipsoid): acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
-- [`robot.acceleration_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.acceleration_polytope): Acceleration polytope calculating function
-- [`robot.force_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_ellipsoid): force manipulability ellipsoid calculation
-- [`robot.force_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope): Force polytope representing the capacities of the two robots in a certain configuration
-- [`robot.force_polytope_intersection`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.force_polytope_intersection): Force polytope representing the intersection of the capacities of the two robots in certain configurations.
-- [`robot.force_polytope_sum`](https://auctus-team.github.io/pycapacity/pycapacity.robot.html#pycapacity.robot.force_polytope_sum): Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
-- [`robot.velocity_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_ellipsoid): velocity manipulability ellipsoid calculation
-- [`robot.velocity_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.robot\.html#pycapacity\.robot\.velocity_polytope): Velocity polytope calculating function
-
-Human metrics
-- [`human.acceleration_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.acceleration_polytope): A function calculating the polytopes of achievable accelerations
-- [`human.force_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.force_polytope): A function calculating the polytopes of achievable foreces based 
-- [`human.joint_torques_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.joint_torques_polytope): A function calculating the polytopes of achievable joint torques
-- [`human.torque_to_muscle_force`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.torque_to_muscle_force): A function calculating muscle forces needed to create the joint torques tau
-- [`human.velocity_polytope`](https://auctus-team.github.io/pycapacity/pycapacity\.human\.html#pycapacity\.human\.velocity_polytope): A function calculating the  polytopes of achievable velocity based 
-
-
-Algorithms
-- [`algorithms.hyper_plane_shift_method`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.hyper_plane_shift_method): Hyper plane shifting method implementation used to solve problems of a form:
-- [`algorithms.iterative_convex_hull_method`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.iterative_convex_hull_method): A function calculating the polytopes of achievable x for equations form:
-- [`algorithms.vertex_enumeration_vepoli2`](https://auctus-team.github.io/pycapacity/pycapacity\.algorithms\.html#pycapacity\.algorithms\.vertex_enumeration_vepoli2): Efficient vertex enumeration algorithm for a problem of a form:
-
-
-Visualisation tools
-- [`visual.plot_polytope`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
-- [`visual.plot_ellipsoid`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
-- [`visual.plot_polytope_faces`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#pycapacity.visual.plot_polytope_faces): Polytope faces plotting function in 2d and 3d
-- [`visual.plot_polytope_vertex`](https://auctus-team.github.io/pycapacity/pycapacity.visual.html#fpycapacity.visual.plot_polytope_vertex): Polytope vertices plotting function in 2d and 3d
----
-
 
 ## Contributing and discussions
 
@@ -213,6 +173,34 @@ Please do not hesitate to leave an issue if you have problems/advices/suggestion
 
 If you'd like to contribute to this project but you are not very familiar with github, don't worry, let us know either by starting the discussion or posting a github issue.
 
+
+## Citing `pycapacity` in scientific publications
+
+We are very happy that `pycapacity` has been used as a component of several research project and has made its way to several scientific papers. We are hoping that this trend is going to continue as the project matures and becomes more robust! 
+
+A short resume paper about `pycapacity` has been published in the Journal of Open Source Software: 
+<p>
+  <b><i>pycapacity</i></b>: a real-time task-space capacity calculation package for robotics and biomechanics<br>
+  A. Skuric, V. Padois and D. Daney<br>
+Journal of Open Source Software, 8(89), 5670, https://doi.org/10.21105/joss.05670
+</p>
+
+If you are interested in citing  `pycapacity` in your research, we suggest you to cite our paper:
+
+```bib
+@article{Skuric2023pycapacity,
+    author = {Skuric, Antun and Padois, Vincent and Daney, David},
+    doi = {10.21105/joss.05670},
+    journal = {Journal of Open Source Software},
+    month = sep,
+    number = {89},
+    pages = {5670},
+    title = {{Pycapacity: a real-time task-space capacity calculation package for robotics and biomechanics}},
+    url = {https://joss.theoj.org/papers/10.21105/joss.05670},
+    volume = {8},
+    year = {2023}
+}
+```
 
 ## Code examples
 
