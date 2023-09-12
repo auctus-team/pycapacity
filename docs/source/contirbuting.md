@@ -2,6 +2,10 @@
 
 Feel free to create a github issue if you experience any problems using the code or the docs. The code is in its early stage still and any feedback will be highly appreciated!
 
+A new GitHub tool enabling discussions is also available for this repository. Feel free to use it to ask questions, propose new features or discuss the future of the package. 
+
+Here is the [Github discussions](https://github.com/auctus-team/pycapacity/discussions)
+
 ## All contributions are welcome! 
 
 We will be very happy to hear about your contribution propositions so don't hesitate to open a pull request or an issue to discuss it.
