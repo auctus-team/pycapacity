@@ -1,0 +1,40 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Skuric
+  given-names: Antun
+  orcid: "https://orcid.org/0000-0002-3323-4482"
+- family-names: Padois
+  given-names: Vincent
+- family-names: Daney
+  given-names: David
+contact:
+- family-names: Skuric
+  given-names: Antun
+  orcid: "https://orcid.org/0000-0002-3323-4482"
+doi: 10.5281/zenodo.8333929
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Skuric
+    given-names: Antun
+    orcid: "https://orcid.org/0000-0002-3323-4482"
+  - family-names: Padois
+    given-names: Vincent
+  - family-names: Daney
+    given-names: David
+  date-published: 2023-09-12
+  doi: 10.21105/joss.05670
+  issn: 2475-9066
+  issue: 89
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 5670
+  title: "Pycapacity: a real-time task-space capacity calculation
+    package for robotics and biomechanics"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.05670"
+  volume: 8
+title: "Pycapacity: a real-time task-space capacity calculation package
+  for robotics and biomechanics"
