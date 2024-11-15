@@ -302,18 +302,20 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None, options = None):
     
     return poly
 
-def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None, q_max= None,q_min= None, dq_max= None,dq_min= None, options= None):
+def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None, q_max= None,q_min= None, dq_max= None,dq_min= None, x0=None, A_x=None, b_x =None, options= None):
     """
     Reachable space aproximation function based on convex polytopes. For a given time horizon, it calculates the reachable space of the robot.
     It evaluates the polytope of a form:
     
-    .. math:: P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\\tau \Delta t_{h}^2/2,
+    .. math:: P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\\tau \Delta t_{h}^2/2 + x0,
     .. math:: {\\tau}_{min} - \\tau_{bias} \leq \\tau \leq {\\tau}_{max} - \\tau_{bias}
     .. math::  \dot{q}_{min} \leq M^{-1}\\tau \Delta t_{h}  \leq \dot{q}_{max}
-    .. math::  {q}_{min} \leq M^{-1}\\tau \Delta t_{h}^2/2  \leq {q}_{max} \}
+    .. math::  {q}_{min} \leq M^{-1}\\tau \Delta t_{h}^2/2  \leq {q}_{max} 
+    .. math::  A_x x \leq b_x\}
 
     where :math:`\\tau_{bias}` is the bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces which is optional.
     and :math:`\Delta t_{h}` is the time horizon. If limits on joint velocity :math:`\dot{q}_{min}` and :math:`\dot{q}_{max}` or joint postion limits :math:`{q}_{min}` and :math:`{q}_{max}` are not given, the function calculates the ploytope  without them.
+    `A_x` and `b_x` are additional inequality covex constraints in the Cartesian position space. `x0` is the initial Cartesian position corresponding to the initial joint position `q0`.
 
     Based on the ``iterative_convex_hull`` algorithm.
 
@@ -324,11 +326,13 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
         horizon:  time horizon
         t_max:  maximal joint torque 
         t_min:  minimal joint torque
+        x0:  initial Cartesian position (optional)
         t_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces (optional)
         q_max:  maximal joint position (optional)
         q_min:  minimal joint position (optional)
         dq_max:  maximal joint velocities (optional)
         dq_min:  minimal joint velocities (optional)
+        A_x, b_x:  additional inequality constraints matrices in Cartesian position space (optional)
         options: dictionary of options for the polytope calculation - currently supported ``tolerance``, ``max_iteration`` and ``verbose`` (default: ``tolerance=1e-3``, ``max_iteration=500``, ``verbose=False``)
     
     Returns
@@ -400,6 +404,17 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
             dq_max.flatten(),
             -dq_min.flatten()))
     
+    
+    if A_x is not None and b_x is not None:
+        if x0 is not None:
+            b_x = b_x - A_x@x0
+        if G_in is not None:
+            G_in = np.vstack((G_in, A_x@Jac@M_inv*horizon**2/2))
+            h_in = np.hstack((h_in, b_x))
+        else:
+            G_in = A_x*Jac*M_inv*horizon**2/2
+            h_in = b_x
+
     # if limits on joint position are given
     if q_max is not None and q_min is not None:
         if G_in is not None:
@@ -417,6 +432,7 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
                 (q_max.flatten()-q0),
                 -(q_min.flatten()-q0)))
     
+    
     # calculate the polytope
     vertex, H,d, faces_index, t_vert, x_vert =  iterative_convex_hull_method(
         A = np.eye(J.shape[0]),
@@ -430,7 +446,8 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
         verbose=verbose)
     
     # construct a polytope object
-    poly = Polytope(vertices=vertex, H=H, d=d, face_indices=faces_index)
+    x0 = x0.reshape(-1,1)
+    poly = Polytope(vertices=vertex + x0, H=H, d=d, face_indices=faces_index)
     if options and 'calculate_faces' in options.keys() and options['calculate_faces']:
         poly.face_indices = faces_index
         poly.faces = face_index_to_vertex(poly.vertices, poly.face_indices)
