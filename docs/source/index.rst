@@ -55,5 +55,6 @@ Learn more about the ``pycapacity`` package
     📝 Contributing & Issues <contirbuting.md>
     🎓 Tutorials <examples/index>
     📑 Changelog <changelog>
-   
+    ✍️ Citing <citing.md>
+    
    
