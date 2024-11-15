@@ -264,4 +264,6 @@ Read more
       📝 Contributing & Issues <contirbuting.md>
       🎓 Tutorials <examples/index>
       📑 Changelog <changelog>
+      ✍️ Citing <citing.md>
+
    
