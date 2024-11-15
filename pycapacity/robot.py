@@ -446,7 +446,10 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
         verbose=verbose)
     
     # construct a polytope object
-    x0 = x0.reshape(-1,1)
+    if x0 is not None:
+        x0 = x0.reshape(-1,1)
+    else:
+        x0 = np.zeros((J.shape[0],1))
     poly = Polytope(vertices=vertex + x0, H=H, d=d, face_indices=faces_index)
     if options and 'calculate_faces' in options.keys() and options['calculate_faces']:
         poly.face_indices = faces_index
