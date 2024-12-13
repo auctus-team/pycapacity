@@ -10,6 +10,10 @@ If wanting to use a specific version of the library, you can install it using pi
   
   pip install pycapacity==1.2.17
 
+v2.1.4 (12-2024)
+----------------
+* BUGFIX: acceleration ellipsoid inverted limits
+
 v2.1.3 (11-2024)
 ----------------
 * Reachable space approximation polytope now allows for specifying additional Cartesian space constraints - `see API docs <pycapacity.robot.html#pycapacity.robot.reachable_space_approximation>`_

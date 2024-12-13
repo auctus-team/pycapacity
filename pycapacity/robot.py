@@ -76,7 +76,7 @@ def acceleration_ellipsoid(J, M, t_max):
     # jacobian calculation
     Jac = J.dot(np.linalg.pinv(M))
     # limits scaling
-    W = np.linalg.pinv(np.diagflat(t_max))
+    W = np.diagflat(t_max)
     # calculate the singular value decomposition
     U, S, V = np.linalg.svd(Jac.dot(W))
     # create the ellipsoid from the singular values and the unit vector angle
