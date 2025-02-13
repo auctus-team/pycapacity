@@ -10,6 +10,11 @@ If wanting to use a specific version of the library, you can install it using pi
   
   pip install pycapacity==1.2.17
 
+
+V2.1.5 (02-2025)
+----------------
+* Added the initial implementation of the non-linear reachable workspace approximation - `see API docs <pycapacity.robot.html#pycapacity.robot.reachable_space_approximation>`_
+
 v2.1.4 (12-2024)
 ----------------
 * BUGFIX: acceleration ellipsoid inverted limits

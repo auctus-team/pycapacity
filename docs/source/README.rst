@@ -112,8 +112,7 @@ Where :math:`J` is the robot jacobian matrix, :math:`f` is the vector of cartesi
 - New 📢 : Reachable space non-linear approximation in the desired horizon of interest :math:`\Delta t_{h}`:
 
   .. math:: C_x = \{ x~ |~ x = f_{fk}(q_0 + \dot{q}\Delta t), 
-  .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max}
-  .. math::  {q}_{min} \leq q_0 + \dot{q}\Delta_t  \leq {q}_{max} \}
+  .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max},\quad {q}_{min} \leq q_0 + \dot{q}\Delta t  \leq {q}_{max} \}
 
 
 

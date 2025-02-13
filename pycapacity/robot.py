@@ -469,11 +469,9 @@ def reachable_space_curved(forward_func, q0, time_horizon, q_max, q_min, dq_max,
     The output of the algorithm is the reachable space that the robot is able to reach within the horizon time, while guaranteeing that the joint position and velocity limits are not violated.
     
     If you are interested in the complete workspace of the robot, you can set a large time horizon (>1 second)
-
+    
     .. math:: C_x = \{ x~ |~ x = f_{fk}(q_0 + \dot{q}\Delta t), 
-    .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max}
-    .. math::  {q}_{min} \leq q_0 + \dot{q}\Delta_t  \leq {q}_{max} \}
-
+    .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max},\quad {q}_{min} \leq q_0 + \dot{q}\Delta t  \leq {q}_{max} \}
 
     The parameters of the algorithm are set using the options dictionary. The following options are available:
     - n_samples: The number of samples to use for the discretization of the joint velocity space. The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
