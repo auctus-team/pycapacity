@@ -1,4 +1,4 @@
-r"""
+"""
 Overview
 ---------
 
@@ -25,7 +25,7 @@ from pycapacity.algorithms import *
 from pycapacity.objects import *
 
 def velocity_ellipsoid(J, dq_max):
-    r"""
+    """
     Velocity manipulability ellipsoid calculation
 
     .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad ||W^{-1}\dot{q}|| \leq 1\}
@@ -55,7 +55,7 @@ def velocity_ellipsoid(J, dq_max):
     return ellipsoid
 
 def acceleration_ellipsoid(J, M, t_max):
-    r"""
+    """
     Acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
     .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad ||W^{-1}{\\tau}|| \leq 1\}
@@ -85,7 +85,7 @@ def acceleration_ellipsoid(J, M, t_max):
     return ellipsoid
 
 def force_ellipsoid(J, t_max):
-    r"""
+    """
     Force manipulability ellipsoid calculation
 
     .. math:: E_f = \{f~ |~ \\tau  = J^Tf,\quad ||W^{-1}\\tau|| \leq 1\}
@@ -114,7 +114,7 @@ def force_ellipsoid(J, t_max):
     return ellipsoid
 
 def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias=None, t2_bias=None, options = None):
-    r"""
+    """
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
 
 
@@ -150,7 +150,7 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     return force_polytope(Jac, t_max, t_min, t_bias, options=options)
 
 def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias = None, t2_bias = None, options = None):
-    r"""
+    """
     Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
 
@@ -198,7 +198,7 @@ def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_
     return poly
 
 def force_polytope(Jacobian, t_max, t_min, t_bias = None, options = None):
-    r"""
+    """
     Force polytope representing the capacities of the two robots in a certain configuration
 
     .. math:: P_f = \{f~ |~ \\tau  = J^Tf,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\}
@@ -233,7 +233,7 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None, options = None):
     return poly
 
 def velocity_polytope(Jacobian, dq_max, dq_min, options = None):
-    r"""
+    """
     Velocity polytope calculating function
 
     .. math:: P_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}\}
@@ -264,7 +264,7 @@ def velocity_polytope(Jacobian, dq_max, dq_min, options = None):
     return poly
 
 def acceleration_polytope(J, M, t_max, t_min, t_bias= None, options = None):
-    r"""
+    """
     Acceleration polytope calculating function
 
     .. math:: P_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\} 
@@ -304,7 +304,7 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None, options = None):
     return poly
 
 def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None, q_max= None,q_min= None, dq_max= None,dq_min= None, x0=None, A_x=None, b_x =None, options= None):
-    r"""
+    """
     Reachable space aproximation function based on convex polytopes. For a given time horizon, it calculates the reachable space of the robot.
     It evaluates the polytope of a form:
     
@@ -463,7 +463,7 @@ import numpy.matlib
 # reachable space calculation algorithm
 def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
 
-    r"""
+    """
     Compute the reachable set of the robot for the given joint configuration.
     The algorithm calculates the reachable set of cartesian position of the desired frame of the robot given the robots joint position and joint velocity limits.
     The output of the algorithm is the reachable space that the robot is able to reach within the horizon time, while guaranteeing that the joint position and velocity limits are not violated.

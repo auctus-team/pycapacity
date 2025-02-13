@@ -1,4 +1,4 @@
-r"""
+"""
 Overview
 ---------
 
@@ -32,7 +32,7 @@ import cvxopt.glpk
 
 
 def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,  G_in = None, h_in = None, G_eq = None, h_eq = None, max_iter=1000, verbose=False):
-    r"""
+    """
     A function calculating the polytopes of achievable x for equations form:
 
     .. math:: P_x = \{x~ |~ Ax = By,\quad y_{min} \leq y \leq y_{max}\}
@@ -315,7 +315,7 @@ def iterative_convex_hull_method(A, B, y_min, y_max, tol, P = None, bias = None,
 
 
 def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
-    r"""
+    """
     Hyper plane shifting method implementation used to solve problems of a form:
 
     .. math:: P = \{y~ |~y = Ax, \quad x_{min} \leq x \leq x_{max}\}
@@ -395,7 +395,7 @@ def hyper_plane_shift_method(A, x_min, x_max, tol = 1e-15):
 
 # maximal end effector force
 def vertex_enumeration_vepoli2(A, b_max, b_min, b_bias = None):
-    r"""
+    """
     Efficient vertex enumeration algorithm for a problem of a form:
     
     .. math:: P = \{x~ |~Ax = b, \quad b_{min} \leq b \leq b_{max}\}

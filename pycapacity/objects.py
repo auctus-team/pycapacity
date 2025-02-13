@@ -1,4 +1,4 @@
-r"""
+"""
 Overview
 ---------
 
@@ -11,7 +11,7 @@ There two  genertic classes implemented in this module:
 from pycapacity.algorithms import *
 
 class Polytope:
-    r"""
+    """
     A generic class representing a polytope with different representations (vertex, half-plane, face)
 
     Vertex representation is a list of vertices of the polytope
@@ -78,7 +78,7 @@ class Polytope:
     """
     
     def __init__(self, vertices=None,faces=None,face_indices=None,H=None,d=None):
-        r"""
+        """
         A constructor of the polytope object
 
         Args:
@@ -191,7 +191,7 @@ class Polytope:
 
 
 class Ellipsoid:
-    r"""
+    """
     A generic class representing an ellipsoid with a list of radii and rotation matrix, where 
     every column of the rotation matrix is a vector of the ellipsoid's axes
 
