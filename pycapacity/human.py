@@ -1,4 +1,4 @@
-"""
+r"""
 Overview
 ---------
 
@@ -23,7 +23,7 @@ import pycapacity.robot as robot
 
 
 def velocity_ellipsoid(J, N, dl_max):
-    """
+    r"""
     Human musculoskeletal velocity ellipsoid calculation
 
     .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},~ L\dot{q} = \dot{l} \quad ||W^{-1}\dot{l}|| \leq 1\}
@@ -54,7 +54,7 @@ def velocity_ellipsoid(J, N, dl_max):
     return ellipsoid
 
 def acceleration_ellipsoid(J, M, N, F_max):
-    """
+    r"""
     Human musculoskeletal acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
     .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}NF, \quad ||W^{-1}F|| \leq 1\}
@@ -85,7 +85,7 @@ def acceleration_ellipsoid(J, M, N, F_max):
     return ellipsoid
 
 def force_ellipsoid(J, N, F_max):
-    """
+    r"""
     Human musculoskeletal force ellipsoid calculation
 
     .. math:: E_f = \{f~ |~ NF  = J^Tf,\quad ||W^{-1}F|| \leq 1\}
@@ -116,7 +116,7 @@ def force_ellipsoid(J, N, F_max):
 
 
 def joint_torques_polytope(N, F_min, F_max, tol=1e-5, options=None):
-    """
+    r"""
     A function calculating the polytopes of achievable joint torques
     based on the moment arm matrix `N` :
     
@@ -148,7 +148,7 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-5, options=None):
     return poly
     
 def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5, options=None):
-    """
+    r"""
     A function calculating the polytopes of achievable accelerations
     based on the jacobian matrix `J`, moment arm matrix `N` and mass matrix `M`
 
@@ -195,7 +195,7 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5, options=None):
     return poly
 
 def force_polytope(J, N, F_min, F_max, tol, torque_bias=None, options=None):
-    """
+    r"""
     A function calculating the polytopes of achievable forces based 
     on the jacobian matrix `J` and moment arm matrix `N`
 
@@ -236,7 +236,7 @@ def force_polytope(J, N, F_min, F_max, tol, torque_bias=None, options=None):
 
 
 def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=None, tol=1e-5, options=None):
-    """
+    r"""
     A function calculating the polytopes of achievable velocity based 
     on the jacobian matrix `J` and moment arm matrix `N`
 
@@ -326,7 +326,7 @@ def velocity_polytope(J, N=None, dl_min=None , dl_max=None, dq_max=None, dq_min=
     return poly
 
 def torque_to_muscle_force(N, F_min, F_max, tau, options="lp"):
-    """
+    r"""
     A function calculating muscle forces needed to create the joint torques tau.
     It uses either the linear programming or quadratic programming, set with the ``options`` parameter.
 

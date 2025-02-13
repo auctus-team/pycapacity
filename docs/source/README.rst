@@ -95,7 +95,7 @@ And polytopes:
 
 Where :math:`J` is the robot jacobian matrix, :math:`f` is the vector of cartesian forces, :math:`\dot{x}` and :math:`\ddot{x}` are vectors fo cartesian velocities and accretions, :math:`\dot{q}` is the vector of the joint velocities and :math:`\tau` is the vector of joint torques.
 
-- New 📢 : Reachable space approximation of in the desired horizon of interest :math:`\Delta t_{h}` using the convex polytope formulation:
+- Reachable space approximation of in the desired horizon of interest :math:`\Delta t_{h}` using the convex polytope formulation:
 
     .. math::  P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\tau \Delta t_{h}^2/2,
     .. math:: {\tau}_{min} \leq \tau \leq {\tau}_{max},
@@ -108,6 +108,15 @@ Where :math:`J` is the robot jacobian matrix, :math:`f` is the vector of cartesi
   | In: Human-Friendly Robotics 2022: HFR: 15th International Workshop on Human-Friendly Robotics. Cham: Springer International Publishing, 2023.
 
   See the full formulaiton in the `api docs <pycapacity.robot.html#pycapacity.robot.reachable_space_approximation>`_.
+
+- New 📢 : Reachable space non-linear approximation in the desired horizon of interest :math:`\Delta t_{h}`:
+
+  .. math:: C_x = \{ x~ |~ x = f_{fk}(q_0 + \dot{q}\Delta t), 
+  .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max}
+  .. math::  {q}_{min} \leq q_0 + \dot{q}\Delta_t  \leq {q}_{max} \}
+
+
+
 
 Human musculoskeletal models capacity metrics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

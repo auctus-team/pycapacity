@@ -1,4 +1,4 @@
-"""
+r"""
 Overview
 ---------
 
@@ -9,6 +9,7 @@ This is a python module which implements different robot performance metrics bas
 * force `polytope <#pycapacity\.robot\.force_polytope>`_ and `ellipsoid <#pycapacity\.robot\.force_ellipsoid>`_
 * force polytope `minkowski sum <#pycapacity\.robot\.force_polytope_sum>`_  and `intersection <#pycapacity\.robot\.force_polytope_intersection>`_
 * reachable space approximation `polytope <#pycapacity\.robot\.reachable_space_approximation>`_
+* reachable space `curved <#pycapacity\.robot\.reachable_space_curved>`_
 
 """
 
@@ -18,13 +19,13 @@ from scipy.spatial import ConvexHull
 from scipy.linalg import block_diag
 
 # import the algos
-from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_vepoli2
+from pycapacity.algorithms import hyper_plane_shift_method, vertex_enumeration_vepoli2, stack
 from pycapacity.algorithms import *
 
 from pycapacity.objects import *
 
 def velocity_ellipsoid(J, dq_max):
-    """
+    r"""
     Velocity manipulability ellipsoid calculation
 
     .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad ||W^{-1}\dot{q}|| \leq 1\}
@@ -54,7 +55,7 @@ def velocity_ellipsoid(J, dq_max):
     return ellipsoid
 
 def acceleration_ellipsoid(J, M, t_max):
-    """
+    r"""
     Acceleration ellipsoid calculation (dynamic manipulability ellipsoid)
    
     .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad ||W^{-1}{\\tau}|| \leq 1\}
@@ -84,7 +85,7 @@ def acceleration_ellipsoid(J, M, t_max):
     return ellipsoid
 
 def force_ellipsoid(J, t_max):
-    """
+    r"""
     Force manipulability ellipsoid calculation
 
     .. math:: E_f = \{f~ |~ \\tau  = J^Tf,\quad ||W^{-1}\\tau|| \leq 1\}
@@ -113,7 +114,7 @@ def force_ellipsoid(J, t_max):
     return ellipsoid
 
 def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias=None, t2_bias=None, options = None):
-    """
+    r"""
     Force polytope representing the intersection of the capacities of the two robots in certain configurations.
 
 
@@ -149,7 +150,7 @@ def force_polytope_intersection(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2
     return force_polytope(Jac, t_max, t_min, t_bias, options=options)
 
 def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_bias = None, t2_bias = None, options = None):
-    """
+    r"""
     Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
     With ordered vertices into the faces.
 
@@ -197,7 +198,7 @@ def force_polytope_sum(Jacobian1, Jacobian2, t1_max, t1_min, t2_max, t2_min, t1_
     return poly
 
 def force_polytope(Jacobian, t_max, t_min, t_bias = None, options = None):
-    """
+    r"""
     Force polytope representing the capacities of the two robots in a certain configuration
 
     .. math:: P_f = \{f~ |~ \\tau  = J^Tf,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\}
@@ -232,7 +233,7 @@ def force_polytope(Jacobian, t_max, t_min, t_bias = None, options = None):
     return poly
 
 def velocity_polytope(Jacobian, dq_max, dq_min, options = None):
-    """
+    r"""
     Velocity polytope calculating function
 
     .. math:: P_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}\}
@@ -263,7 +264,7 @@ def velocity_polytope(Jacobian, dq_max, dq_min, options = None):
     return poly
 
 def acceleration_polytope(J, M, t_max, t_min, t_bias= None, options = None):
-    """
+    r"""
     Acceleration polytope calculating function
 
     .. math:: P_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\} 
@@ -303,7 +304,7 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None, options = None):
     return poly
 
 def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None, q_max= None,q_min= None, dq_max= None,dq_min= None, x0=None, A_x=None, b_x =None, options= None):
-    """
+    r"""
     Reachable space aproximation function based on convex polytopes. For a given time horizon, it calculates the reachable space of the robot.
     It evaluates the polytope of a form:
     
@@ -455,4 +456,99 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
         poly.face_indices = faces_index
         poly.faces = face_index_to_vertex(poly.vertices, poly.face_indices)
     poly.torque_vertices = t_vert
+    return poly
+
+import numpy.matlib
+
+# reachable space calculation algorithm
+def reachable_space_curved(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
+
+    r"""
+    Compute the reachable set of the robot for the given joint configuration.
+    The algorithm calculates the reachable set of cartesian position of the desired frame of the robot given the robots joint position and joint velocity limits.
+    The output of the algorithm is the reachable space that the robot is able to reach within the horizon time, while guaranteeing that the joint position and velocity limits are not violated.
+    
+    If you are interested in the complete workspace of the robot, you can set a large time horizon (>1 second)
+
+    .. math:: C_x = \{ x~ |~ x = f_{fk}(q_0 + \dot{q}\Delta t), 
+    .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max}
+    .. math::  {q}_{min} \leq q_0 + \dot{q}\Delta_t  \leq {q}_{max} \}
+
+
+    The parameters of the algorithm are set using the options dictionary. The following options are available:
+    - n_samples: The number of samples to use for the discretization of the joint velocity space. The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
+    - facet_dim: The dimension of the facet that will be sampled. Between 0 and the number of DOF of the robot.  The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
+
+    Args:
+        forward_func: The forward kinematic function, taking in the current joint position and ouputting the Cartesian space position (no orientation)
+        q0: Current joint configuration
+        time_horizon: The time horizon for which to compute the reachable set
+        q_max:  maximal joint position
+        q_min:  minimal joint position
+        dq_max:  maximal joint velocities
+        dq_min:  minimal joint velocities 
+        options: dictionary of options for the polytope calculation - currently supported calculate_faces, n_samples, facet_dim
+        
+    Returns
+    ---------
+        polytope(Polytope):
+            polytope object with ``vertices`` and faces if option ``calculate_faces`` is set to True in ``options``
+    """
+
+    delta_t = time_horizon
+
+    n_samples = options['n_samples']
+    n_steps = 1
+    n_combs = options['facet_dim']
+
+    if len(dq_min) != len(q_min):
+        n = len(dq_max)
+        dq_max = np.hstack((dq_max, -np.ones(len(q_min)-n)*1000))
+        dq_min = np.hstack((dq_min, np.ones(len(q_min)-n)*1000))
+      
+    n = len(dq_max)  
+    n_dof = n_steps*n
+    dt = delta_t/n_steps
+    
+    dq_ub = np.matlib.repmat(np.minimum(dq_max,(q_max.flatten()-q0)/dt), n_steps,1).flatten()
+    dq_lb = np.matlib.repmat(np.maximum(dq_min,(q_min.flatten()-q0)/dt), n_steps,1).flatten()
+
+    Dq_ub = np.diag(dq_ub)
+    Dq_lb = np.diag(dq_lb)
+    sum_steps = np.matlib.repmat(np.eye(n), n_steps,1)
+
+    combs = list(itertools.combinations(range(n_dof), n_combs) )
+    perm_set = list(itertools.product([1, 0], repeat=n_dof-n_combs) )
+
+    dq_curve_v = []
+
+    x_rng = np.arange(0, 1, 1/n_samples)
+    mat_rng = np.array(list(itertools.product(x_rng, repeat=n_combs))).T
+    n_rng = len(mat_rng.T)
+
+    for c in combs:
+        c= np.array(c)
+        ind = np.ones(n_dof, dtype=bool)
+        ind[c] = np.zeros(len(c))
+        ind_i = np.argwhere(ind > 0)
+
+        n_ps = len(perm_set)
+        ps = np.array(perm_set).T
+        dq_i = np.zeros((n_dof,n_ps))
+        dq_i[ind,:] = ps
+
+        DQ_i = np.matlib.repmat(dq_i.T, n_rng,1).T
+        DQ_i[ind,:] = DQ_i[ind,:]*Dq_ub[ind_i,ind_i] + (1-DQ_i[ind,:])*Dq_lb[ind_i,ind_i] 
+        mat = np.diag([dq_ub[c_i]-dq_lb[c_i] for c_i in c ])@mat_rng + np.array([dq_lb[c_i] for c_i in c ])[:,None]
+        DQ_i[c,:] = np.matlib.repeat(mat,n_ps,1)
+        dq_curve_v = stack(dq_curve_v,DQ_i.T)
+
+    dq_curve_v= np.unique(dq_curve_v,axis=0)
+    q_v =(np.array(q0)[:, None] + (dq_curve_v@sum_steps).T*dt).T
+    x_curves = np.array([forward_func(q).flatten() for q in q_v])
+
+    # if(options['convex']):
+    poly = Polytope(x_curves.T)
+    if options["calculate_faces"]:
+        poly.find_faces()
     return poly
