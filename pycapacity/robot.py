@@ -9,7 +9,7 @@ This is a python module which implements different robot performance metrics bas
 * force `polytope <#pycapacity\.robot\.force_polytope>`_ and `ellipsoid <#pycapacity\.robot\.force_ellipsoid>`_
 * force polytope `minkowski sum <#pycapacity\.robot\.force_polytope_sum>`_  and `intersection <#pycapacity\.robot\.force_polytope_intersection>`_
 * reachable space approximation `polytope <#pycapacity\.robot\.reachable_space_approximation>`_
-* reachable space `curved <#pycapacity\.robot\.reachable_space_curved>`_
+* reachable space `nonlinear <#pycapacity\.robot\.reachable_space_nonlinear>`_
 
 """
 
@@ -461,7 +461,7 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
 import numpy.matlib
 
 # reachable space calculation algorithm
-def reachable_space_curved(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
+def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
 
     r"""
     Compute the reachable set of the robot for the given joint configuration.
