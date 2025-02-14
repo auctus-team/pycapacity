@@ -18,6 +18,7 @@ Robot  workspace analysis
     Robotics toolbox <robotics_toolbox.md>
     Pinocchio <pinocchio.md>
     ROS example <ROS.rst>
+    Reachable workspace approximation <reachable_workspace.md>
 
 
 Human musculoskeletal models

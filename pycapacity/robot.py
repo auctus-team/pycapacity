@@ -524,7 +524,7 @@ def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_m
     
     * n_samples: The number of samples to use for the discretization of the joint velocity space. The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
     * facet_dim: The dimension of the facet that will be sampled. Between 0 and the number of DOF of the robot.  The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
-    * convex: Approximate the reachable set with a convex hull (True) or with a non-convex shape (False) - if False, CGAL must be installed
+    * convex_hull: Approximate the reachable set with a convex hull (True) or with a non-convex shape (False) - if False, CGAL must be installed
     
     Args:
         forward_func: The forward kinematic function, taking in the current joint position and ouputting the Cartesian space position (no orientation)
@@ -543,6 +543,10 @@ def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_m
     """
 
     delta_t = time_horizon
+    
+    
+    if 'convex_hull' not in options.keys():
+        options['convex_hull'] = True
 
     n_samples = options['n_samples']
     n_steps = 1
@@ -594,11 +598,11 @@ def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_m
     q_v =(np.array(q0)[:, None] + (dq_curve_v@sum_steps).T*dt).T
     x_curves = np.array([forward_func(q).flatten() for q in q_v])
 
-    if options['convex'] == True:
+    if options['convex_hull'] == True:
         poly = Polytope(x_curves.T)
         if options["calculate_faces"]:
             poly.find_faces()
-    if options is not None and options["convex"] == False:
+    if options["convex_hull"] == False:
         if CGAL_INSTALLED:
             if options is not None and "alpha" in options.keys():
                 vert, faces = alpha_shape_with_cgal(x_curves, options['alpha'])

@@ -27,6 +27,10 @@ An efficient task-space capacity calculation package for robotics and biomechani
   :height: 200
   :alt: Alternative text
 
+.. image:: images/reachable.gif
+  :height: 200
+  :alt: Alternative text
+
 What is ``pycapacity``?
 ------------------------------------
 

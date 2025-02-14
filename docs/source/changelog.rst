@@ -10,10 +10,22 @@ If wanting to use a specific version of the library, you can install it using pi
   
   pip install pycapacity==1.2.17
 
+V2.1.6 (02-2025)
+----------------
+
+* Added the initial implementation for the non-convex reachable workspace approximation - `see API docs <pycapacity.robot.html#pycapacity.robot.reachable_space_nonlinear>`_
+* In order to use it you need to install `CGAL library <https://github.com/CGAL/cgal>`_ with its python bindings - if not installed the algorihtm will only be available in the convex mode
+* See the example in tutorials - `see example <examples/reachable_workspace.html>`_
+
+.. image:: images/reachable.gif
+  :height: 200
+  :alt: Alternative text
 
 V2.1.5 (02-2025)
 ----------------
 * Added the initial implementation of the non-linear reachable workspace approximation - `see API docs <pycapacity.robot.html#pycapacity.robot.reachable_space_nonlinear>`_
+
+
 
 v2.1.4 (12-2024)
 ----------------

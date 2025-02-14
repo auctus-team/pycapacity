@@ -37,6 +37,9 @@ An efficient task-space capacity calculation package for robotics and biomechani
   :height: 200
   :alt: Alternative text
 
+.. image:: images/reachable.gif
+  :height: 200
+  :alt: Alternative text
  
 What is ``pycapacity``?
 ------------------------------------
@@ -114,6 +117,7 @@ Where :math:`J` is the robot jacobian matrix, :math:`f` is the vector of cartesi
   .. math:: C_x = \{ x~ |~ x = f_{fk}(q_0 + \dot{q}\Delta t), 
   .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max},\quad {q}_{min} \leq q_0 + \dot{q}\Delta t  \leq {q}_{max} \}
 
+  | See an example of how its used in the `tutorials <examples/reachable_workspace.html>`_.
 
 
 

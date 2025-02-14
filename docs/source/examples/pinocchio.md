@@ -39,7 +39,7 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - python=3.8
+  - python=3
   - conda-forge::pinocchio
   - conda-forge::gepetto-viewer
   - conda-forge::gepetto-viewer-corba
@@ -74,7 +74,7 @@ Then install `pycapacity` for the workspace analysis
 pip install pycapacity
 ```
 
-<<div class="admonition-new-examples admonition">
+<div class="admonition-new-examples admonition">
 <p class="admonition-title">📢 NEW Examples!</p>
 <dl class="simple">
 <dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
