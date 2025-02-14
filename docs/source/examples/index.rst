@@ -2,11 +2,9 @@ Getting started coding examples
 ===============================
 
 
-.. admonition::  📢 NEW Examples!
+.. admonition::  📢 Reachable workspace examples
 
-   For some more examples check out the ``examples`` folder of the repository.
-      - Interactive jupyter notebooks are available in the ``examples/notebooks`` folder: `see on Github <https://github.com/auctus-team/pycapacity/tree/master/examples/notebooks>`_
-      - Python scripts are available in the ``examples/scripts`` folder: `see on Github <https://github.com/auctus-team/pycapacity/tree/master/examples/scripts>`_
+   See the new non-convex reachable workspace approximation example `here <reachable_workspace.html>`_
 
 Robot  workspace analysis
 
@@ -18,7 +16,7 @@ Robot  workspace analysis
     Robotics toolbox <robotics_toolbox.md>
     Pinocchio <pinocchio.md>
     ROS example <ROS.rst>
-    Reachable workspace approximation <reachable_workspace.md>
+    NEW 📢: Reachable workspace approximation <reachable_workspace.md>
 
 
 Human musculoskeletal models
