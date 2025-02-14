@@ -24,6 +24,16 @@ from pycapacity.algorithms import *
 
 from pycapacity.objects import *
 
+# check if CGAL is installed
+try:
+    from CGAL.CGAL_Alpha_wrap_3 import *
+    from CGAL.CGAL_Kernel import *
+    from CGAL.CGAL_Polyhedron_3 import Polyhedron_3
+    from CGAL.CGAL_Mesh_3 import *
+    CGAL_INSTALLED = True
+except ImportError:
+    CGAL_INSTALLED = False
+
 def velocity_ellipsoid(J, dq_max):
     """
     Velocity manipulability ellipsoid calculation
@@ -460,6 +470,43 @@ def reachable_space_approximation( M, J, q0, horizon, t_max,t_min, t_bias= None,
 
 import numpy.matlib
 
+
+# conditionally implement a funciton (if CGAL is installed)
+if CGAL_INSTALLED:
+    def alpha_shape_with_cgal(coords, alpha=None):
+        """
+        Compute the alpha shape of a set of points.
+        Retrieved from http://blog.thehumangeo.com/2014/05/12/drawing-boundaries-in-python/
+
+        :param coords : Coordinates of points
+        :param alpha: List of alpha values to influence the gooeyness of the border. Smaller numbers don't fall inward as much as larger numbers. 
+        Too large, and you lose everything!
+        :return: vertices and faces of the alpha shape
+        """
+        if alpha is None:
+            bbox_diag = np.linalg.norm(np.max(coords,0)-np.min(coords,0))
+            alpha_value = bbox_diag/5
+        else:
+            alpha_value = np.mean(alpha)
+        # Convert to CGAL point
+        points = [Point_3(pt[0], pt[1], pt[2]) for pt in coords]
+        # Compute alpha shape
+        Q = Polyhedron_3()
+        a = alpha_wrap_3(points,alpha_value,0.01,Q)
+        #Q.make_tetrahedron()
+        alpha_shape_vertices = np.array([(vertex.point().x(), vertex.point().y(), vertex.point().z()) for vertex in Q.vertices()])
+        alpha_shape_faces = np.array([
+            np.array([
+                (face.halfedge().vertex().point().x(), face.halfedge().vertex().point().y(), face.halfedge().vertex().point().z()),
+                (face.halfedge().next().vertex().point().x(), face.halfedge().next().vertex().point().y(), face.halfedge().next().vertex().point().z()),
+                (face.halfedge().next().next().vertex().point().x(), face.halfedge().next().next().vertex().point().y(), face.halfedge().next().next().vertex().point().z())
+                #for i in face.halfedge()
+            ])
+            for face in Q.facets()])
+                
+        return alpha_shape_vertices,alpha_shape_faces
+
+
 # reachable space calculation algorithm
 def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
 
@@ -474,9 +521,11 @@ def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_m
     .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max},\quad {q}_{min} \leq q_0 + \dot{q}\Delta t  \leq {q}_{max} \}
 
     The parameters of the algorithm are set using the options dictionary. The following options are available:
-    - n_samples: The number of samples to use for the discretization of the joint velocity space. The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
-    - facet_dim: The dimension of the facet that will be sampled. Between 0 and the number of DOF of the robot.  The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
-
+    
+    * n_samples: The number of samples to use for the discretization of the joint velocity space. The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
+    * facet_dim: The dimension of the facet that will be sampled. Between 0 and the number of DOF of the robot.  The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be
+    * convex: Approximate the reachable set with a convex hull (True) or with a non-convex shape (False) - if False, CGAL must be installed
+    
     Args:
         forward_func: The forward kinematic function, taking in the current joint position and ouputting the Cartesian space position (no orientation)
         q0: Current joint configuration
@@ -545,8 +594,19 @@ def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_m
     q_v =(np.array(q0)[:, None] + (dq_curve_v@sum_steps).T*dt).T
     x_curves = np.array([forward_func(q).flatten() for q in q_v])
 
-    # if(options['convex']):
-    poly = Polytope(x_curves.T)
-    if options["calculate_faces"]:
-        poly.find_faces()
+    if options['convex'] == True:
+        poly = Polytope(x_curves.T)
+        if options["calculate_faces"]:
+            poly.find_faces()
+    if options is not None and options["convex"] == False:
+        if CGAL_INSTALLED:
+            if options is not None and "alpha" in options.keys():
+                vert, faces = alpha_shape_with_cgal(x_curves, options['alpha'])
+            else:
+                vert, faces = alpha_shape_with_cgal(x_curves)
+            vert = faces.reshape(-1,3)
+            poly = Polytope(vertices=vert.T, faces=faces)
+            poly.face_indices = np.arange(len(vert)).reshape(-1,3)
+        else:
+            raise ValueError("CGAL is not installed, please install it to use the non-convex option")
     return poly
