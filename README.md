@@ -2,12 +2,12 @@
 # An efficient task-space capacity calculation package for robotics and biomechanics
 
 
-> 📢 New version of the pycapacity package is out - version v2.1.5! - [see full changelog](https://auctus-team.github.io/pycapacity/changelog.html)
+> 📢 New version of the pycapacity package is out - version v2.1.6! - [see full changelog](https://auctus-team.github.io/pycapacity/changelog.html)
 
 ## About 
 [![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/) [![Tests](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml) ![](https://img.shields.io/pypi/dm/pycapacity?color=blue&label=pip%20downloads)  [![Docs](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml) [![status](https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348/status.svg)](https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348)
 
-<img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" height="250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" height="250px">
+<img src="https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif" height="250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/human_poly.gif?raw=true" height="250px"><img src="https://github.com/auctus-team/pycapacity/blob/master/images/reachable.gif?raw=true" height="250px">
 
 ## What is ``pycapacity``?
 
@@ -38,8 +38,9 @@ And polytopes:
 - Velocity polytope <br> `P_vel = {dx | dx = J.dq,  dq_min < dq < dq_max}`
 - Acceleration polytope <br> `P_acc = {ddx | ddx = J.M^(-1).t, t_min < t < t_max}`
 - Force polytope <br> `P_for = {f | J^T.f = t, t_min < t < t_max}`
-- **NEW** 📢: Reachable space of the robot with the horizon `T`  <br> `P_x = {x | x = JM(-1)tT^2/2, t_min < t < t_max,   dq_min < M^(-1)tT < dq_max,   q_min < M^(-1)tT^2/2 < q_max}`
+- Reachable space of the robot with a horizon `T`  <br> `P_x = {x | x = JM(-1)tT^2/2, t_min < t < t_max,   dq_min < M^(-1)tT < dq_max,   q_min < M^(-1)tT^2/2 < q_max}`
 - Force polytopes *Minkowski sum and intersection*
+- **NEW** 📢: Sampling-based reachable space approximation with a horizon `T` <br> `C_x = {x | x = f(q0 + dq*T), q_min < q0 + dq*T < q_max,   dq_min < dq < dq_max}`
 
 Where `J` is the robot jacobian matrix, `f` is the vector of cartesian forces,`dx` and `ddx` are vectors fo cartesian velocities and accretions, `dq` is the vector of the joint velocities and `t` is the vector of joint torques.
 
