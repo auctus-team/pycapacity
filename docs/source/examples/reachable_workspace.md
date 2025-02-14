@@ -176,7 +176,7 @@ viz.viewer['rwspace'].set_object(poly, g.MeshBasicMaterial(color=0x0022ff, wiref
 
 Here is the visualisation of the reachable space of two different runns of the code:
 
-<img src="../_images/reachable_space.png" style="height:300px"> <img src="../_images/reachable_space2.png" style="height:300px">
+<img src="../images/reachable_space.png" style="height:300px"> <img src="../images/reachable_space2.png" style="height:300px">
 
 
 
