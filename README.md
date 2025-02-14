@@ -202,76 +202,237 @@ If you are interested in citing  `pycapacity` in your research, we suggest you t
 
 ## Code examples
 
-See [`demo_notebook.ipynb`](https://github.com/auctus-team/pycapacity/blob/master/demo_notebook.ipynb) for more examples of how ot use the module.
+See more examples in the [tutorials](https://auctus-team.github.io/pycapacity/examples/)
 
-### Randomised serial robot example
+### An example code with robotics toolbox and swift visualisation
+
+This code snippet shows how to calculate the force polytope of the Franka Emika Panda robot and visualise it in the Swift visualisation tool.
+
+<details markdown="1"> <summary>Click to see the code</summary>
+
 ```python
-"""
-A simple example program for 3d force polytope 
-evaluation of a randomised 6dof robot 
-"""
-import pycapacity.robot as capacity # robot capacity module
+import roboticstoolbox as rp
 import numpy as np
 
-m = 3 # 3d forces
-n = 6 # robot dof
+panda = rp.models.DH.Panda()
+# initial pose
+q= np.array([0.00138894 ,5.98736e-05,-0.30259058,   -1.6, -6.64181e-05,    1.56995,-5.1812e-05])
+panda.q = q
+# joint torque limits
+t_max = np.array([87, 87, 87, 87, 20, 20, 20]) 
+t_min = -t_max
 
-J = np.array(np.random.rand(m,n)) # random jacobian matrix
+# polytope python module
+import pycapacity.robot as pyc
 
-t_max = np.ones(n)  # joint torque limits max and min
-t_min = -np.ones(n)
+# robot matrices
+Jac = panda.jacob0(q)[:3,:]
+# gravity torque
+gravity = panda.gravload(q).reshape((-1,1))
 
-f_poly = capacity.force_polytope(J,t_min, t_max) # calculate the polytope vertices and faces
+# calculate for the polytope
+f_poly =  pyc.force_polytope(Jac, t_max, t_min, gravity)
+# calculate the face representation of the polytope
+f_poly.find_faces()
 
-print(f_poly.vertices) # display the vertices
+ # visualise panda
+panda = rp.models.Panda()
+import swift.Swift as Swift
+panda.q = q
+env = Swift()
+env.launch()
+env.add(panda)
 
-# plotting the polytope
-import matplotlib.pyplot as plt
-from pycapacity.visual import * # pycapacity visualisation tools
-fig = plt.figure(4)
 
-# draw faces and vertices
-plot_polytope(polytope=f_poly, plot=plt, label='force polytope', vertex_color='blue', edge_color='blue', alpha=0.2)
+# polytope visualisation
+import trimesh
+# save polytope as mesh file
+scaling = 500
+# create the mesh
+mesh = trimesh.Trimesh(vertices=(f_poly.vertices.T/scaling + panda.fkine(q).t),
+                       faces=f_poly.face_indices, use_embree=True, validate=True)
 
-plt.legend()
-plt.show()
+# absolute path to the temporary polytope file saved 
+# in the stl format
+import os
+file_path = os.path.join(os.getcwd(),'tmp_polytope_file.stl')
+                  
+f = open(file_path, "wb")
+f.write(trimesh.exchange.stl.export_stl(mesh))
+f.close()
+# robot visualisation
+from spatialgeometry import Mesh
+poly_mesh = Mesh(file_path)
+poly_mesh.color = (0.9,0.6,0.0,0.5)
+env.add(poly_mesh)
 ```
 
+</details>
 
-### Randomised muslucoskeletal model example
+<img src="./docs/source/images/rb_swig.png" width="500">
+
+See more examples in the [tutorials](https://auctus-team.github.io/pycapacity/examples/robotics_toolbox.html)
+
+### An example with pinocchio library and meshcat visualisation
+
+This example shows how to calculate the velocity polytope and ellipsoid of the Franka Emika Panda robot and visualise it in the Meshcat visualisation tool.
+
+
+<details markdown="1"> <summary>Click to see the code</summary>
+
 ```python
-"""
-A simple example program for 3d force polytope 
-evaluation of a randomised 30 muscle 7dof 
-human musculoskeletal model 
-"""
-
-import pycapacity.human as capacity # robot capacity module
+import pinocchio as pin
 import numpy as np
+import time
 
-L = 30 # number of muscles
-m = 3 # 3d forces
-n = 6 # number of joints - dof
+from example_robot_data import load
 
-J = np.array(np.random.rand(m,n))*2-1 # random jacobian matrix
-N = np.array(np.random.rand(n,L))*2-1 # random moment arm matrix
+# import pycapacity 
+import pycapacity as pycap
 
-F_max = 100*np.ones(L)  # muscle forces limits max and min
-F_min = np.zeros(L)
+# get panda robot usinf example_robot_data
+robot = load('panda')
 
-f_poly = capacity.force_polytope(J,N, F_min, F_max, 0.1) # calculate the polytope vertices and faces
+# get joint position ranges
+q_max = robot.model.upperPositionLimit.T
+q_min = robot.model.lowerPositionLimit.T
+# get max velocity
+dq_max = robot.model.velocityLimit
+dq_min = -dq_max
 
-print(f_poly.vertices) # display the vertices
+# Use robot configuration.
+# q0 = np.random.uniform(q_min,q_max)
+q0 = (q_min+q_max)/2
 
+# calculate the jacobian
+data = robot.model.createData()
+pin.framesForwardKinematics(robot.model,data,q0)
+pin.computeJointJacobians(robot.model,data, q0)
+J = pin.getFrameJacobian(robot.model, data, robot.model.getFrameId(robot.model.frames[-1].name), pin.LOCAL_WORLD_ALIGNED)
+# use only position jacobian
+J = J[:3,:]
 
-# plotting the polytope
-import matplotlib.pyplot as plt
-from pycapacity.visual import * # pycapacity visualisation tools
-fig = plt.figure(4)
+# end-effector pose
+Xee = data.oMf[robot.model.getFrameId(robot.model.frames[-1].name)]
 
-# draw faces and vertices
-plot_polytope(polytope=f_poly, plot=plt, label='force polytope', vertex_color='blue', edge_color='blue', alpha=0.2)
+## visualise the robot
+from pinocchio.visualize import MeshcatVisualizer
 
-plt.legend()
-plt.show()
+viz = MeshcatVisualizer(robot.model, robot.collision_model, robot.visual_model)
+# Start a new MeshCat server and client.
+viz.initViewer(open=True)
+# Load the robot in the viewer.
+viz.loadViewerModel()
+viz.display(q0)
+# small time window for loading the model 
+# if meshcat does not visualise the robot properly, augment the time
+# it can be removed in most cases
+time.sleep(0.2) 
+
+## visualise the polytope and the ellipsoid
+import meshcat.geometry as g 
+
+# calculate the polytope
+opt = {'calculate_faces':True}
+# calculate the polytope
+vel_poly = pycap.robot.velocity_polytope(J, dq_min, dq_max,options=opt)
+# meshcat triangulated mesh
+poly = g.TriangularMeshGeometry(vertices=vel_poly.vertices.T/10 + Xee.translation, faces=vel_poly.face_indices)
+viz.viewer['poly'].set_object(poly, g.MeshBasicMaterial(color=0x0022ff, wireframe=True, linewidth=3, opacity=0.2))
+
+# calculate the ellipsoid
+vel_ellipsoid = pycap.robot.velocity_ellipsoid(J, dq_max)
+# meshcat ellipsoid
+ellipsoid = g.Ellipsoid(radii=vel_ellipsoid.radii/10)
+viz.viewer['ellipse'].set_object(ellipsoid, g.MeshBasicMaterial(color=0xff5500, transparent=True, opacity=0.2))
+viz.viewer['ellipse'].set_transform(pin.SE3(vel_ellipsoid.rotation, Xee.translation).homogeneous)
 ```
+
+</details>
+
+<img src="./docs/source/images/pin_meshcat.png" width="500">
+
+See more examples in the [tutorials](https://auctus-team.github.io/pycapacity/examples/pinocchio.html)
+
+
+## An example with OpenSim 
+
+This example shows how to calculate the force polytope of the MoBL-ARMS Upper Extremity Model and visualise it in the OpenSim visualisation tool.
+
+
+<details markdown="1"> <summary>Click to see the code</summary>
+
+```python
+# include the pyosim module
+from utils import getStationJacobian, getMomentArmMatrix, getQIndicesOfClampedCoord, getMuscleTensions, getBodyPosition, setCoordinateValues
+
+# include opensim package
+import opensim as osim
+
+# pycappacity for polytope calculationreate 
+from pycapacity.human import force_polytope
+
+# some utils 
+import numpy as np
+import time
+
+## Constructor of the OsimModel class.
+model = osim.Model("opensim_models/upper_body/unimanual/MoBL-ARMS Upper Extremity Model/MOBL_ARMS_fixed_41.osim")
+endEffectorBody = 'hand'
+
+state  = model.initSystem()
+
+joint_pos = [0,0.5,0,1.3,0,1.0,0]
+setCoordinateValues(model,state,joint_pos)
+
+start = time.time()
+coordNames, coordIds = getQIndicesOfClampedCoord(model, state)
+model.equilibrateMuscles(state)
+J = getStationJacobian(model, state, endEffectorBody, osim.Vec3(0), coordIds)
+N = getMomentArmMatrix(model, state, coordNames=coordNames)
+F_min, F_max = getMuscleTensions(model, state)
+print("time", time.time() - start)
+
+# polytope calculation
+start = time.time()
+f_poly = force_polytope(J, N, F_min, F_max, 0.01)
+print("time", time.time() - start)
+
+
+
+# create the polytope
+import trimesh
+
+# find hand position
+hand_orientation, hand_position = getBodyPosition(model,state, endEffectorBody)
+# save the mesh to disk
+mesh = trimesh.Trimesh(vertices=(f_poly.vertices.T/2000 + hand_position.reshape((3,))) ,
+                       faces=f_poly.face_indices,  use_embree=True, validate=True)
+# save polytope as stl file
+f = open("polytope.stl", "wb")
+f.write(trimesh.exchange.stl.export_stl(mesh))
+f.close()
+
+# adding polytope faces 
+mesh = osim.Mesh("./polytope.stl")
+model.get_ground().attachGeometry(mesh)
+mesh.setColor(osim.Vec3(0.1,0.1,1))
+mesh.setOpacity(0.3)
+# adding polytope vireframe
+mesh = osim.Mesh("./polytope.stl")
+model.get_ground().attachGeometry(mesh)
+mesh.setColor(osim.Vec3(0.1,0.1,1))
+mesh.setRepresentation(2)
+
+# visualise the model and polytope
+model.setUseVisualizer(True)
+state  = model.initSystem()
+mviz = model.getVisualizer()
+setCoordinateValues(model,state,joint_pos)
+mviz.show(state)
+```
+</details>
+
+<img src="./docs/source/images/osim_poly.png" width="500">
+
+See more examples in the [tutorials](https://auctus-team.github.io/pycapacity/examples/opensim.html)
