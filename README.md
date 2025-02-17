@@ -23,7 +23,20 @@ The package additionally implements a set of visualization tools for polytopes a
 Python package ``matplotlib`` intended for fast prototyping and quick and interactive visualization.
 
 
+## Compatible libraries
+
+Library | Example
+--- | ---
+[OpenSim](https://github.com/opensim-org/opensim-core) |[Tutorial](https://auctus-team.github.io/pycapacity/examples/opensim.html)
+ [pyomeca biorbd](https://github.com/pyomeca/biorbd)  | [Tutorial](https://auctus-team.github.io/pycapacity/examples/pyomeca.html)
+ [pinocchio](https://github.com/stack-of-tasks/pinocchio) | [Tutorial](https://auctus-team.github.io/pycapacity/examples/pinocchio.html)
+ [Robotics toolbox](https://github.com/petercorke/robotics-toolbox-python) | [Tutorial](https://auctus-team.github.io/pycapacity/examples/robotics_toolbox.html)
+ [Robot Operating System (ROS)](https://ros.org/) | [Tutorial ](https://auctus-team.github.io/pycapacity/examples/ROS.html)
+ [Mujoco](https://www.roboti.us/index.html)    | [Tutorial](https://auctus-team.github.io/pycapacity/examples/mujoco.html)
+
+
 See [full API documentation and docs.](https://auctus-team.github.io/pycapacity/)
+
 
 ## Robotic manipulator capacity metrics
 <img src='https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/robot.png' height='300px'>
