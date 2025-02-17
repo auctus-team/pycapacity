@@ -1,0 +1,530 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROS example using pinocchio &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/my_theme.css" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reachable Space with Pinocchio and CGAL" href="reachable_workspace.html" />
+    <link rel="prev" title="Mujoco examples" href="mujoco.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pycapacity.html"> 📄 API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"> 🎓 Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="randomised_rob.html"> Randomized robot model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourlink.html"> Four link planar robot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="robotics_toolbox.html"> Robotics toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pinocchio.html"> Pinocchio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mujoco.html"> NEW 📢: Mujoco</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> ROS example</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#robot-model-from-robot-description">Robot model from <code class="docutils literal notranslate"><span class="pre">robot_description</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculating-the-polytope-using-pycapacity">Calculating the polytope using <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-polytope-visualisation-using-jsk-rviz-plugins">Adding polytope visualisation using <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#full-code-of-the-ros-node">Full code of the ROS node</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reachable_workspace.html"> NEW 📢: Reachable workspace approximation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomised_human.html"> Randomized human model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyomeca.html"> Pyomeca</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opensim.html"> Opensim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hspace_from_vert.html"> Find a half-plane representation of a point cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vert_from_hspace.html"> Find a vertex representation of a set of half-planes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes.html"> Polytope manipulation example: Minkowski sum and intersection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes_approx.html"> Polytope manipulation example: Inner approximation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Getting started coding examples</a></li>
+      <li class="breadcrumb-item active">ROS example using <code class="docutils literal notranslate"><span class="pre">pinocchio</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/examples/ROS.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ros-example-using-pinocchio">
+<h1>ROS example using <code class="docutils literal notranslate"><span class="pre">pinocchio</span></code><a class="headerlink" href="#ros-example-using-pinocchio" title="Link to this heading"></a></h1>
+<figure class="align-center" id="id1">
+<img alt="vel_polytope_rviz" src="../_images/rviz.gif" />
+<figcaption>
+<p><span class="caption-text">Interactive visualisation of the polytope in <code class="docutils literal notranslate"><span class="pre">rviz</span></code> using <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code> package.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>This is an example of using <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> with <code class="docutils literal notranslate"><span class="pre">pinocchio</span></code> and <code class="docutils literal notranslate"><span class="pre">ROS</span></code>.
+The example is based on the <code class="docutils literal notranslate"><span class="pre">panda</span></code> robot.
+The robot is loaded from the <code class="docutils literal notranslate"><span class="pre">robot_description</span></code> parameter.
+The robot is visualised in <code class="docutils literal notranslate"><span class="pre">rviz</span></code>.
+The polytope is visualised in <code class="docutils literal notranslate"><span class="pre">rviz</span></code> as well using <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code> package and its message <code class="docutils literal notranslate"><span class="pre">PolygonArray</span></code>.</p>
+<section id="robot-model-from-robot-description">
+<h2>Robot model from <code class="docutils literal notranslate"><span class="pre">robot_description</span></code><a class="headerlink" href="#robot-model-from-robot-description" title="Link to this heading"></a></h2>
+<p>Getting the robot model from <code class="docutils literal notranslate"><span class="pre">robot_description</span></code> parameter is easy with <code class="docutils literal notranslate"><span class="pre">pinocchio</span></code>. Just use its build in function <code class="docutils literal notranslate"><span class="pre">buildModelFromXML</span></code> and construct the <code class="docutils literal notranslate"><span class="pre">RobotWrapper</span></code> class.
+Then we can use the <code class="docutils literal notranslate"><span class="pre">RobotWrapper</span></code> class to calculate forward kinematics, jacobians, etc.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rospy</span>
+<span class="c1"># time evaluation</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="c1">#some math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># joint state message</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sensor_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">JointState</span>
+
+<span class="c1"># URDF parsing an kinematics</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pinocchio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pin</span>
+
+<span class="c1"># initial joint positions</span>
+<span class="n">joint_positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># function receiveing the new joint positions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">callback</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">joint_positions</span>
+    <span class="n">joint_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+
+
+<span class="c1"># main function of the class</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vel_polytope</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">joint_positions</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;vel_polytope&#39;</span><span class="p">)</span>
+
+    <span class="c1"># loading the root urdf from robot_description parameter</span>
+    <span class="n">robot</span> <span class="o">=</span> <span class="n">pin</span><span class="o">.</span><span class="n">RobotWrapper</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">pin</span><span class="o">.</span><span class="n">buildModelFromXML</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;robot_description&quot;</span><span class="p">)))</span>
+
+    <span class="c1"># end-effector frame id</span>
+    <span class="n">ee_frame_id</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">getFrameId</span><span class="p">(</span><span class="s2">&quot;panda_link8&quot;</span><span class="p">)</span>
+
+    <span class="c1"># joint state topic</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s1">&#39;joint_states&#39;</span><span class="p">,</span> <span class="n">JointState</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Rate</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="c1">#Hz</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">joint_positions</span><span class="p">):</span>
+            <span class="n">robot</span><span class="o">.</span><span class="n">forwardKinematics</span><span class="p">(</span><span class="n">joint_positions</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;robot&#39;s end-effector position: </span><span class="si">{</span><span class="n">robot</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">oMf</span><span class="p">[</span><span class="n">ee_frame_id</span><span class="p">]</span><span class="o">.</span><span class="n">translation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">rate</span><span class="o">.</span><span class="n">sleep</span><span class="p">()</span>
+
+
+<span class="c1"># class definition</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">vel_polytope</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSInterruptException</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="calculating-the-polytope-using-pycapacity">
+<h2>Calculating the polytope using <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code><a class="headerlink" href="#calculating-the-polytope-using-pycapacity" title="Link to this heading"></a></h2>
+<p>The polytope is calculated using <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> package. To do so we need to calculate the jacobian matrix of the robot as well as the maximal joint velocities.
+The maximal joint velocities are taken from the robot model. The jacobian matrix is calculated using <code class="docutils literal notranslate"><span class="pre">pinocchio</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rospy</span>
+<span class="c1"># time evaluation</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="c1">#some math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># joint state message</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sensor_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">JointState</span>
+
+<span class="c1"># URDF parsing an kinematics</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pinocchio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pin</span>
+
+<span class="c1"># import pycapacity robot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># initial joint positions</span>
+<span class="n">joint_positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># function receiveing the new joint positions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">callback</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">joint_positions</span>
+    <span class="n">joint_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_polytope</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">frame_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">scaling_factor</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+
+    <span class="c1"># if no joint state received, return</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="c1"># if frame not specified, use the last frame</span>
+    <span class="k">if</span> <span class="n">frame_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">frame_name</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># calculate forward kinematics of the robot</span>
+    <span class="n">robot</span><span class="o">.</span><span class="n">forwardKinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">ee_position</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">oMf</span><span class="p">[</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">getFrameId</span><span class="p">(</span><span class="n">frame_name</span><span class="p">)]</span><span class="o">.</span><span class="n">translation</span>
+
+    <span class="c1"># calculate jacobi matrix</span>
+    <span class="n">robot</span><span class="o">.</span><span class="n">computeJointJacobians</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">pin</span><span class="o">.</span><span class="n">getFrameJacobian</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">getFrameId</span><span class="p">(</span><span class="n">frame_name</span><span class="p">)</span> <span class="p">,</span> <span class="n">pin</span><span class="o">.</span><span class="n">ReferenceFrame</span><span class="o">.</span><span class="n">LOCAL_WORLD_ALIGNED</span><span class="p">)</span>
+    <span class="c1"># only position part</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:]</span>
+
+    <span class="c1"># maximal joint angles</span>
+    <span class="n">dq_max</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">velocityLimit</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">dq_max</span>
+
+    <span class="c1"># calculate force vertexes</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">velocity_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">)</span>
+    <span class="n">poly</span><span class="o">.</span><span class="n">find_faces</span><span class="p">()</span>
+    <span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">velocity_faces</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">poly</span><span class="o">.</span><span class="n">faces</span>
+
+    <span class="c1"># print time and number of vertices</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Time to calculate polytope: &quot;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of vertices: &quot;</span><span class="p">,</span> <span class="n">velocity_vertex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># main function of the class</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vel_polytope</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">joint_positions</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;vel_polytope&#39;</span><span class="p">)</span>
+
+    <span class="c1"># loading the root urdf from robot_description parameter</span>
+    <span class="n">robot</span> <span class="o">=</span> <span class="n">pin</span><span class="o">.</span><span class="n">RobotWrapper</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">pin</span><span class="o">.</span><span class="n">buildModelFromXML</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;robot_description&quot;</span><span class="p">)))</span>
+
+    <span class="c1"># joint state topic</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s1">&#39;joint_states&#39;</span><span class="p">,</span> <span class="n">JointState</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Rate</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="c1">#Hz</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+        <span class="n">plot_polytope</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">joint_positions</span><span class="p">,</span> <span class="n">frame_name</span><span class="o">=</span><span class="s2">&quot;panda_link8&quot;</span><span class="p">)</span>
+        <span class="n">rate</span><span class="o">.</span><span class="n">sleep</span><span class="p">()</span>
+
+
+<span class="c1"># class definition</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">vel_polytope</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSInterruptException</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-polytope-visualisation-using-jsk-rviz-plugins">
+<h2>Adding polytope visualisation using <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code><a class="headerlink" href="#adding-polytope-visualisation-using-jsk-rviz-plugins" title="Link to this heading"></a></h2>
+<p>The polytope is visualised in <code class="docutils literal notranslate"><span class="pre">rviz</span></code> as well using <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code> package and its message <code class="docutils literal notranslate"><span class="pre">PolygonArray</span></code>. The message contains the vertices of the polytope as well as the faces.</p>
+<p>To install <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code> package, follow the instructions on the <a class="reference external" href="https://jsk-visualization.readthedocs.io/en/latest/">jsk-ros-pkg</a> website.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ros-*-jsk-rviz-plugins<span class="w"> </span><span class="c1"># melodic/kinetic... your ros version</span>
+</pre></div>
+</div>
+<p>Two utility functions are defined to create the vertex and faces messages.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># polytope messages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sensor_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">JointState</span><span class="p">,</span> <span class="n">PointCloud</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jsk_recognition_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolygonArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geometry_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span><span class="p">,</span> <span class="n">Point32</span><span class="p">,</span> <span class="n">PolygonStamped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">std_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Header</span>
+
+<span class="c1"># visualisation of vertices</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_vertex_msg</span><span class="p">(</span><span class="n">force_vertex</span><span class="p">,</span> <span class="n">pose</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">scaling_factor</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="n">pointcloud_massage</span> <span class="o">=</span> <span class="n">PointCloud</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">force_vertex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">Point32</span><span class="p">()</span>
+        <span class="n">point</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">force_vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">point</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">force_vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">point</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">force_vertex</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+    <span class="c1"># polytop stamped message</span>
+    <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Header</span><span class="p">()</span>
+    <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame</span>
+    <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pointcloud_massage</span>
+
+
+<span class="c1"># visualisation of polytope faces</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_polytopes_msg</span><span class="p">(</span><span class="n">force_polytopes</span><span class="p">,</span> <span class="n">pose</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">scaling_factor</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="n">polygonarray_message</span> <span class="o">=</span> <span class="n">PolygonArray</span><span class="p">()</span>
+    <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Header</span><span class="p">()</span>
+    <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame</span>
+    <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">face_polygon</span> <span class="ow">in</span> <span class="n">force_polytopes</span><span class="p">:</span>
+        <span class="n">polygon_massage</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">face_polygon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">Point32</span><span class="p">()</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">face_polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">face_polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">face_polygon</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">polygon_massage</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+        <span class="c1"># polytope stamped message</span>
+        <span class="n">polygon_stamped</span> <span class="o">=</span> <span class="n">PolygonStamped</span><span class="p">()</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">polygon</span> <span class="o">=</span> <span class="n">polygon_massage</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Header</span><span class="p">()</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">polygon_stamped</span><span class="p">)</span>
+        <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">polygonarray_message</span>
+</pre></div>
+</div>
+<p>Once you have the message, you can add the <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code> plugin to <code class="docutils literal notranslate"><span class="pre">rviz</span></code> and subscribe to the topic. The result is shown in the figure below.</p>
+<figure class="align-center" id="id2">
+<img alt="vel_polytope_rviz" src="../_images/ros_vertices.png" />
+<figcaption>
+<p><span class="caption-text">Configuration of the display of polytope vertices in <code class="docutils literal notranslate"><span class="pre">rviz</span></code>.</span><a class="headerlink" href="#id2" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id3">
+<img alt="vel_polytope_rviz" src="../_images/ros_faces.png" />
+<figcaption>
+<p><span class="caption-text">Configuration of the display of polytope  faces in <code class="docutils literal notranslate"><span class="pre">rviz</span></code> using <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code> package <code class="docutils literal notranslate"><span class="pre">PolygonArray</span></code> message. We suggest using separate visualisation for faces and edges</span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="full-code-of-the-ros-node">
+<h2>Full code of the ROS node<a class="headerlink" href="#full-code-of-the-ros-node" title="Link to this heading"></a></h2>
+<p>The full code of the ROS node is shown below.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rospy</span>
+<span class="c1"># time evaluation</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="c1">#some math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<span class="c1"># URDF parsing an kinematics</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pinocchio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pin</span>
+
+<span class="c1"># import pycapacity robot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="c1"># polytope messages</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sensor_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">JointState</span><span class="p">,</span> <span class="n">PointCloud</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jsk_recognition_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolygonArray</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">geometry_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polygon</span><span class="p">,</span> <span class="n">Point32</span><span class="p">,</span> <span class="n">PolygonStamped</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">std_msgs.msg</span><span class="w"> </span><span class="kn">import</span> <span class="n">Header</span>
+
+<span class="c1"># visualisation of vertices</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_vertex_msg</span><span class="p">(</span><span class="n">force_vertex</span><span class="p">,</span> <span class="n">pose</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">scaling_factor</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="n">pointcloud_massage</span> <span class="o">=</span> <span class="n">PointCloud</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">force_vertex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="n">Point32</span><span class="p">()</span>
+        <span class="n">point</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">force_vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">point</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">force_vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">point</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">force_vertex</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+    <span class="c1"># polytop stamped message</span>
+    <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Header</span><span class="p">()</span>
+    <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame</span>
+    <span class="n">pointcloud_massage</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pointcloud_massage</span>
+
+
+<span class="c1"># visualisation of polytope faces</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_polytopes_msg</span><span class="p">(</span><span class="n">force_polytopes</span><span class="p">,</span> <span class="n">pose</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">scaling_factor</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
+    <span class="n">polygonarray_message</span> <span class="o">=</span> <span class="n">PolygonArray</span><span class="p">()</span>
+    <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Header</span><span class="p">()</span>
+    <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame</span>
+    <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">face_polygon</span> <span class="ow">in</span> <span class="n">force_polytopes</span><span class="p">:</span>
+        <span class="n">polygon_massage</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">face_polygon</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">point</span> <span class="o">=</span> <span class="n">Point32</span><span class="p">()</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">face_polygon</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">face_polygon</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">point</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">face_polygon</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">scaling_factor</span> <span class="o">+</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">polygon_massage</span><span class="o">.</span><span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+        <span class="c1"># polytope stamped message</span>
+        <span class="n">polygon_stamped</span> <span class="o">=</span> <span class="n">PolygonStamped</span><span class="p">()</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">polygon</span> <span class="o">=</span> <span class="n">polygon_massage</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Header</span><span class="p">()</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">frame_id</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="n">polygon_stamped</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">stamp</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">polygon_stamped</span><span class="p">)</span>
+        <span class="n">polygonarray_message</span><span class="o">.</span><span class="n">likelihood</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">polygonarray_message</span>
+
+
+<span class="c1"># initial joint positions</span>
+<span class="n">joint_positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># function receiveing the new joint positions</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">callback</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">joint_positions</span>
+    <span class="n">joint_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">position</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_polytope</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">frame_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">scaling_factor</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+
+    <span class="c1"># if no joint state received, return</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="c1"># if frame not specified, use the last frame</span>
+    <span class="k">if</span> <span class="n">frame_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">frame_name</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># calculate forward kinematics of the robot</span>
+    <span class="n">robot</span><span class="o">.</span><span class="n">forwardKinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">ee_position</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">oMf</span><span class="p">[</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">getFrameId</span><span class="p">(</span><span class="n">frame_name</span><span class="p">)]</span><span class="o">.</span><span class="n">translation</span>
+
+    <span class="c1"># calculate jacobi matrix</span>
+    <span class="n">robot</span><span class="o">.</span><span class="n">computeJointJacobians</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">pin</span><span class="o">.</span><span class="n">getFrameJacobian</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">getFrameId</span><span class="p">(</span><span class="n">frame_name</span><span class="p">)</span> <span class="p">,</span> <span class="n">pin</span><span class="o">.</span><span class="n">ReferenceFrame</span><span class="o">.</span><span class="n">LOCAL_WORLD_ALIGNED</span><span class="p">)</span>
+    <span class="c1"># only position part</span>
+    <span class="n">J</span> <span class="o">=</span> <span class="n">J</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:]</span>
+
+    <span class="c1"># maximal joint angles</span>
+    <span class="n">dq_max</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">velocityLimit</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">dq_max</span>
+
+    <span class="c1"># calculate force vertexes</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">velocity_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">)</span>
+    <span class="n">poly</span><span class="o">.</span><span class="n">find_faces</span><span class="p">()</span>
+    <span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">velocity_faces</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">poly</span><span class="o">.</span><span class="n">faces</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+    <span class="c1"># publish vertices</span>
+    <span class="n">publish_polytope_vertex</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="s1">&#39;velocity_polytope_vertex&#39;</span><span class="p">,</span> <span class="n">PointCloud</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">publish_polytope_vertex</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">create_vertex_msg</span><span class="p">(</span><span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">ee_position</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="n">scaling_factor</span><span class="p">))</span>
+
+    <span class="c1"># publish polytope</span>
+    <span class="n">publish_polytope</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Publisher</span><span class="p">(</span><span class="s1">&#39;velocity_polytope&#39;</span><span class="p">,</span> <span class="n">PolygonArray</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">publish_polytope</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="n">create_polytopes_msg</span><span class="p">(</span><span class="n">velocity_faces</span><span class="p">,</span> <span class="n">ee_position</span><span class="p">,</span> <span class="s2">&quot;world&quot;</span><span class="p">,</span> <span class="n">scaling_factor</span><span class="p">))</span>
+
+
+<span class="c1"># main function of the class</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vel_polytope</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">joint_positions</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">init_node</span><span class="p">(</span><span class="s1">&#39;vel_polytope&#39;</span><span class="p">)</span>
+
+    <span class="c1"># loading the root urdf from robot_description parameter</span>
+    <span class="n">robot</span> <span class="o">=</span> <span class="n">pin</span><span class="o">.</span><span class="n">RobotWrapper</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">pin</span><span class="o">.</span><span class="n">buildModelFromXML</span><span class="p">(</span><span class="n">rospy</span><span class="o">.</span><span class="n">get_param</span><span class="p">(</span><span class="s2">&quot;robot_description&quot;</span><span class="p">)))</span>
+
+    <span class="c1"># joint state topic</span>
+    <span class="n">rospy</span><span class="o">.</span><span class="n">Subscriber</span><span class="p">(</span><span class="s1">&#39;joint_states&#39;</span><span class="p">,</span> <span class="n">JointState</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">queue_size</span><span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">rate</span> <span class="o">=</span> <span class="n">rospy</span><span class="o">.</span><span class="n">Rate</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span> <span class="c1">#Hz</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">rospy</span><span class="o">.</span><span class="n">is_shutdown</span><span class="p">():</span>
+        <span class="n">plot_polytope</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="n">joint_positions</span><span class="p">,</span> <span class="n">frame_name</span><span class="o">=</span><span class="s2">&quot;panda_link8&quot;</span><span class="p">)</span>
+        <span class="n">rate</span><span class="o">.</span><span class="n">sleep</span><span class="p">()</span>
+
+
+<span class="c1"># class definition</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">vel_polytope</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">rospy</span><span class="o">.</span><span class="n">ROSInterruptException</span><span class="p">:</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<figure class="align-center" id="id4">
+<img alt="vel_polytope_rviz" src="../_images/rviz.gif" />
+<figcaption>
+<p><span class="caption-text">Interactive visualisation of the polytope in <code class="docutils literal notranslate"><span class="pre">rviz</span></code> using <code class="docutils literal notranslate"><span class="pre">jsk_rviz_plugins</span></code> package.</span><a class="headerlink" href="#id4" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mujoco.html" class="btn btn-neutral float-left" title="Mujoco examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reachable_workspace.html" class="btn btn-neutral float-right" title="Reachable Space with Pinocchio and CGAL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

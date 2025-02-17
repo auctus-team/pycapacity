@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.robot module &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/my_theme.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pycapacity.visual module" href="pycapacity.visual.html" />
+    <link rel="prev" title="pycapacity.human module" href="pycapacity.human.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="pycapacity.html"> 📄 API Docs</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.algorithms.html">pycapacity.algorithms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.human.html">pycapacity.human module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pycapacity.robot module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.acceleration_ellipsoid"><code class="docutils literal notranslate"><span class="pre">acceleration_ellipsoid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.acceleration_polytope"><code class="docutils literal notranslate"><span class="pre">acceleration_polytope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.force_ellipsoid"><code class="docutils literal notranslate"><span class="pre">force_ellipsoid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.force_polytope"><code class="docutils literal notranslate"><span class="pre">force_polytope()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.force_polytope_intersection"><code class="docutils literal notranslate"><span class="pre">force_polytope_intersection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.force_polytope_sum"><code class="docutils literal notranslate"><span class="pre">force_polytope_sum()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.reachable_space_approximation"><code class="docutils literal notranslate"><span class="pre">reachable_space_approximation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.reachable_space_nonlinear"><code class="docutils literal notranslate"><span class="pre">reachable_space_nonlinear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.velocity_ellipsoid"><code class="docutils literal notranslate"><span class="pre">velocity_ellipsoid()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.robot.velocity_polytope"><code class="docutils literal notranslate"><span class="pre">velocity_polytope()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.visual.html">pycapacity.visual module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.polytope.html">pycapacity.objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.examples.html">pycapacity.examples module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html"> 🎓 Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="pycapacity.html">pycapacity package</a></li>
+      <li class="breadcrumb-item active">pycapacity.robot module</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/pycapacity.robot.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pycapacity.robot">
+<span id="pycapacity-robot-module"></span><h1>pycapacity.robot module<a class="headerlink" href="#module-pycapacity.robot" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>This is a python module which implements different robot performance metrics based on polytopes and ellipsoids.</p>
+<ul class="simple">
+<li><p>acceleration <a class="reference external" href="#pycapacity.robot.acceleration_polytope">polytope</a> and <a class="reference external" href="#pycapacity.robot.acceleration_ellipsoid">ellipsoid</a></p></li>
+<li><p>velocity (manipulability) <a class="reference external" href="#pycapacity.robot.velocity_polytope">polytope</a> and <a class="reference external" href="#pycapacity.robot.velocity_ellipsoid">ellipsoid</a></p></li>
+<li><p>force <a class="reference external" href="#pycapacity.robot.force_polytope">polytope</a> and <a class="reference external" href="#pycapacity.robot.force_ellipsoid">ellipsoid</a></p></li>
+<li><p>force polytope <a class="reference external" href="#pycapacity.robot.force_polytope_sum">minkowski sum</a>  and <a class="reference external" href="#pycapacity.robot.force_polytope_intersection">intersection</a></p></li>
+<li><p>reachable space approximation <a class="reference external" href="#pycapacity.robot.reachable_space_approximation">polytope</a></p></li>
+<li><p>reachable space <a class="reference external" href="#pycapacity.robot.reachable_space_nonlinear">nonlinear</a></p></li>
+</ul>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.acceleration_ellipsoid">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">acceleration_ellipsoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#acceleration_ellipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.acceleration_ellipsoid" title="Link to this definition"></a></dt>
+<dd><p>Acceleration ellipsoid calculation (dynamic manipulability ellipsoid)</p>
+<div class="math notranslate nohighlight">
+\[E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\tau,\quad ||W^{-1}{\tau}|| \leq 1\}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[W=diag(\tau_{max})\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>J</strong> – matrix jacobian</p></li>
+<li><p><strong>M</strong> – matrix inertia</p></li>
+<li><p><strong>t_max</strong> – maximal joint torques</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ellipsoid object with the following attributes <code class="docutils literal notranslate"><span class="pre">radii</span></code>, <code class="docutils literal notranslate"><span class="pre">axes</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ellipsoid(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Ellipsoid" title="pycapacity.objects.Ellipsoid">Ellipsoid</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.acceleration_polytope">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">acceleration_polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#acceleration_polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.acceleration_polytope" title="Link to this definition"></a></dt>
+<dd><p>Acceleration polytope calculating function</p>
+<div class="math notranslate nohighlight">
+\[P_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\tau,\quad {\tau}_{min} \leq \tau \leq {\tau}_{max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">hyper_plane_shifting_method</span></code> algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>J</strong> – position jacobian</p></li>
+<li><p><strong>M</strong> – inertia matrix</p></li>
+<li><p><strong>t_max</strong> – maximal joint torque</p></li>
+<li><p><strong>t_min</strong> – minimal joint torque</p></li>
+<li><p><strong>t_bias</strong> – bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation (currently only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is supported)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, half-plane representation with matrices``H`` and <code class="docutils literal notranslate"><span class="pre">d</span></code> (<code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to True)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>acceleration_polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.force_ellipsoid">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">force_ellipsoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#force_ellipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.force_ellipsoid" title="Link to this definition"></a></dt>
+<dd><p>Force manipulability ellipsoid calculation</p>
+<div class="math notranslate nohighlight">
+\[E_f = \{f~ |~ \tau  = J^Tf,\quad ||W^{-1}\tau|| \leq 1\}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[W=diag(\tau_{max})\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>J</strong> – matrix jacobian</p></li>
+<li><p><strong>t_max</strong> – maximal joint torques</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ellipsoid object with the following attributes <code class="docutils literal notranslate"><span class="pre">radii</span></code>, <code class="docutils literal notranslate"><span class="pre">axes</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ellipsoid(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Ellipsoid" title="pycapacity.objects.Ellipsoid">Ellipsoid</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.force_polytope">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">force_polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Jacobian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#force_polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.force_polytope" title="Link to this definition"></a></dt>
+<dd><p>Force polytope representing the capacities of the two robots in a certain configuration</p>
+<div class="math notranslate nohighlight">
+\[P_f = \{f~ |~ \tau  = J^Tf,\quad {\tau}_{min} \leq \tau \leq {\tau}_{max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">vertex_enumeration_vepoli2</span></code> algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Jacobian</strong> – position jacobian</p></li>
+<li><p><strong>t_max</strong> – maximal joint torques</p></li>
+<li><p><strong>t_min</strong> – minimal joint torques</p></li>
+<li><p><strong>t_bias</strong> – bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation - currently only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is supported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, torque vertices <code class="docutils literal notranslate"><span class="pre">torque_vertices</span></code> (<code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to True)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>force_polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.force_polytope_intersection">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">force_polytope_intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Jacobian1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Jacobian2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#force_polytope_intersection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.force_polytope_intersection" title="Link to this definition"></a></dt>
+<dd><p>Force polytope representing the intersection of the capacities of the two robots in certain configurations.</p>
+<div class="math notranslate nohighlight">
+\[P_f = \{f~ | ~ f_1\! =\! f_2\! =\! f, ~~ \tau_1  = J_1^Tf_1, ~~ \tau_2  = J_2^Tf_2, ~~ {t}_{1,min} \leq \tau_1 \leq {\tau}_{1,max},~~~ {\tau}_{2,min} \leq \tau_1 \leq {\tau}_{2,max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">vertex_enumeration_vepoli2</span></code> algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Jacobian1</strong> – position jacobian robot 1</p></li>
+<li><p><strong>Jacobian2</strong> – Jacobian2 position jacobian robot 2</p></li>
+<li><p><strong>t_min1</strong> – minimal joint torques robot 1</p></li>
+<li><p><strong>t_min2</strong> – minimal joint torques robot 2</p></li>
+<li><p><strong>t_max1</strong> – maximal joint torques robot 1</p></li>
+<li><p><strong>t_max2</strong> – maximal joint torques robot 2</p></li>
+<li><p><strong>t1_bias</strong> – bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 1</p></li>
+<li><p><strong>t2_bias</strong> – bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 2</p></li>
+<li><p><strong>options</strong> – dictionary of options for the algorithm (currently supported: <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>force polytope representing the intersection of the capacities of the two robots in certain configurations. Vertex representation <code class="docutils literal notranslate"><span class="pre">vertices</span></code> and hal-plane representation <code class="docutils literal notranslate"><span class="pre">H</span></code> and <code class="docutils literal notranslate"><span class="pre">d</span></code> (face representation <code class="docutils literal notranslate"><span class="pre">faces</span></code> and <code class="docutils literal notranslate"><span class="pre">face_indices</span></code> if <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> in <code class="docutils literal notranslate"><span class="pre">options</span></code>)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.force_polytope_sum">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">force_polytope_sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Jacobian1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Jacobian2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t1_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t2_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#force_polytope_sum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.force_polytope_sum" title="Link to this definition"></a></dt>
+<dd><p>Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.
+With ordered vertices into the faces.</p>
+<div class="math notranslate nohighlight">
+\[P_f = \{f~ | ~ f\! =\! f_1\! +\! f_2, ~~ \tau_1  = J_1^Tf_1, ~~ \tau_2  = J_2^Tf_2, ~~ {\tau}_{1,min} \leq \tau_1 \leq {\tau}_{1,max},~~~ {\tau}_{2,min} \leq \tau_1 \leq {\tau}_{2,max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">vertex_enumeration_vepoli2</span></code> algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Jacobian1</strong> – position jacobian robot 1</p></li>
+<li><p><strong>Jacobian2</strong> – Jacobian2 position jacobian robot 2</p></li>
+<li><p><strong>t_min1</strong> – minimal joint torques robot 1</p></li>
+<li><p><strong>t_min2</strong> – minimal joint torques robot 2</p></li>
+<li><p><strong>t_max1</strong> – maximal joint torques robot 1</p></li>
+<li><p><strong>t_max2</strong> – maximal joint torques robot 2</p></li>
+<li><p><strong>t1_bias</strong> – bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 1</p></li>
+<li><p><strong>t2_bias</strong> – bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 2</p></li>
+<li><p><strong>options</strong> – dictionary of additional options (currently supported only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> option)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with <code class="docutils literal notranslate"><span class="pre">vertices</span></code> and half-plane representation <code class="docutils literal notranslate"><span class="pre">H</span></code> and <code class="docutils literal notranslate"><span class="pre">d</span></code>, ( <code class="docutils literal notranslate"><span class="pre">faces</span></code> and <code class="docutils literal notranslate"><span class="pre">face_indices</span></code> if <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> option is set to True)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.reachable_space_approximation">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">reachable_space_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#reachable_space_approximation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.reachable_space_approximation" title="Link to this definition"></a></dt>
+<dd><p>Reachable space aproximation function based on convex polytopes. For a given time horizon, it calculates the reachable space of the robot.
+It evaluates the polytope of a form:</p>
+<div class="math notranslate nohighlight">
+\[P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\tau \Delta t_{h}^2/2,\]</div>
+<div class="math notranslate nohighlight">
+\[{\tau}_{min} - \tau_{bias} \leq \tau \leq {\tau}_{max} - \tau_{bias}\]</div>
+<div class="math notranslate nohighlight">
+\[\dot{q}_{min} \leq M^{-1}\tau \Delta t_{h}  \leq \dot{q}_{max}\]</div>
+<div class="math notranslate nohighlight">
+\[{q}_{min} \leq M^{-1}\tau \Delta t_{h}^2/2  \leq {q}_{max}\]</div>
+<div class="math notranslate nohighlight">
+\[A_x \Delta{x} \leq b_x - A_x x_0\}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_{bias}\)</span> is the bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces which is optional.
+and <span class="math notranslate nohighlight">\(\Delta t_{h}\)</span> is the time horizon. If limits on joint velocity <span class="math notranslate nohighlight">\(\dot{q}_{min}\)</span> and <span class="math notranslate nohighlight">\(\dot{q}_{max}\)</span> or joint postion limits <span class="math notranslate nohighlight">\({q}_{min}\)</span> and <span class="math notranslate nohighlight">\({q}_{max}\)</span> are not given, the function calculates the ploytope  without them.
+<cite>A_x</cite> and <cite>b_x</cite> are additional inequality covex constraints in the Cartesian position space. <cite>x0</cite> is the initial Cartesian position corresponding to the initial joint position <cite>q0</cite>.</p>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">iterative_convex_hull</span></code> algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>M</strong> – inertia matrix</p></li>
+<li><p><strong>J</strong> – position jacobian</p></li>
+<li><p><strong>q0</strong> – initial joint position</p></li>
+<li><p><strong>horizon</strong> – time horizon</p></li>
+<li><p><strong>t_max</strong> – maximal joint torque</p></li>
+<li><p><strong>t_min</strong> – minimal joint torque</p></li>
+<li><p><strong>x0</strong> – initial Cartesian position (optional)</p></li>
+<li><p><strong>t_bias</strong> – bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces (optional)</p></li>
+<li><p><strong>q_max</strong> – maximal joint position (optional)</p></li>
+<li><p><strong>q_min</strong> – minimal joint position (optional)</p></li>
+<li><p><strong>dq_max</strong> – maximal joint velocities (optional)</p></li>
+<li><p><strong>dq_min</strong> – minimal joint velocities (optional)</p></li>
+<li><p><strong>A_x</strong> – additional inequality constraints matrices in Cartesian position space (optional)</p></li>
+<li><p><strong>b_x</strong> – additional inequality constraints matrices in Cartesian position space (optional)</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation - currently supported <code class="docutils literal notranslate"><span class="pre">tolerance</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iteration</span></code> and <code class="docutils literal notranslate"><span class="pre">verbose</span></code> (default: <code class="docutils literal notranslate"><span class="pre">tolerance=1e-3</span></code>, <code class="docutils literal notranslate"><span class="pre">max_iteration=500</span></code>, <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, torque vertices <code class="docutils literal notranslate"><span class="pre">torque_vertices</span></code>, half-plane representation with matrices <code class="docutils literal notranslate"><span class="pre">H</span></code> and <code class="docutils literal notranslate"><span class="pre">d</span></code>, and faces defiend by <code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – if the mass and jacobian matrices are not appropriate size</p></li>
+<li><p><strong>ValueError</strong> – if any of the provided joint limits sizes are not equal to the number of joints</p></li>
+<li><p><strong>ValueError</strong> – if bias joint torques are given and their size is not equal to the number of joints</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>Skuric, Antun, Vincent Padois, and David Daney. “Approximating robot reachable space using convex polytopes.” Human-Friendly Robotics 2022: HFR: 15th International Workshop on Human-Friendly Robotics. Cham: Springer International Publishing, 2023.</em></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.reachable_space_nonlinear">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">reachable_space_nonlinear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forward_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_horizon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#reachable_space_nonlinear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.reachable_space_nonlinear" title="Link to this definition"></a></dt>
+<dd><p>Compute the reachable set of the robot for the given joint configuration.
+The algorithm calculates the reachable set of cartesian position of the desired frame of the robot given the robots joint position and joint velocity limits.
+The output of the algorithm is the reachable space that the robot is able to reach within the horizon time, while guaranteeing that the joint position and velocity limits are not violated.</p>
+<p>If you are interested in the complete workspace of the robot, you can set a large time horizon (&gt;1 second)</p>
+<div class="math notranslate nohighlight">
+\[C_x = \{ x~ |~ x = f_{fk}(q_0 + \dot{q}\Delta t),\]</div>
+<div class="math notranslate nohighlight">
+\[\dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max},\quad {q}_{min} \leq q_0 + \dot{q}\Delta t  \leq {q}_{max} \}\]</div>
+<p>The parameters of the algorithm are set using the options dictionary. The following options are available:</p>
+<ul class="simple">
+<li><p>n_samples: The number of samples to use for the discretization of the joint velocity space. The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be</p></li>
+<li><p>facet_dim: The dimension of the facet that will be sampled. Between 0 and the number of DOF of the robot.  The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be</p></li>
+<li><p>convex_hull: Approximate the reachable set with a convex hull (True) or with a non-convex shape (False) - if False, CGAL must be installed</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forward_func</strong> – The forward kinematic function, taking in the current joint position and ouputting the Cartesian space position (no orientation)</p></li>
+<li><p><strong>q0</strong> – Current joint configuration</p></li>
+<li><p><strong>time_horizon</strong> – The time horizon for which to compute the reachable set</p></li>
+<li><p><strong>q_max</strong> – maximal joint position</p></li>
+<li><p><strong>q_min</strong> – minimal joint position</p></li>
+<li><p><strong>dq_max</strong> – maximal joint velocities</p></li>
+<li><p><strong>dq_min</strong> – minimal joint velocities</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation - currently supported calculate_faces, n_samples, facet_dim</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with <code class="docutils literal notranslate"><span class="pre">vertices</span></code> and faces if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to True in <code class="docutils literal notranslate"><span class="pre">options</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.velocity_ellipsoid">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">velocity_ellipsoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">J</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#velocity_ellipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.velocity_ellipsoid" title="Link to this definition"></a></dt>
+<dd><p>Velocity manipulability ellipsoid calculation</p>
+<div class="math notranslate nohighlight">
+\[E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad ||W^{-1}\dot{q}|| \leq 1\}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[W=diag(\dot{q}_{max})\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>J</strong> – position jacobian</p></li>
+<li><p><strong>dq_max</strong> – maximal joint velocities</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>ellipsoid object with the following attributes <code class="docutils literal notranslate"><span class="pre">radii</span></code>, <code class="docutils literal notranslate"><span class="pre">axes</span></code></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ellipsoid(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Ellipsoid" title="pycapacity.objects.Ellipsoid">Ellipsoid</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.robot.velocity_polytope">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.robot.</span></span><span class="sig-name descname"><span class="pre">velocity_polytope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Jacobian</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/robot.html#velocity_polytope"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.robot.velocity_polytope" title="Link to this definition"></a></dt>
+<dd><p>Velocity polytope calculating function</p>
+<div class="math notranslate nohighlight">
+\[P_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}\}\]</div>
+<p>Based on the <code class="docutils literal notranslate"><span class="pre">hyper_plane_shifting_method</span></code> algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Jacobian</strong> – position jacobian</p></li>
+<li><p><strong>dq_max</strong> – maximal joint velocities</p></li>
+<li><p><strong>dq_min</strong> – minimal joint velocities</p></li>
+<li><p><strong>options</strong> – dictionary of options for the polytope calculation - currently only <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is supported</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polytope object with <code class="docutils literal notranslate"><span class="pre">vertices</span></code>, halfspaces <code class="docutils literal notranslate"><span class="pre">H</span></code> and <code class="docutils literal notranslate"><span class="pre">d</span></code> (<code class="docutils literal notranslate"><span class="pre">face_indices</span></code> and <code class="docutils literal notranslate"><span class="pre">faces</span></code> if option <code class="docutils literal notranslate"><span class="pre">calculate_faces</span></code> is set to True)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>velocity_polytope(<a class="reference internal" href="pycapacity.polytope.html#pycapacity.objects.Polytope" title="pycapacity.objects.Polytope">Polytope</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pycapacity.human.html" class="btn btn-neutral float-left" title="pycapacity.human module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pycapacity.visual.html" class="btn btn-neutral float-right" title="pycapacity.visual module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

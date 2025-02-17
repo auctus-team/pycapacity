@@ -1,0 +1,755 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.visual &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/my_theme.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.html"> 📄 API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html"> 🎓 Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pycapacity.visual</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycapacity.visual</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Overview</span>
+<span class="sd">---------</span>
+
+<span class="sd">This is a python module helping to visualise 2d and 3d polytopes and ellipsoids. It is based on the module  ``matplotlib``.</span>
+
+<span class="sd">* visualising 2d and 3d `polytope &lt;#pycapacity\.visual\.plot_polytope&gt;`_</span>
+<span class="sd">* visualising 2d and 3d polytope `faces &lt;#pycapacity\.visual\.plot_polytope_faces&gt;`_ and `vertices  &lt;#pycapacity\.visual\.plot_polytope_vertex&gt;`_</span>
+<span class="sd">* visualising 2d and 3d `ellipsoids &lt;#pycapacity\.visual\.plot_ellipsoid&gt;`_</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d.art3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Poly3DCollection</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mpl_toolkits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ellipse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.objects</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="plot_polytope">
+<a class="viewcode-back" href="../../pycapacity.visual.html#pycapacity.visual.plot_polytope">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_polytope</span><span class="p">(</span><span class="n">polytope</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">face_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">show_vertices</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A polytope plotting function in 2d and 3d. It plots the polytope faces and vertices from the polytope object.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        ``plot`` parameter can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``</span>
+<span class="sd">        polytope(Polytope) :  polytope object it has to be provided</span>
+<span class="sd">        face_color:  polytope face color (optional)</span>
+<span class="sd">        edge_color:  polytope edge color  (optional)</span>
+<span class="sd">        vertex_color:  polytope vertex color  (optional)</span>
+<span class="sd">        alpha:  polytope opacity  (optional)</span>
+<span class="sd">        label:  legend label (optional)</span>
+<span class="sd">        center: offset the polytope (optional)</span>
+<span class="sd">        scale: scale the polytope with a scalar (optional)</span>
+<span class="sd">        show_vertices: show the vertices of the polytope (optional)</span>
+<span class="sd">        wireframe: show the polytope as a wireframe (optional)</span>
+<span class="sd">        color:  polytope color - it can be either a string (one color for faces, edges and vertices) or a list of 3 values for face, edge and vertex color (optional)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">polytope</span><span class="p">,</span> <span class="n">Polytope</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no polytope provided&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plot</span>
+    
+    <span class="c1"># if color is one value, use it for all</span>
+    <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">face_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> 
+        <span class="n">edge_color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> 
+        <span class="n">vertex_color</span><span class="o">=</span><span class="n">color</span>
+    <span class="c1"># if color is a list of 3 values, use it for face, edge and vertex</span>
+    <span class="k">elif</span> <span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">color</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">face_color</span><span class="p">,</span> <span class="n">edge_color</span><span class="p">,</span> <span class="n">vertex_color</span> <span class="o">=</span> <span class="n">color</span>
+
+    <span class="k">if</span> <span class="n">vertex_color</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">show_vertices</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">show_vertices</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">polytope</span><span class="o">.</span><span class="n">vertices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Visual: no vertices found, calculating vertices&quot;</span><span class="p">)</span>
+            <span class="n">polytope</span><span class="o">.</span><span class="n">find_vertices</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">polytope</span><span class="o">.</span><span class="n">vertices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plot</span> <span class="o">=</span> <span class="n">plot_polytope_vertex</span><span class="p">(</span><span class="n">polytope</span><span class="o">=</span><span class="n">polytope</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="o">+</span><span class="s1">&#39; vertex&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">vertex_color</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Visual: cannot find vertices&quot;</span><span class="p">)</span>
+           
+    <span class="k">if</span> <span class="n">polytope</span><span class="o">.</span><span class="n">faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Visual: no faces found, calculating faces&quot;</span><span class="p">)</span>
+        <span class="n">polytope</span><span class="o">.</span><span class="n">find_faces</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">polytope</span><span class="o">.</span><span class="n">faces</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">plot</span> <span class="o">=</span> <span class="n">plot_polytope_faces</span><span class="p">(</span><span class="n">polytope</span><span class="o">=</span><span class="n">polytope</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="n">face_color</span><span class="o">=</span><span class="n">face_color</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="o">+</span><span class="s1">&#39; faces&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="n">wireframe</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Visual: cannot find faces&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">plot</span></div>
+
+
+<div class="viewcode-block" id="plot_polytope_faces">
+<a class="viewcode-back" href="../../pycapacity.visual.html#pycapacity.visual.plot_polytope_faces">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_polytope_faces</span><span class="p">(</span><span class="n">faces</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">polytope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">face_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Polytope faces plotting function in 2d and 3d. </span>
+<span class="sd">    </span>
+<span class="sd">    Note:</span>
+<span class="sd">        ``plot`` parameter can be either matplotlib.pyplot or matplotlib.axes.Axes or matplotlib.figure.Figure.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import pycapacity.visual</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; fig = plt.figure()</span>
+<span class="sd">        &gt;&gt;&gt; pycapacity.visual.plot_polytope_faces([[6,5,4,3],[1,2,2,1]],plot=fig,face_color=&#39;blue&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; pycapacity.visual.plot_polytope_faces([[10,8,7,6],[1,2,2,1]],plot=fig,face_color=&#39;red&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``</span>
+<span class="sd">        faces:  list of faces (optional **either vertex or polytope must be provided**)</span>
+<span class="sd">        polytope(Polytope):  polytope object - if it is provided, it will use polytope.faces (optional **either vertex or polytope must be provided**)</span>
+<span class="sd">        face_color:  polytope face color (optional)</span>
+<span class="sd">        edge_color:  polytope edge color  (optional)</span>
+<span class="sd">        alpha:  polytope opacity  (optional)</span>
+<span class="sd">        label:  legend label (optional)</span>
+<span class="sd">        center: offset the polytope (optional)</span>
+<span class="sd">        scale: scale the polytope with a scalar (optional)</span>
+<span class="sd">        wireframe: show the polytope as a wireframe (optional)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ax:  matplotlib ax used for plotting</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">faces</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">polytope</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">polytope</span><span class="o">.</span><span class="n">faces</span>
+    <span class="k">if</span> <span class="n">faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no data to plot&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span>
+
+
+    <span class="c1"># check if face shape is equal to 2 or 3 </span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">dim</span><span class="p">:</span>    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">dim</span><span class="p">:</span>  <span class="n">dim</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+
+    <span class="c1"># figure out what axes to plot on</span>
+    <span class="k">if</span> <span class="n">plot</span> <span class="o">==</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="p">:</span>
+        <span class="c1"># if its plt provided, get the current axes</span>
+        <span class="c1"># see if the first one is already an axis, if not create one</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;using existing 3d axis&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;creating a new 3d axis&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">):</span>
+        <span class="c1"># if its figure provided, get the current axes</span>
+        <span class="c1"># see if the first one is already an axis, if not create one</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>  <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;using existing 3d axis&quot;</span><span class="p">)</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;creating a new 3d axis&quot;</span><span class="p">)</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">dim</span><span class="o">==</span><span class="mi">2</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+        <span class="c1">#if its axes provided, use it</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span>
+    <span class="k">elif</span> <span class="n">dim</span><span class="o">==</span><span class="mi">3</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+        <span class="c1">#if its axes provided, use it</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;using provided 3d axis&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no matplotlib </span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d axes provided&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span>
+
+    <span class="c1"># scale the data</span>
+    <span class="n">faces</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span>
+
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">wireframe</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">faces</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">faces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">faces</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">face_color</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">polygone</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>        
+            <span class="k">try</span><span class="p">:</span> <span class="c1"># a small management of python3</span>
+                <span class="n">poly</span> <span class="o">=</span> <span class="n">Poly3DCollection</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">polygone</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">polygone</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">polygone</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">2</span><span class="p">]))])</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="c1"># vs python2</span>
+                <span class="n">poly</span> <span class="o">=</span> <span class="n">Poly3DCollection</span><span class="p">(</span><span class="nb">list</span><span class="p">([</span><span class="nb">zip</span><span class="p">(</span><span class="n">polygone</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">polygone</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">polygone</span><span class="p">[</span><span class="mi">2</span><span class="p">,:]</span><span class="o">+</span><span class="n">center</span><span class="p">[</span><span class="mi">2</span><span class="p">])]))</span>
+            
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">wireframe</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">alpha</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">poly</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">face_color</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">poly</span><span class="o">.</span><span class="n">set_facecolors</span><span class="p">(</span><span class="n">face_color</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">edge_color</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">poly</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">poly</span><span class="o">.</span><span class="n">set_facecolors</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">edge_color</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">poly</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="n">edge_color</span><span class="p">)</span> <span class="c1"># cannot set alpha for the moment</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">poly</span><span class="o">.</span><span class="n">set_edgecolor</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">alpha</span><span class="p">))</span>
+                
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span> <span class="c1"># a small management of python3</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">_facecolors2d</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">_facecolor3d</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">_edgecolors2d</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">_edgecolor3d</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span> <span class="c1"># vs python2</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">_edgecolors2d</span><span class="o">=</span><span class="n">poly</span><span class="o">.</span><span class="n">_edgecolors3d</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">_facecolors2d</span><span class="o">=</span><span class="n">poly</span><span class="o">.</span><span class="n">_facecolors3d</span>
+            
+        <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cannot visualise data with dimension: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="plot_polytope_vertex">
+<a class="viewcode-back" href="../../pycapacity.visual.html#pycapacity.visual.plot_polytope_vertex">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_polytope_vertex</span><span class="p">(</span><span class="n">vertex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">polytope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span> <span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Polytope vertices plotting function in 2d and 3d</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        ``plot`` parameter can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import pycapacity.visual</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; fig = plt.figure()</span>
+<span class="sd">        &gt;&gt;&gt; pycapacity.visual.plot_polytope_vertex(np.array([[6,5,4,3],[1,2,2,1]]),plot=fig,color=&#39;blue&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; pycapacity.visual.plot_polytope_vertex(np.array([[10,8,7,6],[1,2,2,1]]),plot=fig, color=&#39;red&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        </span>
+<span class="sd">    Args:</span>
+<span class="sd">        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``</span>
+<span class="sd">        vertex :  vertices to be plotted (optional **either vertex or polytope must be provided**)</span>
+<span class="sd">        polytope(Polytope):  polytope object - if it is provided, it will use the polytope vertices  (optional **either vertex or polytope must be provided**)</span>
+<span class="sd">        color :  vertex color  (optional)</span>
+<span class="sd">        label :  legend label (optional)</span>
+<span class="sd">        center: offset the polytope (optional)</span>
+<span class="sd">        scale: scale the polytope with a scalar (optional)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ax :  matplotlib ax used for plotting</span>
+<span class="sd">    &quot;&quot;&quot;</span>     
+
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">polytope</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vertex</span> <span class="o">=</span> <span class="n">polytope</span><span class="o">.</span><span class="n">vertices</span>
+    
+    <span class="k">if</span> <span class="n">polytope</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">vertex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no data to plot&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span>
+
+    <span class="c1"># check if face shape is equal to 2 or 3 </span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">if</span> <span class="mi">2</span> <span class="ow">in</span> <span class="n">dim</span><span class="p">:</span>    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="mi">3</span> <span class="ow">in</span> <span class="n">dim</span><span class="p">:</span>  <span class="n">dim</span> <span class="o">=</span> <span class="mi">3</span>
+
+
+    <span class="c1"># figure out what axes to plot on</span>
+    <span class="k">if</span> <span class="n">plot</span> <span class="o">==</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="p">:</span>
+        <span class="c1"># if its plt provided, get the current axes</span>
+        <span class="c1"># see if the first one is already an axis, if not create one</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">):</span>
+        <span class="c1"># if its figure provided, get the current axes</span>
+        <span class="c1"># see if the first one is already an axis, if not create one</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>  <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">dim</span><span class="o">==</span><span class="mi">2</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+        <span class="c1">#if its axes provided, use it</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span>
+    <span class="k">elif</span> <span class="n">dim</span><span class="o">==</span><span class="mi">3</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+        <span class="c1">#if its axes provided, use it</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no matplotlib </span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d axes provided&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span>
+
+
+
+
+    <span class="c1"># scale the vertices</span>
+    <span class="n">vertex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vertex</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span>
+
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">]])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">center</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">vertex</span> <span class="o">=</span> <span class="n">vertex</span> <span class="o">+</span> <span class="n">center</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>  
+    <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">center</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        
+
+        <span class="n">vertex</span> <span class="o">=</span> <span class="n">vertex</span> <span class="o">+</span> <span class="n">center</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">vertex</span><span class="p">[</span><span class="mi">2</span><span class="p">,:],</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span><span class="n">vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">,:],</span><span class="n">vertex</span><span class="p">[</span><span class="mi">2</span><span class="p">,:],</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>  
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cannot visualise data with dimension: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ax</span>   </div>
+
+
+<div class="viewcode-block" id="plot_ellipsoid">
+<a class="viewcode-back" href="../../pycapacity.visual.html#pycapacity.visual.plot_ellipsoid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_ellipsoid</span><span class="p">(</span><span class="n">radii</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ellipsoid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edge_color</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plotting ellipsoid in 2d and 3d</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        ``plot`` parameter can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; import pycapacity.visual</span>
+<span class="sd">        &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; fig = plt.figure()</span>
+<span class="sd">        &gt;&gt;&gt; pycapacity.visual.plot_ellipsoid([6,5,4],np.eye(3),plot=fig, color=&#39;blue&#39;, alpha=0.5)</span>
+<span class="sd">        &gt;&gt;&gt; pycapacity.visual.plot_ellipsoid([1,2,3],np.eye(3),plot=fig, color=&#39;red&#39;, alpha=0.5)</span>
+<span class="sd">        &gt;&gt;&gt; plt.show()</span>
+<span class="sd">        </span>
+<span class="sd">    Args:</span>
+<span class="sd">        plot:  matplotlib ax to plot on, can be either ``matplotlib.pyplot`` or ``matplotlib.axes.Axes`` or ``matplotlib.figure.Figure`` or ``mpl_toolkits.mplot3d.axes3d.Axes3D``</span>
+<span class="sd">        radii : radii of the ellipsoid in each axis (optional **either radii and rotation or ellipsoid must be provided**)</span>
+<span class="sd">        rotation : rotation matrix (optional ***either radii and rotation or ellipsoid must be provided***)</span>
+<span class="sd">        ellipsoid(Ellipsoid): ellipsoid object - if it is provided, it will use the ellipsoid radii and rotation (optional either radii and rotation or ellipsoid must be provided)</span>
+<span class="sd">        center : offset of the ellipsoid from origin (optional)</span>
+<span class="sd">        color :  face color (optional)</span>
+<span class="sd">        edge_color : egde collor (optional)</span>
+<span class="sd">        alpha : opacity (optional)</span>
+<span class="sd">        label :  legend label (optional)</span>
+<span class="sd">        scale: scale the polytope with a scalar (optional)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ax :  matplotlib ax used for plotting</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">ellipsoid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">radii</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">radii</span>
+        <span class="n">rotation</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">rotation</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">ellipsoid</span><span class="o">.</span><span class="n">center</span>
+
+    <span class="k">if</span> <span class="n">ellipsoid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">radii</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;no data to plot&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span>
+    
+
+    <span class="n">dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">rotation</span>
+
+    <span class="c1"># scaling the ellipsoid</span>
+    <span class="n">radii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span><span class="o">*</span><span class="n">scale</span>
+
+
+    <span class="c1"># figure out what axes to plot on</span>
+    <span class="k">if</span> <span class="n">plot</span> <span class="o">==</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="p">:</span>
+        <span class="c1"># if its plt provided, get the current axes</span>
+        <span class="c1"># see if the first one is already an axis, if not create one</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">):</span>
+        <span class="c1"># if its figure provided, get the current axes</span>
+        <span class="c1"># see if the first one is already an axis, if not create one</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">get_axes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span>  <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">dim</span><span class="o">==</span><span class="mi">2</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+        <span class="c1">#if its axes provided, use it</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span>
+    <span class="k">elif</span> <span class="n">dim</span><span class="o">==</span><span class="mi">3</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plot</span><span class="p">,</span> <span class="n">mpl_toolkits</span><span class="o">.</span><span class="n">mplot3d</span><span class="o">.</span><span class="n">axes3d</span><span class="o">.</span><span class="n">Axes3D</span><span class="p">):</span>
+        <span class="c1">#if its axes provided, use it</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plot</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no matplotlib </span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2">d axes provided&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ax</span>
+
+
+
+    <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span> <span class="o">=</span> <span class="n">radii</span>
+        <span class="n">ellipse</span> <span class="o">=</span> <span class="n">Ellipse</span><span class="p">(</span><span class="n">xy</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">ry</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">rx</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">angle</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">U</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ellipse</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">ellipse</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Radii corresponding to the coefficients:</span>
+        <span class="n">rx</span><span class="p">,</span> <span class="n">ry</span><span class="p">,</span> <span class="n">rz</span> <span class="o">=</span> <span class="n">radii</span>
+
+        <span class="c1"># Set of all spherical angles:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+
+        <span class="c1"># Cartesian coordinates that correspond to the spherical angles:</span>
+        <span class="c1"># (this is the equation of an ellipsoid):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">rx</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">ry</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">rz</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+                <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span><span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">],</span><span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]],</span> <span class="n">rotation</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">center</span>
+
+        <span class="k">if</span> <span class="n">label</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">surf</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">edge_color</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            
+        <span class="k">try</span><span class="p">:</span> <span class="c1"># a small management of python3</span>
+            <span class="n">surf</span><span class="o">.</span><span class="n">_facecolors2d</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">_facecolor3d</span>
+            <span class="n">surf</span><span class="o">.</span><span class="n">_edgecolors2d</span> <span class="o">=</span> <span class="n">surf</span><span class="o">.</span><span class="n">_edgecolor3d</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span> <span class="c1"># vs python2</span>
+            <span class="n">surf</span><span class="o">.</span><span class="n">_edgecolors2d</span><span class="o">=</span><span class="n">surf</span><span class="o">.</span><span class="n">_edgecolors3d</span>
+            <span class="n">surf</span><span class="o">.</span><span class="n">_facecolors2d</span><span class="o">=</span><span class="n">surf</span><span class="o">.</span><span class="n">_facecolors3d</span>
+  
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cannot visualise data with dimension: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">dim</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">ax</span>  </div>
+
+
+
+<span class="c1"># see if mujoco is installed</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">mujoco</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">mujoco.viewer</span>
+    <span class="n">MUJOCO_INSTALLED</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">MUJOCO_INSTALLED</span> <span class="o">=</span> <span class="kc">False</span>
+    
+
+<span class="k">if</span> <span class="n">MUJOCO_INSTALLED</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mj_makeTriangle</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">v3</span> <span class="p">,</span><span class="n">centroid</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function scaling the unit triangle to match the triangle defined by the vertices v1, v2, v3</span>
+<span class="sd">        and returning the scaling factors and the transformation matrix</span>
+<span class="sd">        </span>
+<span class="sd">        :param v1: vertex 1 of the triangle</span>
+<span class="sd">        :param v2: vertex 2 of the triangle</span>
+<span class="sd">        :param v3: vertex 3 of the triangle</span>
+<span class="sd">        :param centroid: centroid of the triangle</span>
+<span class="sd">        :return lengths: scaling factors for the edges and the normal    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">e1</span> <span class="o">=</span> <span class="n">v2</span><span class="o">-</span><span class="n">v1</span>
+        <span class="n">e2</span> <span class="o">=</span> <span class="n">v3</span><span class="o">-</span><span class="n">v1</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">e1</span><span class="p">,</span><span class="n">e2</span><span class="p">)</span>    
+        <span class="c1"># check if normal is pointing towards the centroid</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="n">centroid</span><span class="o">-</span><span class="n">v1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># flip the normal and </span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="o">-</span><span class="n">normal</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">e1</span>
+            <span class="n">e1</span> <span class="o">=</span> <span class="n">e2</span>
+            <span class="n">e2</span> <span class="o">=</span> <span class="n">tmp</span>
+            
+        <span class="n">lengths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">e1</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">e2</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">normal</span><span class="p">)])</span>
+        <span class="n">xmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">e1</span><span class="o">/</span><span class="n">lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e2</span><span class="o">/</span><span class="n">lengths</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">normal</span><span class="o">/</span><span class="n">lengths</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span><span class="o">.</span><span class="n">T</span>
+        <span class="k">return</span> <span class="n">lengths</span><span class="p">,</span> <span class="n">xmat</span>
+        
+
+    <span class="c1"># Function to draw force polytope</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mj_draw_edges</span><span class="p">(</span><span class="n">viewer</span><span class="p">,</span> <span class="n">faces</span><span class="p">,</span> <span class="n">erase</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Function that draws the edges of the polytope defined by its faces</span>
+<span class="sd">        </span>
+<span class="sd">        :param viewer: viewer object</span>
+<span class="sd">        :param faces: faces of the polytope</span>
+<span class="sd">        :param erase: if True, erase previous geometries</span>
+<span class="sd">        :param color: color of the lines (RGBA, default is red [1, 0, 0, 0.5])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">viewer</span><span class="o">.</span><span class="n">lock</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">erase</span><span class="p">:</span>
+                <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">ngeom</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># Go through all faces of the convex hull</span>
+            <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>
+                <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">T</span>
+
+                <span class="c1"># Add line segments between hull points</span>
+                <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">),</span> <span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">),</span> <span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">p1</span><span class="p">)]:</span>
+                    <span class="n">geom_id</span> <span class="o">=</span> <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">ngeom</span>
+                    <span class="k">if</span> <span class="n">geom_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">geoms</span><span class="p">):</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Too many faces, skipping the rest&quot;</span><span class="p">,</span> <span class="n">geom_id</span><span class="p">)</span>
+                        <span class="k">continue</span>  <span class="c1"># Prevent out-of-bounds errors</span>
+                    
+                    <span class="c1"># avoid rendering the same line twice</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="n">geom_id</span><span class="p">]</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">start</span><span class="p">)):</span>
+                        <span class="k">continue</span>
+                    
+                    <span class="n">mujoco</span><span class="o">.</span><span class="n">mjv_initGeom</span><span class="p">(</span>
+                        <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="n">geom_id</span><span class="p">],</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="n">mujoco</span><span class="o">.</span><span class="n">mjtGeom</span><span class="o">.</span><span class="n">mjGEOM_LINE</span><span class="p">),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)]),</span>
+                        <span class="n">start</span><span class="p">,</span>
+                        <span class="n">rotation_matrix_from_vectors</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">ngeom</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Increase count</span>
+                    
+                    
+    <span class="c1"># Function to draw force polytope</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mj_draw_faces</span><span class="p">(</span><span class="n">viewer</span><span class="p">,</span> <span class="n">simplices</span><span class="p">,</span> <span class="n">centroid</span><span class="p">,</span> <span class="n">erase</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Function that draws the faces of the polytope defined by its simplices</span>
+<span class="sd">        </span>
+<span class="sd">        :param viewer: viewer object</span>
+<span class="sd">        :param simplices: simplices of the polytope</span>
+<span class="sd">        :param centroid: centroid of the polytope</span>
+<span class="sd">        :param erase: if True, erase previous geometries </span>
+<span class="sd">        :param color: color of the faces (RGBA, default is red [1, 0, 0, 0.5])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">with</span> <span class="n">viewer</span><span class="o">.</span><span class="n">lock</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">erase</span><span class="p">:</span>
+                <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">ngeom</span> <span class="o">=</span> <span class="mi">0</span>
+            
+            <span class="c1"># Go through all faces of the convex hull</span>
+            <span class="k">for</span> <span class="n">simplex</span> <span class="ow">in</span> <span class="n">simplices</span><span class="p">:</span>
+                <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">simplex</span><span class="o">.</span><span class="n">T</span>
+
+                <span class="n">geom_id</span> <span class="o">=</span> <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">ngeom</span>
+                <span class="k">if</span> <span class="n">geom_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">geoms</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Too many faces, skipping the rest&quot;</span><span class="p">,</span> <span class="n">geom_id</span><span class="p">)</span>
+                    <span class="k">break</span>  <span class="c1"># Prevent out-of-bounds errors</span>
+                
+                        
+                <span class="n">size</span><span class="p">,</span> <span class="n">mat</span> <span class="o">=</span> <span class="n">mj_makeTriangle</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">,</span> <span class="n">centroid</span><span class="p">)</span>
+                
+                <span class="n">mujoco</span><span class="o">.</span><span class="n">mjv_initGeom</span><span class="p">(</span>
+                    <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="n">geom_id</span><span class="p">],</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">mujoco</span><span class="o">.</span><span class="n">mjtGeom</span><span class="o">.</span><span class="n">mjGEOM_TRIANGLE</span><span class="p">),</span>
+                    <span class="n">size</span><span class="p">,</span>
+                    <span class="n">p1</span><span class="p">,</span>
+                    <span class="n">mat</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="c1"># change to the material of the object</span>
+                <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">geoms</span><span class="p">[</span><span class="n">geom_id</span><span class="p">]</span><span class="o">.</span><span class="n">emission</span> <span class="o">=</span> <span class="mf">0.9</span>
+                <span class="n">viewer</span><span class="o">.</span><span class="n">user_scn</span><span class="o">.</span><span class="n">ngeom</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Increase count</span>
+                
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">mj_draw_polytope</span><span class="p">(</span><span class="n">viewer</span><span class="p">,</span> <span class="n">polytope</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Funciton that draws the polytope defined by its vertices and faces </span>
+<span class="sd">        </span>
+<span class="sd">        :param viewer: viewer object</span>
+<span class="sd">        :param polytope: polytope object</span>
+<span class="sd">        :param eedges: if True, draw the edges of the polytope</span>
+<span class="sd">        :param faces: if True, draw the faces of the polytope</span>
+<span class="sd">        :param color: color of the polytope (RGBA, default is red [1, 0, 0, 0.5])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">if</span> <span class="n">polytope</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span>
+        
+        <span class="c1"># if faces not computed yet, compute them</span>
+        <span class="k">if</span> <span class="n">polytope</span><span class="o">.</span><span class="n">faces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">polytope</span><span class="o">.</span><span class="n">find_faces</span><span class="p">()</span>
+        
+        <span class="c1"># Draw the polytope</span>
+        <span class="k">if</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="n">mj_draw_edges</span><span class="p">(</span><span class="n">viewer</span><span class="p">,</span> <span class="n">polytope</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">erase</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">faces</span><span class="p">:</span>
+            <span class="n">x_center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">polytope</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">mj_draw_faces</span><span class="p">(</span><span class="n">viewer</span><span class="p">,</span> <span class="n">polytope</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="n">x_center</span><span class="p">,</span> <span class="n">erase</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">edges</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.robot &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/my_theme.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pycapacity.html"> 📄 API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html"> 🎓 Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pycapacity.robot</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pycapacity.robot</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Overview</span>
+<span class="sd">---------</span>
+
+<span class="sd">This is a python module which implements different robot performance metrics based on polytopes and ellipsoids.</span>
+
+<span class="sd">* acceleration `polytope &lt;#pycapacity\.robot\.acceleration_polytope&gt;`_ and `ellipsoid &lt;#pycapacity\.robot\.acceleration_ellipsoid&gt;`_</span>
+<span class="sd">* velocity (manipulability) `polytope &lt;#pycapacity\.robot\.velocity_polytope&gt;`_ and `ellipsoid &lt;#pycapacity\.robot\.velocity_ellipsoid&gt;`_</span>
+<span class="sd">* force `polytope &lt;#pycapacity\.robot\.force_polytope&gt;`_ and `ellipsoid &lt;#pycapacity\.robot\.force_ellipsoid&gt;`_</span>
+<span class="sd">* force polytope `minkowski sum &lt;#pycapacity\.robot\.force_polytope_sum&gt;`_  and `intersection &lt;#pycapacity\.robot\.force_polytope_intersection&gt;`_</span>
+<span class="sd">* reachable space approximation `polytope &lt;#pycapacity\.robot\.reachable_space_approximation&gt;`_</span>
+<span class="sd">* reachable space `nonlinear &lt;#pycapacity\.robot\.reachable_space_nonlinear&gt;`_</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="c1"># minkowski sum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConvexHull</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.linalg</span><span class="w"> </span><span class="kn">import</span> <span class="n">block_diag</span>
+
+<span class="c1"># import the algos</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.algorithms</span><span class="w"> </span><span class="kn">import</span> <span class="n">hyper_plane_shift_method</span><span class="p">,</span> <span class="n">vertex_enumeration_vepoli2</span><span class="p">,</span> <span class="n">stack</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.algorithms</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.objects</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># check if CGAL is installed</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">CGAL.CGAL_Alpha_wrap_3</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">CGAL.CGAL_Kernel</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">CGAL.CGAL_Polyhedron_3</span><span class="w"> </span><span class="kn">import</span> <span class="n">Polyhedron_3</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">CGAL.CGAL_Mesh_3</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+    <span class="n">CGAL_INSTALLED</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">CGAL_INSTALLED</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="velocity_ellipsoid">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.velocity_ellipsoid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">velocity_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Velocity manipulability ellipsoid calculation</span>
+
+<span class="sd">    .. math:: E_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad ||W^{-1}\dot{q}|| \leq 1\}</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math:: W=diag(\dot{q}_{max})</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: position jacobian</span>
+<span class="sd">        dq_max:  maximal joint velocities</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        ellipsoid(Ellipsoid):</span>
+<span class="sd">            ellipsoid object with the following attributes ``radii``, ``axes``</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span> <span class="n">J</span>
+    <span class="c1"># limits scaling</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">dq_max</span><span class="p">)</span>
+    <span class="c1"># calculate the singular value decomposition</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Jac</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+
+    <span class="c1"># create the ellipsoid from the singular values and the unit vector angle</span>
+    <span class="n">ellipsoid</span> <span class="o">=</span> <span class="n">Ellipsoid</span><span class="p">(</span><span class="n">radii</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ellipsoid</span></div>
+
+
+<div class="viewcode-block" id="acceleration_ellipsoid">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.acceleration_ellipsoid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">acceleration_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">t_max</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Acceleration ellipsoid calculation (dynamic manipulability ellipsoid)</span>
+<span class="sd">   </span>
+<span class="sd">    .. math:: E_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad ||W^{-1}{\\tau}|| \leq 1\}</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math:: W=diag(\\tau_{max})</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: matrix jacobian</span>
+<span class="sd">        M: matrix inertia </span>
+<span class="sd">        t_max:  maximal joint torques</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        ellipsoid(Ellipsoid):</span>
+<span class="sd">            ellipsoid object with the following attributes ``radii``, ``axes``</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+    <span class="c1"># limits scaling</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">t_max</span><span class="p">)</span>
+    <span class="c1"># calculate the singular value decomposition</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Jac</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="c1"># create the ellipsoid from the singular values and the unit vector angle</span>
+    <span class="n">ellipsoid</span> <span class="o">=</span> <span class="n">Ellipsoid</span><span class="p">(</span><span class="n">radii</span><span class="o">=</span><span class="n">S</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ellipsoid</span></div>
+
+
+<div class="viewcode-block" id="force_ellipsoid">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_ellipsoid">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">force_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">t_max</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force manipulability ellipsoid calculation</span>
+
+<span class="sd">    .. math:: E_f = \{f~ |~ \\tau  = J^Tf,\quad ||W^{-1}\\tau|| \leq 1\}</span>
+
+<span class="sd">    where</span>
+
+<span class="sd">    .. math:: W=diag(\\tau_{max})</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J: matrix jacobian</span>
+<span class="sd">        t_max:  maximal joint torques</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        ellipsoid(Ellipsoid):</span>
+<span class="sd">            ellipsoid object with the following attributes ``radii``, ``axes``</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span> <span class="n">J</span>
+    <span class="c1"># limits scaling</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diagflat</span><span class="p">(</span><span class="n">t_max</span><span class="p">))</span>
+    <span class="c1"># calculate the singular value decomposition</span>
+    <span class="n">U</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">Jac</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="c1"># create the ellipsoid from the singular values and the unit vector angle</span>
+    <span class="n">ellipsoid</span> <span class="o">=</span> <span class="n">Ellipsoid</span><span class="p">(</span><span class="n">radii</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">S</span><span class="p">),</span> <span class="n">rotation</span><span class="o">=</span><span class="n">U</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ellipsoid</span></div>
+
+
+<div class="viewcode-block" id="force_polytope_intersection">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope_intersection">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">force_polytope_intersection</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t1_bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t2_bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the intersection of the capacities of the two robots in certain configurations.</span>
+
+
+<span class="sd">    .. math:: P_f = \{f~ | ~ f_1\! =\! f_2\! =\! f, ~~ \\tau_1  = J_1^Tf_1, ~~ \\tau_2  = J_2^Tf_2, ~~ {t}_{1,min} \leq \\tau_1 \leq {\\tau}_{1,max},~~~ {\\tau}_{2,min} \leq \\tau_1 \leq {\\tau}_{2,max}\}</span>
+
+
+<span class="sd">    Based on the ``vertex_enumeration_vepoli2`` algorithm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian1:  position jacobian robot 1</span>
+<span class="sd">        Jacobian2: Jacobian2 position jacobian robot 2</span>
+<span class="sd">        t_min1:  minimal joint torques robot 1</span>
+<span class="sd">        t_min2:  minimal joint torques robot 2</span>
+<span class="sd">        t_max1:  maximal joint torques robot 1</span>
+<span class="sd">        t_max2:  maximal joint torques robot 2</span>
+<span class="sd">        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 1</span>
+<span class="sd">        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 2</span>
+<span class="sd">        options:  dictionary of options for the algorithm (currently supported: ``calculate_faces``)</span>
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        polytope(Polytope):</span>
+<span class="sd">            force polytope representing the intersection of the capacities of the two robots in certain configurations. Vertex representation ``vertices`` and hal-plane representation ``H`` and ``d`` (face representation ``faces`` and ``face_indices`` if ``calculate_faces`` is set to ``True`` in ``options``)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">Jac</span> <span class="o">=</span>  <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">Jacobian1</span><span class="p">,</span><span class="n">Jacobian2</span><span class="p">))</span>
+    <span class="n">t_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">t1_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="n">t2_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="n">t_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">t1_max</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="n">t2_max</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    <span class="k">if</span> <span class="n">t1_bias</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t_bias</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">t_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">t1_bias</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">t2_bias</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+
+    <span class="k">return</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">Jac</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="force_polytope_sum">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope_sum">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">force_polytope_sum</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t1_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">t2_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the minkowski sum of the capacities of the two robots in certain configurations.</span>
+<span class="sd">    With ordered vertices into the faces.</span>
+
+<span class="sd">    .. math:: P_f = \{f~ | ~ f\! =\! f_1\! +\! f_2, ~~ \\tau_1  = J_1^Tf_1, ~~ \\tau_2  = J_2^Tf_2, ~~ {\\tau}_{1,min} \leq \\tau_1 \leq {\\tau}_{1,max},~~~ {\\tau}_{2,min} \leq \\tau_1 \leq {\\tau}_{2,max}\}</span>
+
+<span class="sd">    Based on the ``vertex_enumeration_vepoli2`` algorithm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian1:  position jacobian robot 1</span>
+<span class="sd">        Jacobian2: Jacobian2 position jacobian robot 2</span>
+<span class="sd">        t_min1:  minimal joint torques robot 1</span>
+<span class="sd">        t_min2:  minimal joint torques robot 2</span>
+<span class="sd">        t_max1:  maximal joint torques robot 1</span>
+<span class="sd">        t_max2:  maximal joint torques robot 2</span>
+<span class="sd">        t1_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 1</span>
+<span class="sd">        t2_bias: bias joint torques due to the gravity, robot dynamics and maybe some already applied forces for robot 2</span>
+<span class="sd">        options: dictionary of additional options (currently supported only ``calculate_faces`` option)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        polytope(Polytope):</span>
+<span class="sd">            polytope object with ``vertices`` and half-plane representation ``H`` and ``d``, ( ``faces`` and ``face_indices`` if ``calculate_faces`` option is set to True)</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+
+
+    <span class="c1"># calculate two polytopes</span>
+    <span class="n">f1_poly</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">Jacobian1</span><span class="p">,</span> <span class="n">t1_max</span><span class="p">,</span> <span class="n">t1_min</span><span class="p">,</span> <span class="n">t1_bias</span><span class="p">)</span>
+    <span class="n">f2_poly</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">Jacobian2</span><span class="p">,</span> <span class="n">t2_max</span><span class="p">,</span> <span class="n">t2_min</span><span class="p">,</span> <span class="n">t2_bias</span><span class="p">)</span>
+    <span class="n">f_vertex1</span> <span class="o">=</span> <span class="n">f1_poly</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="n">f_vertex2</span> <span class="o">=</span> <span class="n">f2_poly</span><span class="o">.</span><span class="n">vertices</span>
+    <span class="c1"># then do a minkowski sum</span>
+    <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">Jacobian1</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">f_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">f_vertex1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">f_vertex2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">m</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">f_vertex1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">f_vertex2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">f_sum</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">f_vertex2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">f_vertex1</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">f_vertex2</span><span class="p">[:,</span><span class="n">j</span><span class="p">])</span><span class="o">.</span><span class="n">flat</span>
+
+    <span class="n">hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">f_sum</span><span class="p">,</span> <span class="n">qhull_options</span><span class="o">=</span><span class="s1">&#39;QJ&#39;</span><span class="p">)</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">Polytope</span><span class="p">(</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">hull</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">hull</span><span class="o">.</span><span class="n">vertices</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">d</span><span class="o">=-</span><span class="n">hull</span><span class="o">.</span><span class="n">equations</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># check if the faces should be calculated</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;calculate_faces&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;calculate_faces&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">find_faces</span><span class="p">()</span>    
+
+    <span class="k">return</span> <span class="n">poly</span></div>
+
+
+<div class="viewcode-block" id="force_polytope">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.force_polytope">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">force_polytope</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Force polytope representing the capacities of the two robots in a certain configuration</span>
+
+<span class="sd">    .. math:: P_f = \{f~ |~ \\tau  = J^Tf,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\}</span>
+
+<span class="sd">    Based on the ``vertex_enumeration_vepoli2`` algorithm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian:  position jacobian </span>
+<span class="sd">        t_max:  maximal joint torques </span>
+<span class="sd">        t_min:  minimal joint torques </span>
+<span class="sd">        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces for robot </span>
+<span class="sd">        options: dictionary of options for the polytope calculation - currently only ``calculate_faces`` is supported</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        force_polytope(Polytope):</span>
+<span class="sd">            polytope object with ``vertices``, torque vertices ``torque_vertices`` (``face_indices`` and ``faces`` if option ``calculate_faces`` is set to True)</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+
+    <span class="c1"># jacobian calculation</span>
+    <span class="n">f_vert</span><span class="p">,</span> <span class="n">t_vert</span> <span class="o">=</span> <span class="n">vertex_enumeration_vepoli2</span><span class="p">(</span><span class="n">Jacobian</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="p">)</span>
+
+    <span class="c1"># create polytope</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">Polytope</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">f_vert</span><span class="p">)</span>
+    <span class="n">poly</span><span class="o">.</span><span class="n">torque_vertices</span> <span class="o">=</span> <span class="n">t_vert</span>
+
+    <span class="c1"># if faces are required</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;calculate_faces&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;calculate_faces&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">vertex_to_faces</span><span class="p">(</span><span class="n">vertex</span><span class="o">=</span><span class="n">f_vert</span><span class="p">)</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">face_index_to_vertex</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">poly</span></div>
+
+
+<div class="viewcode-block" id="velocity_polytope">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.velocity_polytope">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">velocity_polytope</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Velocity polytope calculating function</span>
+
+<span class="sd">    .. math:: P_f = \{\dot{x}~ |~ J\dot{q} = \dot{x},\quad {\dot{q}}_{min} \leq \dot{q} \leq {\dot{q}}_{max}\}</span>
+
+<span class="sd">    Based on the ``hyper_plane_shifting_method`` algorithm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Jacobian:  position jacobian </span>
+<span class="sd">        dq_max:  maximal joint velocities </span>
+<span class="sd">        dq_min:  minimal joint velocities </span>
+<span class="sd">        options: dictionary of options for the polytope calculation - currently only ``calculate_faces`` is supported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        velocity_polytope(Polytope):</span>
+<span class="sd">            polytope object with ``vertices``, halfspaces ``H`` and ``d`` (``face_indices`` and ``faces`` if option ``calculate_faces`` is set to True)</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">H</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">Jacobian</span><span class="p">,</span><span class="n">dq_min</span><span class="p">,</span><span class="n">dq_max</span><span class="p">)</span>
+    <span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">vel_faces</span> <span class="o">=</span> <span class="n">hspace_to_vertex</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="c1"># create polytope</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">Polytope</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">velocity_vertex</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="c1"># if faces are required</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;calculate_faces&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;calculate_faces&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">vel_faces</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">face_index_to_vertex</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">poly</span></div>
+
+
+<div class="viewcode-block" id="acceleration_polytope">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.acceleration_polytope">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span> <span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Acceleration polytope calculating function</span>
+
+<span class="sd">    .. math:: P_a = \{\ddot{x}~ |~ \ddot{x} = JM^{-1}\\tau,\quad {\\tau}_{min} \leq \\tau \leq {\\tau}_{max}\} </span>
+
+<span class="sd">    Based on the ``hyper_plane_shifting_method`` algorithm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        J:  position jacobian </span>
+<span class="sd">        M:  inertia matrix </span>
+<span class="sd">        t_max:  maximal joint torque </span>
+<span class="sd">        t_min:  minimal joint torque </span>
+<span class="sd">        t_bias: bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces</span>
+<span class="sd">        options: dictionary of options for the polytope calculation (currently only ``calculate_faces`` is supported)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        acceleration_polytope(Polytope):</span>
+<span class="sd">            polytope object with ``vertices``, half-plane representation with matrices``H`` and ``d`` (``face_indices`` and ``faces`` if option ``calculate_faces`` is set to True)</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span> 
+    <span class="n">B</span> <span class="o">=</span> <span class="n">J</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">t_bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t_min</span> <span class="o">=</span> <span class="n">t_min</span> <span class="o">-</span> <span class="n">t_bias</span>
+        <span class="n">t_max</span> <span class="o">=</span> <span class="n">t_max</span> <span class="o">-</span> <span class="n">t_bias</span>
+    
+    <span class="n">H</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">hyper_plane_shift_method</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">t_min</span><span class="p">,</span> <span class="n">t_max</span><span class="p">)</span>
+    <span class="n">vertex</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">hspace_to_vertex</span><span class="p">(</span><span class="n">H</span><span class="p">,</span><span class="n">d</span><span class="p">)</span>
+
+
+    <span class="c1"># create polytope</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">Polytope</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertex</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+
+    <span class="c1"># if faces are required</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;calculate_faces&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;calculate_faces&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">faces</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">face_index_to_vertex</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">poly</span></div>
+
+
+<div class="viewcode-block" id="reachable_space_approximation">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.reachable_space_approximation">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reachable_space_approximation</span><span class="p">(</span> <span class="n">M</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">horizon</span><span class="p">,</span> <span class="n">t_max</span><span class="p">,</span><span class="n">t_min</span><span class="p">,</span> <span class="n">t_bias</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">q_max</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">q_min</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dq_max</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">dq_min</span><span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">A_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">b_x</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Reachable space aproximation function based on convex polytopes. For a given time horizon, it calculates the reachable space of the robot.</span>
+<span class="sd">    It evaluates the polytope of a form:</span>
+<span class="sd">    </span>
+<span class="sd">    .. math:: P_x = \{\Delta x~ |~ \Delta{x} = JM^{-1}\\tau \Delta t_{h}^2/2,</span>
+<span class="sd">    .. math:: {\\tau}_{min} - \\tau_{bias} \leq \\tau \leq {\\tau}_{max} - \\tau_{bias}</span>
+<span class="sd">    .. math::  \dot{q}_{min} \leq M^{-1}\\tau \Delta t_{h}  \leq \dot{q}_{max}</span>
+<span class="sd">    .. math::  {q}_{min} \leq M^{-1}\\tau \Delta t_{h}^2/2  \leq {q}_{max} </span>
+<span class="sd">    .. math::  A_x \Delta{x} \leq b_x - A_x x_0\}</span>
+
+<span class="sd">    where :math:`\\tau_{bias}` is the bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces which is optional.</span>
+<span class="sd">    and :math:`\Delta t_{h}` is the time horizon. If limits on joint velocity :math:`\dot{q}_{min}` and :math:`\dot{q}_{max}` or joint postion limits :math:`{q}_{min}` and :math:`{q}_{max}` are not given, the function calculates the ploytope  without them.</span>
+<span class="sd">    `A_x` and `b_x` are additional inequality covex constraints in the Cartesian position space. `x0` is the initial Cartesian position corresponding to the initial joint position `q0`.</span>
+
+<span class="sd">    Based on the ``iterative_convex_hull`` algorithm.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        M:  inertia matrix</span>
+<span class="sd">        J:  position jacobian</span>
+<span class="sd">        q0:  initial joint position</span>
+<span class="sd">        horizon:  time horizon</span>
+<span class="sd">        t_max:  maximal joint torque </span>
+<span class="sd">        t_min:  minimal joint torque</span>
+<span class="sd">        x0:  initial Cartesian position (optional)</span>
+<span class="sd">        t_bias:  bias joint torques due to the gravity, robot dynamics and maybe some already appiled forces (optional)</span>
+<span class="sd">        q_max:  maximal joint position (optional)</span>
+<span class="sd">        q_min:  minimal joint position (optional)</span>
+<span class="sd">        dq_max:  maximal joint velocities (optional)</span>
+<span class="sd">        dq_min:  minimal joint velocities (optional)</span>
+<span class="sd">        A_x, b_x:  additional inequality constraints matrices in Cartesian position space (optional)</span>
+<span class="sd">        options: dictionary of options for the polytope calculation - currently supported ``tolerance``, ``max_iteration`` and ``verbose`` (default: ``tolerance=1e-3``, ``max_iteration=500``, ``verbose=False``)</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        polytope(Polytope):</span>
+<span class="sd">            polytope object with ``vertices``, torque vertices ``torque_vertices``, half-plane representation with matrices ``H`` and ``d``, and faces defiend by ``face_indices`` and ``faces`` </span>
+
+
+<span class="sd">    :raises ValueError: if the mass and jacobian matrices are not appropriate size</span>
+<span class="sd">    :raises ValueError: if any of the provided joint limits sizes are not equal to the number of joints</span>
+<span class="sd">    :raises ValueError: if bias joint torques are given and their size is not equal to the number of joints</span>
+
+
+<span class="sd">    Note:</span>
+<span class="sd">        *Skuric, Antun, Vincent Padois, and David Daney. &quot;Approximating robot reachable space using convex polytopes.&quot; Human-Friendly Robotics 2022: HFR: 15th International Workshop on Human-Friendly Robotics. Cham: Springer International Publishing, 2023.*</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># if options are given</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;tolerance&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">tolerance</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;tolerance&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1e-3</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;max_iteration&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">max_iteration</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;max_iteration&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">max_iteration</span> <span class="o">=</span> <span class="mi">500</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;verbose&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">verbose</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;verbose&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># jacobian (only position part)</span>
+    <span class="n">Jac</span> <span class="o">=</span> <span class="n">J</span>
+    <span class="n">m</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="n">Jac</span><span class="o">.</span><span class="n">shape</span>
+    <span class="c1"># mass matrx</span>
+    <span class="n">M_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+
+    <span class="c1"># check if matrices have the right dimensions</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">!=</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Jacobian and mass matrix have different number of columns </span><span class="si">{}</span><span class="s1"> and </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="c1"># check if limits have good dimensions</span>
+    <span class="k">if</span> <span class="n">t_max</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;t_max has wrong dimensions </span><span class="si">{}</span><span class="s1">, should be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t_max</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">))</span>
+    <span class="c1"># check for joint position limits as well</span>
+    <span class="k">if</span> <span class="n">q_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q_max</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;q_max has wrong dimensions </span><span class="si">{}</span><span class="s1">, should be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">q_max</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">))</span>
+    <span class="c1"># joint velocity limits</span>
+    <span class="k">if</span> <span class="n">dq_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dq_max</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;dq_max has wrong dimensions </span><span class="si">{}</span><span class="s1">, should be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dq_max</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">))</span>
+    <span class="c1"># bias not the good size</span>
+    <span class="k">if</span> <span class="n">t_bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">t_bias</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;t_bias has wrong dimensions </span><span class="si">{}</span><span class="s1">, should be </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t_bias</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">))</span>
+
+
+    <span class="c1"># if bias is given</span>
+    <span class="k">if</span> <span class="n">t_bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t_min</span> <span class="o">=</span> <span class="n">t_min</span> <span class="o">-</span> <span class="n">t_bias</span>
+        <span class="n">t_max</span> <span class="o">=</span> <span class="n">t_max</span> <span class="o">-</span> <span class="n">t_bias</span>
+
+    <span class="c1"># initial value for inequality constraints</span>
+    <span class="n">G_in</span><span class="p">,</span> <span class="n">h_in</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="c1"># if limits on joint velocity are given</span>
+    <span class="k">if</span> <span class="n">dq_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dq_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">G_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span>
+            <span class="n">M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="p">,</span>   
+            <span class="o">-</span><span class="n">M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="p">))</span>
+        <span class="n">h_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span>
+            <span class="n">dq_max</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span>
+            <span class="o">-</span><span class="n">dq_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+    
+    
+    <span class="k">if</span> <span class="n">A_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">b_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">b_x</span> <span class="o">=</span> <span class="n">b_x</span> <span class="o">-</span> <span class="n">A_x</span><span class="nd">@x0</span>
+        <span class="k">if</span> <span class="n">G_in</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">G_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">G_in</span><span class="p">,</span> <span class="n">A_x</span><span class="nd">@Jac@M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">h_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">h_in</span><span class="p">,</span> <span class="n">b_x</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">G_in</span> <span class="o">=</span> <span class="n">A_x</span><span class="o">*</span><span class="n">Jac</span><span class="o">*</span><span class="n">M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span>
+            <span class="n">h_in</span> <span class="o">=</span> <span class="n">b_x</span>
+
+    <span class="c1"># if limits on joint position are given</span>
+    <span class="k">if</span> <span class="n">q_max</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">q_min</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">G_in</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">G_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">G_in</span><span class="p">,</span>
+                <span class="n">M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+                <span class="o">-</span><span class="n">M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">h_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">h_in</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">q_max</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">-</span><span class="n">q0</span><span class="p">),</span>
+                <span class="o">-</span><span class="p">(</span><span class="n">q_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">-</span><span class="n">q0</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">G_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span>
+                <span class="n">M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+                <span class="o">-</span><span class="n">M_inv</span><span class="o">*</span><span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">h_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span>
+                <span class="p">(</span><span class="n">q_max</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">-</span><span class="n">q0</span><span class="p">),</span>
+                <span class="o">-</span><span class="p">(</span><span class="n">q_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">-</span><span class="n">q0</span><span class="p">)))</span>
+    
+    
+    <span class="c1"># calculate the polytope</span>
+    <span class="n">vertex</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span><span class="n">d</span><span class="p">,</span> <span class="n">faces_index</span><span class="p">,</span> <span class="n">t_vert</span><span class="p">,</span> <span class="n">x_vert</span> <span class="o">=</span>  <span class="n">iterative_convex_hull_method</span><span class="p">(</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">J</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Jac</span><span class="p">,</span> <span class="n">M_inv</span><span class="p">)</span><span class="o">*</span><span class="n">horizon</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">y_max</span> <span class="o">=</span> <span class="n">t_max</span><span class="p">,</span> 
+        <span class="n">y_min</span> <span class="o">=</span> <span class="n">t_min</span><span class="p">,</span>
+        <span class="n">G_in</span> <span class="o">=</span> <span class="n">G_in</span><span class="p">,</span>
+        <span class="n">h_in</span> <span class="o">=</span> <span class="n">h_in</span><span class="p">,</span>
+        <span class="n">tol</span> <span class="o">=</span> <span class="n">tolerance</span><span class="p">,</span>
+        <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iteration</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    
+    <span class="c1"># construct a polytope object</span>
+    <span class="k">if</span> <span class="n">x0</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">J</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">Polytope</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vertex</span> <span class="o">+</span> <span class="n">x0</span><span class="p">,</span> <span class="n">H</span><span class="o">=</span><span class="n">H</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">face_indices</span><span class="o">=</span><span class="n">faces_index</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">options</span> <span class="ow">and</span> <span class="s1">&#39;calculate_faces&#39;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;calculate_faces&#39;</span><span class="p">]:</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">faces_index</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">face_index_to_vertex</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span> <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+    <span class="n">poly</span><span class="o">.</span><span class="n">torque_vertices</span> <span class="o">=</span> <span class="n">t_vert</span>
+    <span class="k">return</span> <span class="n">poly</span></div>
+
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy.matlib</span>
+
+
+<span class="c1"># conditionally implement a funciton (if CGAL is installed)</span>
+<span class="k">if</span> <span class="n">CGAL_INSTALLED</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">alpha_shape_with_cgal</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the alpha shape of a set of points.</span>
+<span class="sd">        Retrieved from http://blog.thehumangeo.com/2014/05/12/drawing-boundaries-in-python/</span>
+
+<span class="sd">        :param coords : Coordinates of points</span>
+<span class="sd">        :param alpha: List of alpha values to influence the gooeyness of the border. Smaller numbers don&#39;t fall inward as much as larger numbers. </span>
+<span class="sd">        Too large, and you lose everything!</span>
+<span class="sd">        :return: vertices and faces of the alpha shape</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bbox_diag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">alpha_value</span> <span class="o">=</span> <span class="n">bbox_diag</span><span class="o">/</span><span class="mi">5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+        <span class="c1"># Convert to CGAL point</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point_3</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">coords</span><span class="p">]</span>
+        <span class="c1"># Compute alpha shape</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">Polyhedron_3</span><span class="p">()</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">alpha_wrap_3</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">alpha_value</span><span class="p">,</span><span class="mf">0.01</span><span class="p">,</span><span class="n">Q</span><span class="p">)</span>
+        <span class="c1">#Q.make_tetrahedron()</span>
+        <span class="n">alpha_shape_vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">vertex</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">vertex</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">vertex</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">z</span><span class="p">())</span> <span class="k">for</span> <span class="n">vertex</span> <span class="ow">in</span> <span class="n">Q</span><span class="o">.</span><span class="n">vertices</span><span class="p">()])</span>
+        <span class="n">alpha_shape_faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                <span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">z</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">z</span><span class="p">()),</span>
+                <span class="p">(</span><span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">face</span><span class="o">.</span><span class="n">halfedge</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">next</span><span class="p">()</span><span class="o">.</span><span class="n">vertex</span><span class="p">()</span><span class="o">.</span><span class="n">point</span><span class="p">()</span><span class="o">.</span><span class="n">z</span><span class="p">())</span>
+                <span class="c1">#for i in face.halfedge()</span>
+            <span class="p">])</span>
+            <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">Q</span><span class="o">.</span><span class="n">facets</span><span class="p">()])</span>
+                
+        <span class="k">return</span> <span class="n">alpha_shape_vertices</span><span class="p">,</span><span class="n">alpha_shape_faces</span>
+
+
+<span class="c1"># reachable space calculation algorithm</span>
+<div class="viewcode-block" id="reachable_space_nonlinear">
+<a class="viewcode-back" href="../../pycapacity.robot.html#pycapacity.robot.reachable_space_nonlinear">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">reachable_space_nonlinear</span><span class="p">(</span><span class="n">forward_func</span><span class="p">,</span> <span class="n">q0</span><span class="p">,</span> <span class="n">time_horizon</span><span class="p">,</span> <span class="n">q_max</span><span class="p">,</span> <span class="n">q_min</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">,</span> <span class="n">dq_min</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the reachable set of the robot for the given joint configuration.</span>
+<span class="sd">    The algorithm calculates the reachable set of cartesian position of the desired frame of the robot given the robots joint position and joint velocity limits.</span>
+<span class="sd">    The output of the algorithm is the reachable space that the robot is able to reach within the horizon time, while guaranteeing that the joint position and velocity limits are not violated.</span>
+<span class="sd">    </span>
+<span class="sd">    If you are interested in the complete workspace of the robot, you can set a large time horizon (&gt;1 second)</span>
+<span class="sd">    </span>
+<span class="sd">    .. math:: C_x = \{ x~ |~ x = f_{fk}(q_0 + \dot{q}\Delta t), </span>
+<span class="sd">    .. math::  \dot{q}_{min} \leq \dot{q}  \leq \dot{q}_{max},\quad {q}_{min} \leq q_0 + \dot{q}\Delta t  \leq {q}_{max} \}</span>
+
+<span class="sd">    The parameters of the algorithm are set using the options dictionary. The following options are available:</span>
+<span class="sd">    </span>
+<span class="sd">    * n_samples: The number of samples to use for the discretization of the joint velocity space. The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be</span>
+<span class="sd">    * facet_dim: The dimension of the facet that will be sampled. Between 0 and the number of DOF of the robot.  The higher the number of samples, the more accurate the reachable set will be, however the longer the computation time will be</span>
+<span class="sd">    * convex_hull: Approximate the reachable set with a convex hull (True) or with a non-convex shape (False) - if False, CGAL must be installed</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        forward_func: The forward kinematic function, taking in the current joint position and ouputting the Cartesian space position (no orientation)</span>
+<span class="sd">        q0: Current joint configuration</span>
+<span class="sd">        time_horizon: The time horizon for which to compute the reachable set</span>
+<span class="sd">        q_max:  maximal joint position</span>
+<span class="sd">        q_min:  minimal joint position</span>
+<span class="sd">        dq_max:  maximal joint velocities</span>
+<span class="sd">        dq_min:  minimal joint velocities </span>
+<span class="sd">        options: dictionary of options for the polytope calculation - currently supported calculate_faces, n_samples, facet_dim</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    ---------</span>
+<span class="sd">        polytope(Polytope):</span>
+<span class="sd">            polytope object with ``vertices`` and faces if option ``calculate_faces`` is set to True in ``options``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">delta_t</span> <span class="o">=</span> <span class="n">time_horizon</span>
+    
+    
+    <span class="k">if</span> <span class="s1">&#39;convex_hull&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;convex_hull&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">n_samples</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;n_samples&#39;</span><span class="p">]</span>
+    <span class="n">n_steps</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">n_combs</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;facet_dim&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dq_min</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">q_min</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dq_max</span><span class="p">)</span>
+        <span class="n">dq_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">dq_max</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_min</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">))</span>
+        <span class="n">dq_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">dq_min</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">q_min</span><span class="p">)</span><span class="o">-</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">))</span>
+      
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dq_max</span><span class="p">)</span>  
+    <span class="n">n_dof</span> <span class="o">=</span> <span class="n">n_steps</span><span class="o">*</span><span class="n">n</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">delta_t</span><span class="o">/</span><span class="n">n_steps</span>
+    
+    <span class="n">dq_ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matlib</span><span class="o">.</span><span class="n">repmat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">dq_max</span><span class="p">,(</span><span class="n">q_max</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">-</span><span class="n">q0</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="p">),</span> <span class="n">n_steps</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">dq_lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matlib</span><span class="o">.</span><span class="n">repmat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">dq_min</span><span class="p">,(</span><span class="n">q_min</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">-</span><span class="n">q0</span><span class="p">)</span><span class="o">/</span><span class="n">dt</span><span class="p">),</span> <span class="n">n_steps</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+    <span class="n">Dq_ub</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">dq_ub</span><span class="p">)</span>
+    <span class="n">Dq_lb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">dq_lb</span><span class="p">)</span>
+    <span class="n">sum_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matlib</span><span class="o">.</span><span class="n">repmat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">n_steps</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">combs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_dof</span><span class="p">),</span> <span class="n">n_combs</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">perm_set</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="n">n_dof</span><span class="o">-</span><span class="n">n_combs</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="n">dq_curve_v</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">x_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">n_samples</span><span class="p">)</span>
+    <span class="n">mat_rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="n">x_rng</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">n_combs</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">n_rng</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mat_rng</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">combs</span><span class="p">:</span>
+        <span class="n">c</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_dof</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">ind</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+        <span class="n">ind_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">ind</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">n_ps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">perm_set</span><span class="p">)</span>
+        <span class="n">ps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">perm_set</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">dq_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_dof</span><span class="p">,</span><span class="n">n_ps</span><span class="p">))</span>
+        <span class="n">dq_i</span><span class="p">[</span><span class="n">ind</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">ps</span>
+
+        <span class="n">DQ_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matlib</span><span class="o">.</span><span class="n">repmat</span><span class="p">(</span><span class="n">dq_i</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">n_rng</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">DQ_i</span><span class="p">[</span><span class="n">ind</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">DQ_i</span><span class="p">[</span><span class="n">ind</span><span class="p">,:]</span><span class="o">*</span><span class="n">Dq_ub</span><span class="p">[</span><span class="n">ind_i</span><span class="p">,</span><span class="n">ind_i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DQ_i</span><span class="p">[</span><span class="n">ind</span><span class="p">,:])</span><span class="o">*</span><span class="n">Dq_lb</span><span class="p">[</span><span class="n">ind_i</span><span class="p">,</span><span class="n">ind_i</span><span class="p">]</span> 
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="n">dq_ub</span><span class="p">[</span><span class="n">c_i</span><span class="p">]</span><span class="o">-</span><span class="n">dq_lb</span><span class="p">[</span><span class="n">c_i</span><span class="p">]</span> <span class="k">for</span> <span class="n">c_i</span> <span class="ow">in</span> <span class="n">c</span> <span class="p">])</span><span class="nd">@mat_rng</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">dq_lb</span><span class="p">[</span><span class="n">c_i</span><span class="p">]</span> <span class="k">for</span> <span class="n">c_i</span> <span class="ow">in</span> <span class="n">c</span> <span class="p">])[:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">DQ_i</span><span class="p">[</span><span class="n">c</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matlib</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span><span class="n">n_ps</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dq_curve_v</span> <span class="o">=</span> <span class="n">stack</span><span class="p">(</span><span class="n">dq_curve_v</span><span class="p">,</span><span class="n">DQ_i</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+    <span class="n">dq_curve_v</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">dq_curve_v</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">q_v</span> <span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">q0</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">dq_curve_v</span><span class="nd">@sum_steps</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">*</span><span class="n">dt</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">x_curves</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">forward_func</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">q_v</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;convex_hull&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">poly</span> <span class="o">=</span> <span class="n">Polytope</span><span class="p">(</span><span class="n">x_curves</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;calculate_faces&quot;</span><span class="p">]:</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">find_faces</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;convex_hull&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">CGAL_INSTALLED</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">options</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;alpha&quot;</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">alpha_shape_with_cgal</span><span class="p">(</span><span class="n">x_curves</span><span class="p">,</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;alpha&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vert</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="n">alpha_shape_with_cgal</span><span class="p">(</span><span class="n">x_curves</span><span class="p">)</span>
+            <span class="n">vert</span> <span class="o">=</span> <span class="n">faces</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">poly</span> <span class="o">=</span> <span class="n">Polytope</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">vert</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vert</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">vertices</span><span class="p">[:,</span> <span class="n">poly</span><span class="o">.</span><span class="n">face_indices</span><span class="p">]</span>
+            <span class="n">poly</span><span class="o">.</span><span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">poly</span><span class="o">.</span><span class="n">faces</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;CGAL is not installed, please install it to use the non-convex option&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">poly</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

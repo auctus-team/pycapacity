@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycapacity.algorithms module &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/my_theme.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pycapacity.human module" href="pycapacity.human.html" />
+    <link rel="prev" title="pycapacity package" href="pycapacity.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="pycapacity.html"> 📄 API Docs</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pycapacity.algorithms module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.chebyshev_ball"><code class="docutils literal notranslate"><span class="pre">chebyshev_ball()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.chebyshev_center"><code class="docutils literal notranslate"><span class="pre">chebyshev_center()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.face_index_to_vertex"><code class="docutils literal notranslate"><span class="pre">face_index_to_vertex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.hspace_to_vertex"><code class="docutils literal notranslate"><span class="pre">hspace_to_vertex()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.hyper_plane_shift_method"><code class="docutils literal notranslate"><span class="pre">hyper_plane_shift_method()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.iterative_convex_hull_method"><code class="docutils literal notranslate"><span class="pre">iterative_convex_hull_method()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.order_index"><code class="docutils literal notranslate"><span class="pre">order_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.rotation_matrix_from_vectors"><code class="docutils literal notranslate"><span class="pre">rotation_matrix_from_vectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.stack"><code class="docutils literal notranslate"><span class="pre">stack()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.vertex_enumeration_vepoli2"><code class="docutils literal notranslate"><span class="pre">vertex_enumeration_vepoli2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.vertex_to_faces"><code class="docutils literal notranslate"><span class="pre">vertex_to_faces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycapacity.algorithms.vertex_to_hspace"><code class="docutils literal notranslate"><span class="pre">vertex_to_hspace()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.human.html">pycapacity.human module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.robot.html">pycapacity.robot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.visual.html">pycapacity.visual module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.polytope.html">pycapacity.objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pycapacity.examples.html">pycapacity.examples module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html"> 🎓 Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="pycapacity.html">pycapacity package</a></li>
+      <li class="breadcrumb-item active">pycapacity.algorithms module</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/pycapacity.algorithms.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pycapacity.algorithms">
+<span id="pycapacity-algorithms-module"></span><h1>pycapacity.algorithms module<a class="headerlink" href="#module-pycapacity.algorithms" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>There are three main polytope evaluation algorithms implemented:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#pycapacity.algorithms.hyper_plane_shift_method">hyper_plane_shift_method</a>: Hyper plane shifting method implementation used to find half-space representation of problems of a form</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[P = \{x~ |~ y = Ax,\quad x_{min} &lt;= x &lt;= x_{max}\}\]</div>
+<ul class="simple">
+<li><p><a class="reference external" href="#pycapacity.algorithms.vertex_enumeration_vepoli2">vertex_enumeration_vepoli2</a>: Efficient vertex enumeration algorithm for a problem of a form:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[P = \{x~ |~ Ax = b,\quad b_{min} \leq b \leq b_{max}\}\]</div>
+<ul class="simple">
+<li><p><a class="reference external" href="#pycapacity.algorithms.iterative_convex_hull_method">iterative_convex_hull_method</a>: A function calculating the polytopes given by the equations form:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[P = \{x~ |~ Ax = By,\quad y_{min} \leq y \leq y_{max}\}\]</div>
+<p>Additionally this module implements different helping functions to half-plane and vertex representation manipulations of the polytopes:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="#pycapacity.algorithms.hspace_to_vertex">hspace_to_vertex</a>: Function transforming H-representation to V-representation</p></li>
+<li><p><a class="reference external" href="#pycapacity.algorithms.vertex_to_hspace">vertex_to_hspace</a>: Function transforming V-representation to H-representation</p></li>
+<li><p><a class="reference external" href="#pycapacity.algorithms.vertex_to_faces">vertex_to_faces</a>: Helping function transforming vertices of the polytope to a triangulated faces</p></li>
+</ul>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.chebyshev_ball">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">chebyshev_ball</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#chebyshev_ball"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.chebyshev_ball" title="Link to this definition"></a></dt>
+<dd><p>Calculating chebyshev ball of a polytope given the half-space representation</p>
+<p><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.HalfspaceIntersection.html#r9b902253b317-1">https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.HalfspaceIntersection.html#r9b902253b317-1</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> (<em>list</em>) – matrix of half-space representation <cite>Ax&lt;b</cite></p></li>
+<li><p><strong>b</strong> (<em>list</em>) – vector of half-space representation <cite>Ax&lt;b</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>returns a chebyshev center of the polytope
+radius(float): returns a chebyshev radius of the polytope</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>center(array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.chebyshev_center">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">chebyshev_center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#chebyshev_center"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.chebyshev_center" title="Link to this definition"></a></dt>
+<dd><p>Calculating chebyshev center of a polytope given the half-space representation</p>
+<p><a class="reference external" href="https://pageperso.lis-lab.fr/~francois.denis/IAAM1/scipy-html-1.0.0/generated/scipy.spatial.HalfspaceIntersection.html">https://pageperso.lis-lab.fr/~francois.denis/IAAM1/scipy-html-1.0.0/generated/scipy.spatial.HalfspaceIntersection.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> (<em>list</em>) – matrix of half-space representation <cite>Ax&lt;b</cite></p></li>
+<li><p><strong>b</strong> (<em>list</em>) – vector of half-space representation <cite>Ax&lt;b</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>returns a chebyshev center of the polytope</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>center(array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.face_index_to_vertex">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">face_index_to_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indexes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#face_index_to_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.face_index_to_vertex" title="Link to this definition"></a></dt>
+<dd><p>Helping function for transforming the list of faces with indexes to the vertices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> – list of vertices</p></li>
+<li><p><strong>indexes</strong> – list of vertex indexes forming faces</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of faces composed of vertices</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>faces</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.hspace_to_vertex">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">hspace_to_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">H</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#hspace_to_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.hspace_to_vertex" title="Link to this definition"></a></dt>
+<dd><p>From half-space representation to the vertex representation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>H</strong> (<em>list</em>) – matrix of half-space representation <cite>Hx&lt;d</cite></p></li>
+<li><p><strong>d</strong> (<em>list</em>) – vector of half-space representation <cite>Hx&lt;d</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>vertices(list)</strong> (<em>vertices of the polytope</em>)</p></li>
+<li><p><strong>face_indexes(list)</strong> (<em>indexes of vertices forming triangulated faces of the polytope</em>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.hyper_plane_shift_method">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">hyper_plane_shift_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-15</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#hyper_plane_shift_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.hyper_plane_shift_method" title="Link to this definition"></a></dt>
+<dd><p>Hyper plane shifting method implementation used to solve problems of a form:</p>
+<div class="math notranslate nohighlight">
+\[P = \{y~ |~y = Ax, \quad x_{min} \leq x \leq x_{max}\}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>Gouttefarde M., Krut S. (2010) Characterization of Parallel Manipulator Available Wrench Set Facets. In: Lenarcic J., Stanisic M. (eds) Advances in Robot Kinematics: Motion in Man and Machine. Springer, Dordrecht</em></p>
+</div>
+<p>This algorithm can be used to calculate acceleration polytope, velocity polytoe and even
+polytope of the joint achievable joint torques based on the muscle forces</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – projection matrix</p></li>
+<li><p><strong>x_min</strong> – minimal values</p></li>
+<li><p><strong>x_max</strong> – maximal values</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>H(list)</em> – matrix of half-space representation <cite>Hx&lt;d</cite></p></li>
+<li><p><em>d(list)</em> – vector of half-space representation <cite>Hx&lt;d</cite></p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – if the limits are not of the same size as the projection matrix</p></li>
+<li><p><strong>ValueError</strong> – if the limits are not of the same size</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.iterative_convex_hull_method">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">iterative_convex_hull_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">G_eq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_eq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#iterative_convex_hull_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.iterative_convex_hull_method" title="Link to this definition"></a></dt>
+<dd><p>A function calculating the polytopes of achievable x for equations form:</p>
+<div class="math notranslate nohighlight">
+\[P_x = \{x~ |~ Ax = By,\quad y_{min} \leq y \leq y_{max}\}\]</div>
+<p>(optionally - additional projection matrix)</p>
+<div class="math notranslate nohighlight">
+\[P_x = \{x~ |~Pz = x,~~ Az = By,\quad y_{min} \leq y \leq y_{max}\}\]</div>
+<p>(optionally - additional bias <span class="math notranslate nohighlight">\(b\)</span>)</p>
+<div class="math notranslate nohighlight">
+\[P_x = \{x~ |~Ax = By + b, \quad y_{min} \leq y \leq y_{max}\}\]</div>
+<p>(optionally - additional inequality constaints)</p>
+<div class="math notranslate nohighlight">
+\[G_{in} y \leq h_{in}\]</div>
+<p>(optionally - additional equality constaints)</p>
+<div class="math notranslate nohighlight">
+\[G_{eq} y = h_{eq}\]</div>
+<p>Finally, the most general equation supported is</p>
+<div class="math notranslate nohighlight">
+\[P_x = \{x~ |~Pz = x,~~ Az = By,~~ G_{in} y \leq h_{in} ,~~ G_{eq} y = h_{eq}, ~~ y_{min} \leq y \leq y_{max}\}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On-line feasible wrench polytope evaluation based on human musculoskeletal models: an iterative convex hull method
+A.Skuric,V.Padois,N.Rezzoug,D.Daney</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – matrix</p></li>
+<li><p><strong>B</strong> – matrix</p></li>
+<li><p><strong>y_min</strong> – minimal values</p></li>
+<li><p><strong>y_max</strong> – maximal values</p></li>
+<li><p><strong>tol</strong> – tolerance for the polytope calculation</p></li>
+<li><p><strong>P</strong> – an additional projection matrix</p></li>
+<li><p><strong>bias</strong> – bias in the intermediate space</p></li>
+<li><p><strong>G_in</strong> – matrix - inegality constraint G_in y &lt; h_in</p></li>
+<li><p><strong>h_in</strong> – vector - inegality constraint G_in y &lt; h_in</p></li>
+<li><p><strong>G_eq</strong> – matrix - equality constraint G_eq y = h_eq</p></li>
+<li><p><strong>h_eq</strong> – vector - equality constraint G_eq y = h_eq</p></li>
+<li><p><strong>max_iter</strong> – maximum number of iterations (number of linera programmes solved) - default 1000</p></li>
+<li><p><strong>verbose</strong> – verbose program output - showing execution warnings - default False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>x_vert(list)</em> – list of vertices</p></li>
+<li><p><em>H(list)</em> – matrix of half-space representation <cite>Hx&lt;d</cite></p></li>
+<li><p><em>d(list)</em> – vector of half-space representation <cite>Hx&lt;d</cite></p></li>
+<li><p><em>faces(list)</em> – list of vertex indexes forming polytope faces</p></li>
+<li><p><em>y_vert(list)</em> – list of y values producing x_vert</p></li>
+<li><p><em>z_vert(list)</em> – list of z values producing x_vert</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – if the dimensions of the input matrices are not valid</p></li>
+<li><p><strong>ValueError</strong> – if the limits dimensions are not valid</p></li>
+<li><p><strong>ValueError</strong> – if the limits min and max are not valid</p></li>
+<li><p><strong>ValueError</strong> – if the inequality/equality constraints dimensions are not valid</p></li>
+<li><p><strong>ValueError</strong> – if the the projection matrix dimensions are not valid</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.order_index">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">order_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#order_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.order_index" title="Link to this definition"></a></dt>
+<dd><p>Order clockwise 2D points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>points</strong> – matrix of 2D points</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns</dt><dd><p>indexes(array) : ordered indexes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.rotation_matrix_from_vectors">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix_from_vectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vec1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vec2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#rotation_matrix_from_vectors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.rotation_matrix_from_vectors" title="Link to this definition"></a></dt>
+<dd><p>Find the rotation matrix that aligns vec1 to vec2</p>
+<p>See <a class="reference external" href="https://stackoverflow.com/questions/45142959/calculate-rotation-matrix-to-align-two-vectors-in-3d-space">https://stackoverflow.com/questions/45142959/calculate-rotation-matrix-to-align-two-vectors-in-3d-space</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec1</strong> – A 3d “source” vector</p></li>
+<li><p><strong>vec2</strong> – A 3d “destination” vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return mat<span class="colon">:</span></dt>
+<dd class="field-even"><p>A transform matrix (3x3) which when applied to vec1, aligns it with vec2.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.stack">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">B</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'v'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#stack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.stack" title="Link to this definition"></a></dt>
+<dd><p>Helping function enabling vertical and horizontal stacking of numpy arrays</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.vertex_enumeration_vepoli2">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">vertex_enumeration_vepoli2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b_bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#vertex_enumeration_vepoli2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.vertex_enumeration_vepoli2" title="Link to this definition"></a></dt>
+<dd><p>Efficient vertex enumeration algorithm for a problem of a form:</p>
+<div class="math notranslate nohighlight">
+\[P = \{x~ |~Ax = b, \quad b_{min} \leq b \leq b_{max}\}\]</div>
+<p>Optional (bias <span class="math notranslate nohighlight">\(b_{bias}\)</span> can be added):</p>
+<div class="math notranslate nohighlight">
+\[P = \{x~ |~Ax = b - b_{bias}, \quad b_{min} \leq b \leq b_{max}\}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On-line force capability evaluation based on efficient polytope vertex search
+by A. Skuric, V. Padois, D. Daney</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>A</strong> – system matrix A</p></li>
+<li><p><strong>b_max</strong> – maximal b</p></li>
+<li><p><strong>b_min</strong> – minimal b</p></li>
+<li><p><strong>b_bias</strong> – b bias vector ( offset from 0 )</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x_vertex(list)</strong> (<em>vertices of the polytope</em>)</p></li>
+<li><p><strong>b_vartex(list)</strong> (<em>b values producing x_vertex</em>)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ValueError</strong> – if the A matrix dimensions are not valid</p></li>
+<li><p><strong>ValueError</strong> – if the b_min and b_max are not of the same size as the A matrix</p></li>
+<li><p><strong>ValueError</strong> – if the b_bias is not of the same size as the A matrix</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.vertex_to_faces">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">vertex_to_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#vertex_to_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.vertex_to_faces" title="Link to this definition"></a></dt>
+<dd><p>Function grouping the vertices to faces using a ConvexHull algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertex</strong> (<em>array</em>) – list of vertices</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of triangle faces with vertex indexes which form them</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>faces(array)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycapacity.algorithms.vertex_to_hspace">
+<span class="sig-prename descclassname"><span class="pre">pycapacity.algorithms.</span></span><span class="sig-name descname"><span class="pre">vertex_to_hspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertex</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pycapacity/algorithms.html#vertex_to_hspace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pycapacity.algorithms.vertex_to_hspace" title="Link to this definition"></a></dt>
+<dd><p>Function transforming vertices to half-space representation using a ConvexHull algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertex</strong> (<em>array</em>) – list of vertices</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>H(list)</strong> (matrix of half-space representation <cite>Hx&lt;d</cite>)</p></li>
+<li><p><strong>d(list)</strong> (vector of half-space representation <cite>Hx&lt;d</cite>)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pycapacity.html" class="btn btn-neutral float-left" title="pycapacity package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pycapacity.human.html" class="btn btn-neutral float-right" title="pycapacity.human module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

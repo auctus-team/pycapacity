@@ -1,0 +1,264 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/my_theme.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How to cite pycapacity" href="citing.html" />
+    <link rel="prev" title="Polytope manipulation example: Inner sphere approximation" href="examples/manipulating_polytopes_approx.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pycapacity.html"> 📄 API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html"> 🎓 Tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"> 📑 Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-7-02-2025">V2.1.7 (02-2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-6-02-2025">V2.1.6 (02-2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-5-02-2025">V2.1.5 (02-2025)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-4-12-2024">v2.1.4 (12-2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-3-11-2024">v2.1.3 (11-2024)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-1-09-2023">v2.1 (09-2023)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v2-0-05-2023">v2.0 (05-2023)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="README.html">About pycapacity</a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/changelog.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<p>See <a class="reference external" href="https://github.com/auctus-team/pycapacity/releases">github releases</a> and <a class="reference external" href="https://pypi.org/project/pycapacity/#history">pypi</a> for more info.</p>
+<p>If wanting to use a specific version of the library, you can install it using pip, for example version <code class="docutils literal notranslate"><span class="pre">1.2.17</span></code>:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">pycapacity</span><span class="o">==</span><span class="m">1</span>.2.17
+</pre></div>
+</div>
+<section id="v2-1-7-02-2025">
+<h2>V2.1.7 (02-2025)<a class="headerlink" href="#v2-1-7-02-2025" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added support examples for interfacing pycapacity with <a class="reference external" href="https://github.com/google-deepmind/mujoco">mujoco</a> - <a class="reference external" href="examples/mujoco.html">see example</a></p></li>
+<li><p>Added a support for real-time polyotpe vilsualisaiton in mujoco</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/mj_reachable.gif"><img alt="Alternative text" src="_images/mj_reachable.gif" style="height: 200px;" />
+</a>
+<a class="reference internal image-reference" href="_images/mj_xarm7.gif"><img alt="Alternative text" src="_images/mj_xarm7.gif" style="height: 200px;" />
+</a>
+</section>
+<section id="v2-1-6-02-2025">
+<h2>V2.1.6 (02-2025)<a class="headerlink" href="#v2-1-6-02-2025" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added the initial implementation for the non-convex reachable workspace approximation - <a class="reference external" href="pycapacity.robot.html#pycapacity.robot.reachable_space_nonlinear">see API docs</a></p></li>
+<li><p>In order to use it you need to install <a class="reference external" href="https://github.com/CGAL/cgal">CGAL library</a> with its python bindings - if not installed the algorihtm will only be available in the convex mode</p></li>
+<li><p>See the example in tutorials - <a class="reference external" href="examples/reachable_workspace.html">see example</a></p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/reachable.gif"><img alt="Alternative text" src="_images/reachable.gif" style="height: 200px;" />
+</a>
+</section>
+<section id="v2-1-5-02-2025">
+<h2>V2.1.5 (02-2025)<a class="headerlink" href="#v2-1-5-02-2025" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Added the initial implementation of the non-linear reachable workspace approximation - <a class="reference external" href="pycapacity.robot.html#pycapacity.robot.reachable_space_nonlinear">see API docs</a></p></li>
+</ul>
+</section>
+<section id="v2-1-4-12-2024">
+<h2>v2.1.4 (12-2024)<a class="headerlink" href="#v2-1-4-12-2024" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>BUGFIX: acceleration ellipsoid inverted limits</p></li>
+</ul>
+</section>
+<section id="v2-1-3-11-2024">
+<h2>v2.1.3 (11-2024)<a class="headerlink" href="#v2-1-3-11-2024" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Reachable space approximation polytope now allows for specifying additional Cartesian space constraints - <a class="reference external" href="pycapacity.robot.html#pycapacity.robot.reachable_space_approximation">see API docs</a></p></li>
+</ul>
+</section>
+<section id="v2-1-09-2023">
+<h2>v2.1 (09-2023)<a class="headerlink" href="#v2-1-09-2023" title="Link to this heading"></a></h2>
+<ul>
+<li><p><a class="reference external" href="pycapacity.polytope.html#pycapacity.objects.Polytope">Polytope</a>  class  - <a class="reference external" href="pycapacity.polytope.html#pycapacity.objects">see API docs</a></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Added Minkowski sum (operator <code class="docutils literal notranslate"><span class="pre">+</span></code>) and intersection operations (operator <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>)</p></li>
+<li><p>Added inner approximation using the Chebyshev ball (<code class="docutils literal notranslate"><span class="pre">chebyshev_ball</span></code> method)</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Visualisation tools - <a class="reference external" href="pycapacity.visual.html#pycapacity.visual">see API docs</a></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_polytope</span></code> function now has <code class="docutils literal notranslate"><span class="pre">color</span></code> paremeter that can be used to set <code class="docutils literal notranslate"><span class="pre">face_color</span></code> and <code class="docutils literal notranslate"><span class="pre">edge_color</span></code> and <code class="docutils literal notranslate"><span class="pre">vertex_color</span></code> at once - <a class="reference external" href="pycapacity.visual.html#pycapacity.visual.plot_polytope">see docs</a></p></li>
+</ul>
+</li>
+<li><p>Algorithms: - <a class="reference external" href="pycapacity.algorithms.html#pycapacity.algorithms">see API docs</a></p>
+<ul class="simple">
+<li><p>Added Chebyshev ball algorithm (<code class="docutils literal notranslate"><span class="pre">chebyshev_ball</span></code>) - <a class="reference external" href="pycapacity.algorithms.html#pycapacity.algorithms.chebyshev_ball">see docs</a></p></li>
+</ul>
+</li>
+<li><p>Human metrics - <a class="reference external" href="pycapacity.human.html#pycapacity.human">see API docs</a></p>
+<ul class="simple">
+<li><p>Added ellipsoid: metrics acceleration, velocity and force</p></li>
+</ul>
+</li>
+<li><p>New module added: <code class="docutils literal notranslate"><span class="pre">pycapacity.examples</span></code> - <a class="reference external" href="pycapacity.examples.html#pycapacity.examples">see API docs</a></p>
+<ul class="simple">
+<li><p>Contains 4 dof planar robot model - <a class="reference external" href="pycapacity.examples.html#pycapacity.examples.planar_robot">see docs</a></p></li>
+<li><p>In future it will contain more toy models, for jump starting the library usage</p></li>
+</ul>
+</li>
+<li><p>More examples</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">examples</span></code> folder now contains more examples on how to use the library</dt><dd><ul>
+<li><p>python scripts - <a class="reference external" href="https://github.com/auctus-team/pycapacity/tree/master/examples/scripts">see scripts</a></p></li>
+<li><p>jupyter notebooks - <a class="reference external" href="https://github.com/auctus-team/pycapacity/tree/master/examples/scripts">see notebooks</a></p></li>
+<li><p>benchmarking scripts - <a class="reference external" href="https://github.com/auctus-team/pycapacity/tree/master/examples/scripts/benchmarking/">see scripts</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>More example in the docs - <a class="reference external" href="examples/index.html">see docs</a></p></li>
+</ul>
+</li>
+<li><p>Journal of OpenSource software submission:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> paper is submitter to the Journal of OpenSource software - <a class="reference external" href="https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348">see paper</a></p></li>
+</ul>
+</li>
+<li><p>Improved the docs with more infomation about the library</p>
+<ul class="simple">
+<li><p>Implemented polytope algorithms and their performance - <a class="reference external" href="algorithms.html">see docs</a></p></li>
+<li><p>Implemented capacity metrics - <a class="reference external" href="README.html">see docs</a></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="v2-0-05-2023">
+<h2>v2.0 (05-2023)<a class="headerlink" href="#v2-0-05-2023" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Polytope and ellipsoid algorithms now return <a class="reference external" href="pycapacity.polytope.html#pycapacity.objects.Polytope">Polytope</a>  and <a class="reference external" href="pycapacity.polytope.html#pycapacity.objects.Ellipsoid">Ellipsoid</a>  objects</p>
+<ul>
+<li><p><a class="reference external" href="pycapacity.polytope.html#pycapacity.objects.Polytope">Polytope</a>  class can be used as a standalone class to find  vertex <span class="math notranslate nohighlight">\(\mathcal{V}\)</span>, halfplane <span class="math notranslate nohighlight">\(\mathcal{H}\)</span> and face <span class="math notranslate nohighlight">\(\mathcal{F}\)</span> representation of a polytope</p></li>
+</ul>
+</li>
+<li><p>Visualisation tools improved:</p>
+<ul>
+<li><p>New <code class="docutils literal notranslate"><span class="pre">plot_polytope</span></code> function for plotting polytopes</p></li>
+<li><p>Functions <code class="docutils literal notranslate"><span class="pre">plot_polytope_vertex</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_polytope_faces</span></code> now can receive a polytope object</p></li>
+<li><p>Function <code class="docutils literal notranslate"><span class="pre">plot_ellipsoid</span></code> now can receive a ellipsoid object</p></li>
+<li><p>Better management of the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> figures and axes, now user can provide an <code class="docutils literal notranslate"><span class="pre">ax</span></code>, <code class="docutils literal notranslate"><span class="pre">plt</span></code> or <code class="docutils literal notranslate"><span class="pre">figure</span></code> to the plotting functions</p></li>
+</ul>
+</li>
+<li><p>Added support for robot reachable workspace approximation using convex polytopes (see <a class="reference external" href="pycapacity.robot.html#pycapacity.robot.reachable_space_approximation">API docs</a>)</p></li>
+<li><p>Added unit testing + continuous integration</p></li>
+<li><p>Improved docs with sphinx</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples/manipulating_polytopes_approx.html" class="btn btn-neutral float-left" title="Polytope manipulation example: Inner sphere approximation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="citing.html" class="btn btn-neutral float-right" title="How to cite pycapacity" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

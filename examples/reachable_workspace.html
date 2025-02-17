@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reachable Space with Pinocchio and CGAL &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/my_theme.css" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Randomized Human musculoskeletal models" href="randomised_human.html" />
+    <link rel="prev" title="ROS example using pinocchio" href="ROS.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pycapacity.html"> 📄 API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"> 🎓 Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="randomised_rob.html"> Randomized robot model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourlink.html"> Four link planar robot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="robotics_toolbox.html"> Robotics toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pinocchio.html"> Pinocchio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mujoco.html"> NEW 📢: Mujoco</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ROS.html"> ROS example</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> NEW 📢: Reachable workspace approximation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-pinocchio">Installing Pinocchio</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pip-package-install">Pip package install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#anaconda-install">Anaconda install</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#code-example">Code example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#animate-polytopes-in-meshcat">Animate polytopes in Meshcat</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="randomised_human.html"> Randomized human model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyomeca.html"> Pyomeca</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opensim.html"> Opensim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hspace_from_vert.html"> Find a half-plane representation of a point cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vert_from_hspace.html"> Find a vertex representation of a set of half-planes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes.html"> Polytope manipulation example: Minkowski sum and intersection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes_approx.html"> Polytope manipulation example: Inner approximation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Getting started coding examples</a></li>
+      <li class="breadcrumb-item active">Reachable Space with Pinocchio and CGAL</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/examples/reachable_workspace.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reachable-space-with-pinocchio-and-cgal">
+<h1>Reachable Space with Pinocchio and CGAL<a class="headerlink" href="#reachable-space-with-pinocchio-and-cgal" title="Link to this heading"></a></h1>
+<img src="https://github.com/stack-of-tasks/pinocchio/raw/master/doc/images/pinocchio-logo-large.png" width="300">
+<img src="https://raw.githubusercontent.com/CGAL/cgal/refs/heads/master/Installation/doc_html/images/cgal_2013_grey.png" width="300"><p>This is an example tutorial of how to setup <code class="docutils literal notranslate"><span class="pre">pinocchio</span></code> and <code class="docutils literal notranslate"><span class="pre">CGAL</span></code> library with <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> to calculate and visualise the robot capacities</p>
+<p><img alt="../_images/reachable.gif" src="../_images/reachable.gif" /></p>
+<section id="installing-pinocchio">
+<h2>Installing Pinocchio<a class="headerlink" href="#installing-pinocchio" title="Link to this heading"></a></h2>
+<p>Pinocchio library can be downloaded as sa pip package however due to the large number of different dependencies we suggest you to use anaconda.</p>
+<section id="pip-package-install">
+<h3>Pip package install<a class="headerlink" href="#pip-package-install" title="Link to this heading"></a></h3>
+<p>Install the <code class="docutils literal notranslate"><span class="pre">pinocchio</span></code> library</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pin</span>
+</pre></div>
+</div>
+<p>Install an additional library with robot data <code class="docutils literal notranslate"><span class="pre">example_robot_data</span></code> provided by pinocchio community as well <a class="reference external" href="https://github.com/Gepetto/example-robot-data">more info</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">example</span><span class="o">-</span><span class="n">robot</span><span class="o">-</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>Install the visualisation library <code class="docutils literal notranslate"><span class="pre">meshcat</span></code> that is compatible with pinocchio simple and powerful visualisaiton library <a class="reference external" href="https://pypi.org/project/meshcat/">more info</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">meshcat</span>
+</pre></div>
+</div>
+<p>Then install <code class="docutils literal notranslate"><span class="pre">CGAL</span></code> library for the workspace analysis</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cgal
+</pre></div>
+</div>
+<p>Finally install <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> for the workspace analysis</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pycapacity
+</pre></div>
+</div>
+<p>Also you can install <code class="docutils literal notranslate"><span class="pre">ipython</span></code> of <code class="docutils literal notranslate"><span class="pre">jupyter</span></code> for simplicity.</p>
+</section>
+<section id="anaconda-install">
+<h3>Anaconda install<a class="headerlink" href="#anaconda-install" title="Link to this heading"></a></h3>
+<p>For anaconda instals you can simply download the yaml file and save it as <code class="docutils literal notranslate"><span class="pre">env.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rwspace</span>
+<span class="nt">channels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">defaults</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge</span>
+<span class="nt">dependencies</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge::pinocchio</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge::gepetto-viewer</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge::gepetto-viewer-corba</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge::example-robot-data</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge::meshcat-python</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pip</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pycapacity</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cgal</span>
+</pre></div>
+</div>
+<p>And create a new ready to go environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">env</span><span class="o">.</span><span class="n">yaml</span>    <span class="c1"># create the new environemnt and install pinocchio, gepetto, pycapacity,.. </span>
+<span class="n">conda</span> <span class="n">actvavte</span> <span class="n">rwspace</span>
+</pre></div>
+</div>
+<section id="creating-the-custom-environment-from-scratch">
+<h4>Creating the custom environment from scratch<a class="headerlink" href="#creating-the-custom-environment-from-scratch" title="Link to this heading"></a></h4>
+<p>You can also simply use anaconda to create a new custom environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>rwspace<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span><span class="w"> </span>pip<span class="w"> </span><span class="c1"># create python 3.8 based environment</span>
+conda<span class="w"> </span>activate<span class="w"> </span>rwspace
+</pre></div>
+</div>
+<p>Install all the needed packages</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>pinocchio<span class="w"> </span>
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>example-robot-data<span class="w"> </span>
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>gepetto-viewer
+</pre></div>
+</div>
+<p>Then install <code class="docutils literal notranslate"><span class="pre">CGAL</span></code> library for the workspace analysis</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>cgal
+</pre></div>
+</div>
+<p>Then install <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> for the workspace analysis</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pycapacity
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="code-example">
+<h2>Code example<a class="headerlink" href="#code-example" title="Link to this heading"></a></h2>
+<p>This example code calculates the reachable space of the panda robot (in a random joint configuration) and visualises it using <code class="docutils literal notranslate"><span class="pre">meshcat</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pinocchio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pin</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">example_robot_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+
+<span class="n">robot</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;panda&#39;</span><span class="p">)</span>
+
+<span class="c1"># Display a robot configuration.</span>
+<span class="c1"># q0 = pin.neutral(robot.model)</span>
+<span class="n">q0</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">q0</span>
+
+<span class="c1"># calculate the jacobian</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createData</span><span class="p">()</span>
+<span class="n">pin</span><span class="o">.</span><span class="n">framesForwardKinematics</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">q0</span><span class="p">)</span>
+
+<span class="c1"># set the time-horizon</span>
+<span class="n">horizon_time</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># secs</span>
+
+<span class="c1"># create a simple forward kinematics function</span>
+<span class="c1"># taking the current joint configuration q</span>
+<span class="c1"># and outputting the end-effector position</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fk</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="n">pin</span><span class="o">.</span><span class="n">framesForwardKinematics</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">oMf</span><span class="p">[</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">getFrameId</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span><span class="o">.</span><span class="n">translation</span>
+
+<span class="c1"># polytope python module</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pycap</span>
+<span class="c1"># get max torque</span>
+<span class="n">q_max</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">upperPositionLimit</span><span class="o">.</span><span class="n">T</span>
+<span class="n">q_min</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">lowerPositionLimit</span><span class="o">.</span><span class="n">T</span>
+<span class="c1"># get max velocity</span>
+<span class="n">dq_max</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">velocityLimit</span>
+<span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">dq_max</span>
+
+<span class="c1"># set a random joint configuration</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">q_min</span><span class="p">,</span><span class="n">q_max</span><span class="p">)</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;calculate_faces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+  <span class="s1">&#39;convex_hull&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># if True, the reachable space will be approximated with a convex hull of the vertices (does not require CGAL)</span>
+  <span class="s1">&#39;n_samples&#39;</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span>     <span class="c1"># number of samples per dimension of the facet (the higher the better the approximation - n_samples^facet_dim samples)</span>
+  <span class="s1">&#39;facet_dim&#39;</span><span class="p">:</span><span class="mi">2</span>        <span class="c1"># dimension of the joint-space facet to be sampled (0 for vertices, 1 for edges, 2 for faces, up to n_dof -1, where n_dof is the number of degrees of freedom)</span>
+<span class="p">}</span>
+
+<span class="c1"># calculate force polytope</span>
+<span class="n">rw_poly</span> <span class="o">=</span> <span class="n">pycap</span><span class="o">.</span><span class="n">reachable_space_nonlinear</span><span class="p">(</span>
+            <span class="n">forward_func</span><span class="o">=</span><span class="n">fk</span><span class="p">,</span>
+            <span class="n">q0</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">q_max</span><span class="o">=</span> <span class="n">q_max</span><span class="p">,</span> 
+            <span class="n">q_min</span><span class="o">=</span> <span class="n">q_min</span><span class="p">,</span>
+            <span class="n">dq_max</span><span class="o">=</span> <span class="n">dq_max</span><span class="p">,</span>
+            <span class="n">dq_min</span><span class="o">=</span> <span class="n">dq_min</span><span class="p">,</span>
+            <span class="n">time_horizon</span><span class="o">=</span><span class="n">horizon_time</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">=</span><span class="n">opt</span>
+    <span class="p">)</span>
+
+
+<span class="c1">## visualise the robot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pinocchio.visualize</span><span class="w"> </span><span class="kn">import</span> <span class="n">MeshcatVisualizer</span>
+
+<span class="n">viz</span> <span class="o">=</span> <span class="n">MeshcatVisualizer</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">collision_model</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">visual_model</span><span class="p">)</span>
+<span class="c1"># Start a new MeshCat server and client.</span>
+<span class="n">viz</span><span class="o">.</span><span class="n">initViewer</span><span class="p">(</span><span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Load the robot in the viewer.</span>
+<span class="n">viz</span><span class="o">.</span><span class="n">loadViewerModel</span><span class="p">()</span>
+<span class="n">viz</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># small time window for loading the model </span>
+<span class="c1"># if meshcat does not visualise the robot properly, augment the time</span>
+<span class="c1"># it can be removed in most cases</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span> 
+
+<span class="c1">## visualise the polytope and the ellipsoid</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">meshcat.geometry</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">g</span> 
+
+<span class="c1"># meshcat triangulated mesh</span>
+<span class="n">poly</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">TriangularMeshGeometry</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">rw_poly</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">rw_poly</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+<span class="n">viz</span><span class="o">.</span><span class="n">viewer</span><span class="p">[</span><span class="s1">&#39;rwspace&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_object</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">MeshBasicMaterial</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="mh">0x0022ff</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Here is the visualisation of the reachable space of two different runns of the code:</p>
+<p><img alt="../_images/reachable_space.png" src="../_images/reachable_space.png" /> <img alt="../_images/reachable_space2.png" src="../_images/reachable_space2.png" /></p>
+</section>
+<section id="animate-polytopes-in-meshcat">
+<h2>Animate polytopes in Meshcat<a class="headerlink" href="#animate-polytopes-in-meshcat" title="Link to this heading"></a></h2>
+<p>This example code calculates the reachable space of the panda robot for a sinusoidal motion and visualises it using <code class="docutils literal notranslate"><span class="pre">meshcat</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pinocchio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pin</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">example_robot_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load</span>
+
+<span class="c1"># get panda robot usinf example_robot_data</span>
+<span class="n">robot</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s1">&#39;panda&#39;</span><span class="p">)</span>
+
+<span class="c1"># get joint position ranges</span>
+<span class="n">q_max</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">upperPositionLimit</span><span class="o">.</span><span class="n">T</span>
+<span class="n">q_min</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">lowerPositionLimit</span><span class="o">.</span><span class="n">T</span>
+<span class="c1"># get max velocity</span>
+<span class="n">dq_max</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">velocityLimit</span>
+<span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">dq_max</span>
+
+<span class="c1"># Use robot configuration.</span>
+<span class="n">q</span> <span class="o">=</span> <span class="p">(</span><span class="n">q_min</span><span class="o">+</span><span class="n">q_max</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+
+<span class="c1">## visualise the robot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pinocchio.visualize</span><span class="w"> </span><span class="kn">import</span> <span class="n">MeshcatVisualizer</span>
+
+<span class="n">viz</span> <span class="o">=</span> <span class="n">MeshcatVisualizer</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">collision_model</span><span class="p">,</span> <span class="n">robot</span><span class="o">.</span><span class="n">visual_model</span><span class="p">)</span>
+<span class="c1"># Start a new MeshCat server and client.</span>
+<span class="n">viz</span><span class="o">.</span><span class="n">initViewer</span><span class="p">(</span><span class="nb">open</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Load the robot in the viewer.</span>
+<span class="n">viz</span><span class="o">.</span><span class="n">loadViewerModel</span><span class="p">()</span>
+<span class="n">viz</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pycap</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">meshcat.geometry</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">g</span> 
+
+<span class="c1"># set the time-horizon</span>
+<span class="n">horizon_time</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="c1"># secs</span>
+
+<span class="c1"># create a simple forward kinematics function</span>
+<span class="c1"># taking the current joint configuration q</span>
+<span class="c1"># and outputting the end-effector position</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fk</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="n">pin</span><span class="o">.</span><span class="n">framesForwardKinematics</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">oMf</span><span class="p">[</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">getFrameId</span><span class="p">(</span><span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">frames</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span><span class="o">.</span><span class="n">translation</span>
+
+  <span class="n">opt</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;calculate_faces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s1">&#39;convex_hull&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># if True, the reachable space will be approximated with a convex hull of the vertices (does not require CGAL)</span>
+    <span class="s1">&#39;n_samples&#39;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span>     <span class="c1"># number of samples per dimension of the facet (the higher the better the approximation - n_samples^facet_dim samples)</span>
+    <span class="s1">&#39;facet_dim&#39;</span><span class="p">:</span><span class="mi">1</span>        <span class="c1"># dimension of the joint-space facet to be sampled (0 for vertices, 1 for edges, 2 for faces, up to n_dof -1, where n_dof is the number of degrees of freedom)</span>
+  <span class="p">}</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># some sinusoidal motion</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">200</span><span class="p">)):</span>
+
+        <span class="c1"># update the joint position</span>
+        <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">q</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="c1"># calculate the jacobian</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">createData</span><span class="p">()</span>
+        
+        <span class="c1"># calculate force polytope</span>
+        <span class="n">rw_poly</span> <span class="o">=</span> <span class="n">pycap</span><span class="o">.</span><span class="n">reachable_space_nonlinear</span><span class="p">(</span>
+                    <span class="n">forward_func</span><span class="o">=</span><span class="n">fk</span><span class="p">,</span>
+                    <span class="n">q0</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+                    <span class="n">q_max</span><span class="o">=</span> <span class="n">q_max</span><span class="p">,</span> 
+                    <span class="n">q_min</span><span class="o">=</span> <span class="n">q_min</span><span class="p">,</span>
+                    <span class="n">dq_max</span><span class="o">=</span> <span class="n">dq_max</span><span class="p">,</span>
+                    <span class="n">dq_min</span><span class="o">=</span> <span class="n">dq_min</span><span class="p">,</span>
+                    <span class="n">time_horizon</span><span class="o">=</span><span class="n">horizon_time</span><span class="p">,</span>
+                    <span class="n">options</span><span class="o">=</span><span class="n">opt</span>
+            <span class="p">)</span>
+
+        <span class="c1"># visualise the robot</span>
+        <span class="n">viz</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+        
+        <span class="c1"># meshcat triangulated mesh</span>
+        <span class="n">poly</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">TriangularMeshGeometry</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">rw_poly</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">rw_poly</span><span class="o">.</span><span class="n">face_indices</span><span class="p">)</span>
+        <span class="n">viz</span><span class="o">.</span><span class="n">viewer</span><span class="p">[</span><span class="s1">&#39;rwspace&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_object</span><span class="p">(</span><span class="n">poly</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">MeshBasicMaterial</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="mh">0x0022ff</span><span class="p">,</span> <span class="n">wireframe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="../_images/rwspace_animation.gif" src="../_images/rwspace_animation.gif" /></p>
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: see on Github <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio.ipynb">velocity polytope</a> and <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/pinocchio_reachable_space.ipynb">reachable space polytope</a></p></li> 
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/pinocchio_example.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ROS.html" class="btn btn-neutral float-left" title="ROS example using pinocchio" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="randomised_human.html" class="btn btn-neutral float-right" title="Randomized Human musculoskeletal models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

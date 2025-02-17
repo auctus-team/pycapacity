@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mujoco examples &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/my_theme.css" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ROS example using pinocchio" href="ROS.html" />
+    <link rel="prev" title="Pinocchio examples" href="pinocchio.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pycapacity.html"> 📄 API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"> 🎓 Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="randomised_rob.html"> Randomized robot model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fourlink.html"> Four link planar robot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="robotics_toolbox.html"> Robotics toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pinocchio.html"> Pinocchio</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> NEW 📢: Mujoco</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-mujoco">Installing Mujoco</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pip-package-install">Pip package install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#anaconda-install">Anaconda install</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#visualise-polytopes-in-meshcat">Visualise polytopes in Meshcat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reachable-worksapce-approximation">Reachable worksapce approximation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ROS.html"> ROS example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reachable_workspace.html"> NEW 📢: Reachable workspace approximation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomised_human.html"> Randomized human model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyomeca.html"> Pyomeca</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opensim.html"> Opensim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hspace_from_vert.html"> Find a half-plane representation of a point cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vert_from_hspace.html"> Find a vertex representation of a set of half-planes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes.html"> Polytope manipulation example: Minkowski sum and intersection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes_approx.html"> Polytope manipulation example: Inner approximation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Getting started coding examples</a></li>
+      <li class="breadcrumb-item active">Mujoco examples</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/examples/mujoco.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mujoco-examples">
+<h1>Mujoco examples<a class="headerlink" href="#mujoco-examples" title="Link to this heading"></a></h1>
+<p><img alt="https://github.com/google-deepmind/mujoco/raw/main/banner.png" src="https://github.com/google-deepmind/mujoco/raw/main/banner.png" /></p>
+<p>This is an example tutorial of how to setup <code class="docutils literal notranslate"><span class="pre">mujoco</span></code> with <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> to calculate and visualise the robot capacities and visualise it in the builtin <code class="docutils literal notranslate"><span class="pre">mujoco</span></code> visualiser.</p>
+<p><img alt="../_images/mj_xarm7.gif" src="../_images/mj_xarm7.gif" /></p>
+<section id="installing-mujoco">
+<h2>Installing Mujoco<a class="headerlink" href="#installing-mujoco" title="Link to this heading"></a></h2>
+<p>Mujoco library can be downloaded as sa pip package, however we suggest you to use anaconda to isolate the mujoco environment.</p>
+<section id="pip-package-install">
+<h3>Pip package install<a class="headerlink" href="#pip-package-install" title="Link to this heading"></a></h3>
+<p>Install the <code class="docutils literal notranslate"><span class="pre">mujoco</span></code> library</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">mujoco</span>
+</pre></div>
+</div>
+<p>Install an additional library with robot data <code class="docutils literal notranslate"><span class="pre">robot_descriptions</span></code> provided by mujoco community as well <a class="reference external" href="https://github.com/google-deepmind/mujoco_menagerie/tree/main">more info</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">robot_descriptions</span>
+</pre></div>
+</div>
+<p>Finally install <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> for the workspace analysis</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pycapacity
+</pre></div>
+</div>
+<p>Also you can install <code class="docutils literal notranslate"><span class="pre">ipython</span></code> of <code class="docutils literal notranslate"><span class="pre">jupyter</span></code> for simplicity.</p>
+</section>
+<section id="anaconda-install">
+<h3>Anaconda install<a class="headerlink" href="#anaconda-install" title="Link to this heading"></a></h3>
+<p>For anaconda instals you can simply download the yaml file and save it as <code class="docutils literal notranslate"><span class="pre">env.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mj_examples</span>
+<span class="nt">channels</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">defaults</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">conda-forge</span>
+<span class="nt">dependencies</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">python=3</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pip</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pip</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pycapacity</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mujoco</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">robot_descriptions</span>
+</pre></div>
+</div>
+<p>And create a new ready to go environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">env</span><span class="o">.</span><span class="n">yaml</span>    <span class="c1"># create the new environemnt and install pinocchio, gepetto, pycapacity,.. </span>
+<span class="n">conda</span> <span class="n">actvavte</span> <span class="n">mj_examples</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="visualise-polytopes-in-meshcat">
+<h2>Visualise polytopes in Meshcat<a class="headerlink" href="#visualise-polytopes-in-meshcat" title="Link to this heading"></a></h2>
+<p>Calculating the velocity polytope and ellipsoid of the panda robot and visualising it using <code class="docutils literal notranslate"><span class="pre">meshcat</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mujoco</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mujoco.viewer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">robot_descriptions.loaders.mujoco</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_robot_description</span>
+<span class="c1"># Loading a variant of the model, e.g. panda without a gripper.</span>
+<span class="c1"># model = load_robot_description(&quot;xarm7_mj_description&quot;, variant=&quot;xarm7_nohand&quot;); frame_name = &quot;link7&quot;</span>
+<span class="c1"># model = load_robot_description(&quot;iiwa14_mj_description&quot;); frame_name = &quot;link7&quot;</span>
+<span class="c1"># model = load_robot_description(&quot;gen3_mj_description&quot;); frame_name = &quot;forearm_link&quot;</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_robot_description</span><span class="p">(</span><span class="s2">&quot;panda_mj_description&quot;</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;panda_nohand&quot;</span><span class="p">);</span> <span class="n">frame_name</span> <span class="o">=</span> <span class="s2">&quot;link7&quot;</span>
+<span class="c1"># model = load_robot_description(&quot;ur10e_mj_description&quot;); frame_name = &quot;wrist_3_link&quot;</span>
+<span class="c1"># model = load_robot_description(&quot;ur5e_mj_description&quot;); frame_name = &quot;wrist_3_link&quot;</span>
+<span class="c1"># model = load_robot_description(&quot;fr3_mj_description&quot;); frame_name = &quot;fr3_link6&quot;</span>
+
+<span class="c1"># Create a data structure to hold the state of the robot</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">MjData</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># force polytope calculation function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="n">force_polytope</span>
+<span class="c1"># visualisation utils from pycapacity package</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycapacity.visual</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyviz</span>
+
+<span class="c1"># get max and min joint torques</span>
+<span class="n">tau_max</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">actuator_forcerange</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">tau_max</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Negative or zero torque limits detected, using default value of 10 Nm&quot;</span><span class="p">)</span>
+    <span class="n">tau_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">tau_max</span><span class="p">)</span><span class="o">*</span><span class="mi">10</span>
+<span class="n">tau_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">tau_max</span>
+
+
+<span class="c1"># Launch viewer</span>
+<span class="k">with</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">launch_passive</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">as</span> <span class="n">viewer</span><span class="p">:</span>
+    <span class="k">while</span> <span class="n">viewer</span><span class="o">.</span><span class="n">is_running</span><span class="p">():</span>
+        <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="n">mujoco</span><span class="o">.</span><span class="n">mjtVisFlag</span><span class="o">.</span><span class="n">mjVIS_TEXTURE</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Disable textures</span>
+        <span class="c1"># Compute the Jacobian of the end-effector</span>
+        <span class="n">J_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">nv</span><span class="p">))</span>  <span class="c1"># Linear Jacobian (3xnq)</span>
+        <span class="n">J_rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">nv</span><span class="p">))</span>  <span class="c1"># Rotational Jacobian (3xnq)</span>
+        <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_jacBodyCom</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">J_pos</span><span class="p">,</span> <span class="n">J_rot</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">body</span><span class="p">(</span><span class="n">frame_name</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">J_pos</span>  <span class="c1"># Use only the linear Jacobian</span>
+        
+        <span class="c1"># Compute the force polytope</span>
+        <span class="n">poly</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">tau_min</span><span class="p">,</span> <span class="n">tau_max</span><span class="p">)</span>
+        <span class="c1"># Shift polytope to the current end-effector position</span>
+        <span class="c1"># and scale it for easier visualization</span>
+        <span class="n">poly</span><span class="o">.</span><span class="n">vertices</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">vertices</span> <span class="o">/</span> <span class="mi">500</span> <span class="o">+</span> <span class="n">data</span><span class="o">.</span><span class="n">site_xpos</span><span class="p">[</span><span class="mi">0</span><span class="p">][:,</span><span class="kc">None</span><span class="p">]</span>
+        <span class="c1"># Draw force polytope</span>
+        <span class="n">pyviz</span><span class="o">.</span><span class="n">mj_draw_polytope</span><span class="p">(</span><span class="n">viewer</span><span class="p">,</span> <span class="n">poly</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+        
+        <span class="c1"># Update the viewer        </span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/mj_panda.gif" src="../_images/mj_panda.gif" /></p>
+<p>If you comment the panda robot import and uncomment the xaarm7 robot import</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">load_robot_description</span><span class="p">(</span><span class="s2">&quot;xarm7_mj_description&quot;</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;xarm7_nohand&quot;</span><span class="p">);</span> <span class="n">frame_name</span> <span class="o">=</span> <span class="s2">&quot;link7&quot;</span>
+<span class="o">....</span>
+<span class="c1"># model = load_robot_description(&quot;panda_mj_description&quot;, variant=&quot;panda_nohand&quot;); frame_name = &quot;link7&quot;</span>
+</pre></div>
+</div>
+<p>you will get the following result:</p>
+<p><img alt="../_images/mj_xarm7.gif" src="../_images/mj_xarm7.gif" /></p>
+</section>
+<section id="reachable-worksapce-approximation">
+<h2>Reachable worksapce approximation<a class="headerlink" href="#reachable-worksapce-approximation" title="Link to this heading"></a></h2>
+<p>Calculating the reachable workspace of the panda robot and visualising it using <code class="docutils literal notranslate"><span class="pre">mujoco</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mujoco</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mujoco.viewer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">robot_descriptions.loaders.mujoco</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_robot_description</span>
+<span class="c1"># Loading a variant of the model, e.g. panda without a gripper.</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_robot_description</span><span class="p">(</span><span class="s2">&quot;panda_mj_description&quot;</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="s2">&quot;panda_nohand&quot;</span><span class="p">);</span> <span class="n">frame_name</span> <span class="o">=</span> <span class="s2">&quot;link7&quot;</span>
+
+<span class="c1"># Set the timestep to 10ms</span>
+<span class="n">model</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">timestep</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="c1"># Create a data structure to hold the state of the robot</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">MjData</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># force polytope calculation function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="n">reachable_space_nonlinear</span>
+<span class="c1"># visualisation utils from pycapacity package</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pycapacity.visual</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyviz</span>
+
+<span class="c1"># get max and min joint torques</span>
+<span class="n">q_max</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">actuator_ctrlrange</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">q_min</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">actuator_ctrlrange</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># velocity limits from here: https://frankaemika.github.io/docs/control_parameters</span>
+<span class="n">dq_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.1750</span><span class="p">,</span> <span class="mf">2.1750</span><span class="p">,</span><span class="mf">2.1750</span><span class="p">,</span><span class="mf">2.1750</span><span class="p">,</span><span class="mf">2.6100</span><span class="p">,</span> <span class="mf">2.6100</span><span class="p">,</span><span class="mf">2.6100</span><span class="p">])</span>
+<span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">dq_max</span>
+
+<span class="c1"># Create a data structure to hold the state of the robot (only for the FK calculation)</span>
+<span class="n">data1</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">MjData</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="c1"># A simple forward kinematics (FK) function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fk</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="n">data1</span><span class="o">.</span><span class="n">qpos</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span>
+    <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_kinematics</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data1</span><span class="o">.</span><span class="n">site_xpos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="c1"># Launch viewer</span>
+<span class="k">with</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">viewer</span><span class="o">.</span><span class="n">launch_passive</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="k">as</span> <span class="n">viewer</span><span class="p">:</span>
+    <span class="k">while</span> <span class="n">viewer</span><span class="o">.</span><span class="n">is_running</span><span class="p">():</span>
+        <span class="n">mujoco</span><span class="o">.</span><span class="n">mj_step</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">opt</span><span class="o">.</span><span class="n">flags</span><span class="p">[</span><span class="n">mujoco</span><span class="o">.</span><span class="n">mjtVisFlag</span><span class="o">.</span><span class="n">mjVIS_TEXTURE</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Disable textures</span>
+        
+        <span class="c1"># Compute the reachable space of the end-effector</span>
+        <span class="n">poly</span> <span class="o">=</span> <span class="n">reachable_space_nonlinear</span><span class="p">(</span>
+            <span class="n">forward_func</span><span class="o">=</span> <span class="n">fk</span><span class="p">,</span>
+            <span class="n">q0</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">qpos</span><span class="p">[:</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">time_horizon</span><span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+            <span class="n">q_min</span><span class="o">=</span><span class="n">q_min</span><span class="p">,</span>
+            <span class="n">q_max</span><span class="o">=</span><span class="n">q_max</span><span class="p">,</span>
+            <span class="n">dq_min</span><span class="o">=</span><span class="n">dq_min</span><span class="p">,</span>
+            <span class="n">dq_max</span><span class="o">=</span><span class="n">dq_max</span><span class="p">,</span>
+            <span class="n">options</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;calculate_faces&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;convex_hull&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;n_samples&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;facet_dim&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="p">)</span>
+    
+        <span class="c1"># Draw force polytope</span>
+        <span class="n">pyviz</span><span class="o">.</span><span class="n">mj_draw_polytope</span><span class="p">(</span><span class="n">viewer</span><span class="p">,</span> <span class="n">poly</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+        
+        <span class="c1"># Update the viewer        </span>
+        <span class="n">viewer</span><span class="o">.</span><span class="n">sync</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/mj_reachable.gif" src="../_images/mj_reachable.gif" /></p>
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pinocchio.html" class="btn btn-neutral float-left" title="Pinocchio examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ROS.html" class="btn btn-neutral float-right" title="ROS example using pinocchio" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>

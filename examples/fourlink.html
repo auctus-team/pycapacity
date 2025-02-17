@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Four link planar robot examples &mdash; pycapacity v2.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/my_theme.css" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d767e3cc"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Robotics toolbox examples" href="robotics_toolbox.html" />
+    <link rel="prev" title="Randomized robot" href="randomised_rob.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pycapacity
+          </a>
+<div class="wy-side-nav-search"  style="margin-bottom: 0px;">
+  <a href="https://github.com/auctus-team/pycapacity" class="icon icon-github" style="margin-bottom: 0px;"> View on Github</a>
+</div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../README.html"> About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html"> 🌟 Implemented Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html"> 🚀 Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pycapacity.html"> 📄 API Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contirbuting.html"> 📝 Contributing &amp; Issues</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"> 🎓 Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="randomised_rob.html"> Randomized robot model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"> Four link planar robot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#force-capacity-polytope">Force capacity polytope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acceleration-capacity-polytope">Acceleration capacity polytope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#velocity-capacity-polytope">Velocity capacity polytope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reachable-space-polytope-approximation">Reachable space polytope approximation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="robotics_toolbox.html"> Robotics toolbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pinocchio.html"> Pinocchio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mujoco.html"> NEW 📢: Mujoco</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ROS.html"> ROS example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reachable_workspace.html"> NEW 📢: Reachable workspace approximation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="randomised_human.html"> Randomized human model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyomeca.html"> Pyomeca</a></li>
+<li class="toctree-l2"><a class="reference internal" href="opensim.html"> Opensim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hspace_from_vert.html"> Find a half-plane representation of a point cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vert_from_hspace.html"> Find a vertex representation of a set of half-planes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes.html"> Polytope manipulation example: Minkowski sum and intersection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manipulating_polytopes_approx.html"> Polytope manipulation example: Inner approximation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html"> 📑 Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../citing.html"> ✍️ Citing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pycapacity</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../README.html">About pycapacity</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Getting started coding examples</a></li>
+      <li class="breadcrumb-item active">Four link planar robot examples</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/auctus-team/pycapacity/blob/master/docs/source/examples/fourlink.md" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="four-link-planar-robot-examples">
+<h1>Four link planar robot examples<a class="headerlink" href="#four-link-planar-robot-examples" title="Link to this heading"></a></h1>
+<p>Four link planar robot is one very common simplified robot model for different analysis and algorithm development.
+It is composed of 4 links and 4 joints.
+In order to facilitate testing with this simple robot model it is implemented within <code class="docutils literal notranslate"><span class="pre">pycapacity</span></code> package, inside the module <code class="docutils literal notranslate"><span class="pre">examples</span></code> withing the class <code class="docutils literal notranslate"><span class="pre">FourLinkRobot</span></code>, see the module for <a class="reference external" href="../pycapacity.examples.html">more info</a></p>
+<div class="admonition-new-examples admonition">
+<p class="admonition-title">📢 NEW Examples!</p>
+<dl class="simple">
+<dt>For some more examples check out the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder of the repository.</dt><dd><ul class="simple">
+<li><p>Interactive jupyter notebooks are available in the <code class="docutils literal notranslate"><span class="pre">examples/notebooks</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/notebooks/four_link.ipynb">see on Github</a></p></li>
+<li><p>Python scripts are available in the <code class="docutils literal notranslate"><span class="pre">examples/scripts</span></code> folder: <a class="reference external" href="https://github.com/auctus-team/pycapacity/blob/master/examples/scripts/four_link.py">see on Github</a></p></li>
+</ul>
+</dd>
+</dl>
+</div><section id="force-capacity-polytope">
+<h2>Force capacity polytope<a class="headerlink" href="#force-capacity-polytope" title="Link to this heading"></a></h2>
+<p>Force polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># robot capacity module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.visual</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># visualistion tools</span>
+
+<span class="c1"># four link robot import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.examples</span><span class="w"> </span><span class="kn">import</span> <span class="n">FourLinkRobot</span>
+
+<span class="c1"># create the robot</span>
+<span class="n">robot</span> <span class="o">=</span> <span class="n">FourLinkRobot</span><span class="p">()</span>
+
+<span class="c1"># this seed is used to generate the same image </span>
+<span class="c1"># as in the examples in the docs </span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+
+<span class="c1"># joint positions q</span>
+<span class="n">q</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+<span class="c1"># joint torque limits tau</span>
+<span class="n">tau_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">tau_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># jacobian</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># calculate the force polytope</span>
+<span class="n">f_poly</span> <span class="o">=</span> <span class="n">force_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span><span class="n">tau_min</span><span class="p">,</span><span class="n">tau_max</span><span class="p">)</span>
+
+<span class="c1"># calculate the force ellipsoid</span>
+<span class="n">f_ellipsoid</span> <span class="o">=</span> <span class="n">force_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">tau_max</span><span class="p">)</span>
+
+<span class="c1"># visualise polytope ellipsoid</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span>
+
+<span class="c1"># plot the robot</span>
+<span class="n">robot_position</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> 
+<span class="n">robot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="c1"># plot the polytope</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">f_poly</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;lightsalmon&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope&#39;</span><span class="p">,</span> 
+              <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="c1"># plot ellipsoid</span>
+<span class="n">plot_ellipsoid</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">=</span><span class="n">f_ellipsoid</span><span class="p">,</span> 
+               <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+               <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span> 
+               <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ellipsoid&#39;</span><span class="p">,</span> 
+               <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Force capacity&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/4l_force.png" src="../_images/4l_force.png" /></p>
+</section>
+<section id="acceleration-capacity-polytope">
+<h2>Acceleration capacity polytope<a class="headerlink" href="#acceleration-capacity-polytope" title="Link to this heading"></a></h2>
+<p>Acceleration polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># robot capacity module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.visual</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># visualistion tools</span>
+
+<span class="c1"># four link robot import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.examples</span><span class="w"> </span><span class="kn">import</span> <span class="n">FourLinkRobot</span>
+
+<span class="c1"># create the robot</span>
+<span class="n">robot</span> <span class="o">=</span> <span class="n">FourLinkRobot</span><span class="p">()</span>
+
+<span class="c1"># this seed is used to generate the same image </span>
+<span class="c1"># as in the examples in the docs </span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+
+<span class="c1"># joint positions q</span>
+<span class="n">q</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+<span class="c1"># joint torque limits tau</span>
+<span class="n">tau_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">tau_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+
+<span class="c1"># jacobian</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># jacobian</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">inertia</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+
+<span class="c1"># calculate the velocity polytope</span>
+<span class="n">a_poly</span> <span class="o">=</span> <span class="n">acceleration_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">tau_min</span> <span class="p">,</span><span class="n">tau_max</span><span class="p">)</span>
+
+<span class="c1"># calculate the velocity ellipsoid</span>
+<span class="n">a_ellipsoid</span> <span class="o">=</span> <span class="n">acceleration_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">tau_max</span><span class="p">)</span>
+
+
+<span class="c1"># visualise polytope ellipsoid</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">50</span>
+
+
+<span class="c1"># plot the robot</span>
+<span class="n">robot_position</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> 
+<span class="n">robot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="c1"># plot the polytope</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">a_poly</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;lightsalmon&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope&#39;</span><span class="p">,</span> 
+              <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="c1"># plot ellipsoid</span>
+<span class="n">plot_ellipsoid</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">=</span><span class="n">a_ellipsoid</span><span class="p">,</span> 
+               <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+               <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span> 
+               <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ellipsoid&#39;</span><span class="p">,</span> 
+               <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Acceleration capacity&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/4l_accel.png" src="../_images/4l_accel.png" /></p>
+</section>
+<section id="velocity-capacity-polytope">
+<h2>Velocity capacity polytope<a class="headerlink" href="#velocity-capacity-polytope" title="Link to this heading"></a></h2>
+<p>Velocity polytope and ellipsoid for 4dof planar robot with random joint angles. The robot, polytope and ellipsoid are visualised using matplotlib.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># robot capacity module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.visual</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># visualistion tools</span>
+
+<span class="c1"># four link robot import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.examples</span><span class="w"> </span><span class="kn">import</span> <span class="n">FourLinkRobot</span>
+
+
+<span class="c1"># create the robot</span>
+<span class="n">robot</span> <span class="o">=</span> <span class="n">FourLinkRobot</span><span class="p">()</span>
+
+<span class="c1"># this seed is used to generate the same image </span>
+<span class="c1"># as in the examples in the docs </span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+
+<span class="c1"># joint positions q</span>
+<span class="n">q</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+<span class="c1"># joint torque limits tau</span>
+<span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">dq_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># jacobian</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># calculate the velocity polytope</span>
+<span class="n">v_poly</span> <span class="o">=</span> <span class="n">velocity_polytope</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_min</span> <span class="p">,</span><span class="n">dq_max</span><span class="p">)</span>
+
+<span class="c1"># calculate the velocity ellipsoid</span>
+<span class="n">v_ellipsoid</span> <span class="o">=</span> <span class="n">velocity_ellipsoid</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">dq_max</span><span class="p">)</span>
+
+<span class="c1"># visualise polytope ellipsoid</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+<span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span>
+
+<span class="c1"># plot the robot</span>
+<span class="n">robot_position</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> 
+<span class="n">robot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="c1"># plot the polytope</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">v_poly</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;lightsalmon&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope&#39;</span><span class="p">,</span> 
+              <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="c1"># plot ellipsoid</span>
+<span class="n">plot_ellipsoid</span><span class="p">(</span><span class="n">ellipsoid</span><span class="o">=</span><span class="n">v_ellipsoid</span><span class="p">,</span> 
+               <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+               <span class="n">plot</span><span class="o">=</span><span class="n">plt</span><span class="p">,</span> 
+               <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ellipsoid&#39;</span><span class="p">,</span> 
+               <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> 
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Velocity capacity&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/4l_vel.png" src="../_images/4l_vel.png" /></p>
+</section>
+<section id="reachable-space-polytope-approximation">
+<h2>Reachable space polytope approximation<a class="headerlink" href="#reachable-space-polytope-approximation" title="Link to this heading"></a></h2>
+<p>Reachable space polytope approximation for 4dof planar robot with random joint angles. The reachable space is calculated for two horizon times 1s and 0.5s.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.robot</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># robot capacity module</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.visual</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span> <span class="c1"># visualistion tools</span>
+
+<span class="c1"># four link robot import</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pycapacity.examples</span><span class="w"> </span><span class="kn">import</span> <span class="n">FourLinkRobot</span>
+
+
+<span class="c1"># create the robot</span>
+<span class="n">robot</span> <span class="o">=</span> <span class="n">FourLinkRobot</span><span class="p">()</span>
+
+<span class="c1"># this seed is used to generate the same image </span>
+<span class="c1"># as in the examples in the docs </span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+
+<span class="c1"># joint torque limits tau</span>
+<span class="n">tau_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span>
+<span class="n">tau_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span>
+<span class="c1"># joint velocity limits</span>
+<span class="n">dq_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">dq_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="c1"># joint limits </span>
+<span class="n">q_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">q_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># random joint configuration</span>
+<span class="n">q</span>  <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">q_min</span><span class="p">,</span> <span class="n">q_max</span><span class="p">)</span>
+
+<span class="c1"># jacobian</span>
+<span class="n">J</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># jacobian</span>
+<span class="n">M</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">inertia</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="c1"># calculate the reachable space polytope with 1s horizon</span>
+<span class="n">poly_dt1000</span> <span class="o">=</span> <span class="n">reachable_space_approximation</span><span class="p">(</span><span class="n">J</span><span class="o">=</span><span class="n">J</span><span class="p">,</span> 
+                                            <span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> 
+                                            <span class="n">q0</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> 
+                                            <span class="n">horizon</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                            <span class="n">t_max</span><span class="o">=</span><span class="n">tau_max</span><span class="p">,</span>
+                                            <span class="n">t_min</span><span class="o">=</span><span class="n">tau_min</span><span class="p">,</span> 
+                                            <span class="n">dq_max</span><span class="o">=</span><span class="n">dq_max</span><span class="p">,</span>
+                                            <span class="n">dq_min</span><span class="o">=</span><span class="n">dq_min</span><span class="p">,</span>
+                                            <span class="n">q_min</span> <span class="o">=</span> <span class="n">q_min</span><span class="p">,</span>
+                                            <span class="n">q_max</span> <span class="o">=</span> <span class="n">q_max</span><span class="p">)</span>
+
+<span class="c1"># calculate the reachable space polytope with 0.5s horizon</span>
+<span class="n">poly_dt500</span> <span class="o">=</span> <span class="n">reachable_space_approximation</span><span class="p">(</span><span class="n">J</span><span class="o">=</span><span class="n">J</span><span class="p">,</span> 
+                                            <span class="n">M</span><span class="o">=</span><span class="n">M</span><span class="p">,</span> 
+                                            <span class="n">q0</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> 
+                                            <span class="n">horizon</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                            <span class="n">t_max</span><span class="o">=</span><span class="n">tau_max</span><span class="p">,</span>
+                                            <span class="n">t_min</span><span class="o">=</span><span class="n">tau_min</span><span class="p">,</span> 
+                                            <span class="n">dq_max</span><span class="o">=</span><span class="n">dq_max</span><span class="p">,</span>
+                                            <span class="n">dq_min</span><span class="o">=</span><span class="n">dq_min</span><span class="p">,</span>
+                                            <span class="n">q_min</span> <span class="o">=</span> <span class="n">q_min</span><span class="p">,</span>
+                                            <span class="n">q_max</span> <span class="o">=</span> <span class="n">q_max</span><span class="p">)</span>
+
+<span class="c1"># visualise polytope ellipsoid</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">])</span>
+
+<span class="c1">#plot the robot</span>
+<span class="n">robot_position</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">forward_kinematics</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> 
+<span class="n">robot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plt</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+
+<span class="c1">#plot the polytope</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">poly_dt1000</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;lightsalmon&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;orangered&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope 1s&#39;</span><span class="p">)</span>
+<span class="n">plot_polytope</span><span class="p">(</span><span class="n">plot</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+              <span class="n">polytope</span><span class="o">=</span><span class="n">poly_dt500</span><span class="p">,</span>
+              <span class="n">center</span><span class="o">=</span><span class="n">robot_position</span><span class="p">,</span> 
+              <span class="n">face_color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> 
+              <span class="n">edge_color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+              <span class="n">vertex_color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span>
+              <span class="n">label</span><span class="o">=</span><span class="s1">&#39;polytope 0.5s&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="../_images/4l_reachable.png" src="../_images/4l_reachable.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="randomised_rob.html" class="btn btn-neutral float-left" title="Randomized robot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="robotics_toolbox.html" class="btn btn-neutral float-right" title="Robotics toolbox examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Antun Skuric.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+       <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-M9K0ZYS45T"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-M9K0ZYS45T');
+</script>
+
+
+</body>
+</html>
