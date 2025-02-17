@@ -15,6 +15,7 @@ Robot  workspace analysis
     Four link planar robot <fourlink.md>
     Robotics toolbox <robotics_toolbox.md>
     Pinocchio <pinocchio.md>
+    NEW 📢: Mujoco <mujoco.md>
     ROS example <ROS.rst>
     NEW 📢: Reachable workspace approximation <reachable_workspace.md>
 

@@ -258,6 +258,8 @@ The package is compatible with the following libraries:
       - `Tutorial <examples/robotics_toolbox.html>`_
     * - `Robot Operating System (ROS) <https://ros.org/>`_
       - `Tutorial <examples/ROS.html>`_
+    * - `Mujoco <https://www.roboti.us/index.html>`_
+      - `Tutorial <examples/mujoco.html>`_
 
 
 

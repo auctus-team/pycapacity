@@ -52,6 +52,9 @@ The other scripts require additional dependencies:
 - [robotics toolbox with swift](scripts/robotics_toolbox_swift.py)
 - [robotics toolbox with pyplot](scripts/robotics_toolbox_pyplot.py)
 - [pyomeca](scripts/pyomeca_example.py)
+- mujoco examples
+    - [Froce polytope for different robots](scripts/mujoco_example.py)
+    - [Panda robot reachable workspace](scripts/mujoco_polytope_ellispoid.py)
 
 
 Performance testing and benchmarking scripts:

@@ -10,7 +10,6 @@ This is a python module helping to visualise 2d and 3d polytopes and ellipsoids.
 
 """
 
-
 import matplotlib.pyplot as plt
 import matplotlib
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
@@ -478,3 +477,146 @@ def plot_ellipsoid(radii=None, rotation=None, ellipsoid=None, center=None, plot=
     else:
         print("cannot visualise data with dimension: "+str(dim))
     return ax  
+
+
+# see if mujoco is installed
+try:
+    import mujoco
+    import mujoco.viewer
+    MUJOCO_INSTALLED = True
+except ImportError:
+    MUJOCO_INSTALLED = False
+    
+
+if MUJOCO_INSTALLED:
+    def mj_makeTriangle(v1,v2,v3 ,centroid):
+        """
+        Function scaling the unit triangle to match the triangle defined by the vertices v1, v2, v3
+        and returning the scaling factors and the transformation matrix
+        
+        :param v1: vertex 1 of the triangle
+        :param v2: vertex 2 of the triangle
+        :param v3: vertex 3 of the triangle
+        :param centroid: centroid of the triangle
+        :return lengths: scaling factors for the edges and the normal    
+        """
+        e1 = v2-v1
+        e2 = v3-v1
+        normal = np.cross(e1,e2)    
+        # check if normal is pointing towards the centroid
+        if np.dot(normal, centroid-v1) > 0:
+            # flip the normal and 
+            normal = -normal
+            tmp = e1
+            e1 = e2
+            e2 = tmp
+            
+        lengths = np.array([np.linalg.norm(e1),np.linalg.norm(e2),np.linalg.norm(normal)])
+        xmat = np.array([e1/lengths[0], e2/lengths[1], normal/lengths[2]]).T
+        return lengths, xmat
+        
+
+    # Function to draw force polytope
+    def mj_draw_edges(viewer, faces, erase = True, color = [1, 0, 0, 0.5]):
+        """ 
+        Function that draws the edges of the polytope defined by its faces
+        
+        :param viewer: viewer object
+        :param faces: faces of the polytope
+        :param erase: if True, erase previous geometries
+        :param color: color of the lines (RGBA, default is red [1, 0, 0, 0.5])
+        """
+        with viewer.lock():
+            if erase:
+                viewer.user_scn.ngeom = 0
+            # Go through all faces of the convex hull
+            for face in faces:
+                p1, p2, p3 = face.T
+
+                # Add line segments between hull points
+                for start, end in [(p1, p2), (p2, p3), (p3, p1)]:
+                    geom_id = viewer.user_scn.ngeom
+                    if geom_id >= len(viewer.user_scn.geoms):
+                        print("Too many faces, skipping the rest", geom_id)
+                        continue  # Prevent out-of-bounds errors
+                    
+                    # avoid rendering the same line twice
+                    if np.any(np.allclose(viewer.user_scn.geoms[geom_id].pos, start)):
+                        continue
+                    
+                    mujoco.mjv_initGeom(
+                        viewer.user_scn.geoms[geom_id],
+                        int(mujoco.mjtGeom.mjGEOM_LINE),
+                        np.array([0,0, np.linalg.norm(end - start)]),
+                        start,
+                        rotation_matrix_from_vectors([0, 0, 1], end - start).flatten(),
+                        np.array(color)
+                    )
+                    viewer.user_scn.ngeom += 1  # Increase count
+                    
+                    
+    # Function to draw force polytope
+    def mj_draw_faces(viewer, simplices, centroid, erase = True, color = [1, 0, 0, 0.2]):
+        """ 
+        Function that draws the faces of the polytope defined by its simplices
+        
+        :param viewer: viewer object
+        :param simplices: simplices of the polytope
+        :param centroid: centroid of the polytope
+        :param erase: if True, erase previous geometries 
+        :param color: color of the faces (RGBA, default is red [1, 0, 0, 0.5])
+        """
+
+        with viewer.lock():
+            if erase:
+                viewer.user_scn.ngeom = 0
+            
+            # Go through all faces of the convex hull
+            for simplex in simplices:
+                p1, p2, p3 = simplex.T
+
+                geom_id = viewer.user_scn.ngeom
+                if geom_id >= len(viewer.user_scn.geoms):
+                    print("Too many faces, skipping the rest", geom_id)
+                    break  # Prevent out-of-bounds errors
+                
+                        
+                size, mat = mj_makeTriangle(p1, p2, p3, centroid)
+                
+                mujoco.mjv_initGeom(
+                    viewer.user_scn.geoms[geom_id],
+                    int(mujoco.mjtGeom.mjGEOM_TRIANGLE),
+                    size,
+                    p1,
+                    mat.flatten(),
+                    np.array(color)
+                )
+                # change to the material of the object
+                viewer.user_scn.geoms[geom_id].emission = 0.9
+                viewer.user_scn.ngeom += 1  # Increase count
+                
+
+    def mj_draw_polytope(viewer, polytope, edges=True, faces=True, color = [1, 0, 0, 0.2]):
+        """
+        Funciton that draws the polytope defined by its vertices and faces 
+        
+        :param viewer: viewer object
+        :param polytope: polytope object
+        :param eedges: if True, draw the edges of the polytope
+        :param faces: if True, draw the faces of the polytope
+        :param color: color of the polytope (RGBA, default is red [1, 0, 0, 0.5])
+        """
+        
+        if polytope.vertices.shape[1] < 4:
+            return
+        
+        # if faces not computed yet, compute them
+        if polytope.faces is None:
+            polytope.find_faces()
+        
+        # Draw the polytope
+        if edges:
+            mj_draw_edges(viewer, polytope.faces, erase = True, color = color)
+        if faces:
+            x_center = np.mean(polytope.vertices, axis=1)
+            mj_draw_faces(viewer, polytope.faces, x_center, erase = not edges, color = color)

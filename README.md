@@ -2,7 +2,7 @@
 # An efficient task-space capacity calculation package for robotics and biomechanics
 
 
-> 📢 New version of the pycapacity package is out - version v2.1.6! - [see full changelog](https://auctus-team.github.io/pycapacity/changelog.html)
+> 📢 New version of the pycapacity package is out - version v2.1.7! - [see full changelog](https://auctus-team.github.io/pycapacity/changelog.html)
 
 ## About 
 [![PyPI package](https://img.shields.io/pypi/v/pycapacity)](https://pypi.org/project/pycapacity/) [![Tests](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/python-app.yml) ![](https://img.shields.io/pypi/dm/pycapacity?color=blue&label=pip%20downloads)  [![Docs](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg)](https://github.com/auctus-team/pycapacity/actions/workflows/main.yml) [![status](https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348/status.svg)](https://joss.theoj.org/papers/73f155afc0dfa7730792639ac374b348)
@@ -16,8 +16,7 @@ The aim of ``pycapacity`` is to provide a set of efficient tools for their evalu
 and biomechanics libraries. The package implements several state of the art algorithms for polytope evaluation that bring many of the 
 polytope metrics to the few milliseconds evaluation time, making it possible to use them in online and interactive applications. 
 
-The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as ``robotic-toolbox`` 
-or ``pinocchio``, as well as human musculoskeletal model biomechanics 
+The package can be easily interfaced with standard libraries for robotic manipulator rigid body simulation such as ``robotic-toolbox``, ``pinocchio`` and ``mujoco``, as well as human musculoskeletal model biomechanics 
 softwares ``opensim`` and ``biorbd``. The package can also be used with the Robot Operating System (``ROS``).
 
 The package additionally implements a set of visualization tools for polytopes and ellipsoids based on the
@@ -439,4 +438,73 @@ mviz.show(state)
 
 <img src="./docs/source/images/osim_poly.png" width="500">
 
+
 See more examples in the [tutorials](https://auctus-team.github.io/pycapacity/examples/opensim.html)
+
+
+
+## An example with Mujoco
+
+This is an interactive example that shows how to calculate the force polytope of the different robots in the Mujoco simulator and visualise it in the Mujoco visualisation tool.
+
+<details><summary>Click to see the code</summary>
+
+```python
+import mujoco
+import mujoco.viewer
+import numpy as np
+
+from robot_descriptions.loaders.mujoco import load_robot_description
+# Loading a variant of the model, e.g. panda without a gripper.
+# model = load_robot_description("xarm7_mj_description", variant="xarm7_nohand"); frame_name = "link7"
+# model = load_robot_description("iiwa14_mj_description"); frame_name = "link7"
+# model = load_robot_description("gen3_mj_description"); frame_name = "forearm_link"
+model = load_robot_description("panda_mj_description", variant="panda_nohand"); frame_name = "link7"
+# model = load_robot_description("ur10e_mj_description"); frame_name = "wrist_3_link"
+# model = load_robot_description("ur5e_mj_description"); frame_name = "wrist_3_link"
+# model = load_robot_description("fr3_mj_description"); frame_name = "fr3_link6"
+
+# Create a data structure to hold the state of the robot
+data = mujoco.MjData(model)
+
+# force polytope calculation function
+from pycapacity.robot import force_polytope
+# visualisation utils from pycapacity package
+import pycapacity.visual as pyviz
+
+# get max and min joint torques
+tau_max = model.actuator_forcerange[:,1]
+if np.any(tau_max <= 0):
+    print("Warning: Negative or zero torque limits detected, using default value of 10 Nm")
+    tau_max = np.ones_like(tau_max)*10
+tau_min = -tau_max
+
+
+# Launch viewer
+with mujoco.viewer.launch_passive(model, data) as viewer:
+    while viewer.is_running():
+        mujoco.mj_step(model, data)
+        viewer.opt.flags[mujoco.mjtVisFlag.mjVIS_TEXTURE] = 0  # Disable textures
+        # Compute the Jacobian of the end-effector
+        J_pos = np.zeros((3, model.nv))  # Linear Jacobian (3xnq)
+        J_rot = np.zeros((3, model.nv))  # Rotational Jacobian (3xnq)
+        mujoco.mj_jacBodyCom(model, data, J_pos, J_rot, model.body(frame_name).id)
+        J = J_pos  # Use only the linear Jacobian
+        
+        # Compute the force polytope
+        poly = force_polytope(J, tau_min, tau_max)
+        # Shift polytope to the current end-effector position
+        # and scale it for easier visualization
+        poly.vertices = poly.vertices / 500 + data.site_xpos[0][:,None]
+        # Draw force polytope
+        pyviz.mj_draw_polytope(viewer, poly, edges=True, faces=True) 
+        
+        # Update the viewer        
+        viewer.sync()
+```
+</details>
+
+<img src="./docs/source/images/mj_xarm7.gif" width="500">
+
+See more examples in the [tutorials](https://auctus-team.github.io/pycapacity/examples/mujoco.html)
+

@@ -609,8 +609,10 @@ def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_m
             else:
                 vert, faces = alpha_shape_with_cgal(x_curves)
             vert = faces.reshape(-1,3)
-            poly = Polytope(vertices=vert.T, faces=faces)
+            poly = Polytope(vertices=vert.T)
             poly.face_indices = np.arange(len(vert)).reshape(-1,3)
+            poly.faces = poly.vertices[:, poly.face_indices]
+            poly.faces = np.moveaxis(poly.faces, 0, 1)
         else:
             raise ValueError("CGAL is not installed, please install it to use the non-convex option")
     return poly
