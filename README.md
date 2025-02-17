@@ -215,8 +215,12 @@ import roboticstoolbox as rp
 import numpy as np
 
 panda = rp.models.DH.Panda()
-# initial pose
-q= np.array([0.00138894 ,5.98736e-05,-0.30259058,   -1.6, -6.64181e-05,    1.56995,-5.1812e-05])
+
+# random initial pose    
+q_min = np.array([-2.7437, -1.7837, -2.9007, -3.0421, -2.8065, 0.5445, -3.0159])
+q_max = np.array([2.7437, 1.7837, 2.9007, -0.1518, 2.8065, 4.5169, 3.0159])
+q= np.random.uniform(q_min,q_max)
+
 panda.q = q
 # joint torque limits
 t_max = np.array([87, 87, 87, 87, 20, 20, 20]) 
