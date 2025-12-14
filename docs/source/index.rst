@@ -15,11 +15,11 @@ An efficient task-space capacity calculation package for robotics and biomechani
 .. image:: https://github.com/auctus-team/pycapacity/actions/workflows/main.yml/badge.svg
 
 |
-.. image:: https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/comparison.gif
+.. image:: https://raw.githubusercontent.com/auctus-team/pycapacity/master/images/comparison.gif
   :height: 200
   :alt: Alternative text
 
-.. image:: https://gitlab.inria.fr/auctus-team/people/antunskuric/pycapacity/-/raw/master/images/human_poly.gif
+.. image:: https://raw.githubusercontent.com/auctus-team/pycapacity/refs/heads/master/images/human_poly.gif
   :height: 200
   :alt: Alternative text
 
