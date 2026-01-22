@@ -14,7 +14,7 @@ V2.1.7 (02-2025)
 ----------------
 
 * Added support examples for interfacing pycapacity with `mujoco <https://github.com/google-deepmind/mujoco>`_ - `see example <examples/mujoco.html>`_
-* Added a support for real-time polyotpe vilsualisaiton in mujoco  
+* Added a support for real-time polyotpe visualisation in mujoco  
 
 .. image:: images/mj_reachable.gif
   :height: 200
