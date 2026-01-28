@@ -560,7 +560,7 @@ def chebyshev_ball(A,b):
     res = cvxopt.glpk.lp(c=c,  G=G, h=h, options=solvers_opt)
     return np.array(res[1][:-1]).reshape((-1,)), np.array(res[1][-1]).reshape((-1,))
 
-def hspace_to_vertex(H,d):
+def hspace_to_vertex(H,d, verbose = True):
     """
     From half-space representation to the vertex representation
 
@@ -585,12 +585,12 @@ def hspace_to_vertex(H,d):
             hd = HalfspaceIntersection(hd_mat,feasible_point)
             hull = ConvexHull(hd.intersections)
         except:
-            print("H2V: Convex hull issue: using QJ option! ")
+            if(verbose): print("H2V: Convex hull issue: using QJ option! ")
             try:
                 hd = HalfspaceIntersection(hd_mat,feasible_point,qhull_options='QJ')
                 hull = ConvexHull(hd.intersections)
             except:
-                print("H2V: Convex hull issue: using Q0 option! ")
+                if (verbose): print("H2V: Convex hull issue: using Q0 option! ")
                 hd = HalfspaceIntersection(hd_mat,feasible_point,qhull_options='Q0')
                 hull = ConvexHull(hd.intersections)
         return hd.intersections.T, hull.simplices
