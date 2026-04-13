@@ -13,6 +13,8 @@ This is a python module which implements different robot performance metrics bas
 
 """
 
+import itertools
+
 import numpy as np
 # minkowski sum
 from scipy.spatial import ConvexHull
@@ -508,8 +510,14 @@ if CGAL_INSTALLED:
 
 
 # reachable space calculation algorithm
-def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
-
+def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, jacobian_func=None, options=None):
+    
+    if jacobian_func is None:
+        return reachable_space_cube_sampling(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options)
+    else:
+        return reachable_space_ray_steering(forward_func, jacobian_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options)
+    
+def reachable_space_cube_sampling(forward_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
     """
     Compute the reachable set of the robot for the given joint configuration.
     The algorithm calculates the reachable set of cartesian position of the desired frame of the robot given the robots joint position and joint velocity limits.
@@ -615,4 +623,132 @@ def reachable_space_nonlinear(forward_func, q0, time_horizon, q_max, q_min, dq_m
             poly.faces = np.moveaxis(poly.faces, 0, 1)
         else:
             raise ValueError("CGAL is not installed, please install it to use the non-convex option")
+    return poly
+
+
+def reachable_space_ray_steering(forward_func, jacobian_func, q0, time_horizon, q_max, q_min, dq_max, dq_min, options=None):
+    """
+    Computes the reachable workspace of a robot by actively steering along 3D rays using a "swarm" approach.
+    This function simulates the robot's end-effector moving along multiple rays (directions) in 3D space,
+    starting from an initial joint configuration. At each step, rays "share" the best-performing 
+    joint configuration for their direction to avoid local minima, improving exploration of the workspace. 
+    The reachable points are then used to generate a convex hull or alpha shape representing the workspace boundary.
+    
+    Parameters
+    ----------
+    forward_func : callable
+        Function that computes the forward kinematics. Takes a joint configuration `q` and returns the end-effector position (at least 3D).
+    jacobian_func : callable
+        Function that computes the robot's Jacobian matrix at a given joint configuration `q`.
+    q0 : array-like
+        Initial joint configuration (shape: (n_joints,)).
+    time_horizon : float
+        Total time to simulate the steering along each ray.
+    q_max : array-like
+        Maximum joint limits (shape: (n_joints,)).
+    q_min : array-like
+        Minimum joint limits (shape: (n_joints,)).
+    dq_max : array-like
+        Maximum joint velocities (shape: (n_joints,)).
+    dq_min : array-like
+        Minimum joint velocities (shape: (n_joints,)).
+    options : dict, optional
+        Dictionary of additional options:
+            - 'convex_hull' (bool): If True, use convex hull for workspace boundary (default: True).
+            - 'n_samples' (int): Number of rays/directions to sample (default: 500).
+            - 'n_steps' (int): Number of integration steps along each ray (default: 10).
+            - 'n_exploration_steps' (int): Number of initial steps without swarm sharing (default: 0).
+            - 'calculate_faces' (bool): If True, compute faces of the convex hull (default: False).
+            - 'alpha' (float): Alpha value for alpha shape (if not using convex hull).
+    Returns
+    -------
+    poly : Polytope
+        Polytope object representing the boundary of the reachable workspace, either as a convex hull or alpha shape.
+    Notes
+    -----
+    - The function uses a Fibonacci sphere to sample directions uniformly on the sphere.
+    """
+    
+    # 1. Parse Options
+    options = {} if options is None else dict(options)
+    use_convex_hull = options.get('convex_hull', True)
+    n_rays = options.get('n_samples', 500) 
+    n_steps = options.get('n_steps', 10) 
+    n_exp_steps = options.get('n_exploration_steps', 0)
+    
+    micro_dt = time_horizon / n_steps
+    print(micro_dt)
+    # Flatten inputs
+    q0 = np.asarray(q0).flatten()
+    q_max = np.asarray(q_max).flatten()
+    q_min = np.asarray(q_min).flatten()
+    dq_max = np.asarray(dq_max).flatten()
+    dq_min = np.asarray(dq_min).flatten()
+    
+    # 2. Generate target directions (Fibonacci Sphere)
+    indices = np.arange(0, n_rays, dtype=float) + 0.5
+    phi = np.arccos(1 - 2 * indices / n_rays)
+    theta = np.pi * (1 + 5**0.5) * indices
+    rays = np.array([np.cos(theta) * np.sin(phi), np.sin(theta) * np.sin(phi), np.cos(phi)]).T 
+    
+    # 3. Initialize paths
+    q_paths = np.tile(q0, (n_rays, 1)) 
+    x_endpoints = []
+    
+    # 4. Iterative Multi-Step with Swarm Sharing
+    for step in range(n_steps):
+        if step > n_exp_steps:
+            # --- NEW SWARM LOGIC ---
+            # Calculate current Cartesian positions for all paths
+            x_current = np.array([np.asarray(forward_func(q)).flatten()[:3] for q in q_paths])
+            
+            # Matrix multiply points by rays to get projections. 
+            # Result shape is (n_rays, n_rays). Rows are points, columns are ray directions.
+            projections = x_current @ rays.T 
+            
+            # Find the index of the point that went furthest in each ray's direction
+            best_indices = np.argmax(projections, axis=0)
+            
+            # Teleport each path to the best known configuration for its target direction
+            q_paths = q_paths[best_indices]
+            # -----------------------
+            #x_endpoints += x_current.tolist()
+            
+        # Standard Jacobian Steering
+        for i in range(n_rays):
+            J = np.asarray(jacobian_func(q_paths[i]))
+            if J.shape[0] > 3:
+                J = J[:3, :]
+                
+            c = rays[i].T @ J 
+            
+            dq_opt = np.where(c > 0, dq_max, dq_min)
+            q_paths[i] += dq_opt * micro_dt
+            
+        q_paths = np.clip(q_paths, q_min, q_max)
+        
+    # 5. Final Cartesian endpoint positions
+    x_endpoints += [np.asarray(forward_func(q)).flatten()[:3] for q in q_paths]
+    x_endpoints = np.array(x_endpoints) 
+        
+    # 6. Mesh Generation
+    if use_convex_hull:
+        poly = Polytope(x_endpoints.T)
+        if options.get("calculate_faces", False):
+            poly.find_faces()
+    else:
+        if not CGAL_INSTALLED:
+            raise ValueError("CGAL is not installed.")
+            
+        if "alpha" in options.keys():
+            vert, faces = alpha_shape_with_cgal(x_endpoints, options['alpha'])
+        else:
+            vert, faces = alpha_shape_with_cgal(x_endpoints)
+            
+        vert = faces.reshape(-1, 3)
+        poly = Polytope(vertices=vert.T)
+        poly.face_indices = np.arange(len(vert)).reshape(-1, 3)
+        poly.faces = poly.vertices[:, poly.face_indices]
+        poly.faces = np.moveaxis(poly.faces, 0, 1)
+        
     return poly
