@@ -137,7 +137,10 @@ def joint_torques_polytope(N, F_min, F_max, tol=1e-5, options=None):
             polytope object with the following attributes ``vertices``, half-plane representation ``H``, ``d``, (and ``face_indices`` and ``faces`` if option ``calculate_faces`` is set to ``True``)
     """
     H, d = hyper_plane_shift_method(N, F_min, F_max)
-    vert, faces = hspace_to_vertex(H,d)
+    verbose = True
+    if options is not None and 'verbose' in options.keys() and options['verbose'] is False:
+        verbose = False
+    vert, faces = hspace_to_vertex(H,d, verbose)
 
     # create the polytope object
     poly = Polytope(vertices=vert, H=H, d=d)
@@ -183,7 +186,10 @@ def acceleration_polytope(J, N, M, F_min, F_max, tol=1e-5, options=None):
         poly.face_indices = faces
     else:
         H,d = hyper_plane_shift_method(J.dot(np.linalg.inv(M).dot(N)),F_min,F_max)
-        vert, faces = hspace_to_vertex(H,d) 
+        verbose = True
+        if options is not None and 'verbose' in options.keys() and options['verbose'] is False:
+            verbose = False
+        vert, faces = hspace_to_vertex(H,d, verbose)        
         # construct polytope object
         poly = Polytope(vertices=vert, H=H, d=d)
         poly.face_indices = faces

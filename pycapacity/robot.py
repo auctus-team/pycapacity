@@ -263,7 +263,10 @@ def velocity_polytope(Jacobian, dq_max, dq_min, options = None):
             polytope object with ``vertices``, halfspaces ``H`` and ``d`` (``face_indices`` and ``faces`` if option ``calculate_faces`` is set to True)
     """ 
     H, d = hyper_plane_shift_method(Jacobian,dq_min,dq_max)
-    velocity_vertex, vel_faces = hspace_to_vertex(H,d)
+    verbose = True
+    if options is not None and 'verbose' in options.keys() and options['verbose'] is False:
+        verbose = False
+    velocity_vertex, vel_faces = hspace_to_vertex(H,d, verbose)    
 
     # create polytope
     poly = Polytope(vertices=velocity_vertex, H=H, d=d)
@@ -302,7 +305,11 @@ def acceleration_polytope(J, M, t_max, t_min, t_bias= None, options = None):
         t_max = t_max - t_bias
     
     H, d = hyper_plane_shift_method(B,t_min, t_max)
-    vertex, faces = hspace_to_vertex(H,d)
+    verbose = True
+    if options is not None and 'verbose' in options.keys() and options['verbose'] is False:
+        verbose = False
+    vertex, faces = hspace_to_vertex(H,d, verbose)     
+
 
 
     # create polytope

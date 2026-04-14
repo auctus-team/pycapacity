@@ -105,7 +105,7 @@ class Polytope:
 
         """
         if self.H is not None and self.d is not None:
-            # finding vertices of the polytope from the half-plane representation
+            # finding vertices of the polytope from the half-plane representation            
             self.vertices, self.face_indices = hspace_to_vertex(self.H,self.d)
         else:
             print("No half-plane representation of the polytope is available")
